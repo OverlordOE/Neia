@@ -8,7 +8,7 @@ Object.keys(botCommands).map(key => {
 	bot.commands.set(botCommands[key].name, botCommands[key]);
 });
 
-const TOKEN = "Njg0NDU4Mjc2MTI5MDc5MzIw.Xl-xYA.IpGRYt_8-uLEjHcJMaPkUNaxkkg";
+const TOKEN = "Njg0NDU4Mjc2MTI5MDc5MzIw.Xl-3mw.sQw7gXyN4jUfP998gttWhBOy1W8";
 
 bot.login(TOKEN);
 
