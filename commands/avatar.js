@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'avatar',
-	aliases: ['icon', 'pfp'],
+	aliases: ['icon', 'pfp', 'picture'],
 	description: 'Gets avatar of mentioned users, if there are no mentions it shows the senders avatar',
 	args: false,
 	usage: '<user>',
