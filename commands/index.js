@@ -1,5 +1,6 @@
 module.exports = {
 	Ping: require('./ping'),
 	Avatar: require('./avatar'),
-	Help: require('./help')
+	Help: require('./help'),
+	Hackedandbanned: require('./hackedandbanned')
 };
