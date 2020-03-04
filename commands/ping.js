@@ -7,7 +7,7 @@ module.exports = {
     }
 
     const summon = msg.mentions.users.map(user => {
-      return `${user}, you have been summoned by ${msg.author}`;
+      return `${user.username}, you have been summoned by ${msg.author}`;
     });
 
     msg.channel.send(summon);
