@@ -19,14 +19,15 @@ bot.on('ready', () => {
 
 bot.on('message', msg => {
 	const args = msg.content.slice(prefix.length).split(/ +/);
-	const command = args.shift().toLowerCase();
+	const commandName = args.shift().toLowerCase();
 
 	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
-	console.info(`Called command: ${command}`);
-
+	console.info(`Called command: ${commandName}`);
+	
+	const command = bot.commands.get(commandName);
 
 	try {
-		bot.commands.get(command).execute(msg, args);
+		command.execute(msg, args);
 	} catch (error) {
 		console.error(error);
 		msg.reply('there was an error trying to execute that command!');
