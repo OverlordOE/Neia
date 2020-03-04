@@ -31,6 +31,13 @@ bot.on('message', msg => {
 
 	if (!command) return;
 
+	//chech for admin
+	if (command.admin) {
+		if(!msg.member.hasPermission('ADMINISTRATOR')) {
+			return msg.channel.send("You need Admin priveleges to use this command!");
+		}
+	}
+
 	//if the command is used wrongly correct the user
 	if (command.args && !args.length) {
 		let reply = `You didn't provide any arguments, ${msg.author}!`;

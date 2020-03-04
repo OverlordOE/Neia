@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'reload',
-	description: '"Admin debug tool" Reloads a command',
+    description: '"Admin debug tool" Reloads a command',
+    admin: true,
 	args: true,
 	execute(message, args) {
 		const commandName = args[0].toLowerCase();
