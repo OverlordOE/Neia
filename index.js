@@ -1,6 +1,6 @@
 require('dotenv').config();
 const Discord = require('discord.js');
-const {prefix, token} = require('./config.json');
+const { prefix, token } = require('./config.json');
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 const botCommands = require('./commands');
@@ -18,14 +18,31 @@ bot.on('ready', () => {
 });
 
 bot.on('message', msg => {
+	//split message for further use
 	const args = msg.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
+	//check for prefix
 	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 	console.info(`Called command: ${commandName}`);
-	
-	const command = bot.commands.get(commandName);
 
+	const command = bot.commands.get(commandName)
+		|| bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+
+	if (!command) return;
+
+	//if the command is used wrongly correct the user
+	if (command.args && !args.length) {
+		let reply = `You didn't provide any arguments, ${msg.author}!`;
+	
+		if (command.usage) {
+			reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
+		}
+		
+		return msg.channel.send(reply);
+	}
+
+	//execute command
 	try {
 		command.execute(msg, args);
 	} catch (error) {
