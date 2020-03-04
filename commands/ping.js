@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'ping',
-	description: 'Ping!',
+	description: 'Summon the mentioned user or just get a pong.',
 	aliases: ["PING"],
 	args: false,
 	usage: '<user>',
