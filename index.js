@@ -15,6 +15,7 @@ bot.login(TOKEN);
 
 bot.on('ready', () => {
 	console.info(`Logged in as ${bot.user.tag}!`);
+	bot.user.setActivity('The Syndicate', { type: 'WATCHING' });
 });
 
 bot.on('message', msg => {
@@ -31,14 +32,21 @@ bot.on('message', msg => {
 
 	if (!command) return;
 
+	//chech for admin
+	if (command.admin) {
+		if (!msg.member.hasPermission('ADMINISTRATOR')) {
+			return msg.channel.send("You need Admin privileges to use this command!");
+		}
+	}
+
 	//if the command is used wrongly correct the user
 	if (command.args && !args.length) {
 		let reply = `You didn't provide any arguments, ${msg.author}!`;
-	
+
 		if (command.usage) {
 			reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
 		}
-		
+
 		return msg.channel.send(reply);
 	}
 
