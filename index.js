@@ -1,6 +1,9 @@
 require('dotenv').config();
 const Discord = require('discord.js');
 const { prefix, token } = require('./config.json');
+const { Op } = require('sequelize');
+const { Users, CurrencyShop } = require('./dbObjects');
+const currency = new Discord.Collection();
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 const botCommands = require('./commands');
