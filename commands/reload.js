@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'reload',
     description: '"Admin debug tool" Reloads a command',
+    usage: '[command]',
     admin: true,
 	args: true,
 	execute(message, args) {
