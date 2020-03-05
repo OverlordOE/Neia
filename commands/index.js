@@ -3,5 +3,6 @@ module.exports = {
 	Avatar: require('./avatar'),
 	Help: require('./help'),
 	Hackedandbanned: require('./hackedandbanned'),
-	Reload: require('./reload')
+	Reload: require('./reload'),
+	Balance: require('./balance')
 };
