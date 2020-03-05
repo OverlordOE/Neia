@@ -34,7 +34,7 @@ bot.on('message', msg => {
 
 	//chech for admin
 	if (command.admin) {
-		if(!msg.member.hasPermission('ADMINISTRATOR')) {
+		if (!msg.member.hasPermission('ADMINISTRATOR')) {
 			return msg.channel.send("You need Admin privileges to use this command!");
 		}
 	}
@@ -42,11 +42,11 @@ bot.on('message', msg => {
 	//if the command is used wrongly correct the user
 	if (command.args && !args.length) {
 		let reply = `You didn't provide any arguments, ${msg.author}!`;
-	
+
 		if (command.usage) {
 			reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
 		}
-		
+
 		return msg.channel.send(reply);
 	}
 
