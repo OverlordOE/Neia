@@ -3,10 +3,10 @@ const Discord = require('discord.js');
 const { prefix, token } = require('./config.json');
 const { Op } = require('sequelize');
 const { Users, CurrencyShop } = require('./dbObjects');
-const currency = new Discord.Collection();
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 const botCommands = require('./commands');
+const currency = new Discord.Collection();
 
 //Make add and balance method
 Reflect.defineProperty(currency, 'add', {
@@ -27,6 +27,7 @@ Reflect.defineProperty(currency, 'getBalance', {
 		const user = currency.get(id);
 		return user ? user.balance : 0;
 	},
+	enumerable: true
 });
 
 module.exports = {currency};
@@ -84,7 +85,7 @@ bot.on('message', msg => {
 
 	//execute command
 	try {
-		command.execute(msg, args);
+		command.execute(msg, args, currency, bot);
 	} catch (error) {
 		console.error(error);
 		msg.reply('there was an error trying to execute that command!');
