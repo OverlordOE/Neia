@@ -18,7 +18,7 @@ module.exports = {
 		if (gambleAmount > currentAmount) return msg.channel.send(`Sorry ${msg.author}, you only have ${currentAmount}.`);
 		if (gambleAmount <= 0) return msg.channel.send(`Please enter an amount greater than zero, ${msg.author}.`);
 
-		const answer = Math.floor(Math.random() * (5 - 1 + 1) + 1);
+		const answer = Math.floor(Math.random() * 6);
 
 		msg.channel.send(`You have bet ${gambleAmount}.\nGuess the number between 1 and 5.`);
 		msg.react(emojiCharacters[1])
