@@ -10,5 +10,6 @@ module.exports = {
 	Buy: require('./buy'),
 	Shop: require('./shop'),
 	Leaderboard: require('./leaderboard'),
-	Add: require('./add')
+	Add: require('./add'),
+	Gamble: require('./gamble')
 };

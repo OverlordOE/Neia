@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'hackedandbanned',
-	aliases: ['hacked', 'banned', 'hackandban'],
+	aliases: ['hack', 'ban', 'hackandban'],
 	admin: false,
 	description: 'GET HACKED AND BANNED',
 	args: true,
