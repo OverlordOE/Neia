@@ -8,7 +8,7 @@ module.exports = {
     usage: '"money" <user>',
     execute(msg, args, currency) {
         const currentAmount = currency.getBalance(msg.author.id);
-        const transferAmount = args.split(/ +/g).find(arg => !/<@!?\d+>/g.test(arg));
+        const transferAmount = args.find(arg => !/<@!?\d+>/g.test(arg));
         const transferTarget = msg.mentions.users.first();
 
         if (!transferAmount || isNaN(transferAmount)) return msg.channel.send(`Sorry ${msg.author}, that's an invalid amount.`);

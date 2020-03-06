@@ -58,7 +58,7 @@ bot.on('message', msg => {
 
 	//check for prefix
 	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
-	console.info(`Called command: ${commandName}`);
+	console.info(`${msg.author.tag} Called command: ${commandName}`);
 
 	const command = bot.commands.get(commandName)
 		|| bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
