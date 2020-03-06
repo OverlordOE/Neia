@@ -9,5 +9,6 @@ module.exports = {
 	Transfer: require('./transfer'),
 	Buy: require('./buy'),
 	Shop: require('./shop'),
-	Leaderboard: require('./leaderboard')
+	Leaderboard: require('./leaderboard'),
+	Add: require('./add')
 };
