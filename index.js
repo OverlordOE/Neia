@@ -1,12 +1,21 @@
 require('dotenv').config();
 const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
+const winston = require('winston');
 const { Op } = require('sequelize');
+const { prefix, token } = require('./config.json');
 const { Users, CurrencyShop } = require('./dbObjects');
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 const botCommands = require('./commands');
 const currency = new Discord.Collection();
+const logger = winston.createLogger({
+	transports: [
+		new winston.transports.Console(),
+		new winston.transports.File({ filename: 'log' }),
+	],
+	format: winston.format.printf(log => `[${log.level.toUpperCase()}] - ${log.message}`),
+});
+
 
 //Make add and balance method
 Reflect.defineProperty(currency, 'add', {
@@ -44,9 +53,16 @@ bot.login(TOKEN);
 bot.on('ready', async () => {
 	const storedBalances = await Users.findAll();
 	storedBalances.forEach(b => currency.set(b.user_id, b));
-	console.info(`Logged in as ${bot.user.tag}!`);
+	logger.log('info', `Logged in as ${bot.user.tag}!`);
 	bot.user.setActivity('The Syndicate', { type: 'WATCHING' });
 });
+
+//Logger
+bot.on('debug', m => logger.log('debug', m));
+bot.on('warn', m => logger.log('warn', m));
+bot.on('error', m => logger.log('error', m));
+process.on('unhandledRejection', error => logger.log('error', error));
+process.on('uncaughtException', error => logger.log('error', error));
 
 //Execute for every message
 bot.on('message', msg => {
