@@ -1,17 +1,11 @@
 const { Users, CurrencyShop } = require('../dbObjects');
 module.exports = {
     name: 'inventory',
-    description: 'Shows inventory of tagged user or the sender if noone was tagged.',
+    description: 'This command is outdated use "-profile" instead',
     admin: false,
-    aliases: ["inv", "i", "items"],
     args: false,
-    usage: '<user>',
+    usage: '',
     async execute(msg, args, currency) {
-        const target = msg.mentions.users.first() || msg.author;
-        const user = await Users.findOne({ where: { user_id: target.id } });
-        const items = await user.getItems();
-
-        if (!items.length) return msg.channel.send(`${target.tag} has nothing!`);
-        return msg.channel.send(`${target.tag} currently has ${items.map(i => `${i.amount} ${i.item.name}`).join(', ')}`);
+        msg.channel.send(`This command is outdated use "-profile" instead`);
     },
 };

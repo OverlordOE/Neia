@@ -1,4 +1,3 @@
-require('dotenv').config();
 const Discord = require('discord.js');
 const winston = require('winston');
 const { Op } = require('sequelize');
@@ -45,9 +44,8 @@ Object.keys(botCommands).map(key => {
 	bot.commands.set(botCommands[key].name, botCommands[key]);
 });
 
-const TOKEN = token;
 
-bot.login(TOKEN);
+bot.login(token);
 
 //Execute on bot start
 bot.on('ready', async () => {
@@ -62,6 +60,7 @@ bot.on('debug', m => logger.log('debug', m));
 bot.on('warn', m => logger.log('warn', m));
 bot.on('error', m => logger.log('error', m));
 process.on('unhandledRejection', error => logger.log('error', error));
+process.on('TypeError', error => logger.log('error', error));
 process.on('uncaughtException', error => logger.log('error', error));
 
 //Execute for every message
