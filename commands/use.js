@@ -6,6 +6,7 @@ module.exports = {
 	admin: false,
 	args: true,
 	usage: '<item>\n -use Custom-role [colour in hex code(#0099ff)] "role name"',
+	cooldown: 5,
 	async execute(msg, args, currency) {
 		const author = msg.guild.members.get(msg.author.id);
 		var hasItem = false;

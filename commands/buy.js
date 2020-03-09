@@ -7,11 +7,20 @@ module.exports = {
     aliases: ["get"],
     args: true,
     usage: '<item>',
+    cooldown: 5,
     async execute(msg, args, currency) {
         var amount = 1;
         const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: args[0] } } });
         if (!item) return msg.channel.send(`That item doesn't exist.`);
-        if (args[1]) {amount = args[1]; }
+
+        if (args[1]) {
+            if (Number.isInteger(args[1])) {
+                return msg.channel.send(`${args[1]} is not a valid amount`);
+            } else if (args[1] < 1 || args[1] > 1000) {
+                return msg.channel.send(`Enter a number between 1 and 1000`);
+            } else { amount = args[1]; }
+
+        }
 
         const cost = amount * item.cost
         if (cost > currency.getBalance(msg.author.id)) {
@@ -22,8 +31,11 @@ module.exports = {
         currency.add(msg.author.id, -cost);
         for (var i = 0; i < amount; i++) {
             await user.addItem(item);
+            console.log(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);
+            if (i >= amount / 2 && i < (amount / 2) + 1) {
+                msg.channel.send(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);
+            }
         }
         msg.channel.send(`You've bought: ${amount} ${item.name}.`);
-
     },
 };
