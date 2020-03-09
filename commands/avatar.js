@@ -6,14 +6,8 @@ module.exports = {
 	args: false,
 	usage: '<user>',
 	execute(msg, args) {
-		if (!msg.mentions.users.size) {
-			return msg.channel.send(`Your avatar: <${msg.author.displayAvatarURL}>`);
-		}
+		const target = msg.mentions.users.first() || msg.author;
 
-		const avatarList = msg.mentions.users.map(user => {
-			return `${user.username}'s avatar: <${user.displayAvatarURL}>`;
-		});
-
-		msg.channel.send(avatarList);
+		msg.channel.send(`${target.tag}'s avatar: <${target.displayAvatarURL}>`);
 	},
 };

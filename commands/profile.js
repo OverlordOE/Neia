@@ -4,7 +4,7 @@ module.exports = {
     name: 'profile',
     description: 'Shows inventory of tagged user or the sender if noone was tagged.',
     admin: false,
-    aliases: ["inv", "items"],
+    aliases: ["inv", "items", "prof", "inventory", "balance", "money"],
     args: false,
     usage: '<user>',
     async execute(msg, args, currency) {
