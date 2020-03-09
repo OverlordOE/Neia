@@ -26,6 +26,19 @@ Users.prototype.addItem = async function(item) {
 	return UserItems.create({ user_id: this.user_id, item_id: item.id, amount: 1 });
 };
 
+Users.prototype.removeItem = async function(item) {
+	const userItem = await UserItems.findOne({
+		where: { user_id: this.user_id, item_id: item.id },
+	});
+
+	if (userItem >= 1) {
+		userItem.amount -= 1;
+		return userItem.save();
+	}
+
+	return console.log(user_id + " doesnt have that item.");
+};
+
 Users.prototype.getItems = function() {
 	return UserItems.findAll({
 		where: { user_id: this.user_id },

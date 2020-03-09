@@ -6,6 +6,8 @@
 ## Installation Steps (if applicable)
 
 1. Clone repo
-2. Run `npm install`
-3. Run `node index.js`
+2. Run `npm install` To install all the packages
+3. Run `node dbInit.js -f` To initialize the Database
+4. Run `node index.js` or launch the `bot.bat` file To run the bot
+
 
