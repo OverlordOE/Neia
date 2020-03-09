@@ -8,17 +8,22 @@ module.exports = {
     args: true,
     usage: '<item>',
     async execute(msg, args, currency) {
-        const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: args } } });
+        var amount = 1;
+        const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: args[0] } } });
         if (!item) return msg.channel.send(`That item doesn't exist.`);
-        if (item.cost > currency.getBalance(msg.author.id)) {
-            return msg.channel.send(`You currently have ${currency.getBalance(msg.author.id)}, but the ${item.name} costs ${item.cost}!`);
+        if (args[1]) {amount = args[1]; }
+
+        const cost = amount * item.cost
+        if (cost > currency.getBalance(msg.author.id)) {
+            return msg.channel.send(`You currently have ${currency.getBalance(msg.author.id)}, but ${amount} ${item.name} costs ${cost}!`);
         }
 
         const user = await Users.findOne({ where: { user_id: msg.author.id } });
-        currency.add(msg.author.id, -item.cost);
-        await user.addItem(item);
-
-        msg.channel.send(`You've bought: ${item.name}.`);
+        currency.add(msg.author.id, -cost);
+        for (var i = 0; i < amount; i++) {
+            await user.addItem(item);
+        }
+        msg.channel.send(`You've bought: ${amount} ${item.name}.`);
 
     },
 };

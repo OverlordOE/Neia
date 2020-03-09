@@ -32,6 +32,10 @@ module.exports = {
 			case 'Cake':
 				msg.channel.send("🎂THE CASE IS A LIE DONT TRUST IT🎂");
 				break;
+			
+			case 'Coffee':
+				msg.channel.send(`${msg.author.tag}'s power increased by 1%`);
+				break;
 
 			case 'Custom-Role':
 				msg.guild.createRole({ name: args[2], color: args[1], mentionable: true });
