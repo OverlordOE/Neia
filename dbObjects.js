@@ -31,12 +31,12 @@ Users.prototype.removeItem = async function(item) {
 		where: { user_id: this.user_id, item_id: item.id },
 	});
 
-	if (userItem >= 1) {
+	if (userItem.amount >= 1) {
 		userItem.amount -= 1;
 		return userItem.save();
 	}
 
-	return console.log(user_id + " doesnt have that item.");
+	return msg.reply("user doesnt have that item.");
 };
 
 Users.prototype.getItems = function() {
