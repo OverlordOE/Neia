@@ -61,3 +61,4 @@ typings/
 .next
 log
 database.sqlite
+config.json
