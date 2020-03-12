@@ -7,7 +7,7 @@ module.exports = {
 	aliases: ["guess"],
 	args: true,
 	usage: '"money"',
-	execute(msg, args, currency) {
+	async execute(msg, args, currency) {
 		const currentAmount = currency.getBalance(msg.author.id);
 		const gambleAmount = args;
 		const filter = (reaction, user) => {
@@ -20,15 +20,15 @@ module.exports = {
 
 		const answer = Math.floor((Math.random() * 5) + 1);
 
-		msg.channel.send(`You have bet ${gambleAmount}.\nGuess the number between 1 and 5.`);
-		msg.react(emojiCharacters[1])
-			.then(() => msg.react(emojiCharacters[2]))
-			.then(() => msg.react(emojiCharacters[3]))
-			.then(() => msg.react(emojiCharacters[4]))
-			.then(() => msg.react(emojiCharacters[5]))
+		await msg.channel.send(`You have bet ${gambleAmount}.\nGuess the number between 1 and 5.`)
+			.then(() => msg.channel.lastMessage.react(emojiCharacters[1]))
+			.then(() => msg.channel.lastMessage.react(emojiCharacters[2]))
+			.then(() => msg.channel.lastMessage.react(emojiCharacters[3]))
+			.then(() => msg.channel.lastMessage.react(emojiCharacters[4]))
+			.then(() => msg.channel.lastMessage.react(emojiCharacters[5]))
 			.catch(() => console.error('One of the emojis failed to react.'));
 
-		msg.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+		msg.channel.lastMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
 			.then(collected => {
 				const reaction = collected.first();
 

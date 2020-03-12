@@ -3,10 +3,13 @@ const winston = require('winston');
 const { Op } = require('sequelize');
 const { prefix, token } = require('./config.json');
 const { Users, CurrencyShop } = require('./dbObjects');
-const bot = new Discord.Client();
-bot.commands = new Discord.Collection();
 const botCommands = require('./commands');
+const bot = new Discord.Client();
 const currency = new Discord.Collection();
+const cooldowns = new Discord.Collection();
+bot.commands = new Discord.Collection();
+
+
 const logger = winston.createLogger({
 	transports: [
 		new winston.transports.Console(),
@@ -38,7 +41,7 @@ Reflect.defineProperty(currency, 'getBalance', {
 	enumerable: true
 });
 
-module.exports = {currency};
+module.exports = { currency };
 
 Object.keys(botCommands).map(key => {
 	bot.commands.set(botCommands[key].name, botCommands[key]);
@@ -73,7 +76,7 @@ bot.on('message', msg => {
 
 	//check for prefix
 	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
-	logger.log('info', `${msg.author.tag} Called command: ${commandName}`, );
+	logger.log('info', `${msg.author.tag} Called command: ${commandName}`);
 
 	const command = bot.commands.get(commandName)
 		|| bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -87,6 +90,26 @@ bot.on('message', msg => {
 		}
 	}
 
+	if (!cooldowns.has(command.name)) {
+		cooldowns.set(command.name, new Discord.Collection());
+	}
+
+	//cooldowns
+	const now = Date.now();
+	const timestamps = cooldowns.get(command.name);
+	const cooldownAmount = (command.cooldown || 3) * 1000;
+
+	if (timestamps.has(msg.author.id)) {
+		const expirationTime = timestamps.get(msg.author.id) + cooldownAmount;
+
+		if (now < expirationTime) {
+			const timeLeft = (expirationTime - now) / 1000;
+			return msg.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+		}	
+	}
+	timestamps.set(msg.author.id, now);
+	setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
+	
 	//if the command is used wrongly correct the user
 	if (command.args && !args.length) {
 		let reply = `You didn't provide any arguments, ${msg.author}!`;
@@ -97,6 +120,8 @@ bot.on('message', msg => {
 
 		return msg.channel.send(reply);
 	}
+
+
 
 	//execute command
 	try {

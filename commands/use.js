@@ -6,6 +6,7 @@ module.exports = {
 	admin: false,
 	args: true,
 	usage: '<item>\n -use Custom-role [colour in hex code(#0099ff)] "role name"',
+	cooldown: 5,
 	async execute(msg, args, currency) {
 		const author = msg.guild.members.get(msg.author.id);
 		var hasItem = false;
@@ -31,6 +32,10 @@ module.exports = {
 
 			case 'Cake':
 				msg.channel.send("🎂THE CASE IS A LIE DONT TRUST IT🎂");
+				break;
+			
+			case 'Coffee':
+				msg.channel.send(`${msg.author.tag}'s power increased by 1%`);
 				break;
 
 			case 'Custom-Role':
