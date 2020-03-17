@@ -4,7 +4,6 @@ const { Op } = require('sequelize');
 const {prefix, token} = require('./config.json');
 const { Users, CurrencyShop } = require('./dbObjects');
 const botCommands = require('./commands');
-const creds = require('./Syndicate bot-52a1ba49d569.json');
 const bot = new Discord.Client();
 const currency = new Discord.Collection();
 const cooldowns = new Discord.Collection();
@@ -72,7 +71,8 @@ process.on('uncaughtException', m => logger.log('error', m));
 
 //Execute for every message
 bot.on('message', msg => {
-	currency.add(msg.author.id, 0.2);
+	const reward = 0.3 + (Math.random() * 0.3);
+	currency.add(msg.author.id, reward);
 
 	//split message for further use
 	const args = msg.content.slice(prefix.length).split(/ +/);
