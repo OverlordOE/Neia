@@ -33,7 +33,7 @@ module.exports = {
 			case 'Cake':
 				msg.channel.send("🎂THE CASE IS A LIE DONT TRUST IT🎂");
 				break;
-			
+
 			case 'Coffee':
 				msg.channel.send(`${msg.author.tag}'s power increased by 1%`);
 				break;
@@ -41,26 +41,26 @@ module.exports = {
 			case 'Custom-Role':
 				const name = args[2];
 				const colour = args[1];
-				msg.guild.createRole({ name: name, color: colour, mentionable: true });
+				await msg.guild.createRole({ name: name, color: colour, mentionable: true });
 				const role = msg.guild.roles.find('name', name);
 				author.addRole(role);
 				msg.channel.send(`You have created the role "${name}" with color ${colour}!`);
 				break;
 
 			case 'Text-Channel':
-				const cname = args[0];
-				msg.guild.channels.create(cname , {
+				const cname = args[1];
+				msg.guild.createChannel(cname, {
 					permissionOverwrites: [
 						{
-							id: message.author.id,
-							allow: ['VIEW_CHANNEL', 'MANAGE_CHANNEL'],
+							id: msg.author.id,
+							allow: ['VIEW_CHANNEL', 'MANAGE_CHANNELS', 'MANAGE_ROLES', 'MANAGE_MESSAGES'],
 						},
 						{
-							id: message.guild.id,
+							id: msg.guild.id,
 							deny: ['VIEW_CHANNEL'],
 						},
 					],
-				}).catch(console.error);
+				});
 				msg.channel.send(`You have created channel ${cname}`);
 				break;
 			default:
