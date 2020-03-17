@@ -29,11 +29,14 @@ module.exports = {
 
         const user = await Users.findOne({ where: { user_id: msg.author.id } });
         currency.add(msg.author.id, -cost);
+        const interupt = Math.round(amount / 100);
         for (var i = 0; i < amount; i++) {
             await user.addItem(item);
             console.log(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);
-            if (i >= amount / 2 && i < (amount / 2) + 1) {
-                msg.channel.send(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);
+            if (interupt != 0) {
+                if (i >= amount / interupt && i < (amount / interupt) + 1) {
+                    msg.channel.send(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);
+                }
             }
         }
         msg.channel.send(`You've bought: ${amount} ${item.name}.`);
