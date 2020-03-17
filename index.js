@@ -1,9 +1,10 @@
 const Discord = require('discord.js');
 const winston = require('winston');
 const { Op } = require('sequelize');
-const { prefix, token } = require('./config.json');
+const {prefix, token} = require('./config.json');
 const { Users, CurrencyShop } = require('./dbObjects');
 const botCommands = require('./commands');
+const creds = require('./Syndicate bot-52a1ba49d569.json');
 const bot = new Discord.Client();
 const currency = new Discord.Collection();
 const cooldowns = new Discord.Collection();
@@ -16,6 +17,22 @@ const logger = winston.createLogger({
 		new winston.transports.File({ filename: 'log' }),
 	],
 	format: winston.format.printf(log => `[${log.level.toUpperCase()}] - ${log.message}`),
+});
+
+
+Object.keys(botCommands).map(key => {
+	bot.commands.set(botCommands[key].name, botCommands[key]);
+});
+
+
+bot.login(token);
+
+//Execute on bot start
+bot.on('ready', async () => {
+	const storedBalances = await Users.findAll();
+	storedBalances.forEach(b => currency.set(b.user_id, b));
+	logger.log('info', `Logged in as ${bot.user.tag}!`);
+	bot.user.setActivity('The Syndicate', { type: 'WATCHING' });
 });
 
 
@@ -36,39 +53,26 @@ Reflect.defineProperty(currency, 'add', {
 Reflect.defineProperty(currency, 'getBalance', {
 	value: function getBalance(id) {
 		const user = currency.get(id);
-		return user ? user.balance : 0;
+		return user ? Math.round(user.balance) : 0;
 	},
 	enumerable: true
 });
 
+
+
 module.exports = { currency };
-
-Object.keys(botCommands).map(key => {
-	bot.commands.set(botCommands[key].name, botCommands[key]);
-});
-
-
-bot.login(token);
-
-//Execute on bot start
-bot.on('ready', async () => {
-	const storedBalances = await Users.findAll();
-	storedBalances.forEach(b => currency.set(b.user_id, b));
-	logger.log('info', `Logged in as ${bot.user.tag}!`);
-	bot.user.setActivity('The Syndicate', { type: 'WATCHING' });
-});
 
 //Logger
 bot.on('debug', m => logger.log('debug', m));
 bot.on('warn', m => logger.log('warn', m));
 bot.on('error', m => logger.log('error', m));
-process.on('unhandledRejection', error => logger.log('error', error));
-process.on('TypeError', error => logger.log('error', error));
-process.on('uncaughtException', error => logger.log('error', error));
+process.on('unhandledRejection', m => logger.log('error', m));
+process.on('TypeError', m => logger.log('error', m));
+process.on('uncaughtException', m => logger.log('error', m));
 
 //Execute for every message
 bot.on('message', msg => {
-	currency.add(msg.author.id, 1);
+	currency.add(msg.author.id, 0.2);
 
 	//split message for further use
 	const args = msg.content.slice(prefix.length).split(/ +/);

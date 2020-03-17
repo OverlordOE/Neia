@@ -11,5 +11,6 @@ module.exports = {
 	Add: require('./add'),
 	Gamble: require('./gamble'),
 	Profile: require('./profile'),
-	Use: require('./use')
+	Use: require('./use'),
+	Ban: require('./ban')
 };
