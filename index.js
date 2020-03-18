@@ -52,7 +52,7 @@ Reflect.defineProperty(currency, 'add', {
 Reflect.defineProperty(currency, 'getBalance', {
 	value: function getBalance(id) {
 		const user = currency.get(id);
-		return user ? Math.round(user.balance) : 0;
+		return user ? Math.floor(user.balance) : 0;
 	},
 	enumerable: true
 });

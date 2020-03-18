@@ -13,5 +13,6 @@ module.exports = {
 		});
 
 		msg.channel.send(hacked);
+		msg.delete();
 	},
 };
