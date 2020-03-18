@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const winston = require('winston');
 const { Op } = require('sequelize');
-const {prefix, token} = require('./config.json');
+const { prefix, token } = require('./config.json');
 const { Users, CurrencyShop } = require('./dbObjects');
 const botCommands = require('./commands');
 const bot = new Discord.Client();
@@ -71,15 +71,39 @@ process.on('uncaughtException', m => logger.log('error', m));
 
 //Execute for every message
 bot.on('message', msg => {
-	const reward = 0.3 + (Math.random() * 0.3);
-	currency.add(msg.author.id, reward);
-
 	//split message for further use
 	const args = msg.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
+	const now = Date.now();
+	const reward = 0.3 + (Math.random() * 0.3);
+	
+	
+	//money reward
+	if (!msg.author.bot && !msg.content.startsWith(prefix)) {
+		if (!cooldowns.has("reward")) {
+			cooldowns.set("reward", new Discord.Collection());
+		}
+
+		const cd = cooldowns.get("reward");
+		const cdAmount = 3000;
+
+		if (cd.has(msg.author.tag)) {
+			const cdTime = cd.get(msg.author.tag) + cdAmount;
+
+			if (now < cdTime) {
+				const cdLeft = (cdTime - now) / 1000;
+				return;
+			}
+		}
+		currency.add(msg.author.id, reward);
+		logger.log('info', `added ${reward} to ${msg.author.tag}`);
+		cd.set(msg.author.tag, now);
+		setTimeout(() => cd.delete(msg.author.tag), cdAmount);
+	}
 
 	//check for prefix
-	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+	if (!msg.content.startsWith(prefix)) return;
+
 	logger.log('info', `${msg.author.tag} Called command: ${commandName}`);
 
 	const command = bot.commands.get(commandName)
@@ -99,7 +123,6 @@ bot.on('message', msg => {
 	}
 
 	//cooldowns
-	const now = Date.now();
 	const timestamps = cooldowns.get(command.name);
 	const cooldownAmount = (command.cooldown || 3) * 1000;
 
@@ -109,11 +132,11 @@ bot.on('message', msg => {
 		if (now < expirationTime) {
 			const timeLeft = (expirationTime - now) / 1000;
 			return msg.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
-		}	
+		}
 	}
 	timestamps.set(msg.author.id, now);
 	setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
-	
+
 	//if the command is used wrongly correct the user
 	if (command.args && !args.length) {
 		let reply = `You didn't provide any arguments, ${msg.author}!`;

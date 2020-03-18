@@ -35,7 +35,7 @@ module.exports = {
 				break;
 
 			case 'Coffee':
-				msg.channel.send(`${msg.author.tag}'s power increased by 1%`);
+				msg.channel.send(`${msg.author.username}'s power increased by 1%`);
 				break;
 
 			case 'Custom-Role':

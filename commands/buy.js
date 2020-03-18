@@ -9,7 +9,7 @@ module.exports = {
     usage: '<item>',
     cooldown: 5,
     async execute(msg, args, currency) {
-        const amount = 1;
+        let amount = 1;
         const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: args[0] } } });
         if (!item) return msg.channel.send(`That item doesn't exist.`);
 
