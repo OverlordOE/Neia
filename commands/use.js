@@ -5,7 +5,7 @@ module.exports = {
 	description: 'use an item from your inventory.',
 	admin: false,
 	args: true,
-	usage: '<item>\n -use Custom-role [colour in hex code(#0099ff)] "role name"',
+	usage: '<item>\n -use Custom-role [colour in hex code(#0099ff)] "role name"\n -use Text-Channel [name]',
 	cooldown: 5,
 	async execute(msg, args, currency) {
 		const author = msg.guild.members.get(msg.author.id);
@@ -33,18 +33,36 @@ module.exports = {
 			case 'Cake':
 				msg.channel.send("🎂THE CASE IS A LIE DONT TRUST IT🎂");
 				break;
-			
+
 			case 'Coffee':
-				msg.channel.send(`${msg.author.tag}'s power increased by 1%`);
+				msg.channel.send(`${msg.author.username}'s power increased by 1%`);
 				break;
 
 			case 'Custom-Role':
-				msg.guild.createRole({ name: args[2], color: args[1], mentionable: true });
-				const role = msg.guild.roles.find('name', args[2]);
+				const name = args[2];
+				const colour = args[1];
+				await msg.guild.createRole({ name: name, color: colour, mentionable: true });
+				const role = msg.guild.roles.find('name', name);
 				author.addRole(role);
-				msg.channel.send(`You have created the role "${args[2]}" with color ${args[1]}!`);
+				msg.channel.send(`You have created the role "${name}" with color ${colour}!`);
 				break;
 
+			case 'Text-Channel':
+				const cname = args[1];
+				msg.guild.createChannel(cname, {
+					permissionOverwrites: [
+						{
+							id: msg.author.id,
+							allow: ['VIEW_CHANNEL', 'MANAGE_CHANNELS', 'MANAGE_ROLES', 'MANAGE_MESSAGES'],
+						},
+						{
+							id: msg.guild.id,
+							deny: ['VIEW_CHANNEL'],
+						},
+					],
+				});
+				msg.channel.send(`You have created channel ${cname}`);
+				break;
 			default:
 				return msg.channel.send(`No use for this yet, the item was not used.`);
 		}

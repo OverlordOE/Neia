@@ -19,10 +19,11 @@ const force = process.argv.includes('--force') || process.argv.includes('-f');
 //Create tags
 sequelize.sync({ force }).then(async () => {
 	const shop = [
-		CurrencyShop.upsert({ name: 'Tea', cost: 1 }),
-		CurrencyShop.upsert({ name: 'Coffee', cost: 2 }),
-		CurrencyShop.upsert({ name: 'Cake', cost: 5 }),
-		CurrencyShop.upsert({ name: 'Custom-Role', cost: 400 }),
+		CurrencyShop.upsert({ name: 'Tea', cost: 2 }),
+		CurrencyShop.upsert({ name: 'Coffee', cost: 3 }),
+		CurrencyShop.upsert({ name: 'Cake', cost: 6 }),
+		CurrencyShop.upsert({ name: 'Custom-Role', cost: 100 }),
+		CurrencyShop.upsert({ name: 'Text-Channel', cost: 250 }),
 	];
 	await Promise.all(shop);
 	console.log('Database synced');

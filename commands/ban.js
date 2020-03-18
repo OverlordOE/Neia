@@ -1,15 +1,19 @@
 module.exports = {
 	name: 'ban',
-	description: 'test command',
+	description: 'Bans mentioned user from the server',
 	admin: true,
 	aliases: [],
-	args: false,
-	usage: '',
-	async execute(msg, args, apSheet) {
+	args: true,
+	usage: '{user} [reason]',
+	async execute(msg, args) {
 		const user = msg.mentions.users.first();
-		// const target = msg.guild.members.get(user);
+		const reason = msg.args[1];
 		const guildId = msg.guild;
-		guildId.ban(user);
-		return msg.channel.send(`Banned ${user}.`);
+		try {
+			guildId.ban(user);
+		} catch (error) {
+			return msg.channel.send(`Ban failed because of: ${error}`)
+		}
+		return msg.channel.send(`Banned ${user} for: ${reason}`);
 	},
 };

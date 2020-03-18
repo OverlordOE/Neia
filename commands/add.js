@@ -5,7 +5,7 @@ module.exports = {
     admin: true,
     aliases: [],
     args: true,
-    usage: '"money" <user>',
+    usage: '[money] <user>',
     execute(msg, args, currency) {
         const transferAmount = args.find(arg => !/<@!?\d+>/g.test(arg));
         const transferTarget = msg.mentions.users.first();
