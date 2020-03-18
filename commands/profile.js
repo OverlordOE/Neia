@@ -6,7 +6,7 @@ module.exports = {
     admin: false,
     aliases: ["inv", "items", "prof", "inventory", "balance", "money"],
     args: false,
-    usage: '<user>',
+    usage: 'user',
     async execute(msg, args, currency) {
         const target = msg.mentions.users.first() || msg.author;
         const user = await Users.findOne({ where: { user_id: target.id } });

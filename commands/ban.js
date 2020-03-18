@@ -4,7 +4,7 @@ module.exports = {
 	admin: true,
 	aliases: [],
 	args: true,
-	usage: '{user} [reason]',
+	usage: 'user reason',
 	async execute(msg, args) {
 		const user = msg.mentions.users.first();
 		const reason = msg.args[1];

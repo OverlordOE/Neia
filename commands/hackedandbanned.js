@@ -4,7 +4,7 @@ module.exports = {
 	admin: false,
 	description: 'GET HACKED AND BANNED',
 	args: true,
-	usage: '<user>',
+	usage: 'user',
 	execute(msg, args) {
 
 

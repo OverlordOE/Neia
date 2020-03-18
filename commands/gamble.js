@@ -6,7 +6,7 @@ module.exports = {
 	admin: false,
 	aliases: ["guess"],
 	args: true,
-	usage: '"money"',
+	usage: 'money',
 	async execute(msg, args, currency) {
 		const currentAmount = currency.getBalance(msg.author.id);
 		const gambleAmount = args;

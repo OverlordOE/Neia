@@ -4,7 +4,7 @@ module.exports = {
 	admin: false,
 	aliases: ["PING"],
 	args: false,
-	usage: '<user>',
+	usage: 'user',
 	execute(msg, args) {
 		if (!msg.mentions.users.size) {
 			return msg.channel.send('pong');

@@ -5,7 +5,7 @@ module.exports = {
 	description: 'use an item from your inventory.',
 	admin: false,
 	args: true,
-	usage: '<item>\n -use Custom-role [colour in hex code(#0099ff)] "role name"\n -use Text-Channel [name]',
+	usage: 'item\n -use Custom-role colour in hex code(#0099ff) role name\n -use Text-Channel [name]',
 	cooldown: 5,
 	async execute(msg, args, currency) {
 		const author = msg.guild.members.get(msg.author.id);

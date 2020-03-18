@@ -6,7 +6,7 @@ module.exports = {
     admin: false,
     aliases: ["get"],
     args: true,
-    usage: '<item>',
+    usage: 'item',
     cooldown: 5,
     async execute(msg, args, currency) {
         let amount = 1;

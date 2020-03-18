@@ -64,10 +64,10 @@ module.exports = { currency };
 //Logger
 bot.on('debug', m => logger.log('debug', m));
 bot.on('warn', m => logger.log('warn', m));
-bot.on('error', m => logger.log('error', m));
-process.on('unhandledRejection', m => logger.log('error', m));
-process.on('TypeError', m => logger.log('error', m));
-process.on('uncaughtException', m => logger.log('error', m));
+// bot.on('error', m => logger.log('error', m));
+// process.on('unhandledRejection', m => logger.log('error', m));
+// process.on('TypeError', m => logger.log('error', m));
+// process.on('uncaughtException', m => logger.log('error', m));
 
 //Execute for every message
 bot.on('message', msg => {
@@ -75,7 +75,7 @@ bot.on('message', msg => {
 	const args = msg.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const now = Date.now();
-	const reward = 0.6 + (Math.random() * 0.3);
+	const reward = 0.4 + (Math.random() * 0.3);
 	
 	
 	//money reward
@@ -96,7 +96,6 @@ bot.on('message', msg => {
 			}
 		}
 		currency.add(msg.author.id, reward);
-		logger.log('info', `added ${reward} to ${msg.author.tag}`);
 		cd.set(msg.author.tag, now);
 		setTimeout(() => cd.delete(msg.author.tag), cdAmount);
 	}
