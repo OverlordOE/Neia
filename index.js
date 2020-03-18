@@ -75,7 +75,7 @@ bot.on('message', msg => {
 	const args = msg.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const now = Date.now();
-	const reward = 0.3 + (Math.random() * 0.3);
+	const reward = 0.6 + (Math.random() * 0.3);
 	
 	
 	//money reward
@@ -85,7 +85,7 @@ bot.on('message', msg => {
 		}
 
 		const cd = cooldowns.get("reward");
-		const cdAmount = 3000;
+		const cdAmount = 4000;
 
 		if (cd.has(msg.author.tag)) {
 			const cdTime = cd.get(msg.author.tag) + cdAmount;

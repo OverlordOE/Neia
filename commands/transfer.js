@@ -3,7 +3,7 @@ module.exports = {
     name: 'transfer',
     description: 'Transfers money to the mentioned user from own balance',
     admin: false,
-    aliases: ["give", "donate"],
+    aliases: ["give", "donate", "trade"],
     args: true,
     usage: '"money" <user>',
     execute(msg, args, currency) {
