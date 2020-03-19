@@ -12,5 +12,6 @@ module.exports = {
 	Gamble: require('./gamble'),
 	Profile: require('./profile'),
 	Use: require('./use'),
-	Ban: require('./ban')
+	Ban: require('./ban'),
+	Play: require('./play')
 };

@@ -7,7 +7,7 @@ module.exports = {
 	usage: 'user',
 	execute(msg, args) {
 		const target = msg.mentions.users.first() || msg.author;
-
-		msg.channel.send(`${target.tag}'s avatar: <${target.displayAvatarURL}>`);
+		const avatar = target.displayAvatarURL();
+		msg.channel.send(`${target.tag}'s avatar: <${avatar}>`);
 	},
 };

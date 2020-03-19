@@ -43,7 +43,7 @@ module.exports = {
 				const colour = args[1];
 				await msg.guild.createRole({ name: name, color: colour, mentionable: true });
 				const role = msg.guild.roles.find('name', name);
-				author.addRole(role);
+				author.roles.add(role);
 				msg.channel.send(`You have created the role "${name}" with color ${colour}!`);
 				break;
 

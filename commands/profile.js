@@ -11,11 +11,12 @@ module.exports = {
         const target = msg.mentions.users.first() || msg.author;
         const user = await Users.findOne({ where: { user_id: target.id } });
         const items = await user.getItems();
+        const avatar = target.displayAvatarURL();
 
         const profile = new Discord.RichEmbed()
             .setColor('#0099ff')
             .setTitle(`${target.tag}'s Profile `)
-            .setThumbnail(target.displayAvatarURL)
+            .setThumbnail(avatar)
             .addField(`Balance:`, `${currency.getBalance(target.id)}💰`)
             .setTimestamp();
 
