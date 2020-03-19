@@ -13,7 +13,7 @@ module.exports = {
         const items = await user.getItems();
         const avatar = target.displayAvatarURL();
 
-        const profile = new Discord.RichEmbed()
+        const profile = new Discord.MessageEmbed()
             .setColor('#0099ff')
             .setTitle(`${target.tag}'s Profile `)
             .setThumbnail(avatar)

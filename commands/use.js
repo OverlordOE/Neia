@@ -8,7 +8,7 @@ module.exports = {
 	usage: 'item\n -use Custom-role colour in hex code(#0099ff) role name\n -use Text-Channel [name]',
 	cooldown: 5,
 	async execute(msg, args, currency) {
-		const author = msg.guild.members.get(msg.author.id);
+		const author = msg.guild.members.cache.get(msg.author.id);
 		var hasItem = false;
 		const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: args[0] } } });
 		if (!item) return msg.channel.send(`That item doesn't exist.`);
