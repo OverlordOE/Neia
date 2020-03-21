@@ -117,6 +117,12 @@ bot.on('message', msg => {
 		}
 	}
 
+	if (command.owner) {
+		if (msg.author.id != 137920111754346496) {
+			return msg.channel.send("You are not the owner of this bot!");
+		}
+	}
+
 	if (!cooldowns.has(command.name)) {
 		cooldowns.set(command.name, new Discord.Collection());
 	}
@@ -146,7 +152,6 @@ bot.on('message', msg => {
 
 		return msg.channel.send(reply);
 	}
-
 
 
 	//execute command

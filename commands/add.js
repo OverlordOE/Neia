@@ -3,6 +3,7 @@ module.exports = {
     name: 'add',
     description: 'Adds money too the mentioned user',
     admin: true,
+    owner: true,
     aliases: [],
     args: true,
     usage: 'money user',
