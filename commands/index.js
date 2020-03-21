@@ -13,5 +13,6 @@ module.exports = {
 	Profile: require('./profile'),
 	Use: require('./use'),
 	Ban: require('./ban'),
-	Play: require('./play')
+	Play: require('./play'),
+	Invite: require('./invite')
 };
