@@ -14,3 +14,5 @@ module.exports = {
 		msg.channel.send(embed);
 	},
 };
+// https://discord.gg/duQjgAn
+// https://discordapp.com/oauth2/authorize?client_id=684458276129079320&permissions=8&scope=bot

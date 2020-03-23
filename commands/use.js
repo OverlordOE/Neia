@@ -49,7 +49,7 @@ module.exports = {
 
 			case 'Text-Channel':
 				const cname = args[1];
-				msg.guild.createChannel(cname, {
+				msg.guild.channels.create(cname, {
 					permissionOverwrites: [
 						{
 							id: msg.author.id,
