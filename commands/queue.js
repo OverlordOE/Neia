@@ -10,7 +10,7 @@ module.exports = {
 		var guildIDData = ops.active.get(msg.guild.id);
 
 		// Nakijken als er al liedjes gepsleet worden in deze server.
-		if (!guildIDData) return msg.channel.send("Er is geen muziek aan het spelen op dit moment.");
+		if (!guildIDData) return msg.channel.send("No music queued at the moment.");
 
 		// Data ophalen.
 		var queue = guildIDData.queue;
