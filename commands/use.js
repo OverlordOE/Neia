@@ -5,10 +5,10 @@ module.exports = {
 	description: 'use an item from your inventory.',
 	admin: false,
 	args: true,
-	usage: 'item\n -use Custom-role colour in hex code(#0099ff) role name\n -use Text-Channel [name]',
+	usage: 'item\n -use Custom-role (colour in hex code(#0099ff)) (role name)\n -use Text-Channel (name)',
 	cooldown: 5,
 	async execute(msg, args, currency) {
-		const author = msg.guild.members.get(msg.author.id);
+		const author = msg.guild.members.cache.get(msg.author.id);
 		var hasItem = false;
 		const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: args[0] } } });
 		if (!item) return msg.channel.send(`That item doesn't exist.`);
@@ -41,15 +41,22 @@ module.exports = {
 			case 'Custom-Role':
 				const name = args[2];
 				const colour = args[1];
-				await msg.guild.createRole({ name: name, color: colour, mentionable: true });
-				const role = msg.guild.roles.find('name', name);
-				author.addRole(role);
+				const role = await msg.guild.roles.create({
+					data: {
+						name: name,
+						color: colour,
+						mentionable: true
+					},
+					reason: `${msg.author.tag} bought a role`
+				});
+				author.roles.add(role);
 				msg.channel.send(`You have created the role "${name}" with color ${colour}!`);
 				break;
 
 			case 'Text-Channel':
+				if (!args[1]) return msg.channel.send("please give the channel a name, try again.")
 				const cname = args[1];
-				msg.guild.createChannel(cname, {
+				msg.guild.channels.create(cname, {
 					permissionOverwrites: [
 						{
 							id: msg.author.id,

@@ -10,7 +10,7 @@ module.exports = {
 		const reason = msg.args[1];
 		const guildId = msg.guild;
 		try {
-			guildId.ban(user);
+			guildId.members.ban(user);
 		} catch (error) {
 			return msg.channel.send(`Ban failed because of: ${error}`)
 		}

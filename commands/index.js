@@ -12,5 +12,10 @@ module.exports = {
 	Gamble: require('./gamble'),
 	Profile: require('./profile'),
 	Use: require('./use'),
-	Ban: require('./ban')
+	Ban: require('./ban'),
+	Play: require('./play'),
+	Invite: require('./invite'),
+	Queue: require('./queue'),
+	Clear: require('./clear'),
+	Skip: require('./skip')
 };

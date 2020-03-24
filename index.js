@@ -7,6 +7,7 @@ const botCommands = require('./commands');
 const bot = new Discord.Client();
 const currency = new Discord.Collection();
 const cooldowns = new Discord.Collection();
+var active = new Map();
 bot.commands = new Discord.Collection();
 
 
@@ -64,10 +65,10 @@ module.exports = { currency };
 //Logger
 bot.on('debug', m => logger.log('debug', m));
 bot.on('warn', m => logger.log('warn', m));
-// bot.on('error', m => logger.log('error', m));
-// process.on('unhandledRejection', m => logger.log('error', m));
-// process.on('TypeError', m => logger.log('error', m));
-// process.on('uncaughtException', m => logger.log('error', m));
+bot.on('error', m => logger.log('error', m));
+process.on('unhandledRejection', m => logger.log('error', m));
+process.on('TypeError', m => logger.log('error', m));
+process.on('uncaughtException', m => logger.log('error', m));
 
 //Execute for every message
 bot.on('message', msg => {
@@ -76,8 +77,9 @@ bot.on('message', msg => {
 	const commandName = args.shift().toLowerCase();
 	const now = Date.now();
 	const reward = 0.4 + (Math.random() * 0.3);
-	
-	
+
+
+
 	//money reward
 	if (!msg.author.bot && !msg.content.startsWith(prefix)) {
 		if (!cooldowns.has("reward")) {
@@ -110,18 +112,25 @@ bot.on('message', msg => {
 
 	if (!command) return;
 
-	//chech for admin
+	//check for admin
 	if (command.admin) {
 		if (!msg.member.hasPermission('ADMINISTRATOR')) {
 			return msg.channel.send("You need Admin privileges to use this command!");
 		}
 	}
 
+	//check for owner
+	if (command.owner) {
+		if (msg.author.id != 137920111754346496) {
+			return msg.channel.send("You are not the owner of this bot!");
+		}
+	}
+
+	//cooldowns
 	if (!cooldowns.has(command.name)) {
 		cooldowns.set(command.name, new Discord.Collection());
 	}
 
-	//cooldowns
 	const timestamps = cooldowns.get(command.name);
 	const cooldownAmount = (command.cooldown || 3) * 1000;
 
@@ -147,11 +156,13 @@ bot.on('message', msg => {
 		return msg.channel.send(reply);
 	}
 
-
+	var options = {
+		active: active
+	}
 
 	//execute command
 	try {
-		command.execute(msg, args, currency, bot);
+		command.execute(msg, args, currency, bot, options);
 	} catch (error) {
 		console.error(error);
 		msg.reply('there was an error trying to execute that command!');
