@@ -14,5 +14,7 @@ module.exports = {
 	Use: require('./use'),
 	Ban: require('./ban'),
 	Play: require('./play'),
-	Invite: require('./invite')
+	Invite: require('./invite'),
+	Queue: require('./queue'),
+	Stop: require('./stop')
 };

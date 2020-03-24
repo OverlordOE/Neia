@@ -7,6 +7,7 @@ const botCommands = require('./commands');
 const bot = new Discord.Client();
 const currency = new Discord.Collection();
 const cooldowns = new Discord.Collection();
+var songQueue = [];
 bot.commands = new Discord.Collection();
 
 
@@ -76,6 +77,7 @@ bot.on('message', msg => {
 	const commandName = args.shift().toLowerCase();
 	const now = Date.now();
 	const reward = 0.4 + (Math.random() * 0.3);
+
 
 
 	//money reward
@@ -157,7 +159,7 @@ bot.on('message', msg => {
 
 	//execute command
 	try {
-		command.execute(msg, args, currency, bot);
+		command.execute(msg, args, currency, bot, songQueue);
 	} catch (error) {
 		console.error(error);
 		msg.reply('there was an error trying to execute that command!');
