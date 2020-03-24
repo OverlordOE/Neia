@@ -11,7 +11,8 @@ module.exports = {
 	aliases: [""],
 	args: true,
 	usage: 'search criteria',
-	async execute(msg, args, currency, bot, songQueue) {
+	async execute(msg, args, currency, bot, ops) {
+
 		if (!msg.member.voice.channel) {
 			msg.reply("You are not in a voice channel!")
 		}
@@ -22,29 +23,75 @@ module.exports = {
 			search += " ";
 		}
 
-		const video = await youtube.searchVideos(search);
-
-		const connection = await msg.member.voice.channel.join();
-		songQueue.push(video);
-		playNext();
-
-
-		async function playNext() {
-			var song = songQueue[0];
-			const dispatcher = connection.play(await ytdl(song.url), { type: 'opus' });
-
-			dispatcher.on('start', () => {
-				console.log(`Now playing: ${song.title}`);
-				msg.channel.send(`Now playing: ${song.title}`)
-			});
-
-			dispatcher.on('finish', () => {
-				console.log(`${song.title} has finished playing!`);
-				msg.channel.send(`${song.title} has finished playing!`);
-				songQueue.shift();
-				if (songQueue.length) {playNext();}
-			});
-			dispatcher.on('error', console.error);
+		try {
+			var video = await youtube.searchVideos(search);
+		} catch (error) {
+			console.error(error);
+			return msg.reply("Cannot play this query");
 		}
+
+		var data = ops.active.get(msg.guild.id) || {};
+		if (!data.connection) data.connection = await msg.member.voice.channel.join();
+		if (!data.queue) data.queue = [];
+		data.guildID = msg.guild.id;
+
+		data.queue.push({
+			songTitle: video.title,
+			requester: msg.author.tag,
+			url: video.url,
+			announceChannel: msg.channel.id
+		});
+
+		if (!data.dispatcher) {
+			Play(bot, ops, data);
+		} else {
+			msg.channel.send(`Added ${video.title} to the queue - Requested by ${msg.author.tag}`);
+		}
+
+		ops.active.set(msg.guild.id, data);
 	},
-};
+}
+
+
+async function Play(bot, ops, data) {
+
+	let message = bot.channels.cache.get(data.queue[0].announceChannel);
+	message.send(`Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
+
+	var options = { seek: 2, volume: 1, bitrate: 64000, type: 'opus' };
+
+	data.dispatcher = await data.connection.play(await ytdl(data.queue[0].url), options);
+	data.dispatcher.guildID = data.guildID;
+
+	data.dispatcher.on('finish', () => {
+		console.log(`${data.queue[0].songTitle} has finished playing!`);
+		message.send(`${data.queue[0].songTitle} has finished playing!`);
+		Finish(bot, ops, data.dispatcher);
+	});
+
+	data.dispatcher.on('error', e => {
+		message.send(e);
+		console.log(e);
+	});
+
+
+}
+
+
+function Finish(bot, ops, dispatcher) {
+
+	var fetchedData = ops.active.get(dispatcher.guildID);
+	fetchedData.queue.shift();
+
+	if (fetchedData.queue.length > 0) {
+		ops.active.set(dispatcher.guildID, fetchedData);
+		Play(bot, ops, fetchedData);
+	} else {
+
+		ops.active.delete(dispatcher.guildID);
+
+		var voiceChannel = bot.guilds.cache.get(dispatcher.guildID).me.voice.channel;
+		if (voiceChannel) voiceChannel.leave();
+
+	}
+}

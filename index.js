@@ -7,7 +7,7 @@ const botCommands = require('./commands');
 const bot = new Discord.Client();
 const currency = new Discord.Collection();
 const cooldowns = new Discord.Collection();
-var songQueue = [];
+var active = new Map();
 bot.commands = new Discord.Collection();
 
 
@@ -156,10 +156,13 @@ bot.on('message', msg => {
 		return msg.channel.send(reply);
 	}
 
+	var options = {
+		active: active
+	}
 
 	//execute command
 	try {
-		command.execute(msg, args, currency, bot, songQueue);
+		command.execute(msg, args, currency, bot, options);
 	} catch (error) {
 		console.error(error);
 		msg.reply('there was an error trying to execute that command!');

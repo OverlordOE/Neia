@@ -16,5 +16,6 @@ module.exports = {
 	Play: require('./play'),
 	Invite: require('./invite'),
 	Queue: require('./queue'),
-	Stop: require('./stop')
+	Clear: require('./clear'),
+	Skip: require('./skip')
 };
