@@ -6,7 +6,7 @@ const youtube = new YouTube("AIzaSyDALIKqq8SLibcRS5RotqVu4sd_SktS4eU");
 
 module.exports = {
 	name: 'skip',
-	description: 'skip a song.',
+	description: 'Skip a song.',
 	admin: false,
 	aliases: ["next"],
 	args: false,

@@ -2,7 +2,7 @@ const { Users, CurrencyShop } = require('../dbObjects');
 const { Op } = require('sequelize');
 module.exports = {
 	name: 'use',
-	description: 'use an item from your inventory.',
+	description: 'Use an item from your inventory.',
 	admin: false,
 	args: true,
 	usage: 'item\n -use Custom-role (colour in hex code(#0099ff)) (role name)\n -use Text-Channel (name)',

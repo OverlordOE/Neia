@@ -20,9 +20,8 @@ module.exports = {
 		var response = `Now playing ${nowPlaying.songTitle} - Requested by ${nowPlaying.requester}\n\nQueue: \n`;
 
 		// Voor ieder liedje in de lijst gaan we deze toevoegen aan het bericht.
-		for (var i = 0; i < queue.length; i++) {
-			let nr = i + 1;
-			response += `${nr}: ${queue[i].songTitle} - Requested by ${queue[i].requester}\n`;
+		for (var i = 1; i < queue.length; i++) {
+			response += `${i}: ${queue[i].songTitle} - Requested by ${queue[i].requester}\n`;
 
 		}
 
