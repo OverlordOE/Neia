@@ -4,11 +4,13 @@ const { Op } = require('sequelize');
 const { prefix, token } = require('./config.json');
 const { Users, CurrencyShop } = require('./dbObjects');
 const botCommands = require('./commands');
+var moment = require('moment');
 const bot = new Discord.Client();
-const currency = new Discord.Collection();
+const profile = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 var active = new Map();
 bot.commands = new Discord.Collection();
+moment().format();
 
 
 const logger = winston.createLogger({
@@ -30,37 +32,56 @@ bot.login(token);
 //Execute on bot start
 bot.on('ready', async () => {
 	const storedBalances = await Users.findAll();
-	storedBalances.forEach(b => currency.set(b.user_id, b));
+	storedBalances.forEach(b => profile.set(b.user_id, b));
 	logger.log('info', `Logged in as ${bot.user.tag}!`);
 	bot.user.setActivity('The Syndicate', { type: 'WATCHING' });
 });
 
 
-//Make add and balance method
-Reflect.defineProperty(currency, 'add', {
-	value: async function add(id, amount) {
-		const user = currency.get(id);
+//Add db commands
+Reflect.defineProperty(profile, 'addMoney', {
+	value: async function addMoney(id, amount) {
+		const user = profile.get(id);
 		if (user) {
 			user.balance += Number(amount);
 			return user.save();
 		}
 		const newUser = await Users.create({ user_id: id, balance: amount });
-		currency.set(id, newUser);
+		profile.set(id, newUser);
 		return newUser;
 	},
 });
 
-Reflect.defineProperty(currency, 'getBalance', {
+Reflect.defineProperty(profile, 'getBalance', {
 	value: function getBalance(id) {
-		const user = currency.get(id);
+		const user = profile.get(id);
 		return user ? Math.floor(user.balance) : 0;
 	},
-	enumerable: true
+});
+
+Reflect.defineProperty(profile, 'getDaily', {
+	value: function getBalance(id) {
+		const user = profile.get(id);
+		return user ? user.lastDaily : 0;
+	},
+});
+
+Reflect.defineProperty(profile, 'addMoney', {
+	value: async function addMoney(id, amount) {
+		const user = profile.get(id);
+		if (user) {
+			user.balance += Number(amount);
+			return user.save();
+		}
+		const newUser = await Users.create({ user_id: id, balance: amount });
+		profile.set(id, newUser);
+		return newUser;
+	},
 });
 
 
 
-module.exports = { currency };
+module.exports = { profile };
 
 //Logger
 bot.on('debug', m => logger.log('debug', m));
@@ -93,11 +114,10 @@ bot.on('message', msg => {
 			const cdTime = cd.get(msg.author.tag) + cdAmount;
 
 			if (now < cdTime) {
-				const cdLeft = (cdTime - now) / 1000;
 				return;
 			}
 		}
-		currency.add(msg.author.id, reward);
+		profile.addMoney(msg.author.id, reward);
 		cd.set(msg.author.tag, now);
 		setTimeout(() => cd.delete(msg.author.tag), cdAmount);
 	}
@@ -162,7 +182,7 @@ bot.on('message', msg => {
 
 	//execute command
 	try {
-		command.execute(msg, args, currency, bot, options);
+		command.execute(msg, args, profile, bot, options);
 	} catch (error) {
 		console.error(error);
 		msg.reply('there was an error trying to execute that command!');

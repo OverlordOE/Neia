@@ -6,8 +6,7 @@ module.exports = {
 	admin: false,
 	args: true,
 	usage: 'item\n -use Custom-role (colour in hex code(#0099ff)) (role name)\n -use Text-Channel (name)',
-	cooldown: 5,
-	async execute(msg, args, currency) {
+	async execute(msg, args, profile) {
 		const author = msg.guild.members.cache.get(msg.author.id);
 		var hasItem = false;
 		const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: args[0] } } });
@@ -31,7 +30,7 @@ module.exports = {
 				break;
 
 			case 'Cake':
-				msg.channel.send("🎂THE CASE IS A LIE DONT TRUST IT🎂");
+				msg.channel.send("🎂THE CAkE IS A LIE");
 				break;
 
 			case 'Coffee':

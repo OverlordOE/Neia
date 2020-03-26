@@ -7,24 +7,24 @@ module.exports = {
     aliases: ["inv", "items", "prof", "inventory", "balance", "money"],
     args: false,
     usage: 'user',
-    async execute(msg, args, currency) {
+    async execute(msg, args, profile) {
         const target = msg.mentions.users.first() || msg.author;
         const user = await Users.findOne({ where: { user_id: target.id } });
         const items = await user.getItems();
         const avatar = target.displayAvatarURL();
 
-        const profile = new Discord.MessageEmbed()
+        const embed = new Discord.MessageEmbed()
             .setTitle(`${target.tag}'s Profile`)
             .setColor('#42f548')
             .setThumbnail(avatar)
-            .addField(`Balance:`, `${currency.getBalance(target.id)}💰`)
+            .addField(`Balance:`, `${profile.getBalance(target.id)}💰`)
             .setTimestamp();
 
-        if (!items.length) {profile.addField('Inventory:',`${target.tag} has nothing!`);}
+        if (!items.length) {embed.addField('Inventory:',`${target.tag} has nothing!`);}
         else {
-            profile.addField('Inventory:', '-----------------------------');
-            items.map(i => profile.addField(`${i.item.name}: `, `${i.amount}`, true));
+            embed.addField('Inventory:', '-----------------------------');
+            items.map(i => embed.addField(`${i.item.name}: `, `${i.amount}`, true));
         }
-        msg.channel.send(profile);
+        msg.channel.send(embed);
     },
 };

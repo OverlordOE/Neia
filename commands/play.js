@@ -11,7 +11,7 @@ module.exports = {
 	aliases: ["song"],
 	args: true,
 	usage: 'search criteria',
-	async execute(msg, args, currency, bot, ops) {
+	async execute(msg, args, profile, bot, ops) {
 
 		if (!msg.member.voice.channel) {
 			msg.reply("You are not in a voice channel!")

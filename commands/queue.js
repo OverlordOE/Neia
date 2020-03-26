@@ -5,7 +5,7 @@ module.exports = {
 	aliases: ["list"],
 	args: false,
 	usage: '',
-	async execute(msg, args, currency, bot, ops) {
+	async execute(msg, args, profile, bot, ops) {
 		// Ophalen van het ID van de server voor de data.
 		var guildIDData = ops.active.get(msg.guild.id);
 

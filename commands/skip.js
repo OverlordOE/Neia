@@ -11,7 +11,7 @@ module.exports = {
 	aliases: ["next"],
 	args: false,
 	usage: 'search criteria',
-	async execute(msg, args, currency, bot, ops) {
+	async execute(msg, args, profile, bot, ops) {
 		var guildIDData = ops.active.get(msg.guild.id);
 		return guildIDData.dispatcher.emit('finish');
 	},
