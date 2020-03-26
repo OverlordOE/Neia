@@ -6,9 +6,9 @@ module.exports = {
     admin: false,
     aliases: ["get"],
     args: true,
-    usage: 'item',
+    usage: 'item (amount)',
     cooldown: 5,
-    async execute(msg, args, currency) {
+    async execute(msg, args, profile) {
         let amount = 1;
         const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: args[0] } } });
         if (!item) return msg.channel.send(`That item doesn't exist.`);
@@ -19,16 +19,16 @@ module.exports = {
             } else if (args[1] < 1 || args[1] > 1000) {
                 return msg.channel.send(`Enter a number between 1 and 1000`);
             } else { amount = args[1]; }
-
         }
 
+        const balance = await profile.getBalance(transferTarget.id);
         const cost = amount * item.cost
-        if (cost > currency.getBalance(msg.author.id)) {
-            return msg.channel.send(`You currently have ${currency.getBalance(msg.author.id)}, but ${amount} ${item.name} costs ${cost}!`);
+        if (cost > balance) {
+            return msg.channel.send(`You currently have ${balance}, but ${amount} ${item.name} costs ${cost}💰!`);
         }
 
         const user = await Users.findOne({ where: { user_id: msg.author.id } });
-        currency.add(msg.author.id, -cost);
+        profile.addMoney(msg.author.id, -cost);
         const interupt = Math.round(amount / 100);
         for (var i = 0; i < amount; i++) {
             await user.addItem(item);

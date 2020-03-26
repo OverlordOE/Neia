@@ -7,24 +7,26 @@ module.exports = {
     aliases: ["inv", "items", "prof", "inventory", "balance", "money"],
     args: false,
     usage: 'user',
-    async execute(msg, args, currency) {
+    async execute(msg, args, profile) {
         const target = msg.mentions.users.first() || msg.author;
+        const balance = await profile.getBalance(target.id);
         const user = await Users.findOne({ where: { user_id: target.id } });
-        const items = await user.getItems();
+        try { var items = await user.getItems(); } catch{ console.error(`${target} doesnt exist`); }
+
         const avatar = target.displayAvatarURL();
 
-        const profile = new Discord.MessageEmbed()
-            .setColor('#0099ff')
-            .setTitle(`${target.tag}'s Profile `)
+        const embed = new Discord.MessageEmbed()
+            .setTitle(`${target.tag}'s Profile`)
+            .setColor('#42f548')
             .setThumbnail(avatar)
-            .addField(`Balance:`, `${currency.getBalance(target.id)}💰`)
+            .addField(`Balance:`, `${balance}💰`)
             .setTimestamp();
 
-        if (!items.length) {profile.addField('Inventory:',`${target.tag} has nothing!`);}
+        if (!items.length) { embed.addField('Inventory:', `${target.tag} has nothing!`); }
         else {
-            profile.addField('Inventory:', '-----------------------------');
-            items.map(i => profile.addField(`${i.item.name}: `, `${i.amount}`, true));
+            embed.addField('Inventory:', '-----------------------------');
+            items.map(i => embed.addField(`${i.item.name}: `, `${i.amount}`, true));
         }
-        msg.channel.send(profile);
+        msg.channel.send(embed);
     },
 };
