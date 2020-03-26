@@ -16,31 +16,40 @@ module.exports = {
 		if (!msg.member.voice.channel) {
 			msg.reply("You are not in a voice channel!")
 		}
-		var search = "";
+		var search = args.join(' ');
 
-		for (var i = 0; i < args.length; i++) {
-			search += args[i];
-			search += " ";
-		}
-
-		try {
-			var video = await youtube.searchVideos(search);
-		} catch (error) {
-			console.error(error);
-			return msg.reply("Cannot play this query");
-		}
+		console.log(search);
 
 		var data = ops.active.get(msg.guild.id) || {};
 		if (!data.connection) data.connection = await msg.member.voice.channel.join();
 		if (!data.queue) data.queue = [];
 		data.guildID = msg.guild.id;
 
-		data.queue.push({
-			songTitle: video.title,
-			requester: msg.author.tag,
-			url: video.url,
-			announceChannel: msg.channel.id
-		});
+		var validate = await ytdl.validateURL(search);
+
+		if (!validate) {
+			var video = await youtube.searchVideos(search);
+
+			data.queue.push({
+				songTitle: video.title,
+				requester: msg.author.tag,
+				url: video.url,
+				announceChannel: msg.channel.id
+			});
+		} else if (validate) {
+			var video = await ytdl.getInfo(search);
+
+			data.queue.push({
+				songTitle: video.title,
+				requester: msg.author.tag,
+				url: search,
+				announceChannel: msg.channel.id
+			});
+
+		}
+		else return msg.reply("Cannot play this query");
+
+
 
 		if (!data.dispatcher) {
 			Play(bot, ops, data);
@@ -73,7 +82,7 @@ async function Play(bot, ops, data) {
 		message.send(e);
 		console.log(e);
 	});
-	
+
 
 }
 
