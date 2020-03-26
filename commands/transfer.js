@@ -21,7 +21,7 @@ module.exports = {
 
         //money transfer
         if (!item) {
-            const balance = profile.getBalance(msg.author.id);
+            const balance = await profile.getBalance(msg.author.id);
             const transferAmount = args.find(arg => !/<@?\d+>/g.test(arg));
             if (!transferAmount || isNaN(transferAmount)) return msg.channel.send(`Sorry ${msg.author}, that's an invalid amount.`);
             if (transferAmount > balance) return msg.channel.send(`Sorry ${msg.author}, you only have ${balance}.`);
@@ -29,8 +29,8 @@ module.exports = {
 
             profile.addMoney(msg.author.id, -transferAmount);
             profile.addMoney(target.id, transferAmount);
-
-            return msg.channel.send(`Successfully transferred ${transferAmount}💰 to ${target.tag}. Your current balance is ${profile.getBalance(msg.author.id)}💰`);
+            const balance2 = await profile.getBalance(msg.author.id);
+            return msg.channel.send(`Successfully transferred ${transferAmount}💰 to ${target.tag}. Your current balance is ${balance2}💰`);
         }
 
         //item trade

@@ -19,12 +19,12 @@ module.exports = {
             } else if (args[1] < 1 || args[1] > 1000) {
                 return msg.channel.send(`Enter a number between 1 and 1000`);
             } else { amount = args[1]; }
-
         }
 
+        const balance = await profile.getBalance(transferTarget.id);
         const cost = amount * item.cost
-        if (cost > profile.getBalance(msg.author.id)) {
-            return msg.channel.send(`You currently have ${profile.getBalance(msg.author.id)}, but ${amount} ${item.name} costs ${cost}!`);
+        if (cost > balance) {
+            return msg.channel.send(`You currently have ${balance}, but ${amount} ${item.name} costs ${cost}💰!`);
         }
 
         const user = await Users.findOne({ where: { user_id: msg.author.id } });

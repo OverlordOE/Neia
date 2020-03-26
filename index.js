@@ -53,27 +53,35 @@ Reflect.defineProperty(profile, 'addMoney', {
 });
 
 Reflect.defineProperty(profile, 'getBalance', {
-	value: function getBalance(id) {
+	value: async function getBalance(id) {
 		const user = profile.get(id);
-		return user ? Math.floor(user.balance) : 0;
+		if (user) {
+			return user ? Math.floor(user.balance) : 0;
+		}
+		const newUser = await Users.create({ user_id: id, balance: 1 });
+		profile.set(id, newUser);
+		return newUser;
+		
+		
 	},
 });
 
 Reflect.defineProperty(profile, 'getDaily', {
-	value: function getBalance(id) {
+	value: function getDaily(id) {
 		const user = profile.get(id);
 		return user ? user.lastDaily : 0;
 	},
 });
 
-Reflect.defineProperty(profile, 'addMoney', {
-	value: async function addMoney(id, amount) {
+Reflect.defineProperty(profile, 'setDaily', {
+	value: async function setDaily(id) {
 		const user = profile.get(id);
 		if (user) {
-			user.balance += Number(amount);
+			const currentDay = moment().dayOfYear();
+			user.lastDaily = currentDay;
 			return user.save();
 		}
-		const newUser = await Users.create({ user_id: id, balance: amount });
+		const newUser = await Users.create({ user_id: id, lastDaily: currentDay });
 		profile.set(id, newUser);
 		return newUser;
 	},
@@ -97,7 +105,7 @@ bot.on('message', msg => {
 	const args = msg.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const now = Date.now();
-	const reward = 0.4 + (Math.random() * 0.3);
+	
 
 
 
@@ -117,7 +125,7 @@ bot.on('message', msg => {
 				return;
 			}
 		}
-		profile.addMoney(msg.author.id, reward);
+		
 		cd.set(msg.author.tag, now);
 		setTimeout(() => cd.delete(msg.author.tag), cdAmount);
 	}

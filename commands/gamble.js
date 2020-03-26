@@ -35,27 +35,18 @@ module.exports = {
 
 
 		msg.channel.lastMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-			.then(collected => {
+			.then(async collected => {
 				const reaction = collected.first();
 
-				if (reaction.emoji.name === emojiCharacters[1] && answer === 1) {
+
+				if (reaction.emoji.name === emojiCharacters[answer]) {
 					profile.addMoney(msg.author.id, gambleAmount);
-					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰.\nYour current balance is ${profile.getBalance(msg.author.id)}💰`);
-				} else if (reaction.emoji.name === emojiCharacters[2] && answer === 2) {
-					profile.addMoney(msg.author.id, gambleAmount);
-					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰.\nYour current balance is ${profile.getBalance(msg.author.id)}💰`);
-				} else if (reaction.emoji.name === emojiCharacters[3] && answer === 3) {
-					profile.addMoney(msg.author.id, gambleAmount);
-					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰.\nYour current balance is ${profile.getBalance(msg.author.id)}💰`);
-				} else if (reaction.emoji.name === emojiCharacters[4] && answer === 4) {
-					profile.addMoney(msg.author.id, gambleAmount);
-					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰.\nYour current balance is ${profile.getBalance(msg.author.id)}💰`);
-				} else if (reaction.emoji.name === emojiCharacters[5] && answer === 5) {
-					profile.addMoney(msg.author.id, gambleAmount);
-					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰.\nYour current balance is ${profile.getBalance(msg.author.id)}💰`);
+					const balance = await profile.getBalance(msg.author.id);
+					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰.\nYour current balance is ${balance}💰`);
 				} else {
 					profile.addMoney(msg.author.id, -gambleAmount);
-					return msg.channel.send(`The correct answer was ${answer}. You lost ${gambleAmount}💰.\nYour current balance is ${profile.getBalance(msg.author.id)}💰`);
+					const balance = await profile.getBalance(msg.author.id);
+					return msg.channel.send(`The correct answer was ${answer}. You lost ${gambleAmount}💰.\nYour current balance is ${balance}💰`);
 				}
 			})
 			.catch(collected => {
