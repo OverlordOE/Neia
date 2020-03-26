@@ -20,13 +20,19 @@ module.exports = {
 
 		const answer = Math.floor((Math.random() * 5) + 1);
 
-		await msg.channel.send(`You have bet ${gambleAmount}.\nGuess the number between 1 and 5.`)
-			.then(() => msg.channel.lastMessage.react(emojiCharacters[1]))
-			.then(() => msg.channel.lastMessage.react(emojiCharacters[2]))
-			.then(() => msg.channel.lastMessage.react(emojiCharacters[3]))
-			.then(() => msg.channel.lastMessage.react(emojiCharacters[4]))
-			.then(() => msg.channel.lastMessage.react(emojiCharacters[5]))
-			.catch(() => console.error('One of the emojis failed to react.'));
+		await msg.channel.send(`You have bet ${gambleAmount}💰.\nGuess the number between 1 and 5.`)
+			.then(() => {
+				msg.channel.lastMessage.react(emojiCharacters[1]);
+				msg.channel.lastMessage.react(emojiCharacters[2]);
+				msg.channel.lastMessage.react(emojiCharacters[3]);
+				msg.channel.lastMessage.react(emojiCharacters[4]);
+				msg.channel.lastMessage.react(emojiCharacters[5]);
+			})
+			.catch(e => {
+				console.error(`One of the emojis failed to react because of:\n${e}`)
+				return msg.reply('One of the emojis failed to react.');
+			});
+
 
 		msg.channel.lastMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
 			.then(collected => {
@@ -34,22 +40,22 @@ module.exports = {
 
 				if (reaction.emoji.name === emojiCharacters[1] && answer === 1) {
 					currency.add(msg.author.id, gambleAmount);
-					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰. Your current balance is ${currency.getBalance(msg.author.id)}💰`);
+					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰.\nYour current balance is ${currency.getBalance(msg.author.id)}💰`);
 				} else if (reaction.emoji.name === emojiCharacters[2] && answer === 2) {
 					currency.add(msg.author.id, gambleAmount);
-					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰. Your current balance is ${currency.getBalance(msg.author.id)}💰`);
+					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰.\nYour current balance is ${currency.getBalance(msg.author.id)}💰`);
 				} else if (reaction.emoji.name === emojiCharacters[3] && answer === 3) {
 					currency.add(msg.author.id, gambleAmount);
-					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰. Your current balance is ${currency.getBalance(msg.author.id)}💰`);
+					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰.\nYour current balance is ${currency.getBalance(msg.author.id)}💰`);
 				} else if (reaction.emoji.name === emojiCharacters[4] && answer === 4) {
 					currency.add(msg.author.id, gambleAmount);
-					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰. Your current balance is ${currency.getBalance(msg.author.id)}💰`);
+					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰.\nYour current balance is ${currency.getBalance(msg.author.id)}💰`);
 				} else if (reaction.emoji.name === emojiCharacters[5] && answer === 5) {
 					currency.add(msg.author.id, gambleAmount);
-					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰. Your current balance is ${currency.getBalance(msg.author.id)}💰`);
+					return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰.\nYour current balance is ${currency.getBalance(msg.author.id)}💰`);
 				} else {
 					currency.add(msg.author.id, -gambleAmount);
-					return msg.channel.send(`The correct answer was ${answer}. You lost ${gambleAmount}💰. Your current balance is ${currency.getBalance(msg.author.id)}💰`);
+					return msg.channel.send(`The correct answer was ${answer}. You lost ${gambleAmount}💰.\nYour current balance is ${currency.getBalance(msg.author.id)}💰`);
 				}
 			})
 			.catch(collected => {

@@ -4,7 +4,6 @@ module.exports = {
     description: 'Adds money too the mentioned user',
     admin: true,
     owner: true,
-    aliases: [],
     args: true,
     usage: 'money user',
     execute(msg, args, currency) {

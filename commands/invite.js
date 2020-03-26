@@ -3,7 +3,6 @@ module.exports = {
 	name: 'invite',
 	description: 'Sends an invite link to add the bot to other servers.',
 	admin: false,
-	aliases: [],
 	args: false,
 	usage: '',
 	async execute(msg) {

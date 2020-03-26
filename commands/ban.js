@@ -2,7 +2,6 @@ module.exports = {
 	name: 'ban',
 	description: 'Bans mentioned user from the server',
 	admin: true,
-	aliases: [],
 	args: true,
 	usage: 'user reason',
 	async execute(msg, args) {

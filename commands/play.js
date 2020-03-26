@@ -8,7 +8,7 @@ module.exports = {
 	name: 'play',
 	description: 'Play a song.',
 	admin: false,
-	aliases: [""],
+	aliases: ["song"],
 	args: true,
 	usage: 'search criteria',
 	async execute(msg, args, currency, bot, ops) {

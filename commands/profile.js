@@ -14,8 +14,8 @@ module.exports = {
         const avatar = target.displayAvatarURL();
 
         const profile = new Discord.MessageEmbed()
-            .setColor('#0099ff')
-            .setTitle(`${target.tag}'s Profile `)
+            .setTitle(`${target.tag}'s Profile`)
+            .setColor('#42f548')
             .setThumbnail(avatar)
             .addField(`Balance:`, `${currency.getBalance(target.id)}💰`)
             .setTimestamp();
