@@ -18,5 +18,6 @@ module.exports = {
 	Add: require('./add'),
 	Ban: require('./ban'),
 	Reload: require('./reload'),
-	Delete: require('./delete')
+	Delete: require('./delete'),
+	Reply: require('./reply')
 };

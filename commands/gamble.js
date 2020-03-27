@@ -8,8 +8,8 @@ module.exports = {
 	args: true,
 	usage: 'money',
 	async execute(msg, args, profile) {
-		const currentAmount = profile.getBalance(msg.author.id);
-		const gambleAmount = args;
+		const currentAmount = await profile.getBalance(msg.author.id);
+		const gambleAmount = args[0];
 		const filter = (reaction, user) => {
 			return [emojiCharacters[1], emojiCharacters[2], emojiCharacters[3], emojiCharacters[4], emojiCharacters[5]].includes(reaction.emoji.name) && user.id === msg.author.id;
 		};

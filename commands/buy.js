@@ -21,7 +21,7 @@ module.exports = {
             } else { amount = args[1]; }
         }
 
-        const balance = await profile.getBalance(transferTarget.id);
+        const balance = await profile.getBalance(msg.author.id);
         const cost = amount * item.cost
         if (cost > balance) {
             return msg.channel.send(`You currently have ${balance}, but ${amount} ${item.name} costs ${cost}💰!`);
