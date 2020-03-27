@@ -1,10 +1,10 @@
 const { Users, CurrencyShop } = require('../dbObjects');
 const { Op } = require('sequelize');
 module.exports = {
-    name: 'transfer',
+    name: 'trade',
     description: 'Transfers money to the mentioned user from own balance',
     admin: false,
-    aliases: ["give", "donate", "trade"],
+    aliases: ["give", "donate", "transfer"],
     args: true,
     usage: 'money user\n -trade item amount target',
     async execute(msg, args, profile) {

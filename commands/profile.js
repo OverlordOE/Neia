@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const { Users, CurrencyShop } = require('../dbObjects');
+var moment = require('moment');
 module.exports = {
     name: 'profile',
     description: 'Shows inventory of tagged user or the sender if noone was tagged.',
@@ -11,15 +12,17 @@ module.exports = {
         const target = msg.mentions.users.first() || msg.author;
         const balance = await profile.getBalance(target.id);
         const user = await Users.findOne({ where: { user_id: target.id } });
-        try { var items = await user.getItems(); } catch{ console.error(`${target} doesnt exist`); }
-
+        const items = await user.getItems();
         const avatar = target.displayAvatarURL();
+        let daily = true;
+        if (profile.getDaily(target.id) == moment().dayOfYear()) daily = false;
 
         const embed = new Discord.MessageEmbed()
             .setTitle(`${target.tag}'s Profile`)
             .setColor('#42f548')
             .setThumbnail(avatar)
             .addField(`Balance:`, `${balance}💰`)
+            .addField(`Daily Available:`, daily, true)
             .setTimestamp();
 
         if (!items.length) { embed.addField('Inventory:', `${target.tag} has nothing!`); }

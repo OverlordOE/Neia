@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const winston = require('winston');
 const { Op } = require('sequelize');
-const { prefix, token } = require('./config.json');
+const { prefix, token, testToken } = require('./config.json');
 const { Users, CurrencyShop } = require('./dbObjects');
 const botCommands = require('./commands');
 var moment = require('moment');
@@ -46,7 +46,7 @@ Reflect.defineProperty(profile, 'addMoney', {
 			user.balance += Number(amount);
 			return user.save();
 		}
-		const newUser = await Users.create({ user_id: id, balance: amount });
+		const newUser = await Users.create({ user_id: id, balance: amount, lastDaily: 0 });
 		profile.set(id, newUser);
 		return newUser;
 	},
@@ -58,30 +58,36 @@ Reflect.defineProperty(profile, 'getBalance', {
 		if (user) {
 			return user ? Math.floor(user.balance) : 0;
 		}
-		const newUser = await Users.create({ user_id: id, balance: 1 });
+		const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: 0 });
 		profile.set(id, newUser);
 		return newUser;
-		
-		
+
+
 	},
 });
 
 Reflect.defineProperty(profile, 'getDaily', {
-	value: function getDaily(id) {
-		const user = profile.get(id);
-		return user ? user.lastDaily : 0;
+	value: async function getDaily(id) {
+		if (user) {
+			const user = profile.get(id);
+			return user ? user.lastDaily : 0;
+		}
+		const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: 0 });
+		profile.set(id, newUser);
+		return newUser;
 	},
+
 });
 
 Reflect.defineProperty(profile, 'setDaily', {
 	value: async function setDaily(id) {
 		const user = profile.get(id);
 		if (user) {
-			const currentDay = moment().dayOfYear();
+			var currentDay = moment().dayOfYear();
 			user.lastDaily = currentDay;
 			return user.save();
 		}
-		const newUser = await Users.create({ user_id: id, lastDaily: currentDay });
+		const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: currentDay });
 		profile.set(id, newUser);
 		return newUser;
 	},
@@ -105,7 +111,7 @@ bot.on('message', msg => {
 	const args = msg.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const now = Date.now();
-	
+
 
 
 
@@ -125,7 +131,7 @@ bot.on('message', msg => {
 				return;
 			}
 		}
-		
+
 		cd.set(msg.author.tag, now);
 		setTimeout(() => cd.delete(msg.author.tag), cdAmount);
 	}

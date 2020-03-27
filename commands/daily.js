@@ -2,7 +2,7 @@ const { Users, CurrencyShop } = require('../dbObjects');
 var moment = require('moment');
 module.exports = {
 	name: 'daily',
-	description: 'Get your daily reward.',
+	description: 'Get your daily gift.',
 	admin: false,
 	aliases: ["gift"],
 	args: false,
@@ -14,7 +14,7 @@ module.exports = {
 
 		if (day > lastDaily) {
 
-			msg.reply(`Your daily 🎁 is ${Math.floor(reward)}💰, come back tomorrow for more`);
+			msg.reply(`You got ${Math.floor(reward)}💰 from your daily 🎁, come back tomorrow for more`);
 			profile.setDaily(msg.author.id);
 			profile.addMoney(msg.author.id, reward);
 		} else {

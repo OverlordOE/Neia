@@ -7,7 +7,7 @@ module.exports = {
 	Shop: require('./shop'),
 	Buy: require('./buy'),
 	Use: require('./use'),
-	Transfer: require('./transfer'),
+	Trade: require('./trade'),
 	Profile: require('./profile'),
 	Daily: require('./daily'),
 	Leaderboard: require('./leaderboard'),
