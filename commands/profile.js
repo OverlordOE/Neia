@@ -15,7 +15,7 @@ module.exports = {
         const items = await user.getItems();
         const avatar = target.displayAvatarURL();
         let daily = true;
-        if (profile.getDaily(target.id) == moment().dayOfYear()) daily = false;
+        if (await profile.getDaily(target.id) == moment().dayOfYear()) daily = false;
 
         const embed = new Discord.MessageEmbed()
             .setTitle(`${target.tag}'s Profile`)

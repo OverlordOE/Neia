@@ -41,59 +41,48 @@ bot.on('ready', async () => {
 //Add db commands
 Reflect.defineProperty(profile, 'addMoney', {
 	value: async function addMoney(id, amount) {
-		const user = profile.get(id);
-		if (user) {
-			user.balance += Number(amount);
-			return user.save();
-		}
-		const newUser = await Users.create({ user_id: id, balance: amount, lastDaily: 0 });
-		profile.set(id, newUser);
-		return newUser;
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+		user.balance += Number(amount);
+		return user.save();
 	},
 });
 
 Reflect.defineProperty(profile, 'getBalance', {
 	value: async function getBalance(id) {
-		const user = profile.get(id);
-		if (user) {
-			return user ? Math.floor(user.balance) : 0;
-		}
-		const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: 0 });
-		profile.set(id, newUser);
-		return newUser;
-
-
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+		return user ? Math.floor(user.balance) : 0;
 	},
 });
 
 Reflect.defineProperty(profile, 'getDaily', {
 	value: async function getDaily(id) {
-		if (user) {
-			const user = profile.get(id);
-			return user ? user.lastDaily : 0;
-		}
-		const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: 0 });
-		profile.set(id, newUser);
-		return newUser;
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+		return user ? user.lastDaily : 0;
 	},
 
 });
 
 Reflect.defineProperty(profile, 'setDaily', {
 	value: async function setDaily(id) {
-		const user = profile.get(id);
-		if (user) {
-			var currentDay = moment().dayOfYear();
-			user.lastDaily = currentDay;
-			return user.save();
-		}
-		const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: currentDay });
-		profile.set(id, newUser);
-		return newUser;
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+
+		var currentDay = moment().dayOfYear();
+		user.lastDaily = currentDay;
+		return user.save();
+
 	},
 });
 
-
+async function newUser(id) {
+	const day = moment().dayOfYear();
+	const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: (day - 1) });
+	profile.set(id, newUser);
+	return newUser;
+}
 
 module.exports = { profile };
 
@@ -106,12 +95,16 @@ process.on('TypeError', m => logger.log('error', m));
 process.on('uncaughtException', m => logger.log('error', m));
 
 //Execute for every message
-bot.on('message', msg => {
+bot.on('message', async msg => {
 	//split message for further use
 	const args = msg.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const now = Date.now();
-
+	const id = msg.author.id;
+	const user = profile.get(id);
+	if (!user) {
+		await newUser(id);
+	}
 
 
 
