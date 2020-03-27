@@ -10,7 +10,6 @@ module.exports = {
 		const lastDaily = await profile.getDaily(msg.author.id);
 		const day = moment().dayOfYear();
 		const reward = 10 + (Math.random() * 10);
-		console.log(`LastDaily: ${lastDaily}\nToday: ${day}`)
 		
 		if (day > lastDaily) {
 

@@ -3,7 +3,6 @@ module.exports = {
 	Ping: require('./ping'),
 	Avatar: require('./avatar'),
 	Hackedandbanned: require('./hackedandbanned'),
-	Reload: require('./reload'),
 	Shop: require('./shop'),
 	Buy: require('./buy'),
 	Use: require('./use'),
@@ -12,10 +11,12 @@ module.exports = {
 	Daily: require('./daily'),
 	Leaderboard: require('./leaderboard'),
 	Gamble: require('./gamble'),
-	Add: require('./add'),
-	Ban: require('./ban'),
 	Invite: require('./invite'),
 	Play: require('./play'),
 	Queue: require('./queue'),
-	Skip: require('./skip')
+	Skip: require('./skip'),
+	Add: require('./add'),
+	Ban: require('./ban'),
+	Reload: require('./reload'),
+	Delete: require('./delete')
 };
