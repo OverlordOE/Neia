@@ -12,7 +12,7 @@ module.exports = {
         const user = await Users.findOne({ where: { user_id: msg.author.id } });
         const filter = m => m.author.id === msg.author.id
 
-        const reply = msg.channel.send(`What item do you want to buy?`).then(() => {
+        msg.channel.send(`What item do you want to buy?`).then(() => {
             msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
                 .then(async collected => {

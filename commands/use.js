@@ -11,7 +11,7 @@ module.exports = {
 		const filter = m => m.author.id === msg.author.id
 		var hasItem = false;
 
-		const reply = msg.channel.send(`What item do you want to use?`).then(() => {
+		msg.channel.send(`What item do you want to use?`).then(() => {
 			msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 				.then(async collected => {
