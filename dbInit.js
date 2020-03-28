@@ -13,11 +13,13 @@ const CurrencyShop = sequelize.import('models/CurrencyShop');
 sequelize.import('models/Users');
 sequelize.import('models/UserItems');
 
-//Execute node dbInit.js --force or node dbInit.js -f to force update the tables.
+//Execute node dbInit.js --force or node dbInit.js -f to force update the tables (this resets the db but removes unused tables).
+//Execute node dbInit.js --force or node dbInit.js -f to force update the tables (this doesnt reset the db but keeps unused tables).
+const alter = process.argv.includes('--sync') || process.argv.includes('-s');
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 
 //Create tags
-sequelize.sync({ force }).then(async () => {
+sequelize.sync({ alter, force }).then(async () => {
 	const shop = [
 		CurrencyShop.upsert({ name: 'Tea', cost: 2 }),
 		CurrencyShop.upsert({ name: 'Coffee', cost: 3 }),
