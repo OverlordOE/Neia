@@ -1,7 +1,7 @@
 const fs = require('fs');
 const ytdl = require('ytdl-core-discord');
 const YouTube = require("discord-youtube-api");
-const youtube = new YouTube("AIzaSyDALIKqq8SLibcRS5RotqVu4sd_SktS4eU");
+
 
 
 module.exports = {
