@@ -5,6 +5,8 @@ module.exports = {
 	args: true,
 	usage: 'user reason',
 	async execute(msg, args) {
+		
+		
 		const user = msg.mentions.users.first();
 		const reason = msg.args[1];
 		const guildId = msg.guild;

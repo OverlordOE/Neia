@@ -11,6 +11,7 @@ module.exports = {
 	Daily: require('./daily'),
 	Leaderboard: require('./leaderboard'),
 	Gamble: require('./gamble'),
+	Dice: require('./dice'),
 	Invite: require('./invite'),
 	Play: require('./play'),
 	Queue: require('./queue'),

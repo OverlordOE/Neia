@@ -62,10 +62,10 @@ module.exports = {
 
                 })
         })
-                .catch(e => {
-            console.error(e);
-            msg.reply(`you didn't answer in time.`);
-        });
+            .catch(e => {
+                console.error(e);
+                msg.reply(`you didn't answer in time.`);
+            });
 
-}
+    },
 };
