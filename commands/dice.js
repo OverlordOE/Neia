@@ -13,7 +13,7 @@ module.exports = {
 		if (args[1]) amount = args[1];
 		else amount = 1;
 		
-		if (amount > 100) {return msg.reply('Max amount of roles is 100')}
+		if (!(amount < 100 && !isNaN(amount) && amount > 0)) {return msg.reply('input a number between 1 and 100');}
 		
 		var total = 0;
 		var message = '';
@@ -25,10 +25,10 @@ module.exports = {
 
 		for (var i = 1; i < amount; i++) {
 			var roll = Math.floor((Math.random() * sides) + 1);
-			message += `${roll} + `
+			message += ` + ${roll}`
 			total += roll;
 		}
 
-		msg.channel.send(`${message} = ${total}`);
+		msg.channel.send(`You rolled a ${sides} sided die ${amount} times, these are the results: \n${message} = ${total}`);
 	},
 };

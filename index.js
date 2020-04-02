@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const winston = require('winston');
 const { Op } = require('sequelize');
-const { prefix, token, testToken } = require('./config.json');
+const { prefix, token, testToken, ytAPI } = require('./config.json');
 const { Users, CurrencyShop } = require('./dbObjects');
 const botCommands = require('./commands');
 var moment = require('moment');
@@ -191,7 +191,7 @@ bot.on('message', async msg => {
 
 	//execute command
 	try {
-		command.execute(msg, args, profile, bot, options);
+		command.execute(msg, args, profile, bot, options, ytAPI);
 	} catch (error) {
 		console.error(error);
 		msg.reply('there was an error trying to execute that command!');

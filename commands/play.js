@@ -1,8 +1,5 @@
-const fs = require('fs');
 const ytdl = require('ytdl-core-discord');
 const YouTube = require("discord-youtube-api");
-const youtube = new YouTube("AIzaSyDALIKqq8SLibcRS5RotqVu4sd_SktS4eU");
-
 
 module.exports = {
 	name: 'play',
@@ -11,8 +8,9 @@ module.exports = {
 	aliases: ["song"],
 	args: true,
 	usage: 'search criteria',
-	async execute(msg, args, profile, bot, ops) {
-
+	async execute(msg, args, profile, bot, ops, ytAPI) {
+		
+		const youtube = new YouTube(ytAPI);
 		if (!msg.member.voice.channel) {
 			msg.reply("You are not in a voice channel!")
 		}
@@ -100,7 +98,7 @@ function Finish(bot, ops, dispatcher) {
 		ops.active.delete(dispatcher.guildID);
 
 		var voiceChannel = bot.guilds.cache.get(dispatcher.guildID).me.voice.channel;
-		if (voiceChannel) dispatcher.end();
+		if (voiceChannel) voiceChannel.leave();
 
 	}
 }
