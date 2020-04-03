@@ -73,13 +73,30 @@ Reflect.defineProperty(profile, 'setDaily', {
 		var currentDay = moment().dayOfYear();
 		user.lastDaily = currentDay;
 		return user.save();
+	},
+});
 
+
+Reflect.defineProperty(profile, 'addCount', {
+	value: async function addCount(id) {
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+		user.msgCount++;
+		return user.save();
+	},
+});
+
+Reflect.defineProperty(profile, 'getCount', {
+	value: async function getCount(id) {
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+		return user ? Math.floor(user.msgCount) : 0;
 	},
 });
 
 async function newUser(id) {
 	const day = moment().dayOfYear();
-	const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: (day - 1) });
+	const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: (day - 1), msgCount: 1 });
 	profile.set(id, newUser);
 	return newUser;
 }
@@ -106,7 +123,7 @@ bot.on('message', async msg => {
 		await newUser(id);
 	}
 
-
+	profile.addCount(id);
 
 	//money reward
 	if (!msg.author.bot && !msg.content.startsWith(prefix)) {

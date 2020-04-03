@@ -27,12 +27,12 @@ module.exports = {
                                 const amount = collected.first().content;
 
                                 if (amount) {
-                                    if (Number.isInteger(amount)) {
+                                    if (!Number.isInteger(amount)) {
                                         return msg.channel.send(`${amount} is not a valid amount`);
                                     } else if (amount < 1 || amount > 1000) {
                                         return msg.channel.send(`Enter a number between 1 and 1000`);
                                     }
-                                } else msg.channel.send(`${amount} is not a valid amount`)
+                                } else return msg.channel.send(`${amount} is not a valid amount`)
 
                                 const balance = await profile.getBalance(msg.author.id);
                                 const cost = amount * item.cost
