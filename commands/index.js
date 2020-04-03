@@ -20,5 +20,5 @@ module.exports = {
 	Ban: require('./ban'),
 	Reload: require('./reload'),
 	Delete: require('./delete'),
-	Reply: require('./reply')
+	Backup: require('./backup')
 };
