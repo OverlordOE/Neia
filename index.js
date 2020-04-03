@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const winston = require('winston');
 const { Op } = require('sequelize');
-const { prefix, token } = require('./config.json');
+const { prefix, token, testToken, ytAPI } = require('./config.json');
 const { Users, CurrencyShop } = require('./dbObjects');
 const botCommands = require('./commands');
 var moment = require('moment');
@@ -41,53 +41,48 @@ bot.on('ready', async () => {
 //Add db commands
 Reflect.defineProperty(profile, 'addMoney', {
 	value: async function addMoney(id, amount) {
-		const user = profile.get(id);
-		if (user) {
-			user.balance += Number(amount);
-			return user.save();
-		}
-		const newUser = await Users.create({ user_id: id, balance: amount });
-		profile.set(id, newUser);
-		return newUser;
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+		user.balance += Number(amount);
+		return user.save();
 	},
 });
 
 Reflect.defineProperty(profile, 'getBalance', {
 	value: async function getBalance(id) {
-		const user = profile.get(id);
-		if (user) {
-			return user ? Math.floor(user.balance) : 0;
-		}
-		const newUser = await Users.create({ user_id: id, balance: 1 });
-		profile.set(id, newUser);
-		return newUser;
-		
-		
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+		return user ? Math.floor(user.balance) : 0;
 	},
 });
 
 Reflect.defineProperty(profile, 'getDaily', {
-	value: function getDaily(id) {
-		const user = profile.get(id);
+	value: async function getDaily(id) {
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
 		return user ? user.lastDaily : 0;
 	},
+
 });
 
 Reflect.defineProperty(profile, 'setDaily', {
 	value: async function setDaily(id) {
-		const user = profile.get(id);
-		if (user) {
-			const currentDay = moment().dayOfYear();
-			user.lastDaily = currentDay;
-			return user.save();
-		}
-		const newUser = await Users.create({ user_id: id, lastDaily: currentDay });
-		profile.set(id, newUser);
-		return newUser;
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+
+		var currentDay = moment().dayOfYear();
+		user.lastDaily = currentDay;
+		return user.save();
+
 	},
 });
 
-
+async function newUser(id) {
+	const day = moment().dayOfYear();
+	const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: (day - 1) });
+	profile.set(id, newUser);
+	return newUser;
+}
 
 module.exports = { profile };
 
@@ -100,12 +95,16 @@ process.on('TypeError', m => logger.log('error', m));
 process.on('uncaughtException', m => logger.log('error', m));
 
 //Execute for every message
-bot.on('message', msg => {
+bot.on('message', async msg => {
 	//split message for further use
 	const args = msg.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const now = Date.now();
-	
+	const id = msg.author.id;
+	const user = profile.get(id);
+	if (!user) {
+		await newUser(id);
+	}
 
 
 
@@ -116,7 +115,7 @@ bot.on('message', msg => {
 		}
 
 		const cd = cooldowns.get("reward");
-		const cdAmount = 4000;
+		const cdAmount = 5000;
 
 		if (cd.has(msg.author.tag)) {
 			const cdTime = cd.get(msg.author.tag) + cdAmount;
@@ -125,7 +124,9 @@ bot.on('message', msg => {
 				return;
 			}
 		}
-		
+		const reward = 0.4 + (Math.random() * 0.3);
+		profile.addMoney(msg.author.id, reward);
+
 		cd.set(msg.author.tag, now);
 		setTimeout(() => cd.delete(msg.author.tag), cdAmount);
 	}
@@ -190,7 +191,7 @@ bot.on('message', msg => {
 
 	//execute command
 	try {
-		command.execute(msg, args, profile, bot, options);
+		command.execute(msg, args, profile, bot, options, ytAPI);
 	} catch (error) {
 		console.error(error);
 		msg.reply('there was an error trying to execute that command!');

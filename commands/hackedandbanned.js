@@ -7,9 +7,9 @@ module.exports = {
 	usage: 'user',
 	execute(msg, args) {
 
-
+		
 		const hacked = msg.mentions.users.map(user => {
-			return `${user.username} imma be nice to you this time but next time you gonna get HACKED AND BANNED`;
+			return `${user.username} imma be nice to you this time but next time you are gonna get HACKED AND BANNED`;
 		});
 
 		msg.channel.send(hacked);

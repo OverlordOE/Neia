@@ -1,8 +1,5 @@
-const fs = require('fs');
 const ytdl = require('ytdl-core-discord');
 const YouTube = require("discord-youtube-api");
-
-
 
 module.exports = {
 	name: 'play',
@@ -11,8 +8,9 @@ module.exports = {
 	aliases: ["song"],
 	args: true,
 	usage: 'search criteria',
-	async execute(msg, args, profile, bot, ops) {
-
+	async execute(msg, args, profile, bot, ops, ytAPI) {
+		
+		const youtube = new YouTube(ytAPI);
 		if (!msg.member.voice.channel) {
 			msg.reply("You are not in a voice channel!")
 		}
@@ -67,7 +65,7 @@ async function Play(bot, ops, data) {
 	let message = bot.channels.cache.get(data.queue[0].announceChannel);
 	message.send(`Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
 
-	var options = { seek: 2, volume: 1, type: 'opus' };
+	var options = {type: 'opus'};
 
 	data.dispatcher = data.connection.play(await ytdl(data.queue[0].url, { filter: "audioonly" }), options);
 	data.dispatcher.guildID = data.guildID;
@@ -79,7 +77,7 @@ async function Play(bot, ops, data) {
 	});
 
 	data.dispatcher.on('error', e => {
-		message.send(e);
+		message.send(`error:  ${e}`);
 		console.log(e);
 	});
 

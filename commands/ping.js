@@ -13,7 +13,7 @@ module.exports = {
 		const summon = msg.mentions.users.map(user => {
 			return `${user.username}, you have been summoned by ${msg.author}`;
 		});
-		
+
 		msg.delete();
 		msg.channel.send(summon);
 	},
