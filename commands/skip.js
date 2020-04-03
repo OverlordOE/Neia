@@ -12,6 +12,10 @@ module.exports = {
 	args: false,
 	usage: 'search criteria',
 	async execute(msg, args, profile, bot, ops) {
+		if (!msg.member.voice.channel) {
+			return msg.reply("You are not in a voice channel!")
+		}
+		
 		var guildIDData = ops.active.get(msg.guild.id);
 		return guildIDData.dispatcher.emit('finish');
 	},

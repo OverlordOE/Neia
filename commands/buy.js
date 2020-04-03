@@ -7,7 +7,7 @@ module.exports = {
     aliases: ["get"],
     usage: '',
     cooldown: 5,
-    async execute(msg, args, profile) {
+    async execute(msg, args, profile, bot, options, ytAPI, logger) {
 
         const user = await Users.findOne({ where: { user_id: msg.author.id } });
         const filter = m => m.author.id === msg.author.id
@@ -44,7 +44,7 @@ module.exports = {
                                 const interupt = Math.round(amount / 100);
                                 for (var i = 0; i < amount; i++) {
                                     await user.addItem(item);
-                                    console.log(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);
+                                    logger.info('info', `Handled purchase ${i} out of ${amount} for item: ${item.name}`);
                                     if (interupt != 0) {
                                         if (i >= amount / interupt && i < (amount / interupt) + 1) {
                                             msg.channel.send(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);
@@ -55,7 +55,7 @@ module.exports = {
 
                             })
                             .catch(e => {
-                                console.error(e);
+                                logger.log('error', e)
                                 msg.reply(`you didn't answer in time.`);
                             });
                     })
@@ -63,7 +63,7 @@ module.exports = {
                 })
         })
             .catch(e => {
-                console.error(e);
+                logger.log('error', e);
                 msg.reply(`you didn't answer in time.`);
             });
 

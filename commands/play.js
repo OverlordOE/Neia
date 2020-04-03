@@ -8,15 +8,15 @@ module.exports = {
 	aliases: ["song"],
 	args: true,
 	usage: 'search criteria',
-	async execute(msg, args, profile, bot, ops, ytAPI) {
-		
+	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
+
 		const youtube = new YouTube(ytAPI);
 		if (!msg.member.voice.channel) {
-			msg.reply("You are not in a voice channel!")
+			return msg.reply("You are not in a voice channel!")
 		}
 		var search = args.join(' ');
 
-		console.log(search);
+		logger.info(search);
 
 		var data = ops.active.get(msg.guild.id) || {};
 		if (!data.connection) data.connection = await msg.member.voice.channel.join();
@@ -64,21 +64,25 @@ async function Play(bot, ops, data) {
 
 	let message = bot.channels.cache.get(data.queue[0].announceChannel);
 	message.send(`Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
+	message.send(`Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
+	
+	var options = { type: 'opus' };
 
-	var options = {type: 'opus'};
-
-	data.dispatcher = data.connection.play(await ytdl(data.queue[0].url, { filter: "audioonly" }), options);
+	data.dispatcher = data.connection.play(await ytdl(data.queue[0].url, {
+		filter: 'audioonly',
+		highWaterMark: 1 << 25,
+	}), options);
 	data.dispatcher.guildID = data.guildID;
 
 	data.dispatcher.on('finish', () => {
-		console.log(`${data.queue[0].songTitle} has finished playing!`);
+		logger.info(`${data.queue[0].songTitle} has finished playing!`);
 		message.send(`${data.queue[0].songTitle} has finished playing!`);
 		Finish(bot, ops, data.dispatcher);
 	});
 
 	data.dispatcher.on('error', e => {
 		message.send(`error:  ${e}`);
-		console.log(e);
+		logger.log('error', e);
 	});
 
 

@@ -14,9 +14,16 @@ moment().format();
 
 
 const logger = winston.createLogger({
+	level: 'info',
+	format: winston.format.combine(
+		winston.format.timestamp({
+			format: 'YYYY-MM-DD HH:mm:ss'
+		})),
+
 	transports: [
 		new winston.transports.Console(),
-		new winston.transports.File({ filename: 'log' }),
+		new winston.transports.File({ filename: 'error.log', level: 'error' }),
+		new winston.transports.File({ filename: 'log.log' })
 	],
 	format: winston.format.printf(log => `[${log.level.toUpperCase()}] - ${log.message}`),
 });
@@ -208,9 +215,9 @@ bot.on('message', async msg => {
 
 	//execute command
 	try {
-		command.execute(msg, args, profile, bot, options, ytAPI);
+		command.execute(msg, args, profile, bot, options, ytAPI, logger);
 	} catch (error) {
-		console.error(error);
+		logger.log('error', error);
 		msg.reply('there was an error trying to execute that command!');
 	}
 });

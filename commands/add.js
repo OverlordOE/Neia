@@ -1,5 +1,3 @@
-
-
 module.exports = {
     name: 'add',
     description: 'Adds money too the mentioned user',
@@ -7,7 +5,7 @@ module.exports = {
     owner: true,
     args: true,
     usage: 'money user',
-    async execute(msg, args, profile) {
+    async execute(msg, args, profile, bot, options, ytAPI, logger) {
         const transferAmount = args.find(arg => !/<@!?\d+>/g.test(arg));
         const transferTarget = msg.mentions.users.first() || msg.author;
         if (!transferAmount || isNaN(transferAmount)) return msg.channel.send(`Sorry ${msg.author}, that's an invalid amount.`);

@@ -4,7 +4,7 @@ module.exports = {
 	name: 'use',
 	description: 'Use an item from your inventory.',
 
-	async execute(msg, args, profile) {
+	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const uitems = await user.getItems();
@@ -42,7 +42,7 @@ module.exports = {
 										for (var i = 0; i < amount; i++)  await user.removeItem(item)
 									})
 									.catch(e => {
-										console.error(e);
+										logger.log('error', e);
 										msg.reply(`you didn't answer in time.`);
 									});
 
@@ -65,7 +65,7 @@ module.exports = {
 										for (var i = 0; i < amount; i++)  await user.removeItem(item)
 									})
 									.catch(e => {
-										console.error(e);
+										logger.log('error', e);
 										msg.reply(`you didn't answer in time.`);
 									});
 							})
@@ -85,7 +85,7 @@ module.exports = {
 										for (var i = 0; i < amount; i++)  await user.removeItem(item)
 									})
 									.catch(e => {
-										console.error(e);
+										logger.log('error', e);
 										msg.reply(`you didn't answer in time.`);
 									});
 							})
@@ -118,13 +118,13 @@ module.exports = {
 													msg.channel.send(`You have created the role "${name}" with color ${colour}!`);
 												})
 												.catch(e => {
-													console.error(e);
+													logger.log('error', e);
 													msg.reply(`you didn't answer in time.`);
 												});
 										})
 									})
 									.catch(e => {
-										console.error(e);
+										logger.log('error', e);
 										msg.reply(`you didn't answer in time.`);
 									});
 							})
@@ -158,7 +158,7 @@ module.exports = {
 										await user.removeItem(item)
 									})
 									.catch(e => {
-										console.error(e);
+										logger.log('error', e);
 										msg.reply(`you didn't answer in time.`);
 									});
 							})
@@ -170,7 +170,7 @@ module.exports = {
 					}
 				})
 				.catch(e => {
-					console.error(e);
+					logger.log('error', e);
 					msg.reply(`you didn't answer in time.`);
 				});
 		})

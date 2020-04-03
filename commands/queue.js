@@ -17,16 +17,16 @@ module.exports = {
 		var nowPlaying = queue[0];
 
 		// Eerst een lijn met het liedje dat al speelt.
-		var response = `Now playing ${nowPlaying.songTitle} - Requested by ${nowPlaying.requester}\n\nQueue: \n`;
+		var response = `Now playing: ${nowPlaying.songTitle} - Requested by ${nowPlaying.requester}\n\nQueue: \n`;
 
 		// Voor ieder liedje in de lijst gaan we deze toevoegen aan het bericht.
 		for (var i = 1; i < queue.length; i++) {
-			response += `${i}: ${queue[i].songTitle} - Requested by ${queue[i].requester}\n`;
+			response += `${i}: ${queue[i].songTitle}\nRequested by ${queue[i].requester}\n\n`;
 
 		}
 
 		// Zenden van het bericht.
-		msg.channel.send(response);
+		msg.channel.send(response, { code: true });
 
 	
 	},

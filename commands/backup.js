@@ -5,7 +5,8 @@ module.exports = {
 	description: 'Makes a backup of the database',
 	admin: true,
 	owner: true,
-	async execute(msg, args, profile) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger) {
+		let total = 0;
 
 		profile.map((u) => {
 			let user = {
@@ -16,15 +17,16 @@ module.exports = {
 				exp: u.exp,
 				msgCount: u.msgCount
 			}
-			users.push(user)
+			users.push(user);
+			total++;
 		});
 
 		fs.writeFile("users.json", JSON.stringify(users), err => {
 
 			// Checking for errors 
 			if (err) throw err;
-
-			console.log("Done writing"); // Success 
+			msg.channel.send(`Backup succesfull, backed up ${total} users!`)
+			logger.log('info',"Done writing"); // Success 
 		});
 	},
 };

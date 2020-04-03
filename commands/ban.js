@@ -4,7 +4,7 @@ module.exports = {
 	admin: true,
 	args: true,
 	usage: 'user reason',
-	async execute(msg, args) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		
 		
 		const user = msg.mentions.users.first();
@@ -13,7 +13,8 @@ module.exports = {
 		try {
 			guildId.members.ban(user);
 		} catch (error) {
-			return msg.channel.send(`Ban failed because of: ${error}`)
+			logger.log('error', error);
+			return msg.channel.send(`Ban failed because of: ${error}`)		
 		}
 		return msg.channel.send(`Banned ${user} for: ${reason}`);
 	},

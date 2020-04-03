@@ -1,4 +1,3 @@
-const { Users, CurrencyShop } = require('../dbObjects');
 const emojiCharacters = require('../emojiCharacters');
 module.exports = {
 	name: 'gamble',
@@ -7,7 +6,7 @@ module.exports = {
 	aliases: ["guess"],
 	args: true,
 	usage: 'money',
-	async execute(msg, args, profile) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		const currentAmount = await profile.getBalance(msg.author.id);
 		const gambleAmount = args[0];
 		const filter = (reaction, user) => {
@@ -29,7 +28,7 @@ module.exports = {
 				msg.channel.lastMessage.react(emojiCharacters[5]);
 			})
 			.catch(e => {
-				console.error(`One of the emojis failed to react because of:\n${e}`)
+				logger.log('error', `One of the emojis failed to react because of:\n${e}`)
 				return msg.reply('One of the emojis failed to react.');
 			});
 
@@ -51,6 +50,7 @@ module.exports = {
 			})
 			.catch(collected => {
 				message.reply('You failed to react in time.');
+				logger.log('error', collected);
 			});
 	},
 };
