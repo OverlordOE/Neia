@@ -2,7 +2,7 @@ module.exports = {
 	name: 'ping',
 	description: 'Summon the mentioned user or just get a pong.',
 	admin: false,
-	aliases: ["PING"],
+	aliases: ['summon'],
 	args: false,
 	usage: 'user',
 	execute(msg, args) {

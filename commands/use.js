@@ -92,7 +92,7 @@ module.exports = {
 							break;
 
 
-						case 'Custom-Role':
+						case 'Custom Role':
 							const author = msg.guild.members.cache.get(msg.author.id);
 
 							msg.channel.send(`Specify the role name you want.`).then(() => {
@@ -133,7 +133,7 @@ module.exports = {
 							break;
 
 
-						case 'Text-Channel':
+						case 'Text Channel':
 
 							msg.channel.send(`Specify the channel name you want.`).then(() => {
 								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })

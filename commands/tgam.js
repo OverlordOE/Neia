@@ -9,7 +9,7 @@ module.exports = {
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		const currentAmount = await profile.getBalance(msg.author.id);
 		const gambleAmount = args[0];
-		const filter = (reaction, user) => {
+		const rpsFilter = (reaction, user) => {
 			return ['✊', '🧻', '✂️'].includes(reaction.emoji.name) && user.id === msg.author.id;
 		};
 
@@ -32,10 +32,9 @@ module.exports = {
 			});
 
 
-		msg.channel.lastMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+		msg.channel.lastMessage.awaitReactions(rpsFilter, { max: 1, time: 60000, errors: ['time'] })
 			.then(async collected => {
 				const reaction = collected.first();
-				logger.info(reaction.emoji.name);
 				switch (reaction.emoji.name) {
 					case '✊':
 						if (answer == 1) return msg.channel.send(`The bot chooses ✊. **It's a tie!**\nYour balance is **${currentAmount}💰**`);
