@@ -50,7 +50,7 @@ module.exports = {
 
 
 		if (!data.dispatcher) {
-			Play(bot, ops, data);
+			Play(bot, ops, data, logger);
 		} else {
 			msg.channel.send(`Added ${video.title} to the queue - Requested by ${msg.author.tag}`);
 		}
@@ -60,11 +60,11 @@ module.exports = {
 }
 
 
-async function Play(bot, ops, data) {
+async function Play(bot, ops, data, logger) {
 
 	let message = bot.channels.cache.get(data.queue[0].announceChannel);
 	message.send(`Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
-	message.send(`Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
+	logger.info(`Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
 	
 	var options = { type: 'opus' };
 
@@ -76,7 +76,6 @@ async function Play(bot, ops, data) {
 
 	data.dispatcher.on('finish', () => {
 		logger.info(`${data.queue[0].songTitle} has finished playing!`);
-		message.send(`${data.queue[0].songTitle} has finished playing!`);
 		Finish(bot, ops, data.dispatcher);
 	});
 

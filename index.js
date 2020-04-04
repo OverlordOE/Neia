@@ -17,16 +17,18 @@ const logger = winston.createLogger({
 	level: 'info',
 	format: winston.format.combine(
 		winston.format.timestamp({
-			format: 'YYYY-MM-DD HH:mm:ss'
-		})),
+			format: 'MM-DD HH:mm:ss',
+		}),
+		winston.format.printf(log => `(${log.timestamp}) [${log.level.toUpperCase()}] - ${log.message}`),
+		winston.format.colorize(),
+	),
 
 	transports: [
 		new winston.transports.Console(),
 		new winston.transports.File({ filename: 'error.log', level: 'error' }),
 		new winston.transports.File({ filename: 'log.log' })
-	],
-	format: winston.format.printf(log => `[${log.level.toUpperCase()}] - ${log.message}`),
-});
+	]
+})
 
 
 Object.keys(botCommands).map(key => {
@@ -158,7 +160,7 @@ bot.on('message', async msg => {
 	//check for prefix
 	if (!msg.content.startsWith(prefix)) return;
 
-	logger.log('info', `${msg.author.tag} Called command: ${commandName}`);
+	logger.info(`${msg.author.tag} Called command: ${commandName}`);
 
 	const command = bot.commands.get(commandName)
 		|| bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
