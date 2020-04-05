@@ -18,7 +18,7 @@ module.exports = {
 		if (gambleAmount <= 0) return msg.channel.send(`Please enter an amount greater than zero, ${msg.author}.`);
 
 		const answer = Math.floor((Math.random() * 3) + 1);
-		logger.info(`The bot chooses ${answer}`)
+		logger.log('info', `The bot chooses ${answer}`)
 
 		await msg.channel.send(`You have bet **${gambleAmount}💰**.\nChoose rock, paper or scissors!`)
 			.then(() => {

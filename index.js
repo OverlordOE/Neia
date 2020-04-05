@@ -160,7 +160,7 @@ bot.on('message', async msg => {
 	//check for prefix
 	if (!msg.content.startsWith(prefix)) return;
 
-	logger.info(`${msg.author.tag} Called command: ${commandName}`);
+	logger.log('info', `${msg.author.tag} Called command: ${commandName}`);
 
 	const command = bot.commands.get(commandName)
 		|| bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
