@@ -141,7 +141,7 @@ bot.on('message', async msg => {
 		}
 
 		const cd = cooldowns.get("reward");
-		const cdAmount = 5000;
+		const cdAmount = 8000;
 
 		if (cd.has(msg.author.tag)) {
 			const cdTime = cd.get(msg.author.tag) + cdAmount;
@@ -150,7 +150,7 @@ bot.on('message', async msg => {
 				return;
 			}
 		}
-		const reward = 0.4 + (Math.random() * 0.3);
+		const reward = 0.8 + (Math.random() * 0.6);
 		profile.addMoney(msg.author.id, reward);
 
 		cd.set(msg.author.tag, now);
