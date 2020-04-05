@@ -8,15 +8,15 @@ module.exports = {
 	aliases: ["song"],
 	args: true,
 	usage: 'search criteria',
-	async execute(msg, args, profile, bot, ops, ytAPI) {
-		
+	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
+
 		const youtube = new YouTube(ytAPI);
 		if (!msg.member.voice.channel) {
-			msg.reply("You are not in a voice channel!")
+			return msg.reply("You are not in a voice channel!")
 		}
 		var search = args.join(' ');
 
-		console.log(search);
+		logger.info(search);
 
 		var data = ops.active.get(msg.guild.id) || {};
 		if (!data.connection) data.connection = await msg.member.voice.channel.join();
@@ -50,7 +50,7 @@ module.exports = {
 
 
 		if (!data.dispatcher) {
-			Play(bot, ops, data);
+			Play(bot, ops, data, logger);
 		} else {
 			msg.channel.send(`Added ${video.title} to the queue - Requested by ${msg.author.tag}`);
 		}
@@ -60,32 +60,35 @@ module.exports = {
 }
 
 
-async function Play(bot, ops, data) {
+async function Play(bot, ops, data, logger) {
 
 	let message = bot.channels.cache.get(data.queue[0].announceChannel);
-	message.send(`Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
+	message.send(`Now playing ${data.queue[0].songTitle}\nRequested by ${data.queue[0].requester}`);
+	logger.info(`Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
+	
+	var options = { type: 'opus' };
 
-	var options = {type: 'opus'};
-
-	data.dispatcher = data.connection.play(await ytdl(data.queue[0].url, { filter: "audioonly" }), options);
+	data.dispatcher = data.connection.play(await ytdl(data.queue[0].url, {
+		filter: 'audioonly',
+		highWaterMark: 1 << 25,
+	}), options);
 	data.dispatcher.guildID = data.guildID;
 
 	data.dispatcher.on('finish', () => {
-		console.log(`${data.queue[0].songTitle} has finished playing!`);
-		message.send(`${data.queue[0].songTitle} has finished playing!`);
-		Finish(bot, ops, data.dispatcher);
+		logger.info(`${data.queue[0].songTitle} has finished playing!`);
+		Finish(bot, ops, data.dispatcher, logger, message);
 	});
 
 	data.dispatcher.on('error', e => {
 		message.send(`error:  ${e}`);
-		console.log(e);
+		logger.log('error', e);
 	});
 
 
 }
 
 
-function Finish(bot, ops, dispatcher) {
+function Finish(bot, ops, dispatcher,logger ,message) {
 
 	var fetchedData = ops.active.get(dispatcher.guildID);
 	fetchedData.queue.shift();
@@ -96,7 +99,8 @@ function Finish(bot, ops, dispatcher) {
 	} else {
 
 		ops.active.delete(dispatcher.guildID);
-
+		logger.info(`Done playing queue`);
+		message.send(`Queue has finished playing`);
 		var voiceChannel = bot.guilds.cache.get(dispatcher.guildID).me.voice.channel;
 		if (voiceChannel) voiceChannel.leave();
 

@@ -7,7 +7,7 @@ module.exports = {
     aliases: ["get"],
     usage: '',
     cooldown: 5,
-    async execute(msg, args, profile) {
+    async execute(msg, args, profile, bot, options, ytAPI, logger) {
 
         const user = await Users.findOne({ where: { user_id: msg.author.id } });
         const filter = m => m.author.id === msg.author.id
@@ -24,15 +24,15 @@ module.exports = {
                         msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
                             .then(async collected => {
-                                const amount = collected.first().content;
+                                const amount = parseInt(collected.first().content);
 
-                                if (amount) {
-                                    if (Number.isInteger(amount)) {
-                                        return msg.channel.send(`${amount} is not a valid amount`);
-                                    } else if (amount < 1 || amount > 1000) {
-                                        return msg.channel.send(`Enter a number between 1 and 1000`);
-                                    }
-                                } else msg.channel.send(`${amount} is not a valid amount`)
+
+                                if (!Number.isInteger(amount)) {
+                                    return msg.channel.send(`${amount} is not a number`);
+                                } else if (amount < 1 || amount > 1000) {
+                                    return msg.channel.send(`Enter a number between 1 and 1000`);
+                                }
+
 
                                 const balance = await profile.getBalance(msg.author.id);
                                 const cost = amount * item.cost
@@ -44,7 +44,7 @@ module.exports = {
                                 const interupt = Math.round(amount / 100);
                                 for (var i = 0; i < amount; i++) {
                                     await user.addItem(item);
-                                    console.log(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);
+                                    logger.info('info', `Handled purchase ${i} out of ${amount} for item: ${item.name}`);
                                     if (interupt != 0) {
                                         if (i >= amount / interupt && i < (amount / interupt) + 1) {
                                             msg.channel.send(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);
@@ -55,7 +55,7 @@ module.exports = {
 
                             })
                             .catch(e => {
-                                console.error(e);
+                                logger.log('error', e)
                                 msg.reply(`you didn't answer in time.`);
                             });
                     })
@@ -63,7 +63,7 @@ module.exports = {
                 })
         })
             .catch(e => {
-                console.error(e);
+                logger.log('error', e);
                 msg.reply(`you didn't answer in time.`);
             });
 

@@ -4,7 +4,7 @@ module.exports = {
     name: 'trade',
     description: 'Trade items and items to other people',
     aliases: ["give", "donate", "transfer"],
-    async execute(msg, args, profile, bot, options) {
+    async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 
         const user = await Users.findOne({ where: { user_id: msg.author.id } });
         const filter = m => m.author.id === msg.author.id
@@ -54,7 +54,7 @@ module.exports = {
 
                                             })
                                             .catch(e => {
-                                                console.error(e);
+                                                logger.log('error', e);
                                                 msg.reply(`you didn't answer in time.`);
                                             });
                                     })
@@ -95,7 +95,7 @@ module.exports = {
                                                             for (var i = 0; i < amount; i++) {
                                                                 await user.removeItem(item);
                                                                 await userTarget.addItem(item);
-                                                                console.log(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);
+                                                                logger.info(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);
                                                                 if (interupt != 0) {
                                                                     if (i >= amount / interupt && i < (amount / interupt) + 1) {
                                                                         msg.channel.send(`Handled trade ${i} out of ${amount} for item: ${item.name}`);
@@ -107,13 +107,13 @@ module.exports = {
 
                                                         })
                                                         .catch(e => {
-                                                            console.error(e);
+                                                        logger.log('error', e);
                                                             msg.reply(`you didn't answer in time.`);
                                                         });
                                                 })
                                             })
                                             .catch(e => {
-                                                console.error(e);
+                                                logger.log('error', e);
                                                 msg.reply(`you didn't answer in time.`);
                                             });
 
@@ -122,12 +122,12 @@ module.exports = {
 
                             })
                             .catch(e => {
-                                console.error(e);
+                                logger.log('error', e);
                                 msg.reply(`you didn't answer in time.`);
                             });
                     })
                         .catch(e => {
-                            console.error(e);
+                            logger.log('error', e);
                             msg.reply(`you didn't answer in time.`);
                         });
                 })

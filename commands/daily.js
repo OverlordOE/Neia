@@ -9,7 +9,7 @@ module.exports = {
 	async execute(msg, args, profile) {
 		const lastDaily = await profile.getDaily(msg.author.id);
 		const day = moment().dayOfYear();
-		const reward = 10 + (Math.random() * 10);
+		const reward = 15 + (Math.random() * 15);
 		
 		if (day > lastDaily) {
 

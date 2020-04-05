@@ -14,6 +14,7 @@ module.exports = {
         const user = await Users.findOne({ where: { user_id: target.id } });
         const items = await user.getItems();
         const avatar = target.displayAvatarURL();
+        const count = await profile.getCount(target.id);
         let daily = true;
         if (await profile.getDaily(target.id) == moment().dayOfYear()) daily = false;
 
@@ -23,6 +24,7 @@ module.exports = {
             .setThumbnail(avatar)
             .addField(`Balance:`, `${balance}💰`)
             .addField(`Daily Available:`, daily, true)
+            .addField(`Message Count:`, count, true)
             .setTimestamp();
 
         if (!items.length) { embed.addField('Inventory:', `${target.tag} has nothing!`); }

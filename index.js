@@ -14,12 +14,21 @@ moment().format();
 
 
 const logger = winston.createLogger({
+	level: 'info',
+	format: winston.format.combine(
+		winston.format.timestamp({
+			format: 'MM-DD HH:mm:ss',
+		}),
+		winston.format.printf(log => `(${log.timestamp}) [${log.level.toUpperCase()}] - ${log.message}`),
+		winston.format.colorize(),
+	),
+
 	transports: [
 		new winston.transports.Console(),
-		new winston.transports.File({ filename: 'log' }),
-	],
-	format: winston.format.printf(log => `[${log.level.toUpperCase()}] - ${log.message}`),
-});
+		new winston.transports.File({ filename: 'error.log', level: 'error' }),
+		new winston.transports.File({ filename: 'log.log' })
+	]
+})
 
 
 Object.keys(botCommands).map(key => {
@@ -73,13 +82,30 @@ Reflect.defineProperty(profile, 'setDaily', {
 		var currentDay = moment().dayOfYear();
 		user.lastDaily = currentDay;
 		return user.save();
+	},
+});
 
+
+Reflect.defineProperty(profile, 'addCount', {
+	value: async function addCount(id) {
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+		user.msgCount++;
+		return user.save();
+	},
+});
+
+Reflect.defineProperty(profile, 'getCount', {
+	value: async function getCount(id) {
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+		return user ? Math.floor(user.msgCount) : 0;
 	},
 });
 
 async function newUser(id) {
 	const day = moment().dayOfYear();
-	const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: (day - 1) });
+	const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: (day - 1), msgCount: 1 });
 	profile.set(id, newUser);
 	return newUser;
 }
@@ -106,7 +132,7 @@ bot.on('message', async msg => {
 		await newUser(id);
 	}
 
-
+	profile.addCount(id);
 
 	//money reward
 	if (!msg.author.bot && !msg.content.startsWith(prefix)) {
@@ -115,7 +141,7 @@ bot.on('message', async msg => {
 		}
 
 		const cd = cooldowns.get("reward");
-		const cdAmount = 5000;
+		const cdAmount = 8000;
 
 		if (cd.has(msg.author.tag)) {
 			const cdTime = cd.get(msg.author.tag) + cdAmount;
@@ -124,7 +150,7 @@ bot.on('message', async msg => {
 				return;
 			}
 		}
-		const reward = 0.4 + (Math.random() * 0.3);
+		const reward = 0.8 + (Math.random() * 0.6);
 		profile.addMoney(msg.author.id, reward);
 
 		cd.set(msg.author.tag, now);
@@ -134,7 +160,7 @@ bot.on('message', async msg => {
 	//check for prefix
 	if (!msg.content.startsWith(prefix)) return;
 
-	logger.log('info', `${msg.author.tag} Called command: ${commandName}`);
+	logger.info(`${msg.author.tag} Called command: ${commandName}`);
 
 	const command = bot.commands.get(commandName)
 		|| bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -191,9 +217,9 @@ bot.on('message', async msg => {
 
 	//execute command
 	try {
-		command.execute(msg, args, profile, bot, options, ytAPI);
+		command.execute(msg, args, profile, bot, options, ytAPI, logger);
 	} catch (error) {
-		console.error(error);
+		logger.log('error', error);
 		msg.reply('there was an error trying to execute that command!');
 	}
 });
