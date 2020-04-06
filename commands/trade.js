@@ -2,7 +2,7 @@ const { Users, CurrencyShop } = require('../dbObjects');
 const { Op } = require('sequelize');
 module.exports = {
     name: 'trade',
-    description: 'Trade items and items to other people',
+    description: 'Trade money and items to other people',
     aliases: ["give", "donate", "transfer"],
     async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 

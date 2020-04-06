@@ -85,6 +85,25 @@ Reflect.defineProperty(profile, 'setDaily', {
 	},
 });
 
+Reflect.defineProperty(profile, 'getHourly', {
+	value: async function getHourly(id) {
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+		return user ? user.lastHourly : 0;
+	},
+
+});
+
+Reflect.defineProperty(profile, 'setHourly', {
+	value: async function setHourly(id) {
+		var user = profile.get(id);
+		if (!user) user = await newUser(id);
+
+		var day = moment();
+		user.lastHourly = day;
+		return user.save();
+	},
+});
 
 Reflect.defineProperty(profile, 'addCount', {
 	value: async function addCount(id) {
@@ -104,8 +123,15 @@ Reflect.defineProperty(profile, 'getCount', {
 });
 
 async function newUser(id) {
+	const date = moment();
 	const day = moment().dayOfYear();
-	const newUser = await Users.create({ user_id: id, balance: 1, lastDaily: (day - 1), msgCount: 1 });
+	const newUser = await Users.create({
+		user_id: id,
+		balance: 1,
+		lastDaily: (day - 1),
+		lastHourly: date,
+		msgCount: 1
+	});
 	profile.set(id, newUser);
 	return newUser;
 }
