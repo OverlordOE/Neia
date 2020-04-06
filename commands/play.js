@@ -16,7 +16,7 @@ module.exports = {
 		}
 		var search = args.join(' ');
 
-		logger.info(search);
+		logger.log('info', search);
 
 		var data = ops.active.get(msg.guild.id) || {};
 		if (!data.connection) data.connection = await msg.member.voice.channel.join();
@@ -64,7 +64,7 @@ async function Play(bot, ops, data, logger) {
 
 	let message = bot.channels.cache.get(data.queue[0].announceChannel);
 	message.send(`Now playing ${data.queue[0].songTitle}\nRequested by ${data.queue[0].requester}`);
-	logger.info(`Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
+	logger.log('info', `Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
 	
 	var options = { type: 'opus' };
 
@@ -75,7 +75,7 @@ async function Play(bot, ops, data, logger) {
 	data.dispatcher.guildID = data.guildID;
 
 	data.dispatcher.on('finish', () => {
-		logger.info(`${data.queue[0].songTitle} has finished playing!`);
+		logger.log('info',`${data.queue[0].songTitle} has finished playing!`);
 		Finish(bot, ops, data.dispatcher, logger, message);
 	});
 
@@ -99,7 +99,6 @@ function Finish(bot, ops, dispatcher,logger ,message) {
 	} else {
 
 		ops.active.delete(dispatcher.guildID);
-		logger.info(`Done playing queue`);
 		message.send(`Queue has finished playing`);
 		var voiceChannel = bot.guilds.cache.get(dispatcher.guildID).me.voice.channel;
 		if (voiceChannel) voiceChannel.leave();

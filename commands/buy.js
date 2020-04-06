@@ -44,7 +44,7 @@ module.exports = {
                                 const interupt = Math.round(amount / 100);
                                 for (var i = 0; i < amount; i++) {
                                     await user.addItem(item);
-                                    logger.info('info', `Handled purchase ${i} out of ${amount} for item: ${item.name}`);
+                                    logger.log('info', `Handled purchase ${i} out of ${amount} for item: ${item.name}`);
                                     if (interupt != 0) {
                                         if (i >= amount / interupt && i < (amount / interupt) + 1) {
                                             msg.channel.send(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);

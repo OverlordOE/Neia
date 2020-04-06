@@ -2,7 +2,7 @@ const { Users, CurrencyShop } = require('../dbObjects');
 const { Op } = require('sequelize');
 module.exports = {
     name: 'trade',
-    description: 'Trade items and items to other people',
+    description: 'Trade money and items to other people',
     aliases: ["give", "donate", "transfer"],
     async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 
@@ -95,7 +95,7 @@ module.exports = {
                                                             for (var i = 0; i < amount; i++) {
                                                                 await user.removeItem(item);
                                                                 await userTarget.addItem(item);
-                                                                logger.info(`Handled purchase ${i} out of ${amount} for item: ${item.name}`);
+                                                                logger.log('info', `Handled purchase ${i} out of ${amount} for item: ${item.name}`);
                                                                 if (interupt != 0) {
                                                                     if (i >= amount / interupt && i < (amount / interupt) + 1) {
                                                                         msg.channel.send(`Handled trade ${i} out of ${amount} for item: ${item.name}`);

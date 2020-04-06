@@ -110,7 +110,7 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount) {
 	};
 
 	const answer = Math.floor((Math.random() * 3) + 1);
-	logger.info(`The bot chooses ${answer}`)
+	logger.log('info', `The bot chooses ${answer}`)
 
 	await msg.channel.send(`You have bet **${gambleAmount}💰**.\nChoose rock, paper or scissors!`)
 		.then(() => {

@@ -3,7 +3,7 @@ module.exports = {
 	name: 'daily',
 	description: 'Get your daily gift.',
 	admin: false,
-	aliases: ["gift"],
+	aliases: ["day", "d"],
 	args: false,
 	cooldown: 5,
 	async execute(msg, args, profile) {
