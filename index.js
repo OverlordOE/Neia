@@ -1,14 +1,16 @@
 const Discord = require('discord.js');
 const winston = require('winston');
-const { Op } = require('sequelize');
-const { prefix, token, testToken, ytAPI } = require('./config.json');
-const { Users, CurrencyShop } = require('./dbObjects');
+require('dotenv').config();
+const prefix = process.env.PREFIX;
+const token = process.env.TOKEN;
+const ytAPI = process.env.YT_API;
+const { Users } = require('./dbObjects');
 const botCommands = require('./commands');
-var moment = require('moment');
+const moment = require('moment');
 const bot = new Discord.Client();
 const profile = new Discord.Collection();
 const cooldowns = new Discord.Collection();
-var active = new Map();
+const active = new Map();
 bot.commands = new Discord.Collection();
 moment().format();
 
@@ -26,9 +28,9 @@ const logger = winston.createLogger({
 	transports: [
 		new winston.transports.Console(),
 		new winston.transports.File({ filename: 'error.log', level: 'error' }),
-		new winston.transports.File({ filename: 'log.log' })
-	]
-})
+		new winston.transports.File({ filename: 'log.log' }),
+	],
+});
 
 
 Object.keys(botCommands).map(key => {
@@ -38,7 +40,7 @@ Object.keys(botCommands).map(key => {
 
 bot.login(token);
 
-//Execute on bot start
+// Execute on bot start
 bot.on('ready', async () => {
 	const storedBalances = await Users.findAll();
 	storedBalances.forEach(b => profile.set(b.user_id, b));
@@ -47,10 +49,10 @@ bot.on('ready', async () => {
 });
 
 
-//Add db commands
+// Add db commands
 Reflect.defineProperty(profile, 'addMoney', {
 	value: async function addMoney(id, amount) {
-		var user = profile.get(id);
+		let user = profile.get(id);
 		if (!user) user = await newUser(id);
 		user.balance += Number(amount);
 		return user.save();
@@ -59,7 +61,7 @@ Reflect.defineProperty(profile, 'addMoney', {
 
 Reflect.defineProperty(profile, 'getBalance', {
 	value: async function getBalance(id) {
-		var user = profile.get(id);
+		let user = profile.get(id);
 		if (!user) user = await newUser(id);
 		return user ? Math.floor(user.balance) : 0;
 	},
@@ -67,7 +69,7 @@ Reflect.defineProperty(profile, 'getBalance', {
 
 Reflect.defineProperty(profile, 'getDaily', {
 	value: async function getDaily(id) {
-		var user = profile.get(id);
+		let user = profile.get(id);
 		if (!user) user = await newUser(id);
 		return user ? user.lastDaily : 0;
 	},
@@ -76,10 +78,10 @@ Reflect.defineProperty(profile, 'getDaily', {
 
 Reflect.defineProperty(profile, 'setDaily', {
 	value: async function setDaily(id) {
-		var user = profile.get(id);
+		let user = profile.get(id);
 		if (!user) user = await newUser(id);
 
-		var currentDay = moment().dayOfYear();
+		const currentDay = moment().dayOfYear();
 		user.lastDaily = currentDay;
 		return user.save();
 	},
@@ -87,7 +89,7 @@ Reflect.defineProperty(profile, 'setDaily', {
 
 Reflect.defineProperty(profile, 'getHourly', {
 	value: async function getHourly(id) {
-		var user = profile.get(id);
+		let user = profile.get(id);
 		if (!user) user = await newUser(id);
 		return user ? user.lastHourly : 0;
 	},
@@ -96,27 +98,27 @@ Reflect.defineProperty(profile, 'getHourly', {
 
 Reflect.defineProperty(profile, 'setHourly', {
 	value: async function setHourly(id) {
-		var user = profile.get(id);
+		let user = profile.get(id);
 		if (!user) user = await newUser(id);
 
-		var day = moment();
+		const day = moment();
 		user.lastHourly = day;
 		return user.save();
 	},
 });
 
 Reflect.defineProperty(profile, 'addCount', {
-	value: async function addCount(id) {
-		var user = profile.get(id);
+	value: async function addCount(id, amount) {
+		let user = profile.get(id);
 		if (!user) user = await newUser(id);
-		user.msgCount++;
+		user.msgCount += amount;
 		return user.save();
 	},
 });
 
 Reflect.defineProperty(profile, 'getCount', {
 	value: async function getCount(id) {
-		var user = profile.get(id);
+		let user = profile.get(id);
 		if (!user) user = await newUser(id);
 		return user ? Math.floor(user.msgCount) : 0;
 	},
@@ -130,7 +132,7 @@ async function newUser(id) {
 		balance: 1,
 		lastDaily: (day - 1),
 		lastHourly: date,
-		msgCount: 1
+		msgCount: 1,
 	});
 	profile.set(id, newUser);
 	return newUser;
@@ -138,7 +140,7 @@ async function newUser(id) {
 
 module.exports = { profile };
 
-//Logger
+// Logger
 bot.on('debug', m => logger.log('debug', m));
 bot.on('warn', m => logger.log('warn', m));
 bot.on('error', m => logger.log('error', m));
@@ -146,9 +148,9 @@ process.on('unhandledRejection', m => logger.log('error', m));
 process.on('TypeError', m => logger.log('error', m));
 process.on('uncaughtException', m => logger.log('error', m));
 
-//Execute for every message
+// Execute for every message
 bot.on('message', async msg => {
-	//split message for further use
+	// split message for further use
 	const args = msg.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const now = Date.now();
@@ -158,15 +160,15 @@ bot.on('message', async msg => {
 		await newUser(id);
 	}
 
-	profile.addCount(id);
+	profile.addCount(id, 1);
 
-	//money reward
+	// money reward
 	if (!msg.author.bot && !msg.content.startsWith(prefix)) {
-		if (!cooldowns.has("reward")) {
-			cooldowns.set("reward", new Discord.Collection());
+		if (!cooldowns.has('reward')) {
+			cooldowns.set('reward', new Discord.Collection());
 		}
 
-		const cd = cooldowns.get("reward");
+		const cd = cooldowns.get('reward');
 		const cdAmount = 8000;
 
 		if (cd.has(msg.author.tag)) {
@@ -183,7 +185,7 @@ bot.on('message', async msg => {
 		setTimeout(() => cd.delete(msg.author.tag), cdAmount);
 	}
 
-	//check for prefix
+	// check for prefix
 	if (!msg.content.startsWith(prefix)) return;
 
 	logger.log('info', `${msg.author.tag} Called command: ${commandName}`);
@@ -193,21 +195,21 @@ bot.on('message', async msg => {
 
 	if (!command) return;
 
-	//check for admin
+	// check for admin
 	if (command.admin) {
 		if (!msg.member.hasPermission('ADMINISTRATOR')) {
-			return msg.channel.send("You need Admin privileges to use this command!");
+			return msg.channel.send('You need Admin privileges to use this command!');
 		}
 	}
 
-	//check for owner
+	// check for owner
 	if (command.owner) {
 		if (msg.author.id != 137920111754346496) {
-			return msg.channel.send("You are not the owner of this bot!");
+			return msg.channel.send('You are not the owner of this bot!');
 		}
 	}
 
-	//cooldowns
+	// cooldowns
 	if (!cooldowns.has(command.name)) {
 		cooldowns.set(command.name, new Discord.Collection());
 	}
@@ -226,7 +228,7 @@ bot.on('message', async msg => {
 	timestamps.set(msg.author.id, now);
 	setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
 
-	//if the command is used wrongly correct the user
+	// if the command is used wrongly correct the user
 	if (command.args && !args.length) {
 		let reply = `You didn't provide any arguments, ${msg.author}!`;
 
@@ -237,14 +239,15 @@ bot.on('message', async msg => {
 		return msg.channel.send(reply);
 	}
 
-	var options = {
-		active: active
-	}
+	const options = {
+		active: active,
+	};
 
-	//execute command
+	// execute command
 	try {
 		command.execute(msg, args, profile, bot, options, ytAPI, logger);
-	} catch (error) {
+	}
+	catch (error) {
 		logger.log('error', error);
 		msg.reply('there was an error trying to execute that command!');
 	}

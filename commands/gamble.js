@@ -4,7 +4,7 @@ module.exports = {
 	name: 'gamble',
 	description: 'Starts a minigame where you need to guess what number is correct',
 	admin: false,
-	aliases: ["guess"],
+	aliases: ['guess'],
 	args: true,
 	usage: 'money',
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
@@ -18,7 +18,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setColor('#ffff00')
 			.setTimestamp()
-			.setTitle("Syndicate's Gambling Improrium")
+			.setTitle('Syndicate\'s Gambling Improrium')
 			.addField('Bet', `**${gambleAmount}💰**`)
 			.addField('Number Guess',
 				`In this game you get 5 numbers too choose from, guess the right one and you win.\n
@@ -26,8 +26,8 @@ module.exports = {
 				`)
 			.addField('Rock, paper and scissors',
 			`It's a game of rock, paper and scissors against the bot, if you tie you lose nothing but gain nothing.\n
-			**Potential winnings: ${(gambleAmount)}💰**
-			`)
+			**Potential winnings: ${(0.75 * gambleAmount)}💰**
+			`);
 
 		const filter = (reaction, user) => {
 			return ['✂️', emojiCharacters[5]].includes(reaction.emoji.name) && user.id === msg.author.id;
@@ -40,7 +40,7 @@ module.exports = {
 				msg.channel.lastMessage.react(emojiCharacters[5]);
 			})
 			.catch(e => {
-				logger.log('error', `One of the emojis failed to react because of:\n${e}`)
+				logger.log('error', `One of the emojis failed to react because of:\n${e}`);
 				return msg.reply('One of the emojis failed to react.');
 			});
 
@@ -49,11 +49,11 @@ module.exports = {
 			.then(async collected => {
 				const reaction = collected.first();
 
-				if (reaction.emoji.name == emojiCharacters[5]) OneInFive(msg, profile, logger, gambleAmount)
-				else if (reaction.emoji.name == '✂️') RPS(msg, profile, logger, gambleAmount, currentAmount)
+				if (reaction.emoji.name == emojiCharacters[5]) OneInFive(msg, profile, logger, gambleAmount);
+				else if (reaction.emoji.name == '✂️') RPS(msg, profile, logger, gambleAmount, currentAmount);
 			})
 			.catch(collected => {
-				message.reply('You failed to react in time.');
+				msg.reply('You failed to react in time.');
 				logger.log('error', collected);
 			});
 	},
@@ -66,6 +66,7 @@ async function OneInFive(msg, profile, logger, gambleAmount) {
 	};
 
 	const answer = Math.floor((Math.random() * 5) + 1);
+	const winAmount = 2 * gambleAmount;
 
 	await msg.channel.send(`You have bet ${gambleAmount}💰.\nGuess the number between 1 and 5.`)
 		.then(() => {
@@ -76,7 +77,7 @@ async function OneInFive(msg, profile, logger, gambleAmount) {
 			msg.channel.lastMessage.react(emojiCharacters[5]);
 		})
 		.catch(e => {
-			logger.log('error', `One of the emojis failed to react because of:\n${e}`)
+			logger.log('error', `One of the emojis failed to react because of:\n${e}`);
 			return msg.reply('One of the emojis failed to react.');
 		});
 
@@ -87,9 +88,9 @@ async function OneInFive(msg, profile, logger, gambleAmount) {
 
 
 			if (reaction.emoji.name === emojiCharacters[answer]) {
-				profile.addMoney(msg.author.id, (2 * gambleAmount));
+				profile.addMoney(msg.author.id, winAmount);
 				const balance = await profile.getBalance(msg.author.id);
-				return msg.channel.send(`Correct!!!! You have successfully won ${gambleAmount}💰.\nYour current balance is ${balance}💰`);
+				return msg.channel.send(`Correct!!!! You have successfully won ${winAmount}💰.\nYour current balance is ${balance}💰`);
 			} else {
 				profile.addMoney(msg.author.id, -gambleAmount);
 				const balance = await profile.getBalance(msg.author.id);
@@ -97,7 +98,7 @@ async function OneInFive(msg, profile, logger, gambleAmount) {
 			}
 		})
 		.catch(collected => {
-			message.reply('You failed to react in time.');
+			msg.reply('You failed to react in time.');
 			logger.log('error', collected);
 		});
 
@@ -108,6 +109,8 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount) {
 	const filter = (reaction, user) => {
 		return ['✊', '🧻', '✂️'].includes(reaction.emoji.name) && user.id === msg.author.id;
 	};
+
+	const winAmount = 0.75 * gambleAmount;
 
 	const answer = Math.floor((Math.random() * 3) + 1);
 	logger.log('info', `The bot chooses ${answer}`)
@@ -136,9 +139,9 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount) {
 						return msg.channel.send(`The bot chooses 🧻. **You lose!**\nYour balance is **${balance}💰**`);
 					}
 					else if (answer == 3) {
-						profile.addMoney(msg.author.id, gambleAmount);
+						profile.addMoney(msg.author.id, winAmount);
 						const balance = await profile.getBalance(msg.author.id);
-						return msg.channel.send(`The bot chooses ✂️. **You Win!**\nYou won **${gambleAmount}💰** and your balance is **${balance}💰**`);
+						return msg.channel.send(`The bot chooses ✂️. **You Win!**\nYou won **${winAmount}💰** and your balance is **${balance}💰**`);
 					}
 					break;
 

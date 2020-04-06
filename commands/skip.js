@@ -11,7 +11,7 @@ module.exports = {
 	aliases: ["next"],
 	args: false,
 	usage: 'search criteria',
-	async execute(msg, args, profile, bot, ops) {
+	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 		if (!msg.member.voice.channel) {
 			return msg.reply("You are not in a voice channel!")
 		}

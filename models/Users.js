@@ -14,18 +14,13 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
-		lastHourly: {
-			type: DataTypes.STRING,
-			defaultValue: '',
-			allowNull: false,
-		},
 		msgCount: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
 			allowNull: false,
 		},
 	},
-		{
-			timestamps: false,
-		});
+	{
+		timestamps: false,
+	});
 };
