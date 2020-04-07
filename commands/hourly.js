@@ -1,11 +1,11 @@
 const moment = require('moment');
 module.exports = {
-	name: 'test',
-	description: 'Test command for new commands',
-	owner: true,
-	aliases: ['t'],
+	name: 'hourly',
+	description: 'Get an hourly gift',
+	aliases: ['h', 'hour'],
 	args: false,
 	usage: '',
+	cooldown: 5,
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		const lastHourly = moment(await profile.getHourly(msg.author.id));
 		const now = moment();

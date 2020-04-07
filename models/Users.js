@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
+		lastHourly: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
 		msgCount: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,

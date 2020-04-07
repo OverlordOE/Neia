@@ -81,7 +81,7 @@ Reflect.defineProperty(profile, 'setDaily', {
 		let user = profile.get(id);
 		if (!user) user = await newUser(id);
 
-		const currentDay = moment().dayOfYear();
+		const currentDay = moment();
 		user.lastDaily = currentDay;
 		return user.save();
 	},

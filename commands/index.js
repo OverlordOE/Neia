@@ -9,6 +9,7 @@ module.exports = {
 	Trade: require('./trade'),
 	Profile: require('./profile'),
 	Daily: require('./daily'),
+	Hourly: require('./hourly'),
 	Leaderboard: require('./leaderboard'),
 	Gamble: require('./gamble'),
 	Dice: require('./dice'),

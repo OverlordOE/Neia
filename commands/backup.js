@@ -33,6 +33,7 @@ module.exports = {
 				user_id: u.user_id,
 				balance: u.balance,
 				lastDaily: u.lastDaily,
+				lastHourly: u.lastHourly,
 				msgCount: u.msgCount,
 			};
 			users.push(user);
