@@ -15,12 +15,13 @@ module.exports = {
 		const items = await user.getItems();
 		const avatar = target.displayAvatarURL();
 		const count = await profile.getCount(target.id);
-		const lastDaily = moment(await profile.getDaily(msg.author.id));
-		const lastHourly = moment(await profile.getHourly(msg.author.id));
+		const lastDaily = moment(await profile.getDaily(target.id));
+		const lastHourly = moment(await profile.getHourly(target.id));
 		
 		const now = moment();
 		const dCheck = moment(lastDaily, 'DDD H').add(1, 'd');
 		const hCheck = moment(lastHourly, 'DDD H').add(1, 'h');
+		
 		let daily = false;
 		let hourly = false;
 		if (moment(dCheck).isBefore(now)) daily = true;

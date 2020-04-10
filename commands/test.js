@@ -1,4 +1,3 @@
-const moment = require('moment');
 module.exports = {
 	name: 'test',
 	description: 'Test command for new commands',
@@ -7,17 +6,22 @@ module.exports = {
 	args: false,
 	usage: '',
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
-		const lastHourly = moment(await profile.getHourly(msg.author.id));
-		const now = moment();
-		const check = moment(lastHourly, 'DDD H').add(1, 'h');
-		const reward = 3 + (Math.random() * 5);
 
-		if (moment(check).isBefore(now)) {
-			profile.addMoney(msg.author.id, reward);
-			await profile.setHourly(msg.author.id);
-			msg.reply(`You got ${Math.floor(reward)}💰 from your hourly 🎁, come back in an hour for more`);
-		}
-		else { msg.reply(`you have already gotten your hourly 🎁, you can get you next hourly in ${check.diff(now, 'minutes')} minutes`); }
+		const connection = await msg.member.voice.channel.join();
+
+		const dispatcher = connection.play('HAH.baf.mp3');
+
+		dispatcher.on('start', () => {
+			console.log('now playing!');
+		});
+
+		dispatcher.on('finish', () => {
+			console.log('finished playing!');
+			connection.disconnect();
+		});
+
+		// Always remember to handle errors appropriately!
+		dispatcher.on('error', logger.error());
 
 
 	},

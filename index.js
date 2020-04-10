@@ -125,13 +125,12 @@ Reflect.defineProperty(profile, 'getCount', {
 });
 
 async function newUser(id) {
-	const date = moment();
 	const day = moment().dayOfYear();
 	const newUser = await Users.create({
 		user_id: id,
 		balance: 1,
 		lastDaily: (day - 1),
-		lastHourly: date,
+		lastHourly: (day - 1),
 		msgCount: 1,
 	});
 	profile.set(id, newUser);

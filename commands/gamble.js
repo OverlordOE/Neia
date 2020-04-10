@@ -67,6 +67,7 @@ async function OneInFive(msg, profile, logger, gambleAmount) {
 
 	const answer = Math.floor((Math.random() * 5) + 1);
 	const winAmount = 2 * gambleAmount;
+	logger.log('info', `The bot chooses ${answer}`);
 
 	await msg.channel.send(`You have bet ${gambleAmount}💰.\nGuess the number between 1 and 5.`)
 		.then(() => {
