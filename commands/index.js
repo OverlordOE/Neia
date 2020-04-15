@@ -22,5 +22,5 @@ module.exports = {
 	Reload: require('./reload'),
 	Delete: require('./delete'),
 	Backup: require('./backup'),
-	Test: require('./test')
+	Test: require('./test'),
 };

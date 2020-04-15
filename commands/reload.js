@@ -3,9 +3,9 @@ module.exports = {
     description: '"Admin debug tool" Reloads a command',
 	usage: '[command]',
 	aliases: ["r", "re"],
-    admin: true,
+	owner: true,
 	args: true,
-	execute(message, args) {
+	execute(message, args, profile, bot, ops, ytAPI, logger) {
 		const commandName = args[0].toLowerCase();
 		const command = message.client.commands.get(commandName)
 			|| message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));

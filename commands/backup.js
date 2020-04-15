@@ -9,8 +9,8 @@ module.exports = {
 		let total = 0;
 
 		if (args[0] == 'all') {
-			let rawdata = fs.readFileSync('users.json');
-			let data = JSON.parse(rawdata);
+			const rawdata = fs.readFileSync('users.json');
+			const data = JSON.parse(rawdata);
 
 			for (let i = 0; i < data.length; i++) {
 				try {
@@ -18,7 +18,8 @@ module.exports = {
 					profile.setDaily(data[i].user_id);
 					profile.addCount(data[i].user_id, data[i].msgCount);
 				
-				} catch (error) {
+				}
+				catch (error) {
 					logger.log('warn', 'something went wrong');
 				}
 			}
@@ -29,7 +30,7 @@ module.exports = {
 
 
 		profile.map((u) => {
-			let user = {
+			const user = {
 				user_id: u.user_id,
 				balance: u.balance,
 				lastDaily: u.lastDaily,

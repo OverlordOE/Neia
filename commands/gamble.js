@@ -178,7 +178,7 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount) {
 			msg.channel.send('you shouldnt see this');
 		})
 		.catch(collected => {
-			message.reply('You failed to react in time.');
+			msg.reply('You failed to react in time.');
 			logger.log('error', collected);
 		});
 

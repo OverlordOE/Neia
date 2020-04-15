@@ -15,7 +15,8 @@ module.exports = {
 			help.setTitle('Syndicate bot command list');
 			commands.map(command => help.addField(`**${command.name}**`, command.description));
 			help.setFooter('You can send `-help [command name]` to get info on a specific command!');
-		} else {
+		}
+		else {
 			const name = args[0].toLowerCase();
 			const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
@@ -30,7 +31,6 @@ module.exports = {
 			if (command.usage) help.addField('**Usage:**', `-${command.name} ${command.usage}`);
 			if (command.admin) help.addField('**Need Admin:**', command.admin);
 		}
-
 
 
 		message.channel.send(help);

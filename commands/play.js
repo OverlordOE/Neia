@@ -14,11 +14,11 @@ module.exports = {
 		if (!msg.member.voice.channel) {
 			return msg.reply('You are not in a voice channel!');
 		}
-		var search = args.join(' ');
+		const search = args.join(' ');
 
 		logger.log('info', search);
 
-		var data = ops.active.get(msg.guild.id) || {};
+		const data = ops.active.get(msg.guild.id) || {};
 		if (!data.connection) data.connection = await msg.member.voice.channel.join();
 		if (!data.queue) data.queue = [];
 		data.guildID = msg.guild.id;
@@ -32,46 +32,48 @@ module.exports = {
 				songTitle: video.title,
 				requester: msg.author.tag,
 				url: video.url,
-				announceChannel: msg.channel.id
+				announceChannel: msg.channel.id,
 			});
-		} else if (validate) {
+		}
+		else if (validate) {
 			var video = await ytdl.getInfo(search);
 
 			data.queue.push({
 				songTitle: video.title,
 				requester: msg.author.tag,
 				url: search,
-				announceChannel: msg.channel.id
+				announceChannel: msg.channel.id,
 			});
 
 		}
-		else return msg.reply('Cannot play this query');
-
+		else {return msg.reply('Cannot play this query');}
 
 
 		if (!data.dispatcher) {
 			Play(bot, ops, data, logger);
-		} else {
+		}
+		else {
 			msg.channel.send(`Added ${video.title} to the queue - Requested by ${msg.author.tag}`);
 		}
 
 		ops.active.set(msg.guild.id, data);
 	},
-}
+};
 
 
 async function Play(bot, ops, data, logger) {
 
-	let message = bot.channels.cache.get(data.queue[0].announceChannel);
+	const message = bot.channels.cache.get(data.queue[0].announceChannel);
 	message.send(`Now playing ${data.queue[0].songTitle}\nRequested by ${data.queue[0].requester}`);
 	try {
 		logger.log('info', `Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
-	} catch (error) {
+	}
+	catch (error) {
 		console.log(error);
 	}
 
 
-	var options = { type: 'opus' };
+	const options = { type: 'opus' };
 
 	data.dispatcher = data.connection.play(await ytdl(data.queue[0].url, {
 		filter: 'audioonly',
@@ -100,7 +102,8 @@ function Finish(bot, ops, dispatcher, message, logger) {
 	if (fetchedData.queue.length > 0) {
 		ops.active.set(dispatcher.guildID, fetchedData);
 		Play(bot, ops, fetchedData, logger);
-	} else {
+	}
+	else {
 
 		ops.active.delete(dispatcher.guildID);
 		message.send('Queue has finished playing');

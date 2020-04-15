@@ -3,10 +3,10 @@ module.exports = {
 	name: 'dice',
 	description: 'rolls a dice',
 	admin: false,
-	aliases: ["roll"],
+	aliases: ['roll'],
 	args: true,
 	usage: 'sides (amount of roles)',
-	execute(msg, args, profile) {
+	execute(msg, args) {
 
 		const sides = args[0];
 		let amount;
@@ -15,20 +15,20 @@ module.exports = {
 		
 		if (!(amount < 100 && !isNaN(amount) && amount > 0)) {return msg.reply('input a number between 1 and 100');}
 		
-		var total = 0;
-		var message = '';
+		let total = 0;
+		let message = '';
 		
 
-		var firstRoll = Math.floor((Math.random() * sides) + 1);
+		const firstRoll = Math.floor((Math.random() * sides) + 1);
 		total += firstRoll;
-		message += `${firstRoll}`
+		message += `${firstRoll}`;
 
-		for (var i = 1; i < amount; i++) {
-			var roll = Math.floor((Math.random() * sides) + 1);
-			message += ` + ${roll}`
+		for (let i = 1; i < amount; i++) {
+			const roll = Math.floor((Math.random() * sides) + 1);
+			message += ` + ${roll}`;
 			total += roll;
 		}
 
-		msg.channel.send(`You rolled a ${sides} sided die ${amount} times, these are the results: \n${message} = ${total}`);
+		msg.channel.send(`You rolled a D${sides} ${amount} times, these are the results: \n${message} = ${total}`);
 	},
 };
