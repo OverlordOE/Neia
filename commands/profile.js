@@ -22,10 +22,10 @@ module.exports = {
 		const dCheck = moment(lastDaily, 'DDD H').add(1, 'd');
 		const hCheck = moment(lastHourly, 'DDD H').add(1, 'h');
 		
-		let daily = false;
-		let hourly = false;
-		if (moment(dCheck).isBefore(now)) daily = true;
-		if (moment(hCheck).isBefore(now)) hourly = true;
+		let daily = dCheck.format('ddd H:mm');
+		let hourly = hCheck.format('ddd H:mm');
+		if (moment(dCheck).isBefore(now)) daily = 'now';
+		if (moment(hCheck).isBefore(now)) hourly = 'now';
 		
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`${target.tag}'s Profile`)
