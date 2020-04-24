@@ -1,8 +1,8 @@
 module.exports = {
-	name: 'skip',
-	description: 'Skip a song.',
+	name: 'clear',
+	description: 'clears the song queue.',
 	admin: false,
-	aliases: ['next'],
+	aliases: ['stop'],
 	args: false,
 	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 		if (!msg.member.voice.channel) {
@@ -11,6 +11,7 @@ module.exports = {
 
 		try {
 			const guildIDData = ops.active.get(msg.guild.id);
+			guildIDData.queue = [];
 			guildIDData.dispatcher.emit('finish');
 		}
 		catch (error) {

@@ -17,6 +17,7 @@ module.exports = {
 	Play: require('./play'),
 	Queue: require('./queue'),
 	Skip: require('./skip'),
+	Clear: require('./clear'),
 	Add: require('./add'),
 	Ban: require('./ban'),
 	Reload: require('./reload'),

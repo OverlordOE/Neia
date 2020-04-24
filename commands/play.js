@@ -19,7 +19,14 @@ module.exports = {
 		logger.log('info', search);
 
 		const data = ops.active.get(msg.guild.id) || {};
+
 		if (!data.connection) data.connection = await msg.member.voice.channel.join();
+		else if (data.connection.status == 4) {
+			data.connection = await msg.member.voice.channel.join();
+			const guildIDData = ops.active.get(msg.guild.id);
+			guildIDData.dispatcher.emit('finish');
+		}
+
 		if (!data.queue) data.queue = [];
 		data.guildID = msg.guild.id;
 
@@ -57,6 +64,11 @@ module.exports = {
 		}
 
 		ops.active.set(msg.guild.id, data);
+
+		data.dispatcher.on('disconnect', e => {
+			data.dispatcher = null;
+			logger.log('info', `left voice channel for reason: ${e}`);
+		});
 	},
 };
 
@@ -82,6 +94,7 @@ async function Play(bot, ops, data, logger) {
 	data.dispatcher.guildID = data.guildID;
 
 	data.dispatcher.on('finish', () => {
+		logger.log('info', 'finish');
 		Finish(bot, ops, data.dispatcher, message, logger);
 	});
 
@@ -90,6 +103,16 @@ async function Play(bot, ops, data, logger) {
 		logger.log('error', e);
 	});
 
+	data.dispatcher.on('failed', e => {
+		message.send('error:  failed to join voice channel');
+		logger.log('error', `failed to join voice channel for reason: ${e}`);
+	});
+
+	data.dispatcher.on('disconnect', e => {
+		data.dispatcher = null;
+		logger.log('info', `left voice channel for reason: ${e}`);
+	});
+	
 
 }
 

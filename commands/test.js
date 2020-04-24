@@ -9,7 +9,7 @@ module.exports = {
 
 		const connection = await msg.member.voice.channel.join();
 
-		const dispatcher = connection.play('HAH.baf.mp3');
+		const dispatcher = connection.play('../soundboard/HAH.baf.mp3');
 
 		dispatcher.on('start', () => {
 			console.log('now playing!');
