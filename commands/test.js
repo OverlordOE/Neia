@@ -1,20 +1,28 @@
-var moment = require('moment');
 module.exports = {
 	name: 'test',
 	description: 'Test command for new commands',
 	owner: true,
-	aliases: ["t"],
+	aliases: ['t'],
 	args: false,
 	usage: '',
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 
-		const lastHourly = moment(await profile.getHourly(msg.author.id))
-		const now = moment()
-		const test = moment(lastHourly, 'DDD H').add(1, 'h')
-		if (moment(test).isBefore(now)) msg.channel.send(`test complete`);
+		const connection = await msg.member.voice.channel.join();
 
-		msg.channel.send(`lastHourly: ${lastHourly}\nnow: ${now}\ntest: ${test} `);
-		await profile.setHourly(msg.author.id)
+		const dispatcher = connection.play('../soundboard/HAH.baf.mp3');
+
+		dispatcher.on('start', () => {
+			console.log('now playing!');
+		});
+
+		dispatcher.on('finish', () => {
+			console.log('finished playing!');
+			connection.disconnect();
+		});
+
+		// Always remember to handle errors appropriately!
+		dispatcher.on('error', logger.error());
+
 
 	},
 };

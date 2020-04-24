@@ -9,7 +9,7 @@ module.exports = {
 	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
-		const filter = m => m.author.id === msg.author.id
+		const filter = m => m.author.id === msg.author.id;
 
 
 		msg.channel.send('Who do you want to trade with? (mention the user)').then(() => {
@@ -26,7 +26,8 @@ module.exports = {
 						}
 
 						var target = bot.users.cache.get(mention);
-					} else return msg.channel.send(`${mention} is not a valid response`);
+					}
+					else {return msg.channel.send(`${mention} is not a valid response`);}
 
 
 					msg.channel.send('Do you want to trade money or items?').then(() => {
@@ -59,7 +60,7 @@ module.exports = {
 												logger.log('error', e);
 												msg.reply('you didn\'t answer in time.');
 											});
-									})
+									});
 								}
 
 								// item trade
@@ -73,7 +74,7 @@ module.exports = {
 												if (!item) return msg.channel.send('That item doesn\'t exist.');
 
 												// item trade
-												var hasItem = false;
+												let hasItem = false;
 												const userTarget = await Users.findOne({ where: { user_id: target.id } });
 												const uitems = await user.getItems();
 
@@ -82,7 +83,7 @@ module.exports = {
 													if (i.item.name == item.name && i.amount >= 1) {
 														hasItem = true;
 													}
-												})
+												});
 												if (!hasItem) {
 													return msg.channel.send(`You don't have ${item.name}!`);
 												}
@@ -112,7 +113,7 @@ module.exports = {
 															logger.log('error', e);
 															msg.reply('you didn\'t answer in time.');
 														});
-												})
+												});
 											})
 											.catch(e => {
 												logger.log('error', e);
@@ -121,7 +122,7 @@ module.exports = {
 
 									});
 								}
-								else {return msg.channel.send(`${goods} is not a valid response`);}
+								else {return msg.channel.send(`${amount} is not a valid response`);}
 
 							})
 							.catch(e => {
@@ -133,7 +134,7 @@ module.exports = {
 							logger.log('error', e);
 							msg.reply('you didn\'t answer in time.');
 						});
-				})
+				});
 		});
-	}
-}
+	},
+};

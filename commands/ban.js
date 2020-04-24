@@ -12,9 +12,10 @@ module.exports = {
 		const guildId = msg.guild;
 		try {
 			guildId.members.ban(user);
-		} catch (error) {
+		}
+		catch (error) {
 			logger.log('error', error);
-			return msg.channel.send(`Ban failed because of: ${error}`)		
+			return msg.channel.send(`Ban failed because of: ${error}`);		
 		}
 		return msg.channel.send(`Banned ${user} for: ${reason}`);
 	},

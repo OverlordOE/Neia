@@ -1,4 +1,4 @@
-const fs = require('fs'); 
+const fs = require('fs');
 const users = require('../users');
 module.exports = {
 	name: 'backup',
@@ -8,13 +8,33 @@ module.exports = {
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		let total = 0;
 
+		if (args[0] == 'all') {
+			const rawdata = fs.readFileSync('users.json');
+			const data = JSON.parse(rawdata);
+
+			for (let i = 0; i < data.length; i++) {
+				try {
+					profile.addMoney(data[i].user_id, data[i].balance);
+					profile.setDaily(data[i].user_id);
+					profile.addCount(data[i].user_id, data[i].msgCount);
+				
+				}
+				catch (error) {
+					logger.log('warn', 'something went wrong');
+				}
+			}
+
+			return msg.channel.send('backup restored');
+
+		}
+
+
 		profile.map((u) => {
 			const user = {
 				user_id: u.user_id,
 				balance: u.balance,
 				lastDaily: u.lastDaily,
-				level: u.level,
-				exp: u.exp,
+				lastHourly: u.lastHourly,
 				msgCount: u.msgCount,
 			};
 			users.push(user);
@@ -25,8 +45,8 @@ module.exports = {
 
 			// Checking for errors
 			if (err) throw err;
-			msg.channel.send(`Backup succesfull, backed up ${total} users!`)
-			logger.log('info', 'Done writing');
+			msg.channel.send(`Backup succesfull, backed up ${total} users!`);
+			logger.log('info', 'Done writing'); // Success
 		});
 	},
 };

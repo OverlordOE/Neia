@@ -28,8 +28,8 @@ const logger = winston.createLogger({
 	transports: [
 		new winston.transports.Console(),
 		new winston.transports.File({ filename: 'error.log', level: 'error' }),
-		new winston.transports.File({ filename: 'log.log' })
-	]
+		new winston.transports.File({ filename: 'log.log' }),
+	],
 });
 
 
@@ -81,7 +81,7 @@ Reflect.defineProperty(profile, 'setDaily', {
 		let user = profile.get(id);
 		if (!user) user = await newUser(id);
 
-		const currentDay = moment().dayOfYear();
+		const currentDay = moment();
 		user.lastDaily = currentDay;
 		return user.save();
 	},
@@ -108,10 +108,10 @@ Reflect.defineProperty(profile, 'setHourly', {
 });
 
 Reflect.defineProperty(profile, 'addCount', {
-	value: async function addCount(id) {
+	value: async function addCount(id, amount) {
 		let user = profile.get(id);
 		if (!user) user = await newUser(id);
-		user.msgCount++;
+		user.msgCount += amount;
 		return user.save();
 	},
 });
@@ -125,14 +125,13 @@ Reflect.defineProperty(profile, 'getCount', {
 });
 
 async function newUser(id) {
-	const date = moment();
 	const day = moment().dayOfYear();
 	const newUser = await Users.create({
 		user_id: id,
 		balance: 1,
 		lastDaily: (day - 1),
-		lastHourly: date,
-		msgCount: 1
+		lastHourly: (day - 1),
+		msgCount: 1,
 	});
 	profile.set(id, newUser);
 	return newUser;
@@ -160,7 +159,7 @@ bot.on('message', async msg => {
 		await newUser(id);
 	}
 
-	profile.addCount(id);
+	profile.addCount(id, 1);
 
 	// money reward
 	if (!msg.author.bot && !msg.content.startsWith(prefix)) {

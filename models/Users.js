@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 		},
 		lastHourly: {
-			type: DataTypes.STRING,
-			defaultValue: '',
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
 			allowNull: false,
 		},
 		msgCount: {
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 		},
 	},
-		{
-			timestamps: false,
-		});
+	{
+		timestamps: false,
+	});
 };

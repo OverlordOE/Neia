@@ -1,37 +1,47 @@
 const Discord = require('discord.js');
-const { Users, CurrencyShop } = require('../dbObjects');
-var moment = require('moment');
+const { Users } = require('../dbObjects');
+const moment = require('moment');
 module.exports = {
-    name: 'profile',
-    description: 'Shows inventory of tagged user or the sender if noone was tagged.',
-    admin: false,
-    aliases: ["inv", "items", "prof", "inventory", "balance", "money"],
-    args: false,
-    usage: 'user',
-    async execute(msg, args, profile) {
-        const target = msg.mentions.users.first() || msg.author;
-        const balance = await profile.getBalance(target.id);
-        const user = await Users.findOne({ where: { user_id: target.id } });
-        const items = await user.getItems();
-        const avatar = target.displayAvatarURL();
-        const count = await profile.getCount(target.id);
-        let daily = true;
-        if (await profile.getDaily(target.id) == moment().dayOfYear()) daily = false;
+	name: 'profile',
+	description: 'Shows inventory of tagged user or the sender if noone was tagged.',
+	admin: false,
+	aliases: ['inv', 'items', 'prof', 'inventory', 'balance', 'money', 'p'],
+	args: false,
+	usage: 'user',
+	async execute(msg, args, profile) {
+		const target = msg.mentions.users.first() || msg.author;
+		const balance = await profile.getBalance(target.id);
+		const user = await Users.findOne({ where: { user_id: target.id } });
+		const items = await user.getItems();
+		const avatar = target.displayAvatarURL();
+		const count = await profile.getCount(target.id);
+		const lastDaily = moment(await profile.getDaily(target.id));
+		const lastHourly = moment(await profile.getHourly(target.id));
+		
+		const now = moment();
+		const dCheck = moment(lastDaily, 'DDD H').add(1, 'd');
+		const hCheck = moment(lastHourly, 'DDD H').add(1, 'h');
+		
+		let daily = dCheck.format('ddd H:mm');
+		let hourly = hCheck.format('ddd H:mm');
+		if (moment(dCheck).isBefore(now)) daily = 'now';
+		if (moment(hCheck).isBefore(now)) hourly = 'now';
+		
+		const embed = new Discord.MessageEmbed()
+			.setTitle(`${target.tag}'s Profile`)
+			.setColor('#42f548')
+			.setThumbnail(avatar)
+			.addField('Balance:', `${balance}💰`, true)
+			.addField('Message Count:', count, true)
+			.addField('Daily Available:', daily)
+			.addField('Hourly Available:', hourly, true)
+			.setTimestamp();
 
-        const embed = new Discord.MessageEmbed()
-            .setTitle(`${target.tag}'s Profile`)
-            .setColor('#42f548')
-            .setThumbnail(avatar)
-            .addField(`Balance:`, `${balance}💰`)
-            .addField(`Daily Available:`, daily, true)
-            .addField(`Message Count:`, count, true)
-            .setTimestamp();
-
-        if (!items.length) { embed.addField('Inventory:', `${target.tag} has nothing!`); }
-        else {
-            embed.addField('Inventory:', '-----------------------------');
-            items.map(i => embed.addField(`${i.item.name}: `, `${i.amount}`, true));
-        }
-        msg.channel.send(embed);
-    },
+		if (!items.length) { embed.addField('Inventory:', `${target.tag} has nothing!`); }
+		else {
+			embed.addField('Inventory:', '-----------------------------');
+			items.map(i => embed.addField(`${i.item.name}: `, `${i.amount}`, true));
+		}
+		msg.channel.send(embed);
+	},
 };

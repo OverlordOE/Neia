@@ -9,6 +9,7 @@ module.exports = {
 	Trade: require('./trade'),
 	Profile: require('./profile'),
 	Daily: require('./daily'),
+	Hourly: require('./hourly'),
 	Leaderboard: require('./leaderboard'),
 	Gamble: require('./gamble'),
 	Dice: require('./dice'),
@@ -16,10 +17,11 @@ module.exports = {
 	Play: require('./play'),
 	Queue: require('./queue'),
 	Skip: require('./skip'),
+	Clear: require('./clear'),
 	Add: require('./add'),
 	Ban: require('./ban'),
 	Reload: require('./reload'),
 	Delete: require('./delete'),
 	Backup: require('./backup'),
-	Test: require('./test')
+	Test: require('./test'),
 };
