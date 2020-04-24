@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable max-nested-callbacks */
 const { Users, CurrencyShop } = require('../dbObjects');
 const { Op } = require('sequelize');
 module.exports = {
