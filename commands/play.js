@@ -40,6 +40,7 @@ module.exports = {
 				requester: msg.author.tag,
 				url: video.url,
 				announceChannel: msg.channel.id,
+				duration: video.length,
 			});
 		}
 		else if (validate) {
@@ -50,6 +51,7 @@ module.exports = {
 				requester: msg.author.tag,
 				url: search,
 				announceChannel: msg.channel.id,
+				duration: video.lengthSeconds,
 			});
 
 		}

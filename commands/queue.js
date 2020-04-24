@@ -17,11 +17,11 @@ module.exports = {
 		const nowPlaying = queue[0];
 
 		// Eerst een lijn met het liedje dat al speelt.
-		let response = `Now playing: ${nowPlaying.songTitle}\nRequested by ${nowPlaying.requester}\n\nQueue: \n`;
+		let response = `Now playing: ${nowPlaying.songTitle}\nDuration: ${nowPlaying.duration}\nRequested by ${nowPlaying.requester}\n\nQueue: \n`;
 
 		// Voor ieder liedje in de lijst gaan we deze toevoegen aan het bericht.
 		for (let i = 1; i < queue.length; i++) {
-			response += `${i}: ${queue[i].songTitle}\nRequested by ${queue[i].requester}\n\n`;
+			response += `${i}: ${queue[i].songTitle}\nDuration: ${queue[i].duration}\nRequested by: ${queue[i].requester}\n\n`;
 
 		}
 
