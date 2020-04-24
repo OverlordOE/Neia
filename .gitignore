@@ -64,3 +64,4 @@ database.sqlite
 config.json
 Syndicate bot-52a1ba49d569.json
 package-lock.json
+.eslintrc.json
