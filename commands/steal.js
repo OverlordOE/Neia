@@ -36,7 +36,7 @@ module.exports = {
 		}
 		else if (luck == 0) {
 			const fine = 15 + (Math.random() * 20);
-			profile.addMoney(msg.author.id, fine);
+			profile.addMoney(msg.author.id, -fine);
 			const balance = await profile.getBalance(msg.author.id);
 			await user.removeItem(item);
 			return msg.channel.send(`You got caught trying to steal from ${target.tag}, you get fined ${Math.floor(fine)}💰. Your current balance is ${balance}💰`);
