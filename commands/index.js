@@ -12,6 +12,7 @@ module.exports = {
 	Hourly: require('./hourly'),
 	Leaderboard: require('./leaderboard'),
 	Gamble: require('./gamble'),
+	Steal: require('./steal'),
 	Dice: require('./dice'),
 	Invite: require('./invite'),
 	Play: require('./play'),

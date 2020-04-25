@@ -20,7 +20,7 @@ module.exports = {
 
 		const data = ops.active.get(msg.guild.id) || {};
 
-		if (!data.connection) data.connection = await msg.member.voice.channel.join();
+		if (!data.connection) {data.connection = await msg.member.voice.channel.join();}
 		else if (data.connection.status == 4) {
 			data.connection = await msg.member.voice.channel.join();
 			const guildIDData = ops.active.get(msg.guild.id);

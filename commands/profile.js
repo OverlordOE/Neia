@@ -22,8 +22,8 @@ module.exports = {
 		const dCheck = moment(lastDaily, 'DDD H').add(1, 'd');
 		const hCheck = moment(lastHourly, 'DDD H').add(1, 'h');
 		
-		let daily = dCheck.format('ddd H:mm');
-		let hourly = hCheck.format('ddd H:mm');
+		let daily = dCheck.format('dddd HH:mm');
+		let hourly = hCheck.format('dddd HH:mm');
 		if (moment(dCheck).isBefore(now)) daily = 'now';
 		if (moment(hCheck).isBefore(now)) hourly = 'now';
 		
@@ -33,8 +33,8 @@ module.exports = {
 			.setThumbnail(avatar)
 			.addField('Balance:', `${balance}💰`, true)
 			.addField('Message Count:', count, true)
-			.addField('Daily Available:', daily)
-			.addField('Hourly Available:', hourly, true)
+			.addField('Next daily:', daily)
+			.addField('Next hourly:', hourly, true)
 			.setTimestamp();
 
 		if (!items.length) { embed.addField('Inventory:', `${target.tag} has nothing!`); }

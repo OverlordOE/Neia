@@ -123,7 +123,7 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount) {
 			msg.channel.lastMessage.react('✂️'); // result 3
 		})
 		.catch(e => {
-			logger.log('error', `One of the emojis failed to react because of:\n${e}`)
+			logger.log('error', `One of the emojis failed to react because of:\n${e}`);
 			return msg.reply('One of the emojis failed to react.');
 		});
 
