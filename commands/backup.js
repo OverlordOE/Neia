@@ -3,9 +3,14 @@ const backup = require('../backup');
 const { Users } = require('../dbObjects');
 module.exports = {
 	name: 'backup',
-	description: 'Makes a backup of the database',
-	admin: true,
+	description: 'Makes a backup of the database.',
 	owner: true,
+	admin: true,
+	aliases: ['b'],
+	args: false,
+	usage: 'modifier',
+	music: false,
+	
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		let total = 0;
 

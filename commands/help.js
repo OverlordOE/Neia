@@ -5,16 +5,36 @@ module.exports = {
 	admin: false,
 	aliases: ['commands'],
 	usage: 'command name',
+	owner: false,
+	args: false,
+	music: false,
+
 	execute(message, args) {
 		const { commands } = message.client;
+		let adminCommands = ``;
+		let musicCommands = ``;
+		let normalCommands = ``;
+
 		const help = new Discord.MessageEmbed()
-			.setColor('#000000')
+			.setColor('#FFFFF')
 			.setTimestamp();
 
 		if (!args.length) {
 			help.setTitle('Syndicate bot command list');
-			commands.map(command => help.addField(`**${command.name}**`, command.description));
-			help.setFooter('You can send `-help [command name]` to get info on a specific command!');
+			commands.map(command => {
+				if (!command.owner) {
+					if (command.admin) { adminCommands += `**-${command.name}** - ${command.description}\n`; }
+					else if (command.music) { musicCommands += `**-${command.name}** - ${command.description}\n`; }
+					else { normalCommands += `**-${command.name}** - ${command.description}\n`; }
+				}
+
+			});
+
+
+			help.addField('**Normal commands**', normalCommands);
+			help.addField('**Music commands**', musicCommands);
+			help.addField('**Admin commands**', adminCommands);
+			help.addField('**Help**', '**You can send `-help [command name]` to get info on a specific command!**');
 		}
 		else {
 			const name = args[0].toLowerCase();
@@ -24,11 +44,12 @@ module.exports = {
 				return message.reply('that\'s not a valid command!');
 			}
 
+			if (command.owner) { return message.channel.send('This command is for debug purposes'); }
 			help.setTitle(command.name);
 
-			if (command.aliases) help.addField('**Aliases:**', command.aliases.join(', '));
 			if (command.description) help.addField('**Description:**', command.description);
 			if (command.usage) help.addField('**Usage:**', `-${command.name} ${command.usage}`);
+			if (command.aliases) help.addField('**Aliases:**', command.aliases.join(', '));
 			if (command.admin) help.addField('**Need Admin:**', command.admin);
 		}
 

@@ -4,6 +4,10 @@ module.exports = {
 	admin: false,
 	aliases: ['next'],
 	args: false,
+	usage: '',
+	owner: false,
+	music: true,
+	
 	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 		if (!msg.member.voice.channel) {
 			return msg.reply('You are not in a voice channel!');

@@ -1,10 +1,14 @@
 module.exports = {
 	name: 'queue',
-	description: 'Shows the song queue',
+	description: 'Shows the song queue.',
 	admin: false,
 	aliases: ['list'],
 	args: false,
 	usage: '',
+	owner: false,
+	music: true,
+
+
 	async execute(msg, args, profile, bot, ops) {
 		// Ophalen van het ID van de server voor de data.
 		const guildIDData = ops.active.get(msg.guild.id);

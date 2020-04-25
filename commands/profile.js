@@ -8,6 +8,10 @@ module.exports = {
 	aliases: ['inv', 'items', 'prof', 'inventory', 'balance', 'money', 'p'],
 	args: false,
 	usage: 'user',
+	owner: false,
+	music: false,
+
+
 	async execute(msg, args, profile) {
 		const target = msg.mentions.users.first() || msg.author;
 		const balance = await profile.getBalance(target.id);

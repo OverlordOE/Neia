@@ -1,10 +1,13 @@
 module.exports = {
 	name: 'ping',
 	description: 'Summon the mentioned user or just get a pong.',
-	admin: false,
 	aliases: ['summon'],
+	owner: false,
+	admin: false,
 	args: false,
 	usage: 'user',
+	music: false,
+
 	execute(msg, args) {
 		if (!msg.mentions.users.size) {
 			return msg.channel.send('pong');

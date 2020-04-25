@@ -1,10 +1,15 @@
 const { Users, CurrencyShop } = require('../dbObjects');
 module.exports = {
 	name: 'steal',
-	description: 'Steal money from other players but have a chance to get caught',
-	cooldown: 1,
+	description: 'Steal money from other players but have a chance to get caught **1 hour cooldown**.',
+	cooldown: 3600,
 	args: true,
 	usage: 'target',
+	admin: false,
+	aliases: ['shoot'],
+	owner: false,
+	music: false,
+
 	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 
 		const target = msg.mentions.users.first();

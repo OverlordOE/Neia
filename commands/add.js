@@ -1,9 +1,14 @@
 module.exports = {
 	name: 'add',
-	description: 'Adds money too the mentioned user',
+	description: 'Adds money too the mentioned user.',
 	owner: true,
 	args: true,
 	usage: 'money user',
+	aliases: [],
+	admin: false,
+	music: false,
+	cooldown: 0,
+
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		const transferAmount = args.find(arg => !/<@!?\d+>/g.test(arg));
 		const transferTarget = msg.mentions.users.first() || msg.author;

@@ -6,6 +6,9 @@ module.exports = {
 	aliases: ['store'],
 	args: false,
 	usage: '',
+	owner: false,
+	music: false,
+	
 	async execute(msg, args, profile) {
 		const items = await CurrencyShop.findAll();
 		return msg.channel.send(items.map(item => `${item.name}: ${item.cost}💰`).join('\n'), { code: true });

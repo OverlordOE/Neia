@@ -1,11 +1,15 @@
 module.exports = {
 	name: 'reload',
-	description: '"Admin debug tool" Reloads a command',
+	description: '"Admin debug tool" Reloads a command.',
 	usage: '[command]',
 	aliases: ['r', 're'],
 	owner: true,
 	args: true,
 	cooldown: 0,
+	admin: false,
+	music: false,
+
+
 	execute(message, args, profile, bot, ops, ytAPI, logger) {
 		const commandName = args[0].toLowerCase();
 		const command = message.client.commands.get(commandName)

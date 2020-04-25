@@ -6,6 +6,10 @@ module.exports = {
 	aliases: ['day', 'd'],
 	args: false,
 	cooldown: 5,
+	owner: false,
+	usage: '',
+	music: false,
+	
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		const lastDaily = moment(await profile.getDaily(msg.author.id));
 		const now = moment();

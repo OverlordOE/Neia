@@ -4,8 +4,14 @@ const { Users, CurrencyShop } = require('../dbObjects');
 const { Op } = require('sequelize');
 module.exports = {
 	name: 'trade',
-	description: 'Trade money and items to other people',
+	description: 'Trade money and items to other people.',
 	aliases: ['give', 'donate', 'transfer'],
+	admin: false,
+	args: false,
+	usage: '',
+	owner: false,
+	music: false,
+
 	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });

@@ -8,6 +8,10 @@ module.exports = {
 	aliases: ['song'],
 	args: true,
 	usage: 'search criteria',
+	owner: false,
+	music: true,
+
+
 	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 
 		const youtube = new YouTube(ytAPI);

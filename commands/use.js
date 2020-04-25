@@ -3,6 +3,12 @@ const { Op } = require('sequelize');
 module.exports = {
 	name: 'use',
 	description: 'Use an item from your inventory.',
+	admin: false,
+	aliases: [],
+	args: false,
+	usage: '',
+	owner: false,
+	music: false,
 
 	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 		

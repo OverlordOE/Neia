@@ -6,6 +6,10 @@ module.exports = {
 	aliases: ['lead', 'top', 'ranking'],
 	args: false,
 	usage: '',
+	owner: false,
+	music: false,
+
+
 	execute(msg, args, profile, bot) {
 		return msg.channel.send(
 			profile.sort((a, b) => b.balance - a.balance)
