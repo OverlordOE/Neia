@@ -14,7 +14,7 @@ module.exports = {
 
 		const target = msg.mentions.users.first();
 		const targetBalance = await profile.getBalance(target.id);
-		// logger.log('info', msg.author.id);
+		if (targetBalance < 1) return msg.channel.send('You cant steal from someone who has no money.');
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const uitems = await user.getItems();
 		let hasItem = false;
