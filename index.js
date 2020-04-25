@@ -208,6 +208,17 @@ bot.on('message', async msg => {
 		}
 	}
 
+	// if the command is used wrongly correct the user
+	if (command.args && !args.length) {
+		let reply = `You didn't provide any arguments, ${msg.author}!`;
+
+		if (command.usage) {
+			reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
+		}
+
+		return msg.channel.send(reply);
+	}
+
 	// cooldowns
 	if (!cooldowns.has(command.name)) {
 		cooldowns.set(command.name, new Discord.Collection());
@@ -227,16 +238,6 @@ bot.on('message', async msg => {
 	timestamps.set(msg.author.id, now);
 	setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
 
-	// if the command is used wrongly correct the user
-	if (command.args && !args.length) {
-		let reply = `You didn't provide any arguments, ${msg.author}!`;
-
-		if (command.usage) {
-			reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
-		}
-
-		return msg.channel.send(reply);
-	}
 
 	const options = {
 		active: active,

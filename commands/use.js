@@ -171,6 +171,9 @@ module.exports = {
 						});
 						break;
 
+					case 'Gun':
+						msg.channel.send('To use a gun please use the **-steal** command');
+						break;
 
 					default:
 						return msg.channel.send('No use for this yet, the item was not used.');
