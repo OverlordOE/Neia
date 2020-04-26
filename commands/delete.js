@@ -1,10 +1,14 @@
 module.exports = {
 	name: 'delete',
-	description: 'Delete messages in bulk',
+	description: 'Delete messages in bulk.',
 	admin: true,
 	aliases: ['remove'],
 	args: false,
 	usage: '(amount of messaged to delete)',
+	owner: false,
+	cooldown: 4,
+	music: false,
+
 	execute(msg, args, profile, bot, options, ytAPI, logger) {
 
 		try {

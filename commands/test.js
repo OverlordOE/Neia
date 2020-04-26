@@ -1,10 +1,14 @@
 module.exports = {
 	name: 'test',
-	description: 'Test command for new commands',
+	description: 'Test command for new commands.',
 	owner: true,
 	aliases: ['t'],
 	args: false,
 	usage: '',
+	admin: false,
+	music: false,
+
+
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 
 		const connection = await msg.member.voice.channel.join();

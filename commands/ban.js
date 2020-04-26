@@ -1,9 +1,13 @@
 module.exports = {
 	name: 'ban',
-	description: 'Bans mentioned user from the server',
+	description: 'Bans mentioned user from the server.',
 	admin: true,
 	args: true,
 	usage: 'user reason',
+	aliases: [],
+	owner: false,
+	music: false,
+
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		
 		

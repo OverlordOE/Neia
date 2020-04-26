@@ -5,6 +5,10 @@ module.exports = {
 	admin: false,
 	args: false,
 	usage: '',
+	aliases: ['inv'],
+	owner: false,
+	music: false,
+
 	async execute(msg) {
 		const embed = new Discord.MessageEmbed()
 			.setColor('#0099ff')

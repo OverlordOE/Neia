@@ -3,6 +3,12 @@ const { Op } = require('sequelize');
 module.exports = {
 	name: 'use',
 	description: 'Use an item from your inventory.',
+	admin: false,
+	aliases: [],
+	args: false,
+	usage: '',
+	owner: false,
+	music: false,
 
 	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 		
@@ -165,6 +171,9 @@ module.exports = {
 						});
 						break;
 
+					case 'Gun':
+						msg.channel.send('To use a gun please use the **-steal** command');
+						break;
 
 					default:
 						return msg.channel.send('No use for this yet, the item was not used.');

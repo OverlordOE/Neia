@@ -1,11 +1,14 @@
 
 module.exports = {
 	name: 'dice',
-	description: 'rolls a dice',
+	description: 'Roll any amount of any sided die.',
 	admin: false,
 	aliases: ['roll'],
 	args: true,
 	usage: 'sides (amount of roles)',
+	owner: false,
+	music: false,
+
 	execute(msg, args) {
 
 		const sides = args[0];

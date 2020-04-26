@@ -2,11 +2,14 @@ const emojiCharacters = require('../emojiCharacters');
 const Discord = require('discord.js');
 module.exports = {
 	name: 'gamble',
-	description: 'Starts a minigame where you need to guess what number is correct',
+	description: 'Gives you a list of minigames to play to make some money with.',
 	admin: false,
 	aliases: ['guess'],
 	args: true,
 	usage: 'money',
+	owner: false,
+	music: false,
+
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		const currentAmount = await profile.getBalance(msg.author.id);
 		const gambleAmount = args[0];
@@ -123,7 +126,7 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount) {
 			msg.channel.lastMessage.react('✂️'); // result 3
 		})
 		.catch(e => {
-			logger.log('error', `One of the emojis failed to react because of:\n${e}`)
+			logger.log('error', `One of the emojis failed to react because of:\n${e}`);
 			return msg.reply('One of the emojis failed to react.');
 		});
 

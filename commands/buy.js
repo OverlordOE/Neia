@@ -7,6 +7,10 @@ module.exports = {
 	aliases: ['get'],
 	usage: '',
 	cooldown: 5,
+	owner: false,
+	args: false,
+	music: false,
+	
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });

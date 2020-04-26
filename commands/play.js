@@ -8,6 +8,10 @@ module.exports = {
 	aliases: ['song'],
 	args: true,
 	usage: 'search criteria',
+	owner: false,
+	music: true,
+
+
 	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 
 		const youtube = new YouTube(ytAPI);
@@ -20,7 +24,7 @@ module.exports = {
 
 		const data = ops.active.get(msg.guild.id) || {};
 
-		if (!data.connection) data.connection = await msg.member.voice.channel.join();
+		if (!data.connection) { data.connection = await msg.member.voice.channel.join(); }
 		else if (data.connection.status == 4) {
 			data.connection = await msg.member.voice.channel.join();
 			const guildIDData = ops.active.get(msg.guild.id);
@@ -40,6 +44,7 @@ module.exports = {
 				requester: msg.author.tag,
 				url: video.url,
 				announceChannel: msg.channel.id,
+				duration: video.length,
 			});
 		}
 		else if (validate) {
@@ -50,10 +55,11 @@ module.exports = {
 				requester: msg.author.tag,
 				url: search,
 				announceChannel: msg.channel.id,
+				duration: video.lengthSeconds,
 			});
 
 		}
-		else {return msg.reply('Cannot play this query');}
+		else { return msg.reply('Cannot play this query'); }
 
 
 		if (!data.dispatcher) {
@@ -112,7 +118,7 @@ async function Play(bot, ops, data, logger) {
 		data.dispatcher = null;
 		logger.log('info', `left voice channel for reason: ${e}`);
 	});
-	
+
 
 }
 
@@ -120,9 +126,15 @@ async function Play(bot, ops, data, logger) {
 function Finish(bot, ops, dispatcher, message, logger) {
 
 	const fetchedData = ops.active.get(dispatcher.guildID);
-	fetchedData.queue.shift();
+	if (fetchedData.loop) {
+		
+		ops.active.set(dispatcher.guildID, fetchedData);
+		return Play(bot, ops, fetchedData, logger);
+	}
+	else { fetchedData.queue.shift(); }
 
 	if (fetchedData.queue.length > 0) {
+
 		ops.active.set(dispatcher.guildID, fetchedData);
 		Play(bot, ops, fetchedData, logger);
 	}
