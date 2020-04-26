@@ -3,7 +3,7 @@ const { Users } = require('../dbObjects');
 const moment = require('moment');
 module.exports = {
 	name: 'profile',
-	description: 'Shows inventory of tagged user or the sender if noone was tagged.',
+	description: 'Shows profile of you or the tagger user.',
 	admin: false,
 	aliases: ['inv', 'items', 'prof', 'inventory', 'balance', 'money', 'p'],
 	args: false,
@@ -23,8 +23,8 @@ module.exports = {
 		const lastHourly = moment(await profile.getHourly(target.id));
 		
 		const now = moment();
-		const dCheck = moment(lastDaily, 'DDD H').add(1, 'd');
-		const hCheck = moment(lastHourly, 'DDD H').add(1, 'h');
+		const dCheck = moment(lastDaily).add(1, 'd');
+		const hCheck = moment(lastHourly).add(1, 'h');
 		
 		let daily = dCheck.format('dddd HH:mm');
 		let hourly = hCheck.format('dddd HH:mm');

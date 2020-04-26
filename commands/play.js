@@ -127,12 +127,14 @@ function Finish(bot, ops, dispatcher, message, logger) {
 
 	const fetchedData = ops.active.get(dispatcher.guildID);
 	if (fetchedData.loop) {
+		
 		ops.active.set(dispatcher.guildID, fetchedData);
 		return Play(bot, ops, fetchedData, logger);
 	}
-	else { fetchedData.queue.shift();}
+	else { fetchedData.queue.shift(); }
+
 	if (fetchedData.queue.length > 0) {
-		
+
 		ops.active.set(dispatcher.guildID, fetchedData);
 		Play(bot, ops, fetchedData, logger);
 	}
