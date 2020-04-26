@@ -24,7 +24,7 @@ module.exports = {
 
 		const data = ops.active.get(msg.guild.id) || {};
 
-		if (!data.connection) {data.connection = await msg.member.voice.channel.join();}
+		if (!data.connection) { data.connection = await msg.member.voice.channel.join(); }
 		else if (data.connection.status == 4) {
 			data.connection = await msg.member.voice.channel.join();
 			const guildIDData = ops.active.get(msg.guild.id);
@@ -59,7 +59,7 @@ module.exports = {
 			});
 
 		}
-		else {return msg.reply('Cannot play this query');}
+		else { return msg.reply('Cannot play this query'); }
 
 
 		if (!data.dispatcher) {
@@ -118,7 +118,7 @@ async function Play(bot, ops, data, logger) {
 		data.dispatcher = null;
 		logger.log('info', `left voice channel for reason: ${e}`);
 	});
-	
+
 
 }
 
@@ -126,9 +126,13 @@ async function Play(bot, ops, data, logger) {
 function Finish(bot, ops, dispatcher, message, logger) {
 
 	const fetchedData = ops.active.get(dispatcher.guildID);
-	fetchedData.queue.shift();
-
+	if (fetchedData.loop) {
+		ops.active.set(dispatcher.guildID, fetchedData);
+		return Play(bot, ops, fetchedData, logger);
+	}
+	else { fetchedData.queue.shift();}
 	if (fetchedData.queue.length > 0) {
+		
 		ops.active.set(dispatcher.guildID, fetchedData);
 		Play(bot, ops, fetchedData, logger);
 	}

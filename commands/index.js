@@ -17,6 +17,7 @@ module.exports = {
 	Invite: require('./invite'),
 	Play: require('./play'),
 	Queue: require('./queue'),
+	Loop: require('./loop'),
 	Skip: require('./skip'),
 	Clear: require('./clear'),
 	Add: require('./add'),
