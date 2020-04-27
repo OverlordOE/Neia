@@ -27,8 +27,8 @@ module.exports = {
 		if (!hasItem) return msg.channel.send('You don\'t have a gun to steal with!');
 
 
-		const luck = Math.floor(Math.random() * 2);
-		if (luck == 1) {
+		const luck = Math.floor(Math.random() * 100);
+		if (luck >= 35) {
 
 			let stealAmount = 30 + (Math.random() * 30);
 			if (targetBalance < stealAmount) stealAmount = targetBalance;
@@ -39,7 +39,7 @@ module.exports = {
 			await user.removeItem(item);
 			return msg.channel.send(`Successfully stolen ${Math.floor(stealAmount)}💰 from ${target.tag}. Your current balance is ${balance}💰`);
 		}
-		else if (luck == 0) {
+		else if (luck < 35) {
 			const fine = 15 + (Math.random() * 20);
 			profile.addMoney(msg.author.id, -fine);
 			const balance = await profile.getBalance(msg.author.id);

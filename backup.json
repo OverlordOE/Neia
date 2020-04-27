@@ -796,5 +796,803 @@
 		"lastDaily": 115,
 		"lastHourly": 115,
 		"msgCount": 8
-	}	
+	},
+	{
+		"user_id": "137920111754346496",
+		"balance": 264.1294742454663,
+		"lastDaily": "2020-04-26T14:57:28.468Z",
+		"lastHourly": "2020-04-26T14:57:31.053Z",
+		"msgCount": 6009
+	},
+	{
+		"user_id": "684458276129079320",
+		"balance": 1,
+		"lastDaily": "Sat Apr 25 2020 03:00:06 GMT+0200",
+		"lastHourly": "Sat Apr 25 2020 03:00:06 GMT+0200",
+		"msgCount": 7092
+	},
+	{
+		"user_id": "226403749168545792",
+		"balance": 174.26740390791804,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "348190362453409794",
+		"balance": 539.944338065966,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 18
+	},
+	{
+		"user_id": "364484738234449931",
+		"balance": 152.57461366174408,
+		"lastDaily": "Sat Apr 25 2020 13:24:58 GMT+0200",
+		"lastHourly": "Sun Apr 26 2020 12:45:19 GMT+0200",
+		"msgCount": 89
+	},
+	{
+		"user_id": "613051536133586944",
+		"balance": 103,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 30
+	},
+	{
+		"user_id": "274210152951840768",
+		"balance": 526.7591868160707,
+		"lastDaily": "Sat Apr 25 2020 14:26:30 GMT+0200",
+		"lastHourly": "Sat Apr 25 2020 14:26:31 GMT+0200",
+		"msgCount": 38
+	},
+	{
+		"user_id": "311548629578022932",
+		"balance": 123.86898795158626,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "133233603416031233",
+		"balance": 219.9636456700234,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "475426816660733993",
+		"balance": 154.12399582243182,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "368461970346868736",
+		"balance": 173.16335132702724,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "206048254868062208",
+		"balance": -10.186317454574752,
+		"lastDaily": "Sat Apr 25 2020 15:00:16 GMT+0200",
+		"lastHourly": "Sat Apr 25 2020 15:00:19 GMT+0200",
+		"msgCount": 94
+	},
+	{
+		"user_id": "451365823303516160",
+		"balance": 109.84360044656931,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "206695033297043456",
+		"balance": 25.792625838346467,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "234064743713734657",
+		"balance": 655.03706350248,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 28
+	},
+	{
+		"user_id": "692754493573431326",
+		"balance": 103,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 8
+	},
+	{
+		"user_id": "217027090904514560",
+		"balance": 110.95201014297383,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "131914056012529664",
+		"balance": 119.0364729897477,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "453584218744946699",
+		"balance": 103.65626293512284,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "283720862786519040",
+		"balance": 119.67080237707825,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 2
+	},
+	{
+		"user_id": "499920202033790976",
+		"balance": 126.07064284470181,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "182552286835376128",
+		"balance": 103.40059381802173,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "223946214062686208",
+		"balance": 108.97904572803455,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "325407079567327243",
+		"balance": 103.68325869606144,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "236932821745139713",
+		"balance": 29.39511261593873,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 20
+	},
+	{
+		"user_id": "159985870458322944",
+		"balance": 103,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 4
+	},
+	{
+		"user_id": "210804831915343872",
+		"balance": 208.8236734520243,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 6
+	},
+	{
+		"user_id": "523859040971784193",
+		"balance": 105.52340874648729,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "137996286413504512",
+		"balance": 138.5277907512384,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 3
+	},
+	{
+		"user_id": "278618815531581440",
+		"balance": 182.18039527514748,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 111
+	},
+	{
+		"user_id": "139030319784263681",
+		"balance": 27.576392758224877,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 2
+	},
+	{
+		"user_id": "163433024942374912",
+		"balance": 510.1286517156271,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 22
+	},
+	{
+		"user_id": "137870275286007808",
+		"balance": 201.13715129891787,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 21
+	},
+	{
+		"user_id": "237290529295958026",
+		"balance": 35.51760876167083,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "184050161213898753",
+		"balance": 113.39948563986412,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "616754792965865495",
+		"balance": 103,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 11
+	},
+	{
+		"user_id": null,
+		"balance": 1,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "202192052765720576",
+		"balance": 101.66856665672957,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 29
+	},
+	{
+		"user_id": "221280352004472842",
+		"balance": -51.123414735967614,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "228595806473551872",
+		"balance": 14.715701240998037,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "111969676296224768",
+		"balance": 4.7163239724642425,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "238764592170270722",
+		"balance": 3.4020020248739202,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "169189217631469569",
+		"balance": 3.6476613451198,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "254661301886779393",
+		"balance": 8.481839392966373,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "612811985867898892",
+		"balance": 3,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "106814052902187008",
+		"balance": 559.6132590191352,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 11
+	},
+	{
+		"user_id": "234395307759108106",
+		"balance": 3,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "342643503274262531",
+		"balance": 39.615662538673504,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "263780265195864064",
+		"balance": 123.2081617391833,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "606936135746453515",
+		"balance": 19.17437475503197,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "424546512614195211",
+		"balance": 6.301264319636216,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "550613223733329920",
+		"balance": 3,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 5
+	},
+	{
+		"user_id": "258600724751974401",
+		"balance": 4.321972519947125,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "199281451307499520",
+		"balance": 4.014542605718212,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "653375095796138071",
+		"balance": 3.812945820541826,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "314837957368610817",
+		"balance": 203.0190439437615,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 38
+	},
+	{
+		"user_id": "621041835934089237",
+		"balance": 315.9651176034337,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "696823245164380201",
+		"balance": 2,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "270904126974590976",
+		"balance": 2,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "390472836130668544",
+		"balance": 24.460900228999442,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "528606166046212116",
+		"balance": 10.553269574951786,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 2
+	},
+	{
+		"user_id": "309283893994061826",
+		"balance": 11.434931491620793,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "228176269819248640",
+		"balance": 2.950289085485347,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "223113269005516800",
+		"balance": 21.99261437882899,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "368670751898861568",
+		"balance": 2.9353329596128503,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "610942812531327006",
+		"balance": 100.37754659522506,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 23
+	},
+	{
+		"user_id": "200971512075780096",
+		"balance": 12.784212476058794,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "402465727145181184",
+		"balance": 35.64669789938358,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "190217890472001546",
+		"balance": 6.588445111680838,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "173849799395639296",
+		"balance": 3.073944800387392,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "278142291900760065",
+		"balance": 47.14187746584027,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "299567448661819402",
+		"balance": 30.840993551569447,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "617434473801187328",
+		"balance": 2,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "296669343645958144",
+		"balance": 70.1100430103199,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 3
+	},
+	{
+		"user_id": "303242188899221504",
+		"balance": 7.75372338236286,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 2
+	},
+	{
+		"user_id": "317686420858863618",
+		"balance": 4.997370575379481,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "213335627016568833",
+		"balance": 9.211491619113573,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "276425548820119561",
+		"balance": 12.769651176289026,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "293824112042704896",
+		"balance": 3.1463329255580117,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "319576891008745472",
+		"balance": 6.860430478487094,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "445276394440884226",
+		"balance": 3.1661935721020598,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "133290449988222976",
+		"balance": 17.079056736025372,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "277818271150112768",
+		"balance": 4.8915873677565145,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "280018394432929804",
+		"balance": 7.668051311187302,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "412549925256167435",
+		"balance": 3.0820598293101336,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "192286347350900737",
+		"balance": 10.094562737516608,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "179313534042243072",
+		"balance": 3.0943385322328876,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "226067027893288970",
+		"balance": 5.067969207634088,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "260843394148990987",
+		"balance": 32.98959545986841,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "318068944730849282",
+		"balance": 224.99308366616748,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "211322838165094400",
+		"balance": 3.0861278081719554,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "529774160457498634",
+		"balance": 3.0793867767586556,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "607003105221017639",
+		"balance": 24.336504678930513,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "604660853677228032",
+		"balance": 4.087271936791157,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "149641555118915585",
+		"balance": 8.85763734896566,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "230773067448582144",
+		"balance": 2.8262519853773447,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "278991520022134784",
+		"balance": 3.0131145262215417,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "108949489607249920",
+		"balance": 3.2863509162570494,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "439205512425504771",
+		"balance": 2,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "230736559773712384",
+		"balance": 7.110574112183816,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "266606710427222017",
+		"balance": 4.359568579040138,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "424333762399174656",
+		"balance": 11.51253706888003,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "249275094147268608",
+		"balance": 7.587907834983,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "220253697991639041",
+		"balance": 12.40895822561853,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "139062645880913921",
+		"balance": 2.801122143953025,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "185899518594777089",
+		"balance": 16.900564971390814,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "371064747719655434",
+		"balance": 8.09780695801372,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 6
+	},
+	{
+		"user_id": "214055966272913411",
+		"balance": 9.346225412371691,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "227110049519108096",
+		"balance": 6.549475834721076,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "383998225591304192",
+		"balance": 3.0613311913948325,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "162284506290585600",
+		"balance": 3.2208488033081233,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "261834277593808907",
+		"balance": 6.962682731622806,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "191996324269391872",
+		"balance": 3.176269916832446,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	},
+	{
+		"user_id": "173531351230709761",
+		"balance": 6.060966120806539,
+		"lastDaily": 115,
+		"lastHourly": 115,
+		"msgCount": 1
+	}
 ]

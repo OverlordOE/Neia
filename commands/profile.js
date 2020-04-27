@@ -33,7 +33,7 @@ module.exports = {
 		
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`${target.tag}'s Profile`)
-			.setColor('#42f548')
+			.setColor('#fffb00')
 			.setThumbnail(avatar)
 			.addField('Balance:', `${balance}💰`, true)
 			.addField('Message Count:', count, true)
