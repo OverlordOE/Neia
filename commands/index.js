@@ -26,4 +26,5 @@ module.exports = {
 	Delete: require('./delete'),
 	Backup: require('./backup'),
 	Test: require('./test'),
+	Embed: require('./embed'),
 };

@@ -13,6 +13,7 @@ module.exports = {
 	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
 
 		const target = msg.mentions.users.first();
+		if(!target) {msg.channel.send('Incorrect mention');}
 		const targetBalance = await profile.getBalance(target.id);
 		if (targetBalance < 1) return msg.channel.send('You cant steal from someone who has no money.');
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
