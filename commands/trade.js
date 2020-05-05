@@ -40,7 +40,7 @@ module.exports = {
 						msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 							.then(async collected => {
-								const goods = collected.first().content;
+								const goods = collected.first().content.toLowerCase();
 
 
 								if (goods == 'money') {
