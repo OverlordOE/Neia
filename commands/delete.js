@@ -9,7 +9,7 @@ module.exports = {
 	cooldown: 4,
 	music: false,
 
-	execute(msg, args, profile, bot, options, ytAPI, logger) {
+	execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 
 		try {
 			msg.delete();

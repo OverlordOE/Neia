@@ -12,7 +12,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
+	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
 
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const filter = m => m.author.id === msg.author.id;
@@ -54,7 +54,7 @@ module.exports = {
 									logger.log('info', `Handled refund ${i} out of ${amount} for item: ${item.name}`);
 								}
 								const balance = await profile.getBalance(msg.author.id);
-								msg.channel.send(`You've refunded ${amount} ${item.name} and received ${totalRefund} back.\nYour balance is ${balance}💰!`);
+								msg.channel.send(`You've refunded ${amount} ${item.name} and received ${Math.floor(totalRefund)} back.\nYour balance is ${balance}💰!`);
 
 							})
 							.catch(e => {

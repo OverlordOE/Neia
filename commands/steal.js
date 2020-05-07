@@ -1,4 +1,5 @@
 const { Users, CurrencyShop } = require('../dbObjects');
+const Discord = require('discord.js');
 module.exports = {
 	name: 'steal',
 	description: 'Steal money from other players but have a chance to get caught **1 hour cooldown**.',
@@ -10,12 +11,25 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
+	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
+
+		const now = Date.now();
+		if (!cooldowns.has('steal')) {
+			cooldowns.set('steal', new Discord.Collection());
+		}
+		const timestamps = cooldowns.get('steal');
+
 
 		const target = msg.mentions.users.first();
-		if(!target) {msg.channel.send('Incorrect mention');}
+		if (!target) {
+			timestamps.delete(msg.author.id);
+			return msg.channel.send('Incorrect mention');
+		}
 		const targetBalance = await profile.getBalance(target.id);
-		if (targetBalance < 1) return msg.channel.send('You cant steal from someone who has no money.');
+		if (targetBalance < 1) {
+			timestamps.delete(msg.author.id);
+			return msg.channel.send('You cant steal from someone who has no money.');
+		}
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const uitems = await user.getItems();
 		let hasItem = false;
@@ -25,7 +39,10 @@ module.exports = {
 				hasItem = true;
 			}
 		});
-		if (!hasItem) return msg.channel.send('You don\'t have a gun to steal with!');
+		if (!hasItem) {
+			timestamps.delete(msg.author.id);
+			return msg.channel.send('You don\'t have a gun to steal with!');
+		}
 
 
 		const luck = Math.floor(Math.random() * 100);
@@ -47,7 +64,10 @@ module.exports = {
 			await user.removeItem(item);
 			return msg.channel.send(`You got caught trying to steal from ${target.tag}, you get fined ${Math.floor(fine)}💰. Your current balance is ${balance}💰`);
 		}
-		else { return msg.channel.send('Something went wrong'); }
+		else {
+			timestamps.delete(msg.author.id);
+			return msg.channel.send('Something went wrong');
+		}
 
 	},
 };

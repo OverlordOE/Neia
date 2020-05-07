@@ -10,7 +10,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, ops, ytAPI, logger) {
+	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
 		
 		const author = msg.guild.members.cache.get(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });

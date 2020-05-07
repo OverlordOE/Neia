@@ -10,7 +10,7 @@ module.exports = {
 	usage: '',
 	music: false,
 	
-	async execute(msg, args, profile, bot, options, ytAPI, logger) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const lastDaily = moment(await profile.getDaily(msg.author.id));
 		const now = moment();
 		const check = moment(lastDaily, 'DDD H').add(1, 'd');

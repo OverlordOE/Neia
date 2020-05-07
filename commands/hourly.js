@@ -10,7 +10,7 @@ module.exports = {
 	admin: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const lastHourly = moment(await profile.getHourly(msg.author.id));
 		const now = moment();
 		const check = moment(lastHourly, 'DDD H').add(1, 'h');

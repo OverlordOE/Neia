@@ -245,7 +245,7 @@ bot.on('message', async msg => {
 
 	// execute command
 	try {
-		command.execute(msg, args, profile, bot, options, ytAPI, logger);
+		command.execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns);
 	}
 	catch (error) {
 		logger.log('error', error);
