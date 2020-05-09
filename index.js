@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const winston = require('winston');
 require('dotenv').config();
 const prefix = process.env.PREFIX;
-const token = process.env.TOKEN;
+const token = process.env.TEST_TOKEN;
 const ytAPI = process.env.YT_API;
 const { Users } = require('./dbObjects');
 const botCommands = require('./commands');
@@ -124,14 +124,55 @@ Reflect.defineProperty(profile, 'getCount', {
 	},
 });
 
+Reflect.defineProperty(profile, 'getProtection', {
+	value: async function getProtection(id) {
+		let user = profile.get(id);
+		if (!user) user = await newUser(id);
+		return user ? user.protection : 0;
+	},
+
+});
+
+Reflect.defineProperty(profile, 'setProtection', {
+	value: async function setProtection(id, day) {
+		let user = profile.get(id);
+		if (!user) user = await newUser(id);
+
+		user.protection = day;
+		return user.save();
+	},
+});
+
+Reflect.defineProperty(profile, 'getPColour', {
+	value: async function getPColour(id) {
+		let user = profile.get(id);
+		if (!user) user = await newUser(id);
+		return user ? user.pColour : 0;
+	},
+
+});
+
+Reflect.defineProperty(profile, 'setPColour', {
+	value: async function setPColour(id, colour) {
+		let user = profile.get(id);
+		if (!user) user = await newUser(id);
+		if (!colour.startsWith('#')) throw 'not a valid colour!';
+
+		user.pColour = colour;
+		return user.save();
+	},
+});
+
 async function newUser(id) {
 	const day = moment().dayOfYear();
 	const newUser = await Users.create({
 		user_id: id,
 		balance: 1,
+		msgCount: 1,
 		lastDaily: (day - 1),
 		lastHourly: (day - 1),
-		msgCount: 1,
+		protection: (day - 1),
+		pColour: '#fffb00',
 	});
 	profile.set(id, newUser);
 	return newUser;
@@ -245,7 +286,7 @@ bot.on('message', async msg => {
 
 	// execute command
 	try {
-		command.execute(msg, args, profile, bot, options, ytAPI, logger);
+		command.execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns);
 	}
 	catch (error) {
 		logger.log('error', error);

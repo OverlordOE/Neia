@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
+		msgCount: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
 		lastDaily: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
@@ -19,11 +24,17 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
-		msgCount: {
+		protection: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
 			allowNull: false,
 		},
+		pColour: {
+			type: DataTypes.STRING,
+			defaultValue: '#fffb00',
+			allowNull: false,
+		},
+		
 	},
 	{
 		timestamps: false,

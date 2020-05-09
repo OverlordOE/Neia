@@ -5,6 +5,7 @@ module.exports = {
 	Hackedandbanned: require('./hackedandbanned'),
 	Shop: require('./shop'),
 	Buy: require('./buy'),
+	Sell: require('./sell'),
 	Use: require('./use'),
 	Trade: require('./trade'),
 	Profile: require('./profile'),
@@ -26,4 +27,5 @@ module.exports = {
 	Delete: require('./delete'),
 	Backup: require('./backup'),
 	Test: require('./test'),
+	Embed: require('./embed'),
 };

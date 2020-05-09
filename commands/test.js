@@ -9,7 +9,7 @@ module.exports = {
 	music: false,
 
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 
 		const connection = await msg.member.voice.channel.join();
 

@@ -10,7 +10,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const currentAmount = await profile.getBalance(msg.author.id);
 		const gambleAmount = args[0];
 
@@ -69,7 +69,7 @@ async function OneInFive(msg, profile, logger, gambleAmount) {
 	};
 
 	const answer = Math.floor((Math.random() * 5) + 1);
-	const winAmount = 2 * gambleAmount;
+	const winAmount = 2.5 * gambleAmount;
 	logger.log('info', `The bot chooses ${answer}`);
 
 	await msg.channel.send(`You have bet ${gambleAmount}💰.\nGuess the number between 1 and 5.`)
@@ -114,7 +114,7 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount) {
 		return ['✊', '🧻', '✂️'].includes(reaction.emoji.name) && user.id === msg.author.id;
 	};
 
-	const winAmount = 0.75 * gambleAmount;
+	const winAmount = 0.85 * gambleAmount;
 
 	const answer = Math.floor((Math.random() * 3) + 1);
 	logger.log('info', `The bot chooses ${answer}`);
