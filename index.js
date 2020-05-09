@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const winston = require('winston');
 require('dotenv').config();
 const prefix = process.env.PREFIX;
-const token = process.env.TEST_TOKEN;
+const token = process.env.TOKEN;
 const ytAPI = process.env.YT_API;
 const { Users } = require('./dbObjects');
 const botCommands = require('./commands');

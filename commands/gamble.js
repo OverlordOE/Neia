@@ -25,11 +25,11 @@ module.exports = {
 			.addField('Bet', `**${gambleAmount}💰**`)
 			.addField('Number Guess',
 				`In this game you get 5 numbers too choose from, guess the right one and you win.\n
-				**Potential winnings: ${(2 * gambleAmount)}💰**
+				**Potential winnings: ${(2.5 * gambleAmount)}💰**
 				`)
 			.addField('Rock, paper and scissors',
 				`It's a game of rock, paper and scissors against the bot, if you tie you lose nothing but gain nothing.\n
-			**Potential winnings: ${(0.75 * gambleAmount)}💰**
+			**Potential winnings: ${(0.85 * gambleAmount)}💰**
 			`);
 
 		const filter = (reaction, user) => {

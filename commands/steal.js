@@ -3,7 +3,7 @@ const moment = require('moment');
 const Discord = require('discord.js');
 module.exports = {
 	name: 'steal',
-	description: 'Steal money from other players but have a chance to get caught **1 hour cooldown**.',
+	description: 'Steal money from other players but have a chance to get caught **45 minute cooldown**.',
 	cooldown: 2400,
 	args: true,
 	usage: 'target',
@@ -30,7 +30,10 @@ module.exports = {
 		const protection = moment(await profile.getProtection(target.id));
 		const checkProtection = moment(protection).isBefore(now);
 
-		if (!checkProtection) { return msg.channel.send(`${target.tag} has steal protection on, you cannot steal from them right now.`); }
+		if (!checkProtection) {
+			timestamps.delete(msg.author.id);
+			return msg.channel.send(`${target.tag} has steal protection on, you cannot steal from them right now.`);
+		}
 
 		const targetBalance = await profile.getBalance(target.id);
 		if (targetBalance < 1) {
@@ -55,7 +58,7 @@ module.exports = {
 		const luck = Math.floor(Math.random() * 100);
 		if (luck >= 35) {
 
-			let stealAmount = 30 + (Math.random() * 35);
+			let stealAmount = 35 + (Math.random() * 30);
 			if (targetBalance < stealAmount) stealAmount = targetBalance;
 
 			profile.addMoney(msg.author.id, stealAmount);
