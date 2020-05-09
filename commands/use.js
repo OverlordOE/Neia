@@ -213,6 +213,7 @@ module.exports = {
 							const prot = moment(now).add(8, 'h');
 							const protection = prot.format('dddd HH:mm');
 							await profile.setProtection(msg.author.id, prot);
+							await user.removeItem(item);
 							msg.channel.send(`You have activated steal protection.\nIt will last untill ${protection}`);
 							break;
 						}
