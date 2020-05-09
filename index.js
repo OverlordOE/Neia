@@ -128,18 +128,17 @@ Reflect.defineProperty(profile, 'getProtection', {
 	value: async function getProtection(id) {
 		let user = profile.get(id);
 		if (!user) user = await newUser(id);
-		return user ? user.lastProtection : 0;
+		return user ? user.protection : 0;
 	},
 
 });
 
 Reflect.defineProperty(profile, 'setProtection', {
-	value: async function setProtection(id) {
+	value: async function setProtection(id, day) {
 		let user = profile.get(id);
 		if (!user) user = await newUser(id);
 
-		const day = moment();
-		user.lastProtection = day;
+		user.protection = day;
 		return user.save();
 	},
 });

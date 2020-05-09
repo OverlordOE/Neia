@@ -1,9 +1,10 @@
 const { Users, CurrencyShop } = require('../dbObjects');
+const moment = require('moment');
 const Discord = require('discord.js');
 module.exports = {
 	name: 'steal',
 	description: 'Steal money from other players but have a chance to get caught **1 hour cooldown**.',
-	cooldown: 3600,
+	cooldown: 2400,
 	args: true,
 	usage: 'target',
 	admin: false,
@@ -13,7 +14,6 @@ module.exports = {
 
 	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
 
-		const now = Date.now();
 		if (!cooldowns.has('steal')) {
 			cooldowns.set('steal', new Discord.Collection());
 		}
@@ -25,6 +25,13 @@ module.exports = {
 			timestamps.delete(msg.author.id);
 			return msg.channel.send('Incorrect mention');
 		}
+
+		const now = moment();
+		const protection = moment(await profile.getProtection(target.id));
+		const checkProtection = moment(protection).isBefore(now);
+
+		if (!checkProtection) { return msg.channel.send(`${target.tag} has steal protection on, you cannot steal from them right now.`); }
+
 		const targetBalance = await profile.getBalance(target.id);
 		if (targetBalance < 1) {
 			timestamps.delete(msg.author.id);

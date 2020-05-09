@@ -21,15 +21,18 @@ module.exports = {
 		const count = await profile.getCount(target.id);
 		const lastDaily = moment(await profile.getDaily(target.id));
 		const lastHourly = moment(await profile.getHourly(target.id));
+		const prot = moment(await profile.getProtection(target.id));
 		const pColour = await profile.getPColour(target.id);
-		logger.log('info', pColour);
+
 		
 		const now = moment();
 		const dCheck = moment(lastDaily).add(1, 'd');
 		const hCheck = moment(lastHourly).add(1, 'h');
+		const pCheck = moment(prot).isBefore(now);
 		
 		let daily = dCheck.format('dddd HH:mm');
 		let hourly = hCheck.format('dddd HH:mm');
+		const protection = prot.format('dddd HH:mm');
 		if (moment(dCheck).isBefore(now)) daily = 'now';
 		if (moment(hCheck).isBefore(now)) hourly = 'now';
 		
@@ -43,6 +46,7 @@ module.exports = {
 			.addField('Next hourly:', hourly, true)
 			.setTimestamp();
 
+		if (!pCheck) { embed.addField('Steal protection untill:', protection);}
 		if (!items.length) { embed.addField('Inventory:', `${target.tag} has nothing!`); }
 		else {
 			embed.addField('Inventory:', '-----------------------------');
