@@ -124,6 +124,46 @@ Reflect.defineProperty(profile, 'getCount', {
 	},
 });
 
+Reflect.defineProperty(profile, 'getProtection', {
+	value: async function getProtection(id) {
+		let user = profile.get(id);
+		if (!user) user = await newUser(id);
+		return user ? user.lastProtection : 0;
+	},
+
+});
+
+Reflect.defineProperty(profile, 'setProtection', {
+	value: async function setProtection(id) {
+		let user = profile.get(id);
+		if (!user) user = await newUser(id);
+
+		const day = moment();
+		user.lastProtection = day;
+		return user.save();
+	},
+});
+
+Reflect.defineProperty(profile, 'getPColour', {
+	value: async function getPColour(id) {
+		let user = profile.get(id);
+		if (!user) user = await newUser(id);
+		return user ? user.PColour : 0;
+	},
+
+});
+
+Reflect.defineProperty(profile, 'setPColour', {
+	value: async function setPColour(id, colour) {
+		let user = profile.get(id);
+		if (!user) user = await newUser(id);
+		if (!colour.startsWith('#')) throw Error('not a valid colour');
+
+		user.PColour = colour;
+		return user.save();
+	},
+});
+
 async function newUser(id) {
 	const day = moment().dayOfYear();
 	const newUser = await Users.create({
@@ -132,6 +172,8 @@ async function newUser(id) {
 		lastDaily: (day - 1),
 		lastHourly: (day - 1),
 		msgCount: 1,
+		protection: (day - 1),
+		PColour: '#fffb00',
 	});
 	profile.set(id, newUser);
 	return newUser;
