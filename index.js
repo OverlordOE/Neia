@@ -148,7 +148,7 @@ Reflect.defineProperty(profile, 'getPColour', {
 	value: async function getPColour(id) {
 		let user = profile.get(id);
 		if (!user) user = await newUser(id);
-		return user ? user.PColour : 0;
+		return user ? user.pColour : 0;
 	},
 
 });
@@ -159,7 +159,7 @@ Reflect.defineProperty(profile, 'setPColour', {
 		if (!user) user = await newUser(id);
 		if (!colour.startsWith('#')) throw Error('not a valid colour');
 
-		user.PColour = colour;
+		user.pColour = colour;
 		return user.save();
 	},
 });
@@ -169,11 +169,11 @@ async function newUser(id) {
 	const newUser = await Users.create({
 		user_id: id,
 		balance: 1,
+		msgCount: 1,
 		lastDaily: (day - 1),
 		lastHourly: (day - 1),
-		msgCount: 1,
 		protection: (day - 1),
-		PColour: '#fffb00',
+		pColour: '#fffb00',
 	});
 	profile.set(id, newUser);
 	return newUser;

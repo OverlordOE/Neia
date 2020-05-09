@@ -107,7 +107,7 @@ module.exports = {
 								.then(async collected => {
 									const name = collected.first().content;
 
-									msg.channel.send('Specify the colour you want for your role in the format #0099ff(look up hex colours if you dont know how)').then(() => {
+									msg.channel.send('Specify the colour you want for your role in the format #0099ff\n(look up hex color on google to get a colour chooser)').then(() => {
 										msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 											.then(async collected => {
@@ -172,6 +172,28 @@ module.exports = {
 									msg.reply('you didn\'t answer in time.');
 								});
 						});
+						break;
+
+					case 'Profile Colour':
+
+						msg.channel.send('Specify the colour you want for your profile in the format #0099ff\n(look up hex color on google to get a colour chooser)').then(() => {
+							msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+
+								.then(async collected => {
+									const colour = collected.first().content;
+									try {
+										profile.setPColour(msg.author.id, colour);
+									}
+									catch { return msg.channel.send('Thats not a valid Hex code'); }
+									msg.channel.send('Profile colour succesfully changed');
+								})
+								.catch(e => {
+									logger.log('error', e);
+									msg.reply('you didn\'t answer in time.');
+								});
+						});
+
+						await user.removeItem(item);
 						break;
 
 					case 'Gun':
