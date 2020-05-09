@@ -56,7 +56,7 @@ module.exports = {
 
 
 		const luck = Math.floor(Math.random() * 100);
-		if (luck >= 35) {
+		if (luck >= 20) {
 
 			let stealAmount = 35 + (Math.random() * 30);
 			if (targetBalance < stealAmount) stealAmount = targetBalance;
