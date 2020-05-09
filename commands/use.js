@@ -11,7 +11,7 @@ module.exports = {
 	music: false,
 
 	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
-		
+
 		const author = msg.guild.members.cache.get(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const uitems = await user.getItems();
@@ -100,7 +100,7 @@ module.exports = {
 
 
 					case 'Custom Role':
-						
+
 
 						msg.channel.send('Specify the role name you want.').then(() => {
 							msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
@@ -112,14 +112,17 @@ module.exports = {
 
 											.then(async collected => {
 												const colour = collected.first().content;
-												const role = await msg.guild.roles.create({
-													data: {
-														name: name,
-														color: colour,
-														mentionable: true,
-													},
-													reason: `${msg.author.tag} bought a role`,
-												});
+												try {
+													const role = await msg.guild.roles.create({
+														data: {
+															name: name,
+															color: colour,
+															mentionable: true,
+														},
+														reason: `${msg.author.tag} bought a role`,
+													});
+												}
+												catch { return msg.channel.send('Something went wrong with creating the role'); }
 
 												author.roles.add(role);
 												msg.channel.send(`You have created the role "${name}" with color ${colour}!`);

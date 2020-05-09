@@ -24,9 +24,11 @@ sequelize.sync({ alter, force }).then(async () => {
 		CurrencyShop.upsert({ name: 'Tea', cost: 2 }),
 		CurrencyShop.upsert({ name: 'Coffee', cost: 3 }),
 		CurrencyShop.upsert({ name: 'Cake', cost: 6 }),
-		CurrencyShop.upsert({ name: 'Custom Role', cost: 100 }),
-		CurrencyShop.upsert({ name: 'Text Channel', cost: 250 }),
-		CurrencyShop.upsert({ name: 'Gun', cost: 20 }),
+		CurrencyShop.upsert({ name: 'Gun', cost: 30 }),
+		CurrencyShop.upsert({ name: 'Steal Protection', cost: 80 }),
+		CurrencyShop.upsert({ name: 'Custom Role', cost: 200 }),
+		CurrencyShop.upsert({ name: 'Text Channel', cost: 500 }),
+		CurrencyShop.upsert({ name: 'Profile Colour', cost: 100 }),
 	];
 	await Promise.all(shop);
 	console.log('Database synced');

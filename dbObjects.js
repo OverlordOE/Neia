@@ -36,7 +36,7 @@ Users.prototype.removeItem = async function(item) {
 		return userItem.save();
 	}
 
-	return msg.reply('user doesnt have that item.');
+	return null;
 };
 
 Users.prototype.getItems = function() {
