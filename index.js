@@ -156,7 +156,7 @@ Reflect.defineProperty(profile, 'setPColour', {
 	value: async function setPColour(id, colour) {
 		let user = profile.get(id);
 		if (!user) user = await newUser(id);
-		if (!colour.startsWith('#')) throw Error('not a valid colour');
+		if (!colour.startsWith('#')) throw 'not a valid colour!';
 
 		user.pColour = colour;
 		return user.save();
