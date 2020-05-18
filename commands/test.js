@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 module.exports = {
 	name: 'test',
 	description: 'Test command for new commands.',
@@ -11,22 +12,29 @@ module.exports = {
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 
-		const connection = await msg.member.voice.channel.join();
+		const embed = new Discord.MessageEmbed()
+			.setTitle('Test embed')
+			.setDescription('test description')
+			.setTimestamp();
 
-		const dispatcher = connection.play('../soundboard/HAH.baf.mp3');
+		const filter = m => m.author.id === msg.author.id;
 
-		dispatcher.on('start', () => {
-			console.log('now playing!');
+		msg.channel.send(embed).then(sentMessage => {
+			msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+
+				.then(async collected => {
+					const input = collected.first().content;
+
+					embed.setDescription(input);
+					sentMessage.edit(embed);
+					collected.first().delete()
+						.catch(e => logger.log('error', e));
+				})
+				.catch(e => {
+					logger.log('error', e);
+					msg.reply('Something went wrong.');
+				});
 		});
-
-		dispatcher.on('finish', () => {
-			console.log('finished playing!');
-			connection.disconnect();
-		});
-
-		// Always remember to handle errors appropriately!
-		dispatcher.on('error', logger.error());
-
 
 	},
 };

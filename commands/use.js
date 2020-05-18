@@ -1,4 +1,6 @@
+/* eslint-disable max-nested-callbacks */
 /* eslint-disable indent */
+const Discord = require('discord.js');
 const { Users, CurrencyShop } = require('../dbObjects');
 const moment = require('moment');
 const { Op } = require('sequelize');
@@ -17,36 +19,47 @@ module.exports = {
 		const author = msg.guild.members.cache.get(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const uitems = await user.getItems();
+		const pColour = await profile.getPColour(msg.author.id);
 		const filter = m => m.author.id === msg.author.id;
 		let hasItem = false;
 
-		msg.channel.send('What item do you want to use?').then(() => {
+		const embed = new Discord.MessageEmbed()
+			.setTitle('Use Command')
+			.setDescription('What item do you want to use?')
+			.setColor(pColour)
+			.setTimestamp();
+
+
+		msg.channel.send(embed).then(sentMessage => {
 			msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 				.then(async collected => {
 					const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: collected.first().content } } });
-					if (!item) return msg.channel.send('That item doesn\'t exist.');
+					if (!item) return sentMessage.edit(embed.setDescription('That item doesn\'t exist.'));
 
 					uitems.map(i => {
 						if (i.item.name == item.name && i.amount >= 1) {
 							hasItem = true;
 						}
 					});
-					if (!hasItem) return msg.channel.send(`You don't have ${item.name}!`);
+					if (!hasItem) return sentMessage.edit(embed.setDescription(`You don't have ${item.name}!`));
+					collected.first().delete().catch(e => logger.log('error', e));
 
 					switch (item.name) {
 
 
 						case 'Tea': {
-							msg.channel.send('How much tea do you want to use?').then(() => {
+							sentMessage.edit(embed.setDescription('How much tea do you want to use')).then(() => {
 								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 									.then(async collected => {
 										const amount = parseInt(collected.first().content);
 
-										if (amount > 50) msg.channel.send('☕You drink an enormous amount of tea☕\nYou die of tea poisoning!');
-										else if (amount > 10) msg.channel.send('☕You drink a shit ton of tea☕\nAre you ok?');
-										else if (amount > 2) msg.channel.send('☕You drink some tea☕\nYour teeth begin to ache.');
-										else msg.channel.send('☕You drink some tea☕\nYou enjoy it.');
+										if (amount > 50) sentMessage.edit(embed.setDescription('☕You drink an enormous amount of tea☕\nYou die of tea poisoning!'));
+										else if (amount > 10) sentMessage.edit(embed.setDescription('☕You drink a shit ton of tea☕\nAre you ok?'));
+										else if (amount > 2) sentMessage.edit(embed.setDescription('☕You drink some tea☕\nYour teeth begin to ache.'));
+										else sentMessage.edit(embed.setDescription('☕You drink some tea☕\nYou enjoy it.'));
+
+										collected.first().delete().catch(e => logger.log('error', e));
 
 										for (let i = 0; i < amount; i++) await user.removeItem(item);
 									})
@@ -61,16 +74,18 @@ module.exports = {
 
 
 						case 'Cake': {
-							msg.channel.send('How much cake do you want to use?').then(() => {
+							sentMessage.edit(embed.setDescription('How much cake do you want to use?')).then(() => {
 								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 									.then(async collected => {
 										const amount = parseInt(collected.first().content);
 
-										if (amount > 10) msg.channel.send('🎂THE CAKE HAS RIPPED A HOLE IN REALITY🎂\nNot even The Avengers can fix this...');
-										else if (amount > 5) msg.channel.send('🎂THE CAKE IS EVOLVING🎂\nYou are not gonna be ok.');
-										else if (amount > 2) msg.channel.send('🎂THE CAKE IS BULLYING YOU🎂\nYour mental state deteriorates.');
-										else msg.channel.send('🎂THE CAkE IS A LIE🎂\nYou feel deceived!');
+										if (amount > 10) sentMessage.edit(embed.setDescription('🎂THE CAKE HAS RIPPED A HOLE IN REALITY🎂\nNot even The Avengers can fix this...'));
+										else if (amount > 5) sentMessage.edit(embed.setDescription('🎂THE CAKE IS EVOLVING🎂\nYou are not gonna be ok.'));
+										else if (amount > 2) sentMessage.edit(embed.setDescription('🎂THE CAKE IS BULLYING YOU🎂\nYour mental state deteriorates.'));
+										else sentMessage.edit(embed.setDescription('🎂THE CAkE IS A LIE🎂\nYou feel deceived!'));
+
+										collected.first().delete().catch(e => logger.log('error', e));
 
 										for (let i = 0; i < amount; i++) await user.removeItem(item);
 									})
@@ -84,14 +99,16 @@ module.exports = {
 
 
 						case 'Coffee': {
-							msg.channel.send('How much coffee do you want to use?').then(() => {
+							sentMessage.edit(embed.setDescription('How much coffee do you want to use?')).then(() => {
 								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 									.then(async collected => {
 										const amount = parseInt(collected.first().content);
 
-										if (amount > 9000) msg.channel.send(`${msg.author.username}'s power increased by ${amount}%\nIT'S OVER 9000`);
-										else msg.channel.send(`${msg.author.username}'s power increased by ${amount}%`);
+										if (amount > 9000) sentMessage.edit(embed.setDescription(`${msg.author.username}'s power increased by ${amount}%\nIT'S OVER 9000`));
+										else sentMessage.edit(embed.setDescription(`${msg.author.username}'s power increased by ${amount}%`));
+
+										collected.first().delete().catch(e => logger.log('error', e));
 
 										for (let i = 0; i < amount; i++) await user.removeItem(item);
 									})
@@ -106,12 +123,14 @@ module.exports = {
 
 						case 'Custom Role': {
 
-							msg.channel.send('Specify the role name you want.').then(() => {
+							sentMessage.edit(embed.setDescription('Specify the role name you want.').then(() => {
 								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 									.then(async collected => {
 										const name = collected.first().content;
 
-										msg.channel.send('Specify the colour you want for your role in the format #0099ff\n(look up hex color on google to get a colour chooser)').then(() => {
+										collected.first().delete().catch(e => logger.log('error', e));
+
+										sentMessage.edit(embed.setDescription('Specify the colour you want for your role in the format #0099ff\n(look up hex color on google to get a colour chooser)')).then(() => {
 											msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 												.then(async collected => {
@@ -125,11 +144,16 @@ module.exports = {
 															},
 															reason: `${msg.author.tag} bought a role`,
 														});
-													}
-													catch { return msg.channel.send('Something went wrong with creating the role'); }
 
-													author.roles.add(role);
-													msg.channel.send(`You have created the role "${name}" with color ${colour}!`);
+														author.roles.add(role);
+														sentMessage.edit(embed.setDescription(`You have created the role "${name}" with color ${colour}!`));
+
+														collected.first().delete().catch(e => logger.log('error', e));
+													}
+													catch { return sentMessage.edit(embed.setDescription('Something went wrong with creating the role')); }
+
+													
+
 													await user.removeItem(item);
 												})
 												.catch(e => {
@@ -142,14 +166,14 @@ module.exports = {
 										logger.log('error', e);
 										msg.reply('you didn\'t answer in time.');
 									});
-							});
+							}));
 							break;
 						}
 
 
 						case 'Text Channel': {
 
-							msg.channel.send('Specify the channel name you want.').then(() => {
+							sentMessage.edit(embed.setDescription('Specify the channel name you want.')).then(() => {
 								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 									.then(async collected => {
@@ -167,7 +191,9 @@ module.exports = {
 												},
 											],
 										});
-										msg.channel.send(`You have created channel ${name}`);
+										sentMessage.edit(embed.setDescription(`You have created channel ${name}`));
+
+										collected.first().delete().catch(e => logger.log('error', e));
 
 										await user.removeItem(item);
 									})
@@ -182,7 +208,7 @@ module.exports = {
 
 						case 'Profile Colour': {
 
-							msg.channel.send('Specify the colour you want for your profile in the format #0099ff\n(look up hex color on google to get a colour chooser)').then(() => {
+							sentMessage.edit(embed.setDescription('Specify the colour you want for your profile in the format #0099ff\n(look up hex color on google to get a colour chooser)')).then(() => {
 								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 									.then(async collected => {
@@ -190,8 +216,11 @@ module.exports = {
 										try {
 											profile.setPColour(msg.author.id, colour);
 										}
-										catch { return msg.channel.send('Thats not a valid Hex code'); }
-										msg.channel.send('Profile colour succesfully changed');
+										catch { return sentMessage.edit(embed.setDescription('Thats not a valid Hex code')); }
+										sentMessage.edit(embed.setDescription('Profile colour succesfully changed'));
+
+										collected.first().delete().catch(e => logger.log('error', e));
+
 										await user.removeItem(item);
 									})
 									.catch(e => {
@@ -204,7 +233,8 @@ module.exports = {
 
 
 						case 'Gun': {
-							msg.channel.send('To use a gun please use the **-steal** command');
+							sentMessage.edit(embed.setDescription('To use a gun please use the **-steal** command'));
+							collected.first().delete().catch(e => logger.log('error', e));
 							break;
 						}
 
@@ -213,13 +243,17 @@ module.exports = {
 							const prot = moment(now).add(8, 'h');
 							const protection = prot.format('dddd HH:mm');
 							await profile.setProtection(msg.author.id, prot);
+							collected.first().delete().catch(e => logger.log('error', e));
+							sentMessage.edit(embed.setDescription(`You have activated steal protection.\nIt will last untill ${protection}`));
+							sentMessage.edit(embed.setDescription(`You have activated steal protection.\nIt will last untill ${protection}`));
 							await user.removeItem(item);
-							msg.channel.send(`You have activated steal protection.\nIt will last untill ${protection}`);
+							
 							break;
 						}
 
 						default: {
-							return msg.channel.send('No use for this yet, the item was not used.');
+						collected.first().delete().catch(e => logger.log('error', e));
+							return sentMessage.edit(embed.setDescription('No use for this yet, the item was not used.'));
 						}
 					}
 				})

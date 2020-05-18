@@ -65,7 +65,7 @@ module.exports = {
 			profile.addMoney(target.id, -stealAmount);
 			const balance = await profile.getBalance(msg.author.id);
 			await user.removeItem(item);
-			const prot = moment(now).add(2, 'h');
+			const prot = moment(now).add(1, 'h');
 			await profile.setProtection(target.id, prot);
 			return msg.channel.send(`Successfully stolen ${Math.floor(stealAmount)}💰 from ${target.tag}. Your current balance is ${balance}💰`);
 		}
