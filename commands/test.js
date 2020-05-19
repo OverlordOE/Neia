@@ -10,7 +10,7 @@ module.exports = {
 	admin: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		const currentAmount = await profile.getBalance(msg.author.id);
 		const gambleAmount = args[0];
 		const pColour = await profile.getPColour(msg.author.id);
