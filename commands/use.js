@@ -123,7 +123,7 @@ module.exports = {
 
 						case 'Custom Role': {
 
-							sentMessage.edit(embed.setDescription('Specify the role name you want.').then(() => {
+							sentMessage.edit(embed.setDescription('Specify the role name you want.')).then(() => {
 								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 									.then(async collected => {
 										const name = collected.first().content;
@@ -166,7 +166,7 @@ module.exports = {
 										logger.log('error', e);
 										msg.reply('you didn\'t answer in time.');
 									});
-							}));
+							});
 							break;
 						}
 
