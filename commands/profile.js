@@ -50,7 +50,7 @@ module.exports = {
 		if (!items.length) { embed.addField('Inventory:', `${target.tag} has nothing!`); }
 		else {
 			embed.addField('Inventory:', '-----------------------------');
-			items.map(i => embed.addField(`${i.item.name}: `, `${i.amount}`, true));
+			items.map(i => {embed.addField(`${i.item.name}: `, `${i.amount}`, true));
 		}
 		msg.channel.send(embed);
 	},

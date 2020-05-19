@@ -9,14 +9,15 @@ module.exports = {
 	args: false,
 	music: false,
 
-	execute(message, args) {
+	execute(message, args, profile) {
+		const pColour = await profile.getPColour(target.id);
 		const { commands } = message.client;
 		let adminCommands = ``;
 		let musicCommands = ``;
 		let normalCommands = ``;
 
 		const help = new Discord.MessageEmbed()
-			.setColor('#FFFFF')
+			.setColor(pColour)
 			.setTimestamp();
 
 		if (!args.length) {

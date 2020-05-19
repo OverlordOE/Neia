@@ -13,13 +13,14 @@ module.exports = {
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const currentAmount = await profile.getBalance(msg.author.id);
 		const gambleAmount = args[0];
+		const pColour = await profile.getPColour(msg.author.id);
 
 		if (!gambleAmount || isNaN(gambleAmount)) return msg.channel.send(`Sorry ${msg.author}, that's an invalid amount.`);
 		if (gambleAmount > currentAmount) return msg.channel.send(`Sorry ${msg.author}, you only have ${currentAmount}.`);
 		if (gambleAmount <= 0) return msg.channel.send(`Please enter an amount greater than zero, ${msg.author}.`);
 
 		const embed = new Discord.MessageEmbed()
-			.setColor('#ffff00')
+			.setColor(pColour)
 			.setTimestamp()
 			.setTitle('Syndicate\'s Gambling Improrium')
 			.addField('Bet', `**${gambleAmount}💰**`)
