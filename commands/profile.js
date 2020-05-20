@@ -18,6 +18,7 @@ module.exports = {
 		const user = await Users.findOne({ where: { user_id: target.id } });
 		const items = await user.getItems();
 		const avatar = target.displayAvatarURL();
+		const bAvatar = bot.user.displayAvatarURL();
 		const count = await profile.getCount(target.id);
 		const lastDaily = moment(await profile.getDaily(target.id));
 		const lastHourly = moment(await profile.getHourly(target.id));
@@ -44,7 +45,8 @@ module.exports = {
 			.addField('Message Count:', count, true)
 			.addField('Next daily:', daily)
 			.addField('Next hourly:', hourly, true)
-			.setTimestamp();
+			.setTimestamp()
+			.setFooter('Syndicate Imporium', bAvatar);
 
 		if (!pCheck) { embed.addField('Steal protection untill:', protection);}
 		if (!items.length) { embed.addField('Inventory:', `${target.tag} has nothing!`); }

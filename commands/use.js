@@ -16,6 +16,7 @@ module.exports = {
 
 	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
 
+		const bAvatar = bot.user.displayAvatarURL();
 		const author = msg.guild.members.cache.get(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const uitems = await user.getItems();
@@ -27,7 +28,8 @@ module.exports = {
 			.setTitle('Use Command')
 			.setDescription('What item do you want to use?')
 			.setColor(pColour)
-			.setTimestamp();
+			.setTimestamp()
+			.setFooter('Syndicate Imporium', bAvatar);
 
 
 		msg.channel.send(embed).then(sentMessage => {

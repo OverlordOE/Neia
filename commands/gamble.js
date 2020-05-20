@@ -14,7 +14,11 @@ module.exports = {
 		const currentAmount = await profile.getBalance(msg.author.id);
 		const gambleAmount = args[0];
 		const pColour = await profile.getPColour(msg.author.id);
+		const bAvatar = bot.user.displayAvatarURL();
 
+		const filter = (reaction, user) => {
+			return ['✂️', emojiCharacters[5]].includes(reaction.emoji.name) && user.id === msg.author.id;
+		};
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(pColour)
@@ -29,16 +33,14 @@ module.exports = {
 							__**Rock, paper, scissors**__\n
 							Play a game of rock, paper, scissors against the bot and see who is superior.\n
 							**Potential winnings: ${(0.85 * gambleAmount)}💰**
-			`);
+			`)
+			.setFooter('Syndicate Imporium', bAvatar);
 
 
 		if (!gambleAmount || isNaN(gambleAmount)) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, that's an invalid amount.`));
 		if (gambleAmount > currentAmount) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, you only have ${currentAmount}💰.`));
 		if (gambleAmount <= 0) return msg.channel.send(embed.setDescription(`Please enter an amount greater than zero, ${msg.author}.`));
 
-		const filter = (reaction, user) => {
-			return ['✂️', emojiCharacters[5]].includes(reaction.emoji.name) && user.id === msg.author.id;
-		};
 
 		await msg.channel.send(embed)
 			.then(sentMessage => {
