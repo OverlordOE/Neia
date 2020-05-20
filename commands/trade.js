@@ -17,11 +17,11 @@ module.exports = {
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const filter = m => m.author.id === msg.author.id;
 
-		const embed = new Discord.MessageEmbed()
-			.setTitle('Use Command')
-			.setDescription('What item do you want to use?')
-			.setColor(pColour)
-			.setTimestamp();
+		// const embed = new Discord.MessageEmbed()
+		// 	.setTitle('Use Command')
+		// 	.setDescription('What item do you want to use?')
+		// 	.setColor(pColour)
+		// 	.setTimestamp();
 
 
 		msg.channel.send('Who do you want to trade with? (mention the user)').then(() => {

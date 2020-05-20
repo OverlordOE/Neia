@@ -9,7 +9,7 @@ module.exports = {
 	args: false,
 	music: false,
 
-	execute(message, args, profile) {
+	async execute(message, args, profile) {
 		const pColour = await profile.getPColour(target.id);
 		const { commands } = message.client;
 		let adminCommands = ``;

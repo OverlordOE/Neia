@@ -19,7 +19,7 @@ const alter = process.argv.includes('--sync') || process.argv.includes('-s');
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 
 // Create tags
-sequelize.sync({ alter, force }).then(async () => {
+sequelize.sync({ alter: true }).then(async () => {
 	const shop = [
 		CurrencyShop.upsert({ name: 'Tea', cost: 2 }),
 		CurrencyShop.upsert({ name: 'Coffee', cost: 3 }),
@@ -28,7 +28,7 @@ sequelize.sync({ alter, force }).then(async () => {
 		CurrencyShop.upsert({ name: 'Steal Protection', cost: 80 }),
 		CurrencyShop.upsert({ name: 'Custom Role', cost: 200 }),
 		CurrencyShop.upsert({ name: 'Text Channel', cost: 500 }),
-		CurrencyShop.upsert({ name: 'Profile Colour', cost: 100 }),
+		CurrencyShop.upsert({ name: 'Profile Colour', cost: 40 }),
 	];
 	await Promise.all(shop);
 	console.log('Database synced');

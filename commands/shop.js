@@ -3,7 +3,7 @@ module.exports = {
 	name: 'shop',
 	description: 'Shows all the shop items.',
 	admin: false,
-	aliases: ['store'],
+	aliases: ['store', 'item', 'items'],
 	args: false,
 	usage: '',
 	owner: false,
