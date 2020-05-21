@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 module.exports = {
 	name: 'avatar',
 	aliases: ['icon', 'pfp', 'picture'],
@@ -7,10 +8,23 @@ module.exports = {
 	usage: 'user',
 	owner: false,
 	music: false,
-	
-	execute(msg, args) {
+
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+
+		const bAvatar = bot.user.displayAvatarURL();
+		const pColour = await profile.getPColour(msg.author.id);
 		const target = msg.mentions.users.first() || msg.author;
 		const avatar = target.displayAvatarURL();
-		msg.channel.send(`${target.tag}'s avatar: <${avatar}>`);
+
+
+		const embed = new Discord.MessageEmbed()
+			.setTitle(`${target.tag}'s Avatar`)
+			.setDescription(avatar)
+			.setImage(avatar)
+			.setColor(pColour)
+			.setTimestamp()
+			.setFooter('Syndicate Imporium', bAvatar);
+
+		msg.channel.send(embed);
 	},
 };
