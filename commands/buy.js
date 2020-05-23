@@ -34,7 +34,7 @@ module.exports = {
 					if (!item) return sentMessage.edit(embed.setDescription('That item doesn\'t exist.'));
 					collected.first().delete().catch(e => logger.log('error', e));
 
-					sentMessage.edit(embed.setDescription('How many do you want to buy (max of 1000)?')).then(() => {
+					sentMessage.edit(embed.setDescription(`How many ${item.name} do you want to buy (max of 1000)?`)).then(() => {
 						msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 							.then(async collected => {
