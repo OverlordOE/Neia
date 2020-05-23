@@ -275,8 +275,8 @@ bot.on('message', async msg => {
 			const timeLeft = (expirationTime - now) / 1000;
 			const minLeft = timeLeft / 60;
 			const secLeft = Math.floor((minLeft - Math.floor(minLeft)) * 60);
-			if (minLeft >= 1) { return msg.reply(`please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`); }
-			else { return msg.reply(`please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`); }
+			if (minLeft >= 1) { return msg.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`); }
+			else { return msg.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`); }
 		}
 	}
 	timestamps.set(msg.author.id, now);

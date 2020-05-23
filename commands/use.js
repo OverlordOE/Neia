@@ -58,8 +58,8 @@ module.exports = {
 
 										if (amount > 50) sentMessage.edit(embed.setDescription('☕You drink an enormous amount of tea☕\nYou die of tea poisoning!'));
 										else if (amount > 10) sentMessage.edit(embed.setDescription('☕You drink a shit ton of tea☕\nAre you ok?'));
-										else if (amount > 2) sentMessage.edit(embed.setDescription('☕You drink some tea☕\nYour teeth begin to ache.'));
-										else sentMessage.edit(embed.setDescription('☕You drink some tea☕\nYou enjoy it.'));
+										else if (amount > 3) sentMessage.edit(embed.setDescription(`☕You drink ${amount} cups of tea☕\nYour teeth begin to ache.`));
+										else sentMessage.edit(embed.setDescription('☕You drink a cup of tea☕\nYou enjoy it.'));
 
 										collected.first().delete().catch(e => logger.log('error', e));
 
