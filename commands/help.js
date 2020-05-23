@@ -10,7 +10,7 @@ module.exports = {
 	music: false,
 
 	async execute(message, args, profile) {
-		const pColour = await profile.getPColour(target.id);
+		const pColour = await profile.getPColour(message.author.id);
 		const { commands } = message.client;
 		let adminCommands = ``;
 		let musicCommands = ``;
