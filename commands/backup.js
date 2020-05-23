@@ -39,11 +39,10 @@ module.exports = {
 			profile.map(async (u) => {
 				const userInfo = await Users.findOne({ where: { user_id: u.user_id } });
 				const items = await userInfo.getItems();
-				items.map(i =>
-					msg.channel.send(`${u.user_id}, ${i.item.name}: ${i.amount}`)
-				);
-
-
+				items.map(i =>{
+					if (i.amount < 1) return;
+					msg.channel.send(`${u.user_id}, ${i.item.name}: ${i.amount}`);
+				});
 			});
 			return msg.channel.send('Done sending all inventories');
 
