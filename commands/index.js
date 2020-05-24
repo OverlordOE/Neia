@@ -12,6 +12,7 @@ module.exports = {
 	Daily: require('./daily'),
 	Hourly: require('./hourly'),
 	Leaderboard: require('./leaderboard'),
+	Jackpot: require('./jackpot'),
 	Gamble: require('./gamble'),
 	Steal: require('./steal'),
 	Dice: require('./dice'),

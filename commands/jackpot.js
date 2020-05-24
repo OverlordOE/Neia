@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 module.exports = {
-	name: 'test',
-	description: 'Test command for new commands.',
+	name: 'jackpot',
+	description: 'Jackpot where everyone with enough money can buy in to get the jackpot.',
 	owner: true,
 	aliases: ['t'],
 	args: true,
