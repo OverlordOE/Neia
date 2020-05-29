@@ -14,13 +14,15 @@ module.exports = {
 		const bAvatar = bot.user.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
 		const buyin = args[0];
+		let players = `Current participants:`;
 		let participants = [];
 		let jackpot = participants.length * buyin;
+		let description = `Press 💰 to participate in the jackpot, you have 60 seconds to join in !\n${buyin}💰 buy-in.\nCurrent jackpot: ${jackpot} 💰`;
 		let duplicate = false;
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Syndicate Jackpot')
-			.setDescription(`Press 💰 to participate in the jackpot, you have 60 seconds to join in!\nCurrent jackpot: ${jackpot}💰`)
+			.setDescription(description)
 			.setColor(pColour)
 			.setTimestamp()
 			.setFooter('Syndicate Imporium', bAvatar);
@@ -52,8 +54,9 @@ module.exports = {
 
 						if (bCheck >= buyin) {
 							participants.push(user);
+							players += `\n${user}`;
 							jackpot = participants.length * buyin;
-							sentMessage.edit(embed.setDescription(`Press 💰 to participate in the jackpot, you have 60 seconds to join in!\nCurrent jackpot: ${jackpot}💰`));
+							sentMessage.edit(embed.setDescription(`Press 💰 to participate in the jackpot, you have 60 seconds to join in!\n${buyin}💰 buy-in.\nCurrent jackpot: ${jackpot}💰\n${players}`));
 						} else {
 							user.send(`You only have ${bCheck}💰 but the buy-in is ${buyin}💰.`);
 						}
@@ -61,6 +64,8 @@ module.exports = {
 					duplicate = false;
 				});
 				collector.on('end', collected => {
+					if (participants.length < 2) return sentMessage.edit(embed.setDescription(`Current jackpot: ${jackpot}💰\n${players}\n\nNot enough people signed up, jackpot cancelled.`));
+					
 					const winner = Math.floor(Math.random() * participants.length);
 
 					for (let i = 0; i < participants.length; i++) {
@@ -68,7 +73,7 @@ module.exports = {
 						if (i == winner) profile.addMoney(participants[i].id, jackpot);
 					}
 
-					sentMessage.edit(embed.setDescription(`Press 💰 to participate in the jackpot, you have 60 seconds to join in!\nCurrent jackpot: ${jackpot}💰\n\nBuy-in time has ended\n${participants[winner]} has won the jackpot of **${jackpot}💰**`));
+					sentMessage.edit(embed.setDescription(`Current jackpot: ${jackpot}💰\n${players}\n\nBuy-in time has ended\n${participants[winner]} has won the jackpot of **${jackpot}💰**`));
 				});
 
 			})
