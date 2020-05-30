@@ -8,7 +8,7 @@ module.exports = {
 	name: 'use',
 	description: 'Use an item from your inventory.',
 	admin: false,
-	aliases: [],
+	aliases: ["item"],
 	args: false,
 	usage: '',
 	owner: false,
