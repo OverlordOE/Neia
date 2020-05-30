@@ -32,7 +32,7 @@ module.exports = {
 			});
 
 
-			help.addField('**Normal commands**', normalCommands);
+			help.setDescription(`**Normal commands**\n${normalCommands}`);
 			help.addField('**Music commands**', musicCommands);
 			help.addField('**Admin commands**', adminCommands);
 			help.addField('**Help**', '**You can send `-help [command name]` to get info on a specific command!**');
@@ -50,7 +50,7 @@ module.exports = {
 
 			if (command.description) help.addField('**Description:**', command.description);
 			if (command.usage) help.addField('**Usage:**', `-${command.name} ${command.usage}`);
-			if (command.aliases) help.addField('**Aliases:**', command.aliases.join(', '));
+			if (command.aliases) help.addField('**Aliases:**', `-${command.aliases.join(', ')}`);
 			if (command.admin) help.addField('**Need Admin:**', command.admin);
 		}
 
