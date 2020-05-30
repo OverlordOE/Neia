@@ -66,3 +66,4 @@ Syndicate bot-52a1ba49d569.json
 package-lock.json
 .eslintrc.json
 database.sqlite
+*.sqlite~eb30fa55486b4f39ed8096506599616d4636cf3a
