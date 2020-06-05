@@ -22,6 +22,7 @@ module.exports = {
 		const count = await profile.getCount(target.id);
 		const lastDaily = moment(await profile.getDaily(target.id));
 		const lastHourly = moment(await profile.getHourly(target.id));
+		const lastWeekly = moment(await profile.getWeekly(target.id));
 		const prot = moment(await profile.getProtection(target.id));
 		const pColour = await profile.getPColour(target.id);
 
@@ -29,13 +30,16 @@ module.exports = {
 		const now = moment();
 		const dCheck = moment(lastDaily).add(1, 'd');
 		const hCheck = moment(lastHourly).add(1, 'h');
+		const wCheck = moment(lastWeekly).add(1, 'w');
 		const pCheck = moment(prot).isBefore(now);
 		
 		let daily = dCheck.format('dddd HH:mm');
 		let hourly = hCheck.format('dddd HH:mm');
+		let weekly = wCheck.format('dddd HH:mm');
 		const protection = prot.format('dddd HH:mm');
 		if (moment(dCheck).isBefore(now)) daily = 'now';
 		if (moment(hCheck).isBefore(now)) hourly = 'now';
+		if (moment(wCheck).isBefore(now)) weekly = 'now';
 		
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`${target.tag}'s Profile`)
@@ -43,7 +47,8 @@ module.exports = {
 			.setThumbnail(avatar)
 			.addField('Balance:', `${balance}💰`, true)
 			.addField('Message Count:', count, true)
-			.addField('Next daily:', daily)
+			.addField('Next weekly:', weekly)
+			.addField('Next daily:', daily, true)
 			.addField('Next hourly:', hourly, true)
 			.setTimestamp()
 			.setFooter('Syndicate Imporium', bAvatar);
