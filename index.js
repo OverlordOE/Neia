@@ -107,6 +107,26 @@ Reflect.defineProperty(profile, 'setHourly', {
 	},
 });
 
+Reflect.defineProperty(profile, 'getWeekly', {
+	value: async function getWeekly(id) {
+		let user = profile.get(id);
+		if (!user) user = await newUser(id);
+		return user ? user.lastWeekly : 0;
+	},
+
+});
+
+Reflect.defineProperty(profile, 'setWeekly', {
+	value: async function setWeekly(id) {
+		let user = profile.get(id);
+		if (!user) user = await newUser(id);
+
+		const day = moment();
+		user.lastWeekly = day;
+		return user.save();
+	},
+});
+
 Reflect.defineProperty(profile, 'addCount', {
 	value: async function addCount(id, amount) {
 		let user = profile.get(id);
@@ -171,6 +191,7 @@ async function newUser(id) {
 		msgCount: 1,
 		lastDaily: (day - 1),
 		lastHourly: (day - 1),
+		lastWeekly: (day - 1),
 		protection: (day - 1),
 		pColour: '#fffb00',
 	});

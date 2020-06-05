@@ -19,7 +19,7 @@ const alter = process.argv.includes('--sync') || process.argv.includes('-s');
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 
 // Create tags
-sequelize.sync({ alter: true }).then(async () => {
+sequelize.sync({ force: true }).then(async () => {
 	const shop = [
 		CurrencyShop.upsert({ name: 'Tea', cost: 2 }),
 		CurrencyShop.upsert({ name: 'Coffee', cost: 3 }),

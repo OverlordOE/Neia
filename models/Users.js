@@ -24,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
+		lastWeekly: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
 		protection: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
@@ -34,9 +39,9 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: '#fffb00',
 			allowNull: false,
 		},
-		
+
 	},
-	{
-		timestamps: false,
-	});
+		{
+			timestamps: false,
+		});
 };
