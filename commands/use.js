@@ -241,8 +241,8 @@ module.exports = {
 						}
 
 						case 'Steal Protection': {
-							const now = moment();
-							const prot = moment(now).add(8, 'h');
+							const oldProtection = moment(await profile.getProtection(msg.author.id));
+							const prot = moment(oldProtection).add(8, 'h');
 							const protection = prot.format('dddd HH:mm');
 							sentMessage.edit(embed.setDescription(`You have activated steal protection.\nIt will last untill ${protection}`));
 							await profile.setProtection(msg.author.id, prot);

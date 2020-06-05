@@ -14,6 +14,8 @@ module.exports = {
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 
+
+		
 		const bAvatar = bot.user.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
