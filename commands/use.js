@@ -20,6 +20,7 @@ module.exports = {
 		const author = msg.guild.members.cache.get(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const uitems = await user.getItems();
+		let iAmount = 0;
 		const pColour = await profile.getPColour(msg.author.id);
 		const filter = m => m.author.id === msg.author.id;
 		let hasItem = false;
@@ -42,6 +43,7 @@ module.exports = {
 					uitems.map(i => {
 						if (i.item.name == item.name && i.amount >= 1) {
 							hasItem = true;
+							iAmount = i.amount;
 						}
 					});
 					if (!hasItem) return sentMessage.edit(embed.setDescription(`You don't have ${item.name}!`));
@@ -55,6 +57,7 @@ module.exports = {
 								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 									.then(async collected => {
 										const amount = parseInt(collected.first().content);
+										if (amount > iAmount) return sentMessage.edit(embed.setDescription(`You only have ${iAmount} tea.`));
 
 										if (amount > 50) sentMessage.edit(embed.setDescription('☕You drink an enormous amount of tea☕\nYou die of tea poisoning!'));
 										else if (amount > 10) sentMessage.edit(embed.setDescription('☕You drink a shit ton of tea☕\nAre you ok?'));
@@ -81,6 +84,7 @@ module.exports = {
 
 									.then(async collected => {
 										const amount = parseInt(collected.first().content);
+										if (amount > iAmount) return sentMessage.edit(embed.setDescription(`You only have ${iAmount} cake.`));
 
 										if (amount > 10) sentMessage.edit(embed.setDescription('🎂THE CAKE HAS RIPPED A HOLE IN REALITY🎂\nNot even The Avengers can fix this...'));
 										else if (amount > 5) sentMessage.edit(embed.setDescription('🎂THE CAKE IS EVOLVING🎂\nYou are not gonna be ok.'));
@@ -106,6 +110,7 @@ module.exports = {
 
 									.then(async collected => {
 										const amount = parseInt(collected.first().content);
+										if (amount > iAmount) return sentMessage.edit(embed.setDescription(`You only have ${iAmount} coffee.`));
 
 										if (amount > 9000) sentMessage.edit(embed.setDescription(`${msg.author.username}'s power increased by ${amount}%\nIT'S OVER 9000`));
 										else sentMessage.edit(embed.setDescription(`${msg.author.username}'s power increased by ${amount}%`));
@@ -241,15 +246,28 @@ module.exports = {
 						}
 
 						case 'Steal Protection': {
-							const oldProtection = moment(await profile.getProtection(msg.author.id));
-							const prot = moment(oldProtection).add(8, 'h');
-							const protection = prot.format('dddd HH:mm');
-							sentMessage.edit(embed.setDescription(`You have activated steal protection.\nIt will last untill ${protection}`));
-							await profile.setProtection(msg.author.id, prot);
-							collected.first().delete().catch(e => logger.log('error', e));
-							
-							await user.removeItem(item);
-							
+							sentMessage.edit(embed.setDescription('How much protection do you want to use?')).then(() => {
+								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+
+									.then(async collected => {
+										const amount = parseInt(collected.first().content);
+										if (amount > iAmount) return sentMessage.edit(embed.setDescription(`You only have ${iAmount} steal protection.`));
+
+										const protTime = 8 * amount;
+										const oldProtection = moment(await profile.getProtection(msg.author.id));
+										const prot = moment(oldProtection).add(protTime, 'h');
+										const protection = prot.format('dddd HH:mm');
+										sentMessage.edit(embed.setDescription(`You have activated steal protection.\nIt will last untill ${protection}`));
+										await profile.setProtection(msg.author.id, prot);
+										collected.first().delete().catch(e => logger.log('error', e));
+
+										for (let i = 0; i < amount; i++) await user.removeItem(item);
+									})
+									.catch(e => {
+										logger.log('error', e);
+										msg.reply('you didn\'t answer in time.');
+									});
+							});
 							break;
 						}
 
