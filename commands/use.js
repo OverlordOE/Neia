@@ -253,6 +253,7 @@ module.exports = {
 										const amount = parseInt(collected.first().content);
 										if (amount > iAmount) return sentMessage.edit(embed.setDescription(`You only have ${iAmount} steal protection.`));
 										let prot;
+										const now = moment();
 										const protTime = 8 * amount;
 										const oldProtection = await profile.getProtection(msg.author.id);
 										const checkProtection = moment(oldProtection).isBefore(now);
