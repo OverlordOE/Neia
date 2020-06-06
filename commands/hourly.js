@@ -35,7 +35,7 @@ module.exports = {
 			const balance = await profile.getBalance(msg.author.id);
 			msg.channel.send(embed.setDescription(`You got ${Math.floor(reward)}💰 from your hourly 🎁, come back in an hour for more!\nYour current balance is ${balance}💰`));
 		}
-		else { msg.channel.send(embed.setDescription(`you have already gotten your hourly 🎁, you can get your next hourly ${hourly}.`)); }
+		else { msg.channel.send(embed.setDescription(`You have already gotten your hourly 🎁\nYou can get your next hourly ${hourly}.`)); }
 
 
 	},

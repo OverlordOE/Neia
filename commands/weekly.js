@@ -33,6 +33,6 @@ module.exports = {
 			const balance = await profile.getBalance(msg.author.id);
 			msg.channel.send(embed.setDescription(`You got ${Math.floor(reward)}💰 from your weekly 🎁, come back in a week for more!\n Your current balance is ${balance}💰`));
 		}
-		else { msg.channel.send(embed.setDescription(`you have already gotten your weekly 🎁, your can get you next weekly ${weekly}`)); }
+		else { msg.channel.send(embed.setDescription(`You have already gotten your weekly 🎁\nYou can get you next weekly ${weekly}`)); }
 	},
 };
