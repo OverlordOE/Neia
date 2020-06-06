@@ -159,7 +159,7 @@ module.exports = {
 													}
 													catch { return sentMessage.edit(embed.setDescription('Something went wrong with creating the role')); }
 
-													
+
 
 													await user.removeItem(item);
 												})
@@ -252,10 +252,14 @@ module.exports = {
 									.then(async collected => {
 										const amount = parseInt(collected.first().content);
 										if (amount > iAmount) return sentMessage.edit(embed.setDescription(`You only have ${iAmount} steal protection.`));
-
+										let prot;
 										const protTime = 8 * amount;
-										const oldProtection = moment(await profile.getProtection(msg.author.id));
-										const prot = moment(oldProtection).add(protTime, 'h');
+										const oldProtection = await profile.getProtection(msg.author.id);
+										const checkProtection = moment(oldProtection).isBefore(now);
+
+										if (checkProtection) { prot = moment(now).add(protTime, 'h'); }
+										else { prot = moment(oldProtection).add(protTime, 'h'); }
+
 										const protection = prot.format('dddd HH:mm');
 										sentMessage.edit(embed.setDescription(`You have activated steal protection.\nIt will last untill ${protection}`));
 										await profile.setProtection(msg.author.id, prot);
@@ -272,7 +276,7 @@ module.exports = {
 						}
 
 						default: {
-						collected.first().delete().catch(e => logger.log('error', e));
+							collected.first().delete().catch(e => logger.log('error', e));
 							return sentMessage.edit(embed.setDescription('No use for this yet, the item was not used.'));
 						}
 					}
