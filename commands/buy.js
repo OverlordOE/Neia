@@ -36,7 +36,7 @@ module.exports = {
 					if (!item) return sentMessage.edit(embed.setDescription('That item doesn\'t exist.'));
 					collected.first().delete().catch(e => logger.log('error', e));
 
-					sentMessage.edit(embed.setDescription(`How many ${item.name} do you want to buy (max of 1000)?`)).then(() => {
+					sentMessage.edit(embed.setDescription(`How many ${item.name} do you want to buy (max of 10000)?`)).then(() => {
 						msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 							.then(async collected => {
@@ -46,8 +46,8 @@ module.exports = {
 								if (!Number.isInteger(amount)) {
 									return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 								}
-								else if (amount < 1 || amount > 1000) {
-									return sentMessage.edit(embed.setDescription('Enter a number between 1 and 1000'));
+								else if (amount < 1 || amount > 10000) {
+									return sentMessage.edit(embed.setDescription('Enter a number between 1 and 10000(numbers greater then 500 will take longer to process.'));
 								}
 
 
@@ -58,6 +58,7 @@ module.exports = {
 								}
 
 								profile.addMoney(msg.author.id, -cost);
+								sentMessage.edit(embed.setDescription(`Processing ${amount} ${item.name}.`));
 								for (let i = 0; i < amount; i++) {
 									await user.addItem(item);
 									logger.log('info', `Handled purchase ${i + 1} out of ${amount} for item: ${item.name}`);
