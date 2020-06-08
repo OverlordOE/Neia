@@ -14,8 +14,17 @@ module.exports = {
 		const items = await CurrencyShop.findAll();
 		const bAvatar = bot.user.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
-		let description = ``;
-		items.map(item => { description += `**${item.name}:** ${item.cost}💰\n`; });
+		let consumable = '__**Consumables:**__\n';
+		let discord = '__**Discord related items:**__\n';
+		let collectables = '__**collectables:**__\n';
+		
+		await items.map(item => {
+			if (item.ctg == 'consumable') { consumable += `${item.name}: ${item.cost}💰\n`; }
+			else if (item.ctg == 'collectables') { collectables += `${item.name}: ${item.cost}💰\n`; }
+			else if (item.ctg == 'discord') { discord += `${item.name}: ${item.cost}💰\n`; }
+		});
+
+		const description = `${consumable}\n${collectables}\n${discord}`;
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Syndicate Shop')

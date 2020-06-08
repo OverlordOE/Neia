@@ -58,7 +58,7 @@ module.exports = {
 								}
 
 								profile.addMoney(msg.author.id, -cost);
-								sentMessage.edit(embed.setDescription(`Processing ${amount} ${item.name}.`));
+								sentMessage.edit(embed.setDescription(`Processing ${amount} ${item.name}.\nThis might take up to 5 minutes.`));
 								for (let i = 0; i < amount; i++) {
 									await user.addItem(item);
 									logger.log('info', `Handled purchase ${i + 1} out of ${amount} for item: ${item.name}`);
