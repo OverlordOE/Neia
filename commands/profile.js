@@ -31,6 +31,7 @@ module.exports = {
 		let title = `${target.tag}'s Profile`;
 		let assets = '';
 		let networth = 0;
+		let collectables = false;
 
 		const now = moment();
 		const dCheck = moment(lastDaily).add(1, 'd');
@@ -62,7 +63,7 @@ module.exports = {
 
 
 		else {
-			embed.addField('Miscellaneous:', '-----------------------------');
+
 			items.map(i => {
 				if (i.amount < 1) return;
 				if (i.item.name == '⭐') {
@@ -72,17 +73,19 @@ module.exports = {
 					}
 					return;
 				}
-				if (i.item.ctg == 'collectables') { 
+				if (i.item.ctg == 'collectables') {
 					for (let j = 0; j < i.amount; j++) {
 						assets += `${i.item.name}`;
 						networth += i.item.cost;
 					}
-					
+					collectables = true;
 				}
 			});
-
-			embed.addField('Assets', assets);
-			embed.addField('Networth', `${networth}💰`);
+			if (collectables) {
+				embed.addField('Miscellaneous:', '-----------------------------');
+				embed.addField('Assets', assets);
+				embed.addField('Networth', `${networth}💰`);
+			}
 
 			embed.addField('Inventory:', '-----------------------------');
 			items.map(i => {
