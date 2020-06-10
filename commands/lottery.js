@@ -9,14 +9,18 @@ module.exports = {
 	admin: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+
+
+		const channel = bot.channels.cache.get('720083496420376616');
+		channel.send('test');
 
 		const bAvatar = bot.user.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
-		const buyin = args[0];
+		const buyin = 5;
 		let players = `Current participants:`;
-		let participants = [];
-		let jackpot = participants.length * buyin;
+		const participants = [];
+		let jackpot = 100 + (participants.length * buyin);
 		let description = `Press 💰 to participate in the lottery!\n${buyin}💰 buy-in.\nCurrent jackpot: ${jackpot} 💰`;
 		let duplicate = false;
 
