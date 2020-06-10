@@ -7,7 +7,6 @@ const ytAPI = process.env.YT_API;
 const { Users } = require('./dbObjects');
 const botCommands = require('./commands');
 const moment = require('moment');
-const cron = require('cron');
 const bot = new Discord.Client();
 const profile = new Discord.Collection();
 const cooldowns = new Discord.Collection();
@@ -318,8 +317,3 @@ bot.on('message', async msg => {
 	}
 });
 
-const lottery = new cron.CronJob('0 18 * * *', () => {
-	const lotCmd = bot.commands.get('lottery');
-	lotCmd.execute(0, 0, profile, bot, 0, ytAPI, logger, cooldowns);
-});
-lottery.start;
