@@ -14,6 +14,7 @@ module.exports = {
 	Weekly: require('./weekly'),
 	Leaderboard: require('./leaderboard'),
 	Jackpot: require('./jackpot'),
+	Lottery: require('./lottery'),
 	Gamble: require('./gamble'),
 	Steal: require('./steal'),
 	Dice: require('./dice'),

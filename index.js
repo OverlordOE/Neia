@@ -245,7 +245,6 @@ bot.on('message', async msg => {
 		cd.set(msg.author.tag, now);
 		setTimeout(() => cd.delete(msg.author.tag), cdAmount);
 	}
-
 	// check for prefix
 	if (!msg.content.startsWith(prefix)) return;
 
@@ -317,3 +316,4 @@ bot.on('message', async msg => {
 		msg.reply('there was an error trying to execute that command!');
 	}
 });
+
