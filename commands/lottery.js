@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const cron = require('cron');
+const fs = require('fs');
 module.exports = {
 	name: 'lottery',
 	description: 'Daily lottery everyone can enter.',
@@ -11,16 +12,17 @@ module.exports = {
 	music: false,
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
-		const lottery = new cron.CronJob('* * * * *', async () => {
-			//0 18 * * *
-			const channel = bot.channels.cache.get('720083496420376616');
+		const lotteryJob = new cron.CronJob('0 0-23/4 * * *', async () => {
 
+			let writeData;
+			const misc = JSON.parse(fs.readFileSync('miscData.json'));
+			const channel = bot.channels.cache.get('720083496420376616');
 			const bAvatar = bot.user.displayAvatarURL();
 			const pColour = await profile.getPColour(msg.author.id);
 			const buyin = 5;
 			let players = 'Current participants:';
 			const participants = [];
-			let lottery = 50 + (participants.length * buyin);
+			let lottery = misc.lastLottery;
 			const description = `Press 💰 to participate in the lottery!\n${buyin}💰 buy-in.\nCurrent jackpot: ${lottery}💰!`;
 			let duplicate = false;
 
@@ -39,7 +41,7 @@ module.exports = {
 				.then(sentMessage => {
 					sentMessage.react('💰');
 
-					const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
+					const collector = sentMessage.createReactionCollector(filter, { time: 14395000 });
 
 					collector.on('collect', async (r, user) => {
 
@@ -56,7 +58,7 @@ module.exports = {
 								participants.push(user);
 								profile.addMoney(user.id, -buyin);
 								players += `\n${participants.length}: ${user}`;
-								lottery = 100 + (participants.length * buyin);
+								lottery = misc.lastLottery + (participants.length * buyin);
 								sentMessage.edit(embed.setDescription(`Press 💰 to participate in the lottery!\n${buyin}💰 buy-in.\nCurrent lottery: ${lottery}💰\n${players}`));
 							}
 							else {
@@ -69,15 +71,23 @@ module.exports = {
 
 					collector.on('end', collected => {
 
-						const winner = Math.floor(Math.random() * 50);
+						const winner = Math.floor(Math.random() * 3);
 
 						for (let i = 0; i < participants.length; i++) {
 							if (i == winner) {
 								profile.addMoney(participants[i].id, lottery);
+								
+								channel.send(`Congrats ${participants[i]} on winning the jackpot of **${lottery}💰**!!!`);
+								misc.lastLottery = 50;
+								writeData = JSON.stringify(misc);
+								fs.writeFileSync('miscData.json', writeData);
 								return sentMessage.edit(embed.setDescription(`Current lottery: ${lottery}💰\n${players}\n\nLottery has ended and the winning number is __**${winner + 1}**__\n${participants[winner]} has won the lottery of **${lottery}💰**`));
 							}
 						}
 
+						misc.lastLottery = lottery;
+						writeData = JSON.stringify(misc);
+						fs.writeFileSync('miscData.json', writeData);
 						sentMessage.edit(embed.setDescription(`Current lottery: ${lottery}💰\n${players}\n\nLottery has ended and the winning number is __**${winner + 1}**__\n\nNoone won the lottery of **${lottery}💰**, it will be added to next days lottery!`));
 					});
 
@@ -87,7 +97,7 @@ module.exports = {
 					return msg.reply('Something went wrong.');
 				});
 		});
-		lottery.start();
+		lotteryJob.start();
 		msg.reply('Starting lottery');
 
 
