@@ -75,7 +75,6 @@ async function OneInFive(msg, profile, logger, gambleAmount, sentMessage, embed)
 
 	const answer = Math.floor((Math.random() * 5) + 1);
 	const winAmount = 2.5 * gambleAmount;
-	logger.log('info', `The bot chooses ${answer}`);
 
 	await sentMessage.edit(embed.setDescription(`You have bet **${gambleAmount}💰**.\nGuess the number between 1 and 5.`))
 		.then(() => {
@@ -124,9 +123,7 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessag
 	};
 
 	const winAmount = 0.85 * gambleAmount;
-
 	const answer = Math.floor((Math.random() * 3) + 1);
-	logger.log('info', `The bot chooses ${answer}`);
 
 	await sentMessage.edit(embed.setDescription(`You have bet **${gambleAmount}💰**.\nChoose rock✊, paper🧻 or scissors✂️!`))
 		.then(() => {
