@@ -8,7 +8,7 @@ module.exports = {
 	name: 'use',
 	description: 'Use an item from your inventory.',
 	admin: false,
-	aliases: [],
+	aliases: ["item"],
 	args: false,
 	usage: '',
 	owner: false,
@@ -20,6 +20,7 @@ module.exports = {
 		const author = msg.guild.members.cache.get(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const uitems = await user.getItems();
+		let iAmount = 0;
 		const pColour = await profile.getPColour(msg.author.id);
 		const filter = m => m.author.id === msg.author.id;
 		let hasItem = false;
@@ -42,6 +43,7 @@ module.exports = {
 					uitems.map(i => {
 						if (i.item.name == item.name && i.amount >= 1) {
 							hasItem = true;
+							iAmount = i.amount;
 						}
 					});
 					if (!hasItem) return sentMessage.edit(embed.setDescription(`You don't have ${item.name}!`));
@@ -55,6 +57,7 @@ module.exports = {
 								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 									.then(async collected => {
 										const amount = parseInt(collected.first().content);
+										if (amount > iAmount) return sentMessage.edit(embed.setDescription(`You only have ${iAmount} tea.`));
 
 										if (amount > 50) sentMessage.edit(embed.setDescription('☕You drink an enormous amount of tea☕\nYou die of tea poisoning!'));
 										else if (amount > 10) sentMessage.edit(embed.setDescription('☕You drink a shit ton of tea☕\nAre you ok?'));
@@ -81,6 +84,7 @@ module.exports = {
 
 									.then(async collected => {
 										const amount = parseInt(collected.first().content);
+										if (amount > iAmount) return sentMessage.edit(embed.setDescription(`You only have ${iAmount} cake.`));
 
 										if (amount > 10) sentMessage.edit(embed.setDescription('🎂THE CAKE HAS RIPPED A HOLE IN REALITY🎂\nNot even The Avengers can fix this...'));
 										else if (amount > 5) sentMessage.edit(embed.setDescription('🎂THE CAKE IS EVOLVING🎂\nYou are not gonna be ok.'));
@@ -106,6 +110,7 @@ module.exports = {
 
 									.then(async collected => {
 										const amount = parseInt(collected.first().content);
+										if (amount > iAmount) return sentMessage.edit(embed.setDescription(`You only have ${iAmount} coffee.`));
 
 										if (amount > 9000) sentMessage.edit(embed.setDescription(`${msg.author.username}'s power increased by ${amount}%\nIT'S OVER 9000`));
 										else sentMessage.edit(embed.setDescription(`${msg.author.username}'s power increased by ${amount}%`));
@@ -154,7 +159,7 @@ module.exports = {
 													}
 													catch { return sentMessage.edit(embed.setDescription('Something went wrong with creating the role')); }
 
-													
+
 
 													await user.removeItem(item);
 												})
@@ -241,20 +246,38 @@ module.exports = {
 						}
 
 						case 'Steal Protection': {
-							const now = moment();
-							const prot = moment(now).add(8, 'h');
-							const protection = prot.format('dddd HH:mm');
-							sentMessage.edit(embed.setDescription(`You have activated steal protection.\nIt will last untill ${protection}`));
-							await profile.setProtection(msg.author.id, prot);
-							collected.first().delete().catch(e => logger.log('error', e));
-							
-							await user.removeItem(item);
-							
+							sentMessage.edit(embed.setDescription('How much protection do you want to use?')).then(() => {
+								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+
+									.then(async collected => {
+										const amount = parseInt(collected.first().content);
+										if (amount > iAmount) return sentMessage.edit(embed.setDescription(`You only have ${iAmount} steal protection.`));
+										let prot;
+										const now = moment();
+										const protTime = 8 * amount;
+										const oldProtection = await profile.getProtection(msg.author.id);
+										const checkProtection = moment(oldProtection).isBefore(now);
+
+										if (checkProtection) { prot = moment(now).add(protTime, 'h'); }
+										else { prot = moment(oldProtection).add(protTime, 'h'); }
+
+										const protection = prot.format('dddd HH:mm');
+										sentMessage.edit(embed.setDescription(`You have activated steal protection.\nIt will last untill ${protection}`));
+										await profile.setProtection(msg.author.id, prot);
+										collected.first().delete().catch(e => logger.log('error', e));
+
+										for (let i = 0; i < amount; i++) await user.removeItem(item);
+									})
+									.catch(e => {
+										logger.log('error', e);
+										msg.reply('you didn\'t answer in time.');
+									});
+							});
 							break;
 						}
 
 						default: {
-						collected.first().delete().catch(e => logger.log('error', e));
+							collected.first().delete().catch(e => logger.log('error', e));
 							return sentMessage.edit(embed.setDescription('No use for this yet, the item was not used.'));
 						}
 					}
