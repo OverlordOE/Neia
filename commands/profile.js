@@ -82,8 +82,10 @@ module.exports = {
 				}
 			});
 			if (collectables) {
+				const pIncome = networth / 35;
 				embed.addField('Miscellaneous:', '-----------------------------');
 				embed.addField('Assets', assets);
+				embed.addField('Passive Income', `${pIncome.toFixed(1)}💰`);
 				embed.addField('Networth', `${networth}💰`);
 			}
 
