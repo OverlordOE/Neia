@@ -34,7 +34,7 @@ module.exports = {
 
 			if (i.item.ctg == 'collectables') {
 				for (let j = 0; j < i.amount; j++) {
-					cReward += i.item.cost / 35;
+					cReward += i.item.cost / 20;
 				}
 			}
 		});
