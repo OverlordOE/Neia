@@ -16,7 +16,7 @@ module.exports = {
 		const pColour = await profile.getPColour(msg.author.id);
 		let consumable = '__**Consumables:**__\n';
 		let discord = '__**Discord related items:**__\n';
-		let collectables = '__**collectables:**__\n';
+		let collectables = '__**Collectables:**__\n';
 		
 		await items.map(item => {
 			if (item.ctg == 'consumable') { consumable += `${item.name}: ${item.cost}💰\n`; }
