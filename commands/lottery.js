@@ -13,7 +13,7 @@ module.exports = {
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const lotteryJob = new cron.CronJob('0 0-23/4 * * *', async () => {
-
+			
 			let writeData;
 			const misc = JSON.parse(fs.readFileSync('miscData.json'));
 			const channel = bot.channels.cache.get('720083496420376616');
@@ -71,12 +71,12 @@ module.exports = {
 
 					collector.on('end', collected => {
 
-						const winner = Math.floor(Math.random() * 3);
+						const winner = Math.floor(Math.random() * 50);
 
 						for (let i = 0; i < participants.length; i++) {
 							if (i == winner) {
 								profile.addMoney(participants[i].id, lottery);
-								
+
 								channel.send(`Congrats ${participants[i]} on winning the jackpot of **${lottery}💰**!!!`);
 								misc.lastLottery = 50;
 								writeData = JSON.stringify(misc);
