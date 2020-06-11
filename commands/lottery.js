@@ -85,7 +85,7 @@ module.exports = {
 							}
 						}
 
-						misc.lastLottery = lottery;
+						misc.lastLottery = lottery + 50;
 						writeData = JSON.stringify(misc);
 						fs.writeFileSync('miscData.json', writeData);
 						sentMessage.edit(embed.setDescription(`Current lottery: ${lottery}💰\n${players}\n\nLottery has ended and the winning number is __**${winner + 1}**__\n\nNoone won the lottery of **${lottery}💰**, it will be added to next days lottery!`));

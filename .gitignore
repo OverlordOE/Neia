@@ -69,3 +69,4 @@ database.sqlite
 *.sqlite~eb30fa55486b4f39ed8096506599616d4636cf3a
 *.sqlite~eb30fa55486b4f39ed8096506599616d4636cf3a_0
 database.sqlite
+miscData.json
