@@ -15,7 +15,7 @@ module.exports = {
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 
 
-		
+
 		const bAvatar = bot.user.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
@@ -59,10 +59,9 @@ module.exports = {
 
 								profile.addMoney(msg.author.id, -cost);
 								sentMessage.edit(embed.setDescription(`Processing ${amount} ${item.name}.\nThis might take up to 5 minutes.`));
-								for (let i = 0; i < amount; i++) {
-									await user.addItem(item);
-									logger.log('info', `Handled purchase ${i + 1} out of ${amount} for item: ${item.name}`);
-								}
+
+								await user.addItem(item, amount);
+
 								sentMessage.edit(embed.setDescription(`You've bought: ${amount} ${item.name}.`));
 
 							})

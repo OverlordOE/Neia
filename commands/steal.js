@@ -64,7 +64,7 @@ module.exports = {
 			profile.addMoney(msg.author.id, stealAmount);
 			profile.addMoney(target.id, -stealAmount);
 			const balance = await profile.getBalance(msg.author.id);
-			await user.removeItem(item);
+			await user.removeItem(item, 1);
 			const prot = moment(now).add(1, 'h');
 			await profile.setProtection(target.id, prot);
 			return msg.channel.send(`Successfully stolen ${Math.floor(stealAmount)}💰 from ${target.tag}. Your current balance is ${balance}💰`);
@@ -73,7 +73,7 @@ module.exports = {
 			const fine = 10 + (Math.random() * 20);
 			profile.addMoney(msg.author.id, -fine);
 			const balance = await profile.getBalance(msg.author.id);
-			await user.removeItem(item);
+			await user.removeItem(item, 1);
 			return msg.channel.send(`You got caught trying to steal from ${target.tag}, you get fined ${Math.floor(fine)}💰. Your current balance is ${balance}💰`);
 		}
 		else {

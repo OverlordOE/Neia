@@ -17,9 +17,9 @@ sequelize.import('models/UserItems');
 // Execute node dbInit.js --sync or node dbInit.js -s to force update the tables (this doesnt reset the db but keeps unused tables).
 
 // Create tags
-sequelize.sync({ force: true }).then(async () => {
+sequelize.sync({  }).then(async () => {
 	const shop = [
-		CurrencyShop.upsert({ name: 'Tea', cost: 2, ctg: 'consumable' }),
+		//CurrencyShop.upsert({ name: 'Tea', cost: 2, ctg: 'consumable' }),
 		
 	];
 	await Promise.all(shop);

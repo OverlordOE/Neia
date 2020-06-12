@@ -116,12 +116,9 @@ module.exports = {
 																.then(async collected => {
 																	const amount = collected.first().content;
 																	collected.first().delete().catch(e => logger.log('error', e));
-
-																	for (let i = 0; i < amount; i++) {
-																		await user.removeItem(item);
-																		await userTarget.addItem(item);
-																		logger.log('info', `Handled trade ${i + 1} out of ${amount} for item: ${item.name}`);
-																	}
+																	
+																	await user.removeItem(item, amount);
+																	await userTarget.addItem(item, amount);
 
 																	sentMessage.edit(embed.setDescription(`Trade with **${target.username}** succesfull!\n\nTraded ${amount} ${item.name} to **${target.username}**.`));
 

@@ -66,7 +66,7 @@ module.exports = {
 
 										collected.first().delete().catch(e => logger.log('error', e));
 
-										for (let i = 0; i < amount; i++) await user.removeItem(item);
+										await user.removeItem(item, amount);
 									})
 									.catch(e => {
 										logger.log('error', e);
@@ -93,7 +93,7 @@ module.exports = {
 
 										collected.first().delete().catch(e => logger.log('error', e));
 
-										for (let i = 0; i < amount; i++) await user.removeItem(item);
+										await user.removeItem(item, amount);
 									})
 									.catch(e => {
 										logger.log('error', e);
@@ -117,7 +117,7 @@ module.exports = {
 
 										collected.first().delete().catch(e => logger.log('error', e));
 
-										for (let i = 0; i < amount; i++) await user.removeItem(item);
+										await user.removeItem(item, amount);
 									})
 									.catch(e => {
 										logger.log('error', e);
@@ -161,7 +161,7 @@ module.exports = {
 
 
 
-													await user.removeItem(item);
+													await user.removeItem(item, 1);
 												})
 												.catch(e => {
 													logger.log('error', e);
@@ -202,7 +202,7 @@ module.exports = {
 
 										collected.first().delete().catch(e => logger.log('error', e));
 
-										await user.removeItem(item);
+										await user.removeItem(item, 1);
 									})
 									.catch(e => {
 										logger.log('error', e);
@@ -228,7 +228,7 @@ module.exports = {
 
 										collected.first().delete().catch(e => logger.log('error', e));
 
-										await user.removeItem(item);
+										await user.removeItem(item, 1);
 									})
 									.catch(e => {
 										logger.log('error', e);
@@ -266,7 +266,7 @@ module.exports = {
 										await profile.setProtection(msg.author.id, prot);
 										collected.first().delete().catch(e => logger.log('error', e));
 
-										for (let i = 0; i < amount; i++) await user.removeItem(item);
+										await user.removeItem(item, amount);
 									})
 									.catch(e => {
 										logger.log('error', e);

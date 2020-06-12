@@ -13,7 +13,7 @@ module.exports = {
 	args: false,
 	usage: 'modifier',
 	music: false,
-	
+
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		let total = 0;
 		const now = moment();
@@ -28,7 +28,7 @@ module.exports = {
 				try {
 					profile.addMoney(data[i].user_id, data[i].balance);
 					profile.setWeekly(data[i].user_id),
-					profile.setDaily(data[i].user_id);
+						profile.setDaily(data[i].user_id);
 					profile.setHourly(data[i].user_id);
 					profile.addCount(data[i].user_id, data[i].msgCount);
 					profile.setProtection(data[i].user_id, now);
@@ -44,10 +44,9 @@ module.exports = {
 				try {
 					const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: iData[i].itemName } } });
 					const user = await Users.findOne({ where: { user_id: iData[i].user_id } });
-					for (let j = 0; j < iData[i].amount; j++) {
-						await user.addItem(item);
-						logger.log('info', `adding ${iData[i].itemName} ${j} of ${iData[i].amount} to user ${iData[i].user_id}`);
-					}
+
+					await user.addItem(item, iData[i].amount);
+
 				}
 				catch (error) {
 					logger.log('warn', 'something went wrong with applying the backup');

@@ -13,26 +13,26 @@ const UserItems = sequelize.import('models/UserItems');
 
 UserItems.belongsTo(CurrencyShop, { foreignKey: 'item_id', as: 'item' });
 
-Users.prototype.addItem = async function(item) {
+Users.prototype.addItem = async function(item, amount) {
 	const userItem = await UserItems.findOne({
 		where: { user_id: this.user_id, item_id: item.id },
 	});
 
 	if (userItem) {
-		userItem.amount += 1;
+		userItem.amount += amount;
 		return userItem.save();
 	}
 
 	return UserItems.create({ user_id: this.user_id, item_id: item.id, amount: 1 });
 };
 
-Users.prototype.removeItem = async function(item) {
+Users.prototype.removeItem = async function(item, amount) {
 	const userItem = await UserItems.findOne({
 		where: { user_id: this.user_id, item_id: item.id },
 	});
 
-	if (userItem.amount >= 1) {
-		userItem.amount -= 1;
+	if (userItem.amount >= amount) {
+		userItem.amount -= amount;
 		return userItem.save();
 	}
 

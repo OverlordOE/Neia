@@ -55,16 +55,12 @@ module.exports = {
 									return sentMessage.edit(embed.setDescription(`You don't have enough ${item.name}!`));
 								}
 
-								const refundAmount = 0.8 * item.cost;
-								let totalRefund = 0;
-								for (let i = 0; i < amount; i++) {
-									await user.removeItem(item);
-									await profile.addMoney(msg.author.id, refundAmount);
-									totalRefund += refundAmount;
-									logger.log('info', `Handled refund ${i} out of ${amount} for item: ${item.name}`);
-								}
+								const refundAmount = 0.8 * item.cost * amount;
+								await user.removeItem(item, amount);
+								await profile.addMoney(msg.author.id, refundAmount);
+
 								const balance = await profile.getBalance(msg.author.id);
-								sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.name} and received ${Math.floor(totalRefund)}💰 back.\nYour balance is ${balance}💰!`));
+								sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.name} and received ${Math.floor(refundAmount)}💰 back.\nYour balance is ${balance}💰!`));
 
 							})
 							.catch(e => {
