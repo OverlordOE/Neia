@@ -25,10 +25,8 @@ module.exports = {
 	Skip: require('./skip'),
 	Clear: require('./clear'),
 	Add: require('./add'),
-	Ban: require('./ban'),
 	Reload: require('./reload'),
 	Delete: require('./delete'),
 	Backup: require('./backup'),
 	Test: require('./test'),
-	Embed: require('./embed'),
 };
