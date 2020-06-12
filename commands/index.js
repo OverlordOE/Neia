@@ -1,6 +1,5 @@
 module.exports = {
 	Help: require('./help'),
-	Ping: require('./ping'),
 	Avatar: require('./avatar'),
 	Hackedandbanned: require('./hackedandbanned'),
 	Shop: require('./shop'),
