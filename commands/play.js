@@ -114,12 +114,6 @@ async function Play(bot, ops, data, logger) {
 		logger.log('error', `failed to join voice channel for reason: ${e}`);
 	});
 
-	data.dispatcher.on('disconnect', e => {
-		data.dispatcher = null;
-		logger.log('info', `left voice channel for reason: ${e}`);
-	});
-
-
 }
 
 
@@ -127,7 +121,7 @@ function Finish(bot, ops, dispatcher, message, logger) {
 
 	const fetchedData = ops.active.get(dispatcher.guildID);
 	if (fetchedData.loop) {
-		
+
 		ops.active.set(dispatcher.guildID, fetchedData);
 		return Play(bot, ops, fetchedData, logger);
 	}
