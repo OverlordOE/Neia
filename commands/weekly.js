@@ -31,8 +31,8 @@ module.exports = {
 			profile.addMoney(msg.author.id, reward);
 			await profile.setWeekly(msg.author.id);
 			const balance = await profile.getBalance(msg.author.id);
-			msg.channel.send(embed.setDescription(`You got ${Math.floor(reward)}💰 from your weekly 🎁, come back in a week for more!\n Your current balance is ${balance}💰`));
+			msg.channel.send(embed.setDescription(`You got ${reward.toFixed(1)}💰 from your weekly 🎁, come back in a week for more!\n\nYour current balance is ${balance}💰`));
 		}
-		else { msg.channel.send(embed.setDescription(`You have already gotten your weekly 🎁\nYou can get you next weekly ${weekly}`)); }
+		else { msg.channel.send(embed.setDescription(`You have already gotten your weekly 🎁\n\nYou can get you next weekly ${weekly}`)); }
 	},
 };
