@@ -13,7 +13,7 @@ module.exports = {
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const lotteryJob = new cron.CronJob('0 0-23/4 * * *', async () => {
-			
+
 			let writeData;
 			const misc = JSON.parse(fs.readFileSync('miscData.json'));
 			const channel = bot.channels.cache.get('720083496420376616');
@@ -27,11 +27,11 @@ module.exports = {
 			let duplicate = false;
 
 			const embed = new Discord.MessageEmbed()
-				.setTitle('Syndicate Lottery')
+				.setTitle('Neija Lottery')
 				.setDescription(description)
 				.setColor(pColour)
 				.setTimestamp()
-				.setFooter('Syndicate Imporium', bAvatar);
+				.setFooter('Neija', bAvatar);
 
 			const filter = (reaction, user) => {
 				return ['💰'].includes(reaction.emoji.name) && !user.bot;

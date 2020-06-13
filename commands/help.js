@@ -21,7 +21,7 @@ module.exports = {
 			.setTimestamp();
 
 		if (!args.length) {
-			help.setTitle('Syndicate bot command list');
+			help.setTitle('Neija command list');
 			commands.map(command => {
 				if (!command.owner) {
 					if (command.admin) { adminCommands += `**-${command.name}** - ${command.description}\n`; }

@@ -23,7 +23,7 @@ module.exports = {
 			.setImage(avatar)
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 		msg.channel.send(embed);
 	},

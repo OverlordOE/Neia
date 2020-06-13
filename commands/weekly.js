@@ -20,7 +20,7 @@ module.exports = {
 			.setTitle('Weekly Reward')
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 		const check = moment(lastWeekly).add(1, 'w');
 		const weekly = check.format('dddd HH:mm');

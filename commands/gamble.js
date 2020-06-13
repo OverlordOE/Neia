@@ -23,7 +23,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setColor(pColour)
 			.setTimestamp()
-			.setTitle('Syndicate\'s Gambling Imporium')
+			.setTitle('Neija\'s Gambling Imporium')
 			.setDescription(`You have bet **${gambleAmount}💰**, you can play the following games:\n
 
 							__**Number Guessing**__\n 
@@ -34,7 +34,7 @@ module.exports = {
 							Play a game of rock, paper, scissors against the bot and see who is superior.\n
 							**Potential winnings: ${(0.85 * gambleAmount)}💰**
 			`)
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 
 		if (!gambleAmount || isNaN(gambleAmount)) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, that's an invalid amount.`));

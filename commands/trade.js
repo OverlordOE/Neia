@@ -21,10 +21,10 @@ module.exports = {
 		const filter = m => m.author.id === msg.author.id;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Syndicate Trading Center')
+			.setTitle('Neija Trading Center')
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 
 		msg.channel.send(embed.setDescription('Who do you want to trade with? __mention the user__\n'))
@@ -116,7 +116,7 @@ module.exports = {
 																.then(async collected => {
 																	const amount = collected.first().content;
 																	collected.first().delete().catch(e => logger.log('error', e));
-																	
+
 																	await user.removeItem(item, amount);
 																	await userTarget.addItem(item, amount);
 

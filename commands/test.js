@@ -19,11 +19,11 @@ module.exports = {
 		let duplicate = false;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Syndicate Jackpot')
+			.setTitle('Neija Jackpot')
 			.setDescription(`Press 💰 to participate in the jackpot, you have 20 seconds to join in!\nCurrent jackpot: ${jackpot}💰`)
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 		if (!buyin || isNaN(buyin)) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, that's an invalid amount.`));
 		if (buyin <= 0) return msg.channel.send(embed.setDescription(`Please enter an amount greater than zero, ${msg.author}.`));

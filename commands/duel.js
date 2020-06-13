@@ -29,7 +29,7 @@ module.exports = {
 			.setDescription(description)
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 
 
@@ -45,7 +45,7 @@ module.exports = {
 
 				collector.on('collect', async (r, user) => {
 
-					
+
 					if (!duplicate) {
 						const bCheck = await profile.getBalance(user.id);
 

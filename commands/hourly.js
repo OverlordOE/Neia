@@ -24,7 +24,7 @@ module.exports = {
 			.setTitle('Hourly Reward')
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 
 		const check = moment(lastHourly).add(1, 'h');

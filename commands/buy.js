@@ -22,11 +22,11 @@ module.exports = {
 		const filter = m => m.author.id === msg.author.id;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Syndicate Shop')
+			.setTitle('Neija Shop')
 			.setDescription('What item do you want to buy?')
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 
 		msg.channel.send(embed).then(sentMessage => {
@@ -34,7 +34,7 @@ module.exports = {
 
 			collector.on('collect', async m => {
 				m.delete().catch(e => logger.log('error', e));
-				item = await CurrencyShop.findOne({ where: { name: { [Op.like]: m.content } } });
+				item = await CurrencyShop.findOne({ where: { name: { [Op.like]: m.content } } }) || await CurrencyShop.findOne({ where: { alias: { [Op.like]: m.content } } });
 				if (!item) return sentMessage.edit(embed.setDescription(`What item do you want to buy?\n\n${m.content} doesn't exist, try again.`));
 				else collector.emit('end');
 			});
@@ -55,7 +55,7 @@ module.exports = {
 					});
 
 					collector2.on('end', async () => {
-						
+
 						const balance = await profile.getBalance(msg.author.id);
 						const cost = amount * item.cost;
 						if (cost > balance) {

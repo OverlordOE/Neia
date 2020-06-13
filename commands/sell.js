@@ -25,7 +25,7 @@ module.exports = {
 			.setDescription('What do you want to refund? (you\'ll get 80% of the original price back)')
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 		msg.channel.send(embed).then(sentMessage => {
 

@@ -56,7 +56,7 @@ module.exports = {
 			.addField('Next daily:', daily, true)
 			.addField('Next hourly:', hourly, true)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 		if (!pCheck) { embed.addField('Steal protection untill:', protection); }
 		if (!items.length) { embed.addField('Inventory:', `${target.tag} has nothing!`); }

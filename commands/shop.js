@@ -17,7 +17,7 @@ module.exports = {
 		let consumable = '__**Consumables:**__\n';
 		let discord = '__**Discord related items:**__\n';
 		let collectables = '__**Collectables:**__\n';
-		
+
 		await items.map(item => {
 			if (item.ctg == 'consumable') { consumable += `${item.name}: ${item.cost}💰\n`; }
 			else if (item.ctg == 'collectables') { collectables += `${item.name}: ${item.cost}💰\n`; }
@@ -27,12 +27,12 @@ module.exports = {
 		const description = `${consumable}\n${collectables}\n${discord}`;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Syndicate Shop')
+			.setTitle('Neija Shop')
 			.setThumbnail(bAvatar)
 			.setDescription(description)
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 		return msg.channel.send(embed);
 	},

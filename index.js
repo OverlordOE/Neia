@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const winston = require('winston');
 require('dotenv').config();
 const prefix = process.env.PREFIX;
-const token = process.env.TOKEN;
+const token = process.env.TEST_TOKEN;
 const ytAPI = process.env.YT_API;
 const { Users } = require('./dbObjects');
 const botCommands = require('./commands');
@@ -45,7 +45,7 @@ bot.on('ready', async () => {
 	const storedBalances = await Users.findAll();
 	storedBalances.forEach(b => profile.set(b.user_id, b));
 	logger.log('info', `Logged in as ${bot.user.tag}!`);
-	bot.user.setActivity('The Syndicate', { type: 'WATCHING' });
+	bot.user.setActivity('Overlord', { type: 'WATCHING' });
 });
 
 

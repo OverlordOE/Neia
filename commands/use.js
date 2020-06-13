@@ -30,7 +30,7 @@ module.exports = {
 			.setDescription('What item do you want to use?')
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 
 		msg.channel.send(embed).then(sentMessage => {

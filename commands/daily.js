@@ -24,7 +24,7 @@ module.exports = {
 			.setTitle('Daily Reward')
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 		const check = moment(lastDaily).add(1, 'd');
 

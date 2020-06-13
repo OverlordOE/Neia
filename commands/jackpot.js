@@ -21,11 +21,11 @@ module.exports = {
 		let duplicate = false;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Syndicate Jackpot')
+			.setTitle('Neija Jackpot')
 			.setDescription(description)
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neija', bAvatar);
 
 		if (!buyin || isNaN(buyin)) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, that's an invalid amount.`));
 		if (buyin <= 0) return msg.channel.send(embed.setDescription(`Please enter an amount greater than zero, ${msg.author}.`));
@@ -65,7 +65,7 @@ module.exports = {
 				});
 				collector.on('end', collected => {
 					if (participants.length < 2) return sentMessage.edit(embed.setDescription(`Current jackpot: ${jackpot}💰\n${players}\n\nNot enough people signed up, jackpot cancelled.`));
-					
+
 					const winner = Math.floor(Math.random() * participants.length);
 
 					for (let i = 0; i < participants.length; i++) {
