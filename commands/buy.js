@@ -19,6 +19,7 @@ module.exports = {
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		let item;
 		let amount = 0;
+		let tries = 0;
 		const filter = m => m.author.id === msg.author.id;
 
 		const embed = new Discord.MessageEmbed()
@@ -34,9 +35,11 @@ module.exports = {
 
 			collector.on('collect', async m => {
 				m.delete().catch(e => logger.log('error', e));
-				item = await CurrencyShop.findOne({ where: { name: { [Op.like]: m.content } } }) || await CurrencyShop.findOne({ where: { alias: { [Op.like]: m.content } } });
-				if (!item) return sentMessage.edit(embed.setDescription(`What item do you want to buy?\n\n${m.content} doesn't exist, try again.`));
-				else collector.emit('end');
+				if (tries > 4) { return sentMessage.edit(embed.setDescription(`${m.content} doesn't exist.`)); }
+				tries++;
+				item = await CurrencyShop.findOne({ where: { name: { [Op.like]: m.content } } });
+				if (!item) return sentMessage.edit(embed.setDescription(`What item do you want to buy?\n\n${m.content} doesn't exist, ${5-tries} attempts left.`));
+				else collector.stop();
 			});
 
 			collector.on('end', () => {
@@ -47,11 +50,13 @@ module.exports = {
 
 					collector2.on('collect', m => {
 						m.delete().catch(e => logger.log('error', e));
+						if (tries > 4) { return sentMessage.edit(embed.setDescription(`${m.content} is not a number.`)); }
+						tries++;
 						amount = parseInt(m.content);
 
-						if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
+						if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number, ${5-tries} attempts left.`));
 						else if (amount < 1 || amount > 10000) return sentMessage.edit(embed.setDescription('Enter a number between 1 and 10000'));
-						else collector2.emit('end');
+						else collector2.stop();
 					});
 
 					collector2.on('end', async () => {
