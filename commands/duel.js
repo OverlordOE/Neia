@@ -12,6 +12,7 @@ module.exports = {
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 
 		const bAvatar = bot.user.displayAvatarURL();
+		const avatar = msg.author.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
 		const target = msg.mentions.users.first();
 
@@ -26,6 +27,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`${msg.author} VS ${target}`)
+			.setThumbnail(avatar)
 			.setDescription(description)
 			.setColor(pColour)
 			.setTimestamp()

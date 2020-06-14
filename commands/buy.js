@@ -15,6 +15,7 @@ module.exports = {
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 
 		const bAvatar = bot.user.displayAvatarURL();
+		const avatar = msg.author.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		let item;
@@ -24,6 +25,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neija Shop')
+			.setThumbnail(avatar)
 			.setDescription('What item do you want to buy?')
 			.setColor(pColour)
 			.setTimestamp()

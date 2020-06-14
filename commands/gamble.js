@@ -15,6 +15,7 @@ module.exports = {
 		const gambleAmount = args[0];
 		const pColour = await profile.getPColour(msg.author.id);
 		const bAvatar = bot.user.displayAvatarURL();
+		const avatar = msg.author.displayAvatarURL();
 
 		const filter = (reaction, user) => {
 			return ['✂️', emojiCharacters[5]].includes(reaction.emoji.name) && user.id === msg.author.id;
@@ -22,6 +23,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(pColour)
+			.setThumbnail(avatar)
 			.setTimestamp()
 			.setTitle('Neija\'s Gambling Imporium')
 			.setDescription(`You have bet **${gambleAmount}💰**, you can play the following games:\n

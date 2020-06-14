@@ -15,6 +15,8 @@ module.exports = {
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const lastDaily = moment(await profile.getDaily(msg.author.id));
 		const bAvatar = bot.user.displayAvatarURL();
+		const avatar = msg.author.displayAvatarURL();
+
 		const pColour = await profile.getPColour(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const items = await user.getItems();
@@ -22,6 +24,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Daily Reward')
+			.setThumbnail(avatar)
 			.setColor(pColour)
 			.setTimestamp()
 			.setFooter('Neija', bAvatar);

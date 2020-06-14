@@ -19,9 +19,11 @@ module.exports = {
 		const filter = m => m.author.id === msg.author.id;
 		const pColour = await profile.getPColour(msg.author.id);
 		const bAvatar = bot.user.displayAvatarURL();
+		const avatar = msg.author.displayAvatarURL();
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Use Command')
+			.setThumbnail(avatar)
 			.setDescription('What do you want to refund? (you\'ll get 80% of the original price back)')
 			.setColor(pColour)
 			.setTimestamp()

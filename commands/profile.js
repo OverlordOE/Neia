@@ -17,8 +17,9 @@ module.exports = {
 		const user = await Users.findOne({ where: { user_id: target.id } });
 		const items = await user.getItems();
 
-		const avatar = target.displayAvatarURL();
+
 		const bAvatar = bot.user.displayAvatarURL();
+		const avatar = msg.author.displayAvatarURL();
 		const balance = await profile.getBalance(target.id);
 		const count = await profile.getCount(target.id);
 		const prot = moment(await profile.getProtection(target.id));

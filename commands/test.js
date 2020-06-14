@@ -12,6 +12,7 @@ module.exports = {
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 
 		const bAvatar = bot.user.displayAvatarURL();
+		const avatar = msg.author.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
 		const buyin = args[0];
 		let participants = [];
@@ -20,6 +21,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neija Jackpot')
+			.setThumbnail(avatar)
 			.setDescription(`Press 💰 to participate in the jackpot, you have 20 seconds to join in!\nCurrent jackpot: ${jackpot}💰`)
 			.setColor(pColour)
 			.setTimestamp()
