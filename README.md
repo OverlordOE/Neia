@@ -1,5 +1,5 @@
-# Syndicate Bot
-Syndicate bot is a fun bot that has all kinds of random features but is primarily focused on the money system it has in place.
+# Neija
+Neija is a fun bot that has all kinds of random features but is primarily focused on the money system it has in place.
 
 ## Major Features
 - Fully funtional youtube music playing with looping functionality.
@@ -9,4 +9,4 @@ Syndicate bot is a fun bot that has all kinds of random features but is primaril
 - Much more to come in the future based on user suggestions!
 
 ### Contact
-To report any bugs or to suggest features you can contact OverlordOE#0717 on discord, join [The Syndicate server](https://discord.gg/rc4S2Py) or post an issue on [the github repo](https://github.com/OverlordOE/syndicatebot)!
+To report any bugs or to suggest features you can contact OverlordOE#0717 on discord, join [The support server](https://discord.gg/hFGxVDT) or post an issue on [the github repo](https://github.com/OverlordOE/Neija)!
