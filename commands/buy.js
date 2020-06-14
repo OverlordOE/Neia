@@ -35,10 +35,13 @@ module.exports = {
 
 			collector.on('collect', async m => {
 				m.delete().catch(e => logger.log('error', e));
-				if (tries > 4) { return sentMessage.edit(embed.setDescription(`${m.content} doesn't exist.`)); }
+				if (tries > 4) {
+					collector.stop();
+					return sentMessage.edit(embed.setDescription(`${m.content} doesn't exist.`));
+				}
 				tries++;
 				item = await CurrencyShop.findOne({ where: { name: { [Op.like]: m.content } } });
-				if (!item) return sentMessage.edit(embed.setDescription(`What item do you want to buy?\n\n${m.content} doesn't exist, ${5-tries} attempts left.`));
+				if (!item) return sentMessage.edit(embed.setDescription(`What item do you want to buy?\n\n${m.content} doesn't exist, ${5 - tries} attempts left.`));
 				else collector.stop();
 			});
 
@@ -50,11 +53,14 @@ module.exports = {
 
 					collector2.on('collect', m => {
 						m.delete().catch(e => logger.log('error', e));
-						if (tries > 4) { return sentMessage.edit(embed.setDescription(`${m.content} is not a number.`)); }
+						if (tries > 4) {
+							collector.stop();
+							return sentMessage.edit(embed.setDescription(`${m.content} is not a number.`));
+						}
 						tries++;
 						amount = parseInt(m.content);
 
-						if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number, ${5-tries} attempts left.`));
+						if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number, ${5 - tries} attempts left.`));
 						else if (amount < 1 || amount > 10000) return sentMessage.edit(embed.setDescription('Enter a number between 1 and 10000'));
 						else collector2.stop();
 					});

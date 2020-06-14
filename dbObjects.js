@@ -18,8 +18,9 @@ Users.prototype.addItem = async function(item, amount) {
 		where: { user_id: this.user_id, item_id: item.id },
 	});
 
+	const add = parseInt(amount);
 	if (userItem) {
-		userItem.amount += amount;
+		userItem.amount += add;
 		return userItem.save();
 	}
 
@@ -31,8 +32,9 @@ Users.prototype.removeItem = async function(item, amount) {
 		where: { user_id: this.user_id, item_id: item.id },
 	});
 
-	if (userItem.amount >= amount) {
-		userItem.amount -= amount;
+	const remove = parseInt(amount);
+	if (userItem.amount >= remove) {
+		userItem.amount -= remove;
 		return userItem.save();
 	}
 
