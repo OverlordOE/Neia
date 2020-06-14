@@ -12,10 +12,9 @@ module.exports = {
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 
 		const bAvatar = bot.user.displayAvatarURL();
+		const avatar = msg.author.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
 		const target = msg.mentions.users.first() || msg.author;
-		const avatar = target.displayAvatarURL();
-
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`${target.tag}'s Avatar`)

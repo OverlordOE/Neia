@@ -15,6 +15,7 @@ module.exports = {
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const lastHourly = moment(await profile.getHourly(msg.author.id));
 		const bAvatar = bot.user.displayAvatarURL();
+		const avatar = msg.author.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const items = await user.getItems();
@@ -22,6 +23,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Hourly Reward')
+			.setThumbnail(avatar)
 			.setColor(pColour)
 			.setTimestamp()
 			.setFooter('Neija', bAvatar);
