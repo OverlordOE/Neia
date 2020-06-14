@@ -180,41 +180,6 @@ module.exports = {
 						}
 
 
-						case 'Text Channel': {
-
-							sentMessage.edit(embed.setDescription('Specify the channel name you want.')).then(() => {
-								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
-
-									.then(async collected => {
-										const name = collected.first().content;
-
-										msg.guild.channels.create(name, {
-											permissionOverwrites: [
-												{
-													id: msg.author.id,
-													allow: ['VIEW_CHANNEL', 'MANAGE_CHANNELS', 'MANAGE_ROLES', 'MANAGE_MESSAGES'],
-												},
-												{
-													id: msg.guild.id,
-													deny: ['VIEW_CHANNEL'],
-												},
-											],
-										});
-										sentMessage.edit(embed.setDescription(`You have created channel ${name}`));
-
-										collected.first().delete().catch(e => logger.log('error', e));
-
-										await user.removeItem(item, 1);
-									})
-									.catch(e => {
-										logger.log('error', e);
-										msg.reply('you didn\'t answer in time.');
-									});
-							});
-							break;
-						}
-
-
 						case 'Profile Colour': {
 
 							sentMessage.edit(embed.setDescription('Specify the colour you want for your profile in the format #0099ff\n(look up hex color on google to get a colour chooser)')).then(() => {

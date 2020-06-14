@@ -12,11 +12,11 @@ module.exports = {
 	music: false,
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
-		const lotteryJob = new cron.CronJob('0 0-23/4 * * *', async () => {
+		const lotteryJob = new cron.CronJob('0 0-23/3 * * *', async () => {
 
 			let writeData;
 			const misc = JSON.parse(fs.readFileSync('miscData.json'));
-			const channel = bot.channels.cache.get('720083496420376616');
+			const channel = bot.channels.cache.get('721743056528867393');
 			const bAvatar = bot.user.displayAvatarURL();
 			const pColour = await profile.getPColour(msg.author.id);
 			const buyin = 5;
