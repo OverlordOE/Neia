@@ -15,73 +15,81 @@ module.exports = {
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 
 		const bAvatar = bot.user.displayAvatarURL();
-		const avatar = msg.author.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
-		const user = await Users.findOne({ where: { user_id: msg.author.id } });
-		let item;
-		let amount = 0;
-		let tries = 0;
 		const filter = m => m.author.id === msg.author.id;
+		let amount = 0;
+		let item;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neija Shop')
-			.setThumbnail(avatar)
+			.setTitle('Syndicate Shop')
 			.setDescription('What item do you want to buy?')
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neija', bAvatar);
+			.setFooter('Syndicate Imporium', bAvatar);
 
 
-		msg.channel.send(embed).then(sentMessage => {
-			const collector = msg.channel.createMessageCollector(filter, { time: 60000 });
+		msg.channel.send(embed).then(async sentMessage => {
 
-			collector.on('collect', async m => {
-				m.delete().catch(e => logger.log('error', e));
-				if (tries > 4) {
-					collector.stop();
-					return sentMessage.edit(embed.setDescription(`${m.content} doesn't exist.`));
-				}
-				tries++;
-				item = await CurrencyShop.findOne({ where: { name: { [Op.like]: m.content } } });
-				if (!item) return sentMessage.edit(embed.setDescription(`What item do you want to buy?\n\n${m.content} doesn't exist, ${5 - tries} attempts left.`));
-				else collector.stop();
+
+			for (let i = 0; i < 2; i++) {
+				if (!(isNaN(args[i]))) amount = parseInt(args[i]);
+				else item = await CurrencyShop.findOne({ where: { name: { [Op.like]: args[i] } } });
+			}
+			if (item) {
+				logger.info(`amount: ${amount}`);
+				logger.info(`item: ${item}`);
+				buy(profile, sentMessage, amount, embed, item, msg);
+			}
+			else {
+				msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+
+					.then(async collected => {
+						item = await CurrencyShop.findOne({ where: { name: { [Op.like]: collected.first().content } } });
+						if (!item) return sentMessage.edit(embed.setDescription(`${item} is not an item.`));
+						collected.first().delete().catch(e => logger.log('error', e));
+
+						sentMessage.edit(embed.setDescription(`How many ${item.name} do you want to buy (max of 10000)?`)).then(() => {
+							msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+
+								.then(async collected => {
+									amount = parseInt(collected.first().content);
+									collected.first().delete().catch(e => logger.log('error', e));
+
+									buy(profile, sentMessage, amount, embed, item, msg);
+
+								})
+								.catch(e => {
+									logger.log('error', e);
+									msg.reply('you didn\'t answer in time or something went wrong.');
+								});
+						});
+					});
+			}
+		})
+			.catch(e => {
+				logger.log('error', e);
+				msg.reply('you didn\'t answer in time or something went wrong.');
 			});
 
-			collector.on('end', () => {
-
-				sentMessage.edit(embed.setDescription(`How many ${item.name} do you want to buy (max of 10000)?`)).then(() => {
-
-					const collector2 = msg.channel.createMessageCollector(filter, { time: 60000 });
-
-					collector2.on('collect', m => {
-						m.delete().catch(e => logger.log('error', e));
-						if (tries > 4) {
-							collector.stop();
-							return sentMessage.edit(embed.setDescription(`${m.content} is not a number.`));
-						}
-						tries++;
-						amount = parseInt(m.content);
-
-						if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number, ${5 - tries} attempts left.`));
-						else if (amount < 1 || amount > 10000) return sentMessage.edit(embed.setDescription('Enter a number between 1 and 10000'));
-						else collector2.stop();
-					});
-
-					collector2.on('end', async () => {
-
-						const balance = await profile.getBalance(msg.author.id);
-						const cost = amount * item.cost;
-						if (cost > balance) {
-							return sentMessage.edit(embed.setDescription(`You currently have ${balance}, but ${amount} ${item.name} costs ${cost}💰!`));
-						}
-						profile.addMoney(msg.author.id, -cost);
-						await user.addItem(item, amount);
-						const balance2 = await profile.getBalance(msg.author.id);
-						sentMessage.edit(embed.setDescription(`You've bought: ${amount} ${item.name}.\nYour balance is ${balance2}💰.`));
-
-					});
-				});
-			});
-		});
 	},
 };
+
+async function buy(profile, sentMessage, amount, embed, item, msg) {
+	if (!Number.isInteger(amount)) {
+		return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
+	}
+	else if (amount < 1 || amount > 10000) {
+		return sentMessage.edit(embed.setDescription('Enter a number between 1 and 10000(numbers greater then 500 will take longer to process.'));
+	}
+
+	const user = await Users.findOne({ where: { user_id: msg.author.id } });
+	const balance = await profile.getBalance(msg.author.id);
+	const cost = amount * item.cost;
+	if (cost > balance) {
+		return sentMessage.edit(embed.setDescription(`You currently have ${balance}, but ${amount} ${item.name} costs ${cost}💰!`));
+	}
+
+	profile.addMoney(msg.author.id, -cost);
+	await user.addItem(item, amount);
+	sentMessage.edit(embed.setDescription(`You've bought: ${amount} ${item.name}.`));
+}

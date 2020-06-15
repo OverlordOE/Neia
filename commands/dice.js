@@ -1,4 +1,3 @@
-
 module.exports = {
 	name: 'dice',
 	description: 'Roll any amount of any sided die.',
