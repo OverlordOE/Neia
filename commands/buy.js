@@ -36,8 +36,6 @@ module.exports = {
 				else item = await CurrencyShop.findOne({ where: { name: { [Op.like]: args[i] } } });
 			}
 			if (item) {
-				logger.info(`amount: ${amount}`);
-				logger.info(`item: ${item}`);
 				buy(profile, sentMessage, amount, embed, item, msg);
 			}
 			else {
