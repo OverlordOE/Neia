@@ -56,7 +56,7 @@ module.exports = {
 					collector2.on('collect', m => {
 						m.delete().catch(e => logger.log('error', e));
 						if (tries > 4) {
-							collector.stop();
+							collector2.stop();
 							return sentMessage.edit(embed.setDescription(`${m.content} is not a number.`));
 						}
 						tries++;

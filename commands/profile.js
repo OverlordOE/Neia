@@ -19,7 +19,7 @@ module.exports = {
 
 
 		const bAvatar = bot.user.displayAvatarURL();
-		const avatar = msg.author.displayAvatarURL();
+		const avatar = target.displayAvatarURL();
 		const balance = await profile.getBalance(target.id);
 		const count = await profile.getCount(target.id);
 		const prot = moment(await profile.getProtection(target.id));

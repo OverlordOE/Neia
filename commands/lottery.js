@@ -41,7 +41,7 @@ module.exports = {
 				.then(sentMessage => {
 					sentMessage.react('💰');
 
-					const collector = sentMessage.createReactionCollector(filter, { time: 14395000 });
+					const collector = sentMessage.createReactionCollector(filter, { time: 10796250 });
 
 					collector.on('collect', async (r, user) => {
 
