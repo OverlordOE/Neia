@@ -46,6 +46,8 @@ module.exports = {
 
 							.then(async collected => {
 								const amount = collected.first().content;
+								if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number!`));
+								else if (amount < 1 || amount > 10000) return sentMessage.edit(embed.setDescription('Enter a number between 1 and 10000'));
 
 								uitems.map(i => {
 									if (i.item.name == item.name && i.amount >= amount) {
