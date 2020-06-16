@@ -197,7 +197,7 @@ async function newUser(id) {
 		lastHourly: (day - 1),
 		lastWeekly: (day - 1),
 		protection: (day - 1),
-		pColour: '#fffb00',
+		pColour: '#ffffff',
 	});
 	profile.set(id, newUser);
 	return newUser;

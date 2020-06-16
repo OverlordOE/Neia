@@ -16,6 +16,9 @@ module.exports = {
 		const target = msg.mentions.users.first() || msg.author;
 		const user = await Users.findOne({ where: { user_id: target.id } });
 		const items = await user.getItems();
+		const filter = (reaction, user) => {
+			return ['🗒️', '📦'].includes(reaction.emoji.name) && user.id === msg.author.id;
+		};
 
 
 		const bAvatar = bot.user.displayAvatarURL();
@@ -25,14 +28,23 @@ module.exports = {
 		const prot = moment(await profile.getProtection(target.id));
 		const pColour = await profile.getPColour(target.id);
 
-		const lastDaily = moment(await profile.getDaily(target.id));
-		const lastHourly = moment(await profile.getHourly(target.id));
-		const lastWeekly = moment(await profile.getWeekly(target.id));
+		let lastDaily;
+		let lastHourly;
+		let lastWeekly;
 
-		let title = `${target.tag}'s Profile`;
+		try {
+			lastDaily = moment(await profile.getDaily(target.id));
+			lastHourly = moment(await profile.getHourly(target.id));
+			lastWeekly = moment(await profile.getWeekly(target.id));
+		} catch (error) {
+			logger.error(error);
+		}
+
+
 		let assets = '';
 		let networth = 0;
 		let collectables = false;
+		let inventory = `__**Inventory:**__\n`;
 
 		const now = moment();
 		const dCheck = moment(lastDaily).add(1, 'd');
@@ -48,8 +60,9 @@ module.exports = {
 		if (moment(hCheck).isBefore(now)) hourly = 'now';
 		if (moment(wCheck).isBefore(now)) weekly = 'now';
 
-		const embed = new Discord.MessageEmbed()
+		const statEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
+			.setTitle(`${target.tag}'s Stats`)
 			.setThumbnail(avatar)
 			.addField('Balance:', `${balance}💰`, true)
 			.addField('Message Count:', count, true)
@@ -59,21 +72,21 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neija', bAvatar);
 
-		if (!pCheck) { embed.addField('Steal protection untill:', protection); }
-		if (!items.length) { embed.addField('Inventory:', `${target.tag} has nothing!`); }
+		const invEmbed = new Discord.MessageEmbed()
+			.setColor(pColour)
+			.setTitle(`${target.tag}'s Inventory`)
+			.setThumbnail(avatar)
+			.setTimestamp()
+			.setFooter('Neija', bAvatar);
+
+		if (!pCheck) { statEmbed.addField('Steal protection untill:', protection); }
+
 
 
 		else {
 
 			items.map(i => {
 				if (i.amount < 1) return;
-				if (i.item.name == '⭐') {
-					for (let j = 0; j < i.amount; j++) {
-						title += '⭐';
-						networth += i.item.cost;
-					}
-					return;
-				}
 				if (i.item.ctg == 'collectables') {
 					for (let j = 0; j < i.amount; j++) {
 						assets += `${i.item.name}`;
@@ -84,22 +97,31 @@ module.exports = {
 			});
 			if (collectables) {
 				const pIncome = (networth / 20) + ((networth / 200) * 24);
-				embed.addField('Miscellaneous:', '-----------------------------');
-				embed.addField('Assets', assets);
-				embed.addField('Max passive income', `${pIncome.toFixed(1)}💰`);
-				embed.addField('Networth', `${networth}💰`);
+				invEmbed.addField('Assets', assets);
+				invEmbed.addField('Max passive income', `${pIncome.toFixed(1)}💰`);
+				invEmbed.addField('Networth', `${networth}💰`, true);
 			}
 
-			embed.addField('Inventory:', '-----------------------------');
 			items.map(i => {
 				if (i.amount < 1) return;
 				if (i.item.ctg == 'collectables') return;
-				embed.addField(`${i.item.name}: `, `${i.amount}`, true);
+				inventory += `${i.item.name}: x${i.amount}\n`;
+				invEmbed.setDescription(inventory);
 			});
-
+			if (!items.length) { invEmbed.addField('Inventory:', `${target.tag} has nothing!`); }
 		}
-		embed.setTitle(title);
 
-		msg.channel.send(embed);
+
+		msg.channel.send(statEmbed)
+			.then(sentMessage => {
+				sentMessage.react('🗒️');
+				sentMessage.react('📦');
+				const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
+
+				collector.on('collect', (reaction) => {
+					if (reaction.emoji.name == '🗒️') { sentMessage.edit(statEmbed); }
+					else if (reaction.emoji.name == '📦') { sentMessage.edit(invEmbed); }
+				});
+			});
 	},
 };

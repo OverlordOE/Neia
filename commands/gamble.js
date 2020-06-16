@@ -1,5 +1,8 @@
 const emojiCharacters = require('../emojiCharacters');
 const Discord = require('discord.js');
+const rpsRate = 0.85;
+const numberRate = 2.5;
+const blackjackRate = 1.2;
 module.exports = {
 	name: 'gamble',
 	description: 'Gives you a list of minigames to play to make some money with.',
@@ -12,13 +15,14 @@ module.exports = {
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		const currentAmount = await profile.getBalance(msg.author.id);
-		const gambleAmount = args[0];
 		const pColour = await profile.getPColour(msg.author.id);
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
+		let gambleAmount = 0;
+		let gambleType = '';
 
 		const filter = (reaction, user) => {
-			return ['✂️', emojiCharacters[5]].includes(reaction.emoji.name) && user.id === msg.author.id;
+			return ['✂️', emojiCharacters[5], '🃏'].includes(reaction.emoji.name) && user.id === msg.author.id;
 		};
 
 		const embed = new Discord.MessageEmbed()
@@ -26,41 +30,59 @@ module.exports = {
 			.setThumbnail(avatar)
 			.setTimestamp()
 			.setTitle('Neija\'s Gambling Imporium')
-			.setDescription(`You have bet **${gambleAmount}💰**, you can play the following games:\n
-
-							__**Number Guessing**__\n 
-							Guess which number is correct, guess right and you win.\n
-							**Potential winnings: ${(2.5 * gambleAmount)}💰**\n
-
-							__**Rock, paper, scissors**__\n
-							Play a game of rock, paper, scissors against the bot and see who is superior.\n
-							**Potential winnings: ${(0.85 * gambleAmount)}💰**
-			`)
 			.setFooter('Neija', bAvatar);
-
-
-		if (!gambleAmount || isNaN(gambleAmount)) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, that's an invalid amount.`));
-		if (gambleAmount > currentAmount) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, you only have ${currentAmount}💰.`));
-		if (gambleAmount <= 0) return msg.channel.send(embed.setDescription(`Please enter an amount greater than zero, ${msg.author}.`));
 
 
 		await msg.channel.send(embed)
 			.then(sentMessage => {
-				sentMessage.react('✂️');
-				sentMessage.react(emojiCharacters[5]);
 
-				sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-					.then(async collected => {
-						const reaction = collected.first();
+				for (let i = 0; i < args.length; i++) {
+					if (!(isNaN(args[i]))) gambleAmount = parseInt(args[i]);
+					else if (args[i] == 'all') gambleAmount = parseInt(currentAmount);
+					else if (gambleType.length > 2) gambleType += ` ${args[i]}`;
+					else gambleType += `${args[i]}`;
+				}
 
-						sentMessage.reactions.removeAll();
-						if (reaction.emoji.name == emojiCharacters[5]) OneInFive(msg, profile, logger, gambleAmount, sentMessage, embed);
-						else if (reaction.emoji.name == '✂️') RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed);
-					})
-					.catch(e => {
-						msg.reply('You failed to react in time.');
-						logger.log('error', e);
-					});
+				if (!gambleAmount || isNaN(gambleAmount)) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, that's an invalid amount.`));
+				if (gambleAmount > currentAmount) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, you only have ${currentAmount}💰.`));
+				if (gambleAmount <= 0) return msg.channel.send(embed.setDescription(`Please enter an amount greater than zero, ${msg.author}.`));
+
+				if (gambleType == 'rock' || gambleType == 'rps' || gambleType == 'rock paper scissors' || gambleType == 'r') {RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed);}
+				else if (gambleType == 'number' || gambleType == 'numbers') {oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed);}
+
+
+				else {
+					sentMessage.edit(embed.setDescription(`You have bet **${gambleAmount}💰**, you can play the following games:\n
+
+							${emojiCharacters[5]}__**Number Guessing**__\n 
+							Guess which number is correct, guess right and you win.\n
+							**Potential winnings: ${(numberRate * gambleAmount)}💰**\n
+
+							✂️__**Rock, paper, scissors**__\n
+							Play a game of rock, paper, scissors against the bot and see who is superior.\n
+							**Potential winnings: ${(rpsRate * gambleAmount)}💰**
+
+							🃏__**Blackjack**__\n
+							Play a game of blackjack against the bot and test your luck.\n
+							**Potential winnings: ${(blackjackRate * gambleAmount)}💰**
+			`));
+					sentMessage.react('✂️');
+					sentMessage.react(emojiCharacters[5]);
+					sentMessage.react('🃏');
+
+					sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+						.then(async collected => {
+							const reaction = collected.first();
+
+							sentMessage.reactions.removeAll();
+							if (reaction.emoji.name == emojiCharacters[5]) oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed);
+							else if (reaction.emoji.name == '✂️') RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed);
+						})
+						.catch(e => {
+							msg.reply('You failed to react in time.');
+							logger.log('error', e);
+						});
+				}
 			})
 			.catch(e => {
 				logger.log('error', `One of the emojis failed to react because of:\n${e}`);
@@ -70,13 +92,13 @@ module.exports = {
 };
 
 
-async function OneInFive(msg, profile, logger, gambleAmount, sentMessage, embed) {
+async function oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed) {
 	const filter = (reaction, user) => {
 		return [emojiCharacters[1], emojiCharacters[2], emojiCharacters[3], emojiCharacters[4], emojiCharacters[5]].includes(reaction.emoji.name) && user.id === msg.author.id;
 	};
 
 	const answer = Math.floor((Math.random() * 5) + 1);
-	const winAmount = 2.5 * gambleAmount;
+	const winAmount = numberRate * gambleAmount;
 
 	await sentMessage.edit(embed.setDescription(`You have bet **${gambleAmount}💰**.\nGuess the number between 1 and 5.`))
 		.then(() => {
@@ -103,7 +125,8 @@ async function OneInFive(msg, profile, logger, gambleAmount, sentMessage, embed)
 
 				embed.setColor('#00fc43');
 				return sentMessage.edit(embed.setDescription(`Correct! You have successfully won **${winAmount}💰**.\nYour current balance is **${balance}💰**`));
-			} else {
+			}
+ else {
 				profile.addMoney(msg.author.id, -gambleAmount);
 				const balance = await profile.getBalance(msg.author.id);
 
@@ -119,12 +142,57 @@ async function OneInFive(msg, profile, logger, gambleAmount, sentMessage, embed)
 }
 
 
+async function blackjack(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed) {
+	const filter = (reaction, user) => {
+		return ['🃏', '✅'].includes(reaction.emoji.name) && user.id === msg.author.id;
+	};
+
+	const suits = ['♠️', '♥️', '♦️', '♣️'];
+	const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+
+	const winAmount = rpsRate * gambleAmount;
+	const answer = Math.floor((Math.random() * 3) + 1);
+
+	await sentMessage.edit(embed.setDescription('!'))
+		.then(() => {
+			sentMessage.react('🃏'); // result 1
+			sentMessage.react('✅'); // result 2
+		})
+		.catch(e => {
+			logger.log('error', `One of the emojis failed to react because of:\n${e}`);
+			return msg.reply('One of the emojis failed to react.');
+		});
+
+
+	sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+		.then(async collected => {
+			const reaction = collected.first();
+			
+			
+			switch (reaction.emoji.name) {
+
+				case '🃏':
+					break;
+
+				case '✅':
+				break;
+
+			}
+
+			sentMessage.edit(embed.setDescription('You shouldnt see this'));
+		})
+		.catch(collected => {
+			msg.reply('You failed to react in time.');
+			logger.log('error', collected);
+		});
+}
+
 async function RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed) {
 	const filter = (reaction, user) => {
 		return ['✊', '🧻', '✂️'].includes(reaction.emoji.name) && user.id === msg.author.id;
 	};
 
-	const winAmount = 0.85 * gambleAmount;
+	const winAmount = rpsRate * gambleAmount;
 	const answer = Math.floor((Math.random() * 3) + 1);
 
 	await sentMessage.edit(embed.setDescription(`You have bet **${gambleAmount}💰**.\nChoose rock✊, paper🧻 or scissors✂️!`))

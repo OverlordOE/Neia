@@ -17,8 +17,6 @@ module.exports = {
 		const target = msg.mentions.users.first();
 
 
-
-
 		if (!target) {
 			return msg.channel.send('Incorrect mention');
 		}
