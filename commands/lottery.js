@@ -69,7 +69,7 @@ module.exports = {
 					});
 
 
-					collector.on('end', () => {
+					collector.on('end', collected => {
 
 						const winner = Math.floor(Math.random() * 50);
 

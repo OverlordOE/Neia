@@ -12,7 +12,7 @@ module.exports = {
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const items = await CurrencyShop.findAll();
-		const bAvatar = msg.author.displayAvatarURL();
+		const bAvatar = bot.user.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
 		let consumable = '__**Consumables:**__\n';
 		let discord = '__**Discord related items:**__\n';
