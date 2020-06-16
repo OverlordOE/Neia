@@ -12,10 +12,11 @@ module.exports = {
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		const currentAmount = await profile.getBalance(msg.author.id);
-		const gambleAmount = args[0];
 		const pColour = await profile.getPColour(msg.author.id);
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
+		let gambleAmount = 0;
+		let gambleType = ``;
 
 		const filter = (reaction, user) => {
 			return ['✂️', emojiCharacters[5]].includes(reaction.emoji.name) && user.id === msg.author.id;
@@ -39,28 +40,41 @@ module.exports = {
 			.setFooter('Neija', bAvatar);
 
 
-		if (!gambleAmount || isNaN(gambleAmount)) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, that's an invalid amount.`));
-		if (gambleAmount > currentAmount) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, you only have ${currentAmount}💰.`));
-		if (gambleAmount <= 0) return msg.channel.send(embed.setDescription(`Please enter an amount greater than zero, ${msg.author}.`));
-
-
 		await msg.channel.send(embed)
 			.then(sentMessage => {
-				sentMessage.react('✂️');
-				sentMessage.react(emojiCharacters[5]);
 
-				sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-					.then(async collected => {
-						const reaction = collected.first();
+				for (let i = 0; i < args.length; i++) {
+					if (!(isNaN(args[i]))) gambleAmount = parseInt(args[i]);
 
-						sentMessage.reactions.removeAll();
-						if (reaction.emoji.name == emojiCharacters[5]) OneInFive(msg, profile, logger, gambleAmount, sentMessage, embed);
-						else if (reaction.emoji.name == '✂️') RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed);
-					})
-					.catch(e => {
-						msg.reply('You failed to react in time.');
-						logger.log('error', e);
-					});
+					else if (gambleType.length > 2) gambleType += ` ${args[i]}`;
+					else gambleType += `${args[i]}`;
+				}
+
+				if (!gambleAmount || isNaN(gambleAmount)) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, that's an invalid amount.`));
+				if (gambleAmount > currentAmount) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, you only have ${currentAmount}💰.`));
+				if (gambleAmount <= 0) return msg.channel.send(embed.setDescription(`Please enter an amount greater than zero, ${msg.author}.`));
+
+				if (gambleType == 'rock' || gambleType == 'rps' || gambleType == 'rock paper scissors' || gambleType == 'r') RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed);
+				else if (gambleType == 'number' || gambleType == 'numbers') oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed);
+
+
+				else {
+					sentMessage.react('✂️');
+					sentMessage.react(emojiCharacters[5]);
+
+					sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+						.then(async collected => {
+							const reaction = collected.first();
+
+							sentMessage.reactions.removeAll();
+							if (reaction.emoji.name == emojiCharacters[5]) oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed);
+							else if (reaction.emoji.name == '✂️') RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed);
+						})
+						.catch(e => {
+							msg.reply('You failed to react in time.');
+							logger.log('error', e);
+						});
+				}
 			})
 			.catch(e => {
 				logger.log('error', `One of the emojis failed to react because of:\n${e}`);
@@ -70,7 +84,7 @@ module.exports = {
 };
 
 
-async function OneInFive(msg, profile, logger, gambleAmount, sentMessage, embed) {
+async function oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed) {
 	const filter = (reaction, user) => {
 		return [emojiCharacters[1], emojiCharacters[2], emojiCharacters[3], emojiCharacters[4], emojiCharacters[5]].includes(reaction.emoji.name) && user.id === msg.author.id;
 	};
