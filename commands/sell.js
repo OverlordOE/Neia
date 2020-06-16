@@ -45,7 +45,7 @@ module.exports = {
 						msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 							.then(async collected => {
-								const amount = collected.first().content;
+								const amount = parseInt(collected.first().content);
 								if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number!`));
 								else if (amount < 1 || amount > 10000) return sentMessage.edit(embed.setDescription('Enter a number between 1 and 10000'));
 

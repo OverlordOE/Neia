@@ -82,9 +82,6 @@ module.exports = {
 		if (!pCheck) { statEmbed.addField('Steal protection untill:', protection); }
 
 
-
-		else {
-
 			items.map(i => {
 				if (i.amount < 1) return;
 				if (i.item.ctg == 'collectables') {
@@ -109,7 +106,7 @@ module.exports = {
 				invEmbed.setDescription(inventory);
 			});
 			if (!items.length) { invEmbed.addField('Inventory:', `${target.tag} has nothing!`); }
-		}
+
 
 
 		msg.channel.send(statEmbed)
