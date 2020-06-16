@@ -28,9 +28,18 @@ module.exports = {
 		const prot = moment(await profile.getProtection(target.id));
 		const pColour = await profile.getPColour(target.id);
 
-		const lastDaily = moment(await profile.getDaily(target.id));
-		const lastHourly = moment(await profile.getHourly(target.id));
-		const lastWeekly = moment(await profile.getWeekly(target.id));
+		let lastDaily;
+		let lastHourly;
+		let lastWeekly;
+
+		try {
+			lastDaily = moment(await profile.getDaily(target.id));
+			lastHourly = moment(await profile.getHourly(target.id));
+			lastWeekly = moment(await profile.getWeekly(target.id));
+		} catch (error) {
+			logger.error(error);
+		}
+
 
 		let assets = '';
 		let networth = 0;
@@ -71,7 +80,7 @@ module.exports = {
 			.setFooter('Neija', bAvatar);
 
 		if (!pCheck) { statEmbed.addField('Steal protection untill:', protection); }
-		if (!items.length) { statEmbed.addField('Inventory:', `${target.tag} has nothing!`); }
+
 
 
 		else {
@@ -96,10 +105,10 @@ module.exports = {
 			items.map(i => {
 				if (i.amount < 1) return;
 				if (i.item.ctg == 'collectables') return;
-				inventory += `${i.item.name}: x${i.amount}`;
+				inventory += `${i.item.name}: x${i.amount}\n`;
 				invEmbed.setDescription(inventory);
 			});
-
+			if (!items.length) { invEmbed.addField('Inventory:', `${target.tag} has nothing!`); }
 		}
 
 
