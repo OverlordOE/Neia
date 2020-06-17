@@ -9,7 +9,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
 
 		const pColour = await profile.getPColour(msg.author.id);
 
@@ -20,12 +20,12 @@ module.exports = {
 		let amount;
 		if (args[1]) amount = args[1];
 		else amount = 1;
-		
-		if (amount > 100 || isNaN(amount) || amount < 0) {return msg.reply('input a number between 1 and 100');}
-		
+
+		if (amount > 100 || isNaN(amount) || amount < 0) { return msg.reply('input a number between 1 and 100'); }
+
 		let total = 0;
 		let message = '';
-		
+
 
 		const firstRoll = Math.floor((Math.random() * sides) + 1);
 		total += firstRoll;

@@ -13,7 +13,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const currentAmount = await profile.getBalance(msg.author.id);
 		const pColour = await profile.getPColour(msg.author.id);
 		const bAvatar = bot.user.displayAvatarURL();
@@ -47,8 +47,9 @@ module.exports = {
 				if (gambleAmount > currentAmount) return msg.channel.send(embed.setDescription(`Sorry ${msg.author}, you only have ${currentAmount}💰.`));
 				if (gambleAmount <= 0) return msg.channel.send(embed.setDescription(`Please enter an amount greater than zero, ${msg.author}.`));
 
-				if (gambleType == 'rock' || gambleType == 'rps' || gambleType == 'rock paper scissors' || gambleType == 'r') {RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed);}
-				else if (gambleType == 'number' || gambleType == 'numbers') {oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed);}
+				if (gambleType == 'rock' || gambleType == 'rps' || gambleType == 'rock paper scissors' || gambleType == 'r') RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed);
+				else if (gambleType == 'number' || gambleType == 'numbers') oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed);
+				else if (gambleType == 'blackjack' || gambleType == 'jack' || gambleType == 'black') blackjack(msg, profile, logger, gambleAmount, sentMessage, embed);
 
 
 				else {
@@ -77,6 +78,7 @@ module.exports = {
 							sentMessage.reactions.removeAll();
 							if (reaction.emoji.name == emojiCharacters[5]) oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed);
 							else if (reaction.emoji.name == '✂️') RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed);
+							else if (reaction.emoji.name == '🃏') blackjack(msg, profile, logger, gambleAmount, sentMessage, embed);
 						})
 						.catch(e => {
 							msg.reply('You failed to react in time.');
@@ -126,7 +128,7 @@ async function oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed)
 				embed.setColor('#00fc43');
 				return sentMessage.edit(embed.setDescription(`Correct! You have successfully won **${winAmount}💰**.\nYour current balance is **${balance}💰**`));
 			}
- else {
+			else {
 				profile.addMoney(msg.author.id, -gambleAmount);
 				const balance = await profile.getBalance(msg.author.id);
 
@@ -142,16 +144,29 @@ async function oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed)
 }
 
 
-async function blackjack(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed) {
+async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed) {
 	const filter = (reaction, user) => {
 		return ['🃏', '✅'].includes(reaction.emoji.name) && user.id === msg.author.id;
 	};
 
 	const suits = ['♠️', '♥️', '♦️', '♣️'];
 	const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+	const deck = [];
+	const playerHand = [];
+	const botHand = [];
 
 	const winAmount = rpsRate * gambleAmount;
 	const answer = Math.floor((Math.random() * 3) + 1);
+
+	for (let i = 0; i < values.length; i++) {
+		for (let j = 0; j < suits.length; j++) {
+			let weight = parseInt(values[i]);
+			if (values[i] == 'J' || values[i] == 'Q' || values[i] == 'K') { weight = 10; }
+			if (values[i] == 'A') { weight = 11; }
+			const card = { Value: values[i], Suit: suits[j], Weight: weight };
+			deck.push(card);
+		}
+	}
 
 	await sentMessage.edit(embed.setDescription('!'))
 		.then(() => {
@@ -167,15 +182,15 @@ async function blackjack(msg, profile, logger, gambleAmount, currentAmount, sent
 	sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
 		.then(async collected => {
 			const reaction = collected.first();
-			
-			
+
+
 			switch (reaction.emoji.name) {
 
 				case '🃏':
 					break;
 
 				case '✅':
-				break;
+					break;
 
 			}
 

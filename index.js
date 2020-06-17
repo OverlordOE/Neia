@@ -4,11 +4,10 @@ require('dotenv').config();
 const prefix = process.env.PREFIX;
 const token = process.env.TOKEN;
 const ytAPI = process.env.YT_API;
-const { Users } = require('./dbObjects');
+const { Users, profile } = require('./dbObjects');
 const botCommands = require('./commands');
 const moment = require('moment');
 const bot = new Discord.Client();
-const profile = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 const active = new Map();
 bot.commands = new Discord.Collection();
@@ -44,166 +43,14 @@ bot.login(token);
 bot.on('ready', async () => {
 	try {
 		const storedBalances = await Users.findAll();
-	storedBalances.forEach(b => profile.set(b.user_id, b));
-	logger.log('info', `Logged in as ${bot.user.tag}!`);
+		storedBalances.forEach(b => profile.set(b.user_id, b));
+		logger.log('info', `Logged in as ${bot.user.tag}!`);
 	} catch (error) {
 		logger.log('error', error);
 	}
-	
-});
-
-
-// Add db commands
-Reflect.defineProperty(profile, 'addMoney', {
-	value: async function addMoney(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		user.balance += Number(amount);
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getBalance', {
-	value: async function getBalance(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? Math.floor(user.balance) : 0;
-	},
-});
-
-Reflect.defineProperty(profile, 'getDaily', {
-	value: async function getDaily(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? user.lastDaily : 0;
-	},
 
 });
 
-Reflect.defineProperty(profile, 'setDaily', {
-	value: async function setDaily(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-
-		const currentDay = moment();
-		user.lastDaily = currentDay;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getHourly', {
-	value: async function getHourly(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? user.lastHourly : 0;
-	},
-
-});
-
-Reflect.defineProperty(profile, 'setHourly', {
-	value: async function setHourly(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-
-		const day = moment();
-		user.lastHourly = day;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getWeekly', {
-	value: async function getWeekly(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? user.lastWeekly : 0;
-	},
-
-});
-
-Reflect.defineProperty(profile, 'setWeekly', {
-	value: async function setWeekly(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-
-		const day = moment();
-		user.lastWeekly = day;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'addCount', {
-	value: async function addCount(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		user.msgCount += amount;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getCount', {
-	value: async function getCount(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? Math.floor(user.msgCount) : 0;
-	},
-});
-
-Reflect.defineProperty(profile, 'getProtection', {
-	value: async function getProtection(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? user.protection : 0;
-	},
-
-});
-
-Reflect.defineProperty(profile, 'setProtection', {
-	value: async function setProtection(id, day) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-
-		user.protection = day;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getPColour', {
-	value: async function getPColour(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? user.pColour : 0;
-	},
-
-});
-
-Reflect.defineProperty(profile, 'setPColour', {
-	value: async function setPColour(id, colour) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		if (!colour.startsWith('#')) throw 'not a valid colour!';
-
-		user.pColour = colour;
-		return user.save();
-	},
-});
-
-async function newUser(id) {
-	const day = moment().dayOfYear();
-	const newUser = await Users.create({
-		user_id: id,
-		balance: 1,
-		msgCount: 1,
-		lastDaily: (day - 1),
-		lastHourly: (day - 1),
-		lastWeekly: (day - 1),
-		protection: (day - 1),
-		pColour: '#ffffff',
-	});
-	profile.set(id, newUser);
-	return newUser;
-}
-
-module.exports = { profile };
 
 // Logger
 bot.on('debug', m => logger.log('debug', m));
@@ -222,7 +69,7 @@ bot.on('message', async msg => {
 	const id = msg.author.id;
 	const user = profile.get(id);
 	if (!user) {
-		await newUser(id);
+		await profile.newUser(id);
 	}
 
 	profile.addCount(id, 1);

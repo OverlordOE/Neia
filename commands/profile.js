@@ -83,33 +83,33 @@ module.exports = {
 
 
 
-		else {
 
-			items.map(i => {
-				if (i.amount < 1) return;
-				if (i.item.ctg == 'collectables') {
-					for (let j = 0; j < i.amount; j++) {
-						assets += `${i.item.name}`;
-						networth += i.item.cost;
-					}
-					collectables = true;
+
+		items.map(i => {
+			if (i.amount < 1) return;
+			if (i.item.ctg == 'collectables') {
+				for (let j = 0; j < i.amount; j++) {
+					assets += `${i.item.name}`;
+					networth += i.item.cost;
 				}
-			});
-			if (collectables) {
-				const pIncome = (networth / 20) + ((networth / 200) * 24);
-				invEmbed.addField('Assets', assets);
-				invEmbed.addField('Max passive income', `${pIncome.toFixed(1)}💰`);
-				invEmbed.addField('Networth', `${networth}💰`, true);
+				collectables = true;
 			}
-
-			items.map(i => {
-				if (i.amount < 1) return;
-				if (i.item.ctg == 'collectables') return;
-				inventory += `${i.item.name}: x${i.amount}\n`;
-				invEmbed.setDescription(inventory);
-			});
-			if (!items.length) { invEmbed.addField('Inventory:', `${target.tag} has nothing!`); }
+		});
+		if (collectables) {
+			const pIncome = (networth / 20) + ((networth / 200) * 24);
+			invEmbed.addField('Assets', assets);
+			invEmbed.addField('Max passive income', `${pIncome.toFixed(1)}💰`);
+			invEmbed.addField('Networth', `${networth}💰`, true);
 		}
+
+		items.map(i => {
+			if (i.amount < 1) return;
+			if (i.item.ctg == 'collectables') return;
+			inventory += `${i.item.name}: x${i.amount}\n`;
+			invEmbed.setDescription(inventory);
+		});
+		if (!items.length) { invEmbed.addField('Inventory:', `${target.tag} has nothing!`); }
+
 
 
 		msg.channel.send(statEmbed)
