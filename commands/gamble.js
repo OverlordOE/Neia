@@ -151,29 +151,32 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 
 	const suits = ['♠️', '♥️', '♦️', '♣️'];
 	const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-	let playerHand = '';
-	let botHand = '';
 	let playerHandValue = 0;
 	let botHandValue = 0;
+	let playerHand = '';
+	let botHand = '';
 
 	const winAmount = blackjackRate * gambleAmount;
-
-	for (let i = 0; i < 2; i++) {
-		getCard('player');
-		getCard('bot');
-	}
 
 
 	await sentMessage.edit(embed
 		.setDescription('Blackjack')
-		.addField('Player Hand', playerHand)
-		.addField('Bot Hand', botHand)
 	)
 		.then(() => {
 			sentMessage.react('🃏'); // result 1
 			sentMessage.react('✅'); // result 2
 
 			const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
+			
+			for (let i = 0; i < 2; i++) {
+				getCard('player');
+				getCard('bot');
+			}
+			setEmbed();
+
+			if (playerHandValue > 21 || botHandValue > 21) {
+				collector.stop();
+			}
 
 			collector.on('collect', (reaction) => {
 				reaction.users.remove(msg.author.id);
@@ -187,7 +190,6 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 						if (botHandValue < 17) getCard('bot');
 						setEmbed();
 						if (playerHandValue > 20) {
-							endGame();
 							collector.stop();
 							return;
 						}
@@ -199,48 +201,46 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 							getCard('bot');
 							setEmbed();
 						}
-						endGame();
 						collector.stop();
 						return;
 				}
+			});
+
+			collector.on('end', async () => {
+				if (playerHandValue > 21) {
+
+					profile.addMoney(msg.author.id, -gambleAmount);
+					const balance = await profile.getBalance(msg.author.id);
+					embed.setColor('#fc0303');
+					sentMessage.edit(embed.setDescription(`__**You busted**__\n\nYour balance is **${balance}💰**`));
+				}
+				else if (botHandValue > 21) {
+
+					profile.addMoney(msg.author.id, winAmount);
+					const balance = await profile.getBalance(msg.author.id);
+					embed.setColor('#00fc43');
+					return sentMessage.edit(embed.setDescription(`__**The bot busted**__. **You Win!**\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
+				}
+				else if (botHandValue >= playerHandValue) {
+
+					profile.addMoney(msg.author.id, -gambleAmount);
+					const balance = await profile.getBalance(msg.author.id);
+					embed.setColor('#fc0303');
+					sentMessage.edit(embed.setDescription(`__**The bot wins**__\n\nYour balance is **${balance}💰**`));
+				} else if (playerHandValue > botHandValue) {
+
+					profile.addMoney(msg.author.id, winAmount);
+					const balance = await profile.getBalance(msg.author.id);
+					embed.setColor('#00fc43');
+					sentMessage.edit(embed.setDescription(`__**You win**__\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
+				}
+				return;
 			});
 		})
 		.catch(e => {
 			logger.log('error', e);
 			return msg.reply('Something went wrong, please report this as a bug.');
 		});
-
-
-	async function endGame() {
-		if (playerHandValue > 21) {
-
-			profile.addMoney(msg.author.id, -gambleAmount);
-			const balance = await profile.getBalance(msg.author.id);
-			embed.setColor('#fc0303');
-			sentMessage.edit(embed.setDescription(`__**You busted**__\n\nYour balance is **${balance}💰**`));
-		}
-		else if (botHandValue > 21) {
-
-			profile.addMoney(msg.author.id, winAmount);
-			const balance = await profile.getBalance(msg.author.id);
-			embed.setColor('#00fc43');
-			return sentMessage.edit(embed.setDescription(`__**The bot busted**__. **You Win!**\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
-		}
-		else if (botHandValue >= playerHandValue) {
-
-			profile.addMoney(msg.author.id, -gambleAmount);
-			const balance = await profile.getBalance(msg.author.id);
-			embed.setColor('#fc0303');
-			sentMessage.edit(embed.setDescription(`__**The bot wins**__\n\nYour balance is **${balance}💰**`));
-		} else if (playerHandValue > botHandValue) {
-
-			profile.addMoney(msg.author.id, winAmount);
-			const balance = await profile.getBalance(msg.author.id);
-			embed.setColor('#00fc43');
-			sentMessage.edit(embed.setDescription(`__**You win**__\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
-		}
-		return;
-	}
 
 	function setEmbed() {
 		embed.spliceFields(0, 2, [
@@ -263,25 +263,13 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 		if (player == 'bot') {
 			botHand += `${card.suit}${card.value} `;
 			botHandValue += card.weight;
-			logger.info(`bot value: ${botHandValue}`);
-			if (botHandValue > 21) {
-				endGame();
-				setEmbed();
-			}
 		}
 		else if (player == 'player') {
 			playerHand += `${card.suit}${card.value} `;
 			playerHandValue += card.weight;
-			logger.info(`player value: ${playerHandValue}`);
-			if (playerHandValue > 21) {
-				endGame();
-				setEmbed();
-			}
 		}
-
 		return card;
 	}
-
 }
 
 async function RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed) {
