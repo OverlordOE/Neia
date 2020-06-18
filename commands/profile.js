@@ -82,9 +82,6 @@ module.exports = {
 		if (!pCheck) { statEmbed.addField('Steal protection untill:', protection); }
 
 
-
-
-
 		items.map(i => {
 			if (i.amount < 1) return;
 			if (i.item.ctg == 'collectables') {
@@ -111,7 +108,6 @@ module.exports = {
 		if (!items.length) { invEmbed.addField('Inventory:', `${target.tag} has nothing!`); }
 
 
-
 		msg.channel.send(statEmbed)
 			.then(sentMessage => {
 				sentMessage.react('🗒️');
@@ -119,6 +115,7 @@ module.exports = {
 				const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
 
 				collector.on('collect', (reaction) => {
+					reaction.users.remove(msg.author.id);
 					if (reaction.emoji.name == '🗒️') { sentMessage.edit(statEmbed); }
 					else if (reaction.emoji.name == '📦') { sentMessage.edit(invEmbed); }
 				});

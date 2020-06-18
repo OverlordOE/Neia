@@ -2,7 +2,7 @@ const emojiCharacters = require('../emojiCharacters');
 const Discord = require('discord.js');
 const rpsRate = 0.85;
 const numberRate = 2.5;
-const blackjackRate = 1.2;
+const blackjackRate = 1.5;
 module.exports = {
 	name: 'gamble',
 	description: 'Gives you a list of minigames to play to make some money with.',
@@ -151,55 +151,137 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 
 	const suits = ['♠️', '♥️', '♦️', '♣️'];
 	const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-	const deck = [];
-	const playerHand = [];
-	const botHand = [];
+	let playerHand = '';
+	let botHand = '';
+	let playerHandValue = 0;
+	let botHandValue = 0;
 
-	const winAmount = rpsRate * gambleAmount;
-	const answer = Math.floor((Math.random() * 3) + 1);
+	const winAmount = blackjackRate * gambleAmount;
 
-	for (let i = 0; i < values.length; i++) {
-		for (let j = 0; j < suits.length; j++) {
-			let weight = parseInt(values[i]);
-			if (values[i] == 'J' || values[i] == 'Q' || values[i] == 'K') { weight = 10; }
-			if (values[i] == 'A') { weight = 11; }
-			const card = { Value: values[i], Suit: suits[j], Weight: weight };
-			deck.push(card);
-		}
+	for (let i = 0; i < 2; i++) {
+		getCard('player');
+		getCard('bot');
 	}
 
-	await sentMessage.edit(embed.setDescription('!'))
+
+	await sentMessage.edit(embed
+		.setDescription('Blackjack')
+		.addField('Player Hand', playerHand)
+		.addField('Bot Hand', botHand)
+	)
 		.then(() => {
 			sentMessage.react('🃏'); // result 1
 			sentMessage.react('✅'); // result 2
+
+			const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
+
+			collector.on('collect', (reaction) => {
+				reaction.users.remove(msg.author.id);
+
+				switch (reaction.emoji.name) {
+
+					case '🃏':
+
+						reaction.users.remove(msg.author.id);
+						getCard('player');
+						if (botHandValue < 17) getCard('bot');
+						setEmbed();
+						if (playerHandValue > 20) {
+							endGame();
+							collector.stop();
+							return;
+						}
+						break;
+
+					case '✅':
+
+						while (botHandValue < 17) {
+							getCard('bot');
+							setEmbed();
+						}
+						endGame();
+						collector.stop();
+						return;
+				}
+			});
 		})
 		.catch(e => {
-			logger.log('error', `One of the emojis failed to react because of:\n${e}`);
-			return msg.reply('One of the emojis failed to react.');
+			logger.log('error', e);
+			return msg.reply('Something went wrong, please report this as a bug.');
 		});
 
 
-	sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-		.then(async collected => {
-			const reaction = collected.first();
+	async function endGame() {
+		if (playerHandValue > 21) {
 
+			profile.addMoney(msg.author.id, -gambleAmount);
+			const balance = await profile.getBalance(msg.author.id);
+			embed.setColor('#fc0303');
+			sentMessage.edit(embed.setDescription(`__**You busted**__\n\nYour balance is **${balance}💰**`));
+		}
+		else if (botHandValue > 21) {
 
-			switch (reaction.emoji.name) {
+			profile.addMoney(msg.author.id, winAmount);
+			const balance = await profile.getBalance(msg.author.id);
+			embed.setColor('#00fc43');
+			return sentMessage.edit(embed.setDescription(`__**The bot busted**__. **You Win!**\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
+		}
+		else if (botHandValue >= playerHandValue) {
 
-				case '🃏':
-					break;
+			profile.addMoney(msg.author.id, -gambleAmount);
+			const balance = await profile.getBalance(msg.author.id);
+			embed.setColor('#fc0303');
+			sentMessage.edit(embed.setDescription(`__**The bot wins**__\n\nYour balance is **${balance}💰**`));
+		} else if (playerHandValue > botHandValue) {
 
-				case '✅':
-					break;
+			profile.addMoney(msg.author.id, winAmount);
+			const balance = await profile.getBalance(msg.author.id);
+			embed.setColor('#00fc43');
+			sentMessage.edit(embed.setDescription(`__**You win**__\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
+		}
+		return;
+	}
 
+	function setEmbed() {
+		embed.spliceFields(0, 2, [
+			{ name: 'Player Hand', value: playerHand },
+			{ name: 'Bot Hand', value: botHand },
+		]);
+		sentMessage.edit(embed);
+	}
+
+	function getCard(player) {
+
+		const suit = Math.floor((Math.random() * 4));
+		const number = Math.floor((Math.random() * 13));
+
+		let weight = parseInt(values[number]);
+		if (values[number] == 'J' || values[number] == 'Q' || values[number] == 'K') { weight = 10; }
+		if (values[number] == 'A') { weight = 11; }
+		const card = { value: values[number], suit: suits[suit], weight: weight };
+
+		if (player == 'bot') {
+			botHand += `${card.suit}${card.value} `;
+			botHandValue += card.weight;
+			logger.info(`bot value: ${botHandValue}`);
+			if (botHandValue > 21) {
+				endGame();
+				setEmbed();
 			}
+		}
+		else if (player == 'player') {
+			playerHand += `${card.suit}${card.value} `;
+			playerHandValue += card.weight;
+			logger.info(`player value: ${playerHandValue}`);
+			if (playerHandValue > 21) {
+				endGame();
+				setEmbed();
+			}
+		}
 
-			sentMessage.edit(embed.setDescription('You shouldnt see this'));
-		})
-		.catch(collected => {
-			msg.reply('You failed to react in time.');
-			logger.log('error', collected);
-		});
+		return card;
+	}
+
 }
 
 async function RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed) {
