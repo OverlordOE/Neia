@@ -27,6 +27,7 @@ module.exports = {
 		const count = await profile.getCount(target.id);
 		const prot = moment(await profile.getProtection(target.id));
 		const pColour = await profile.getPColour(target.id);
+		const hasVoted = await profile.getVote(target.id);
 
 		let lastDaily;
 		let lastHourly;
@@ -69,6 +70,7 @@ module.exports = {
 			.addField('Next weekly:', weekly)
 			.addField('Next daily:', daily, true)
 			.addField('Next hourly:', hourly, true)
+			.addField('Can vote', !hasVoted)
 			.setTimestamp()
 			.setFooter('Neija', bAvatar);
 
