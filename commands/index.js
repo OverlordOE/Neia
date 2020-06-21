@@ -8,6 +8,7 @@ module.exports = {
 	Use: require('./use'),
 	Trade: require('./trade'),
 	Profile: require('./profile'),
+	Vote: require('./vote'),
 	Hourly: require('./hourly'),
 	Daily: require('./daily'),
 	Weekly: require('./weekly'),

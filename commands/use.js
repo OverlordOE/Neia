@@ -14,7 +14,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
 
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
@@ -27,7 +27,7 @@ module.exports = {
 		let amount = 0;
 		let temp = '';
 		let item;
-		
+
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Use Command')

@@ -9,7 +9,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
 
 		const pColour = await profile.getPColour(msg.author.id);
 

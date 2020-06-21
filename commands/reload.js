@@ -10,25 +10,25 @@ module.exports = {
 	music: false,
 
 
-	execute(message, args, profile, bot, ops, ytAPI, logger) {
+	execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
 		const commandName = args[0].toLowerCase();
-		const command = message.client.commands.get(commandName)
-			|| message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+		const command = msg.client.commands.get(commandName)
+			|| msg.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 		if (!command) {
-			return message.channel.send(`There is no command with name or alias \`${commandName}\`, ${message.author}!`);
+			return msg.channel.send(`There is no command with name or alias \`${commandName}\`, ${msg.author}!`);
 		}
 
 		delete require.cache[require.resolve(`./${commandName}.js`)];
 
 		try {
 			const newCommand = require(`./${commandName}.js`);
-			message.client.commands.set(newCommand.name, newCommand);
+			msg.client.commands.set(newCommand.name, newCommand);
 		}
 		catch (error) {
 			logger.log('error', error);
-			return message.channel.send(`There was an error while reloading a command \`${commandName}\`:\n\`${error.message}\``);
+			return msg.channel.send(`There was an error while reloading a command \`${commandName}\`:\n\`${error.message}\``);
 		}
-		message.channel.send(`Command \`${commandName}\` was reloaded!`);
+		msg.channel.send(`Command \`${commandName}\` was reloaded!`);
 	},
 };

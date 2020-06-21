@@ -2,14 +2,17 @@ const Discord = require('discord.js');
 const winston = require('winston');
 require('dotenv').config();
 const prefix = process.env.PREFIX;
-const token = process.env.TOKEN;
+const token = process.env.TEST_TOKEN;
 const ytAPI = process.env.YT_API;
+const dblToken = process.env.DBL_TOKEN;
 const { Users, profile } = require('./dbObjects');
 const botCommands = require('./commands');
 const moment = require('moment');
 const bot = new Discord.Client();
 const cooldowns = new Discord.Collection();
 const active = new Map();
+const DBL = require('dblapi.js');
+const dbl = new DBL(dblToken, bot);
 bot.commands = new Discord.Collection();
 moment().format();
 
@@ -45,7 +48,8 @@ bot.on('ready', async () => {
 		const storedBalances = await Users.findAll();
 		storedBalances.forEach(b => profile.set(b.user_id, b));
 		logger.log('info', `Logged in as ${bot.user.tag}!`);
-	} catch (error) {
+	}
+ catch (error) {
 		logger.log('error', error);
 	}
 
@@ -160,7 +164,7 @@ bot.on('message', async msg => {
 
 	// execute command
 	try {
-		command.execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns);
+		command.execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl, dbl);
 	}
 	catch (error) {
 		logger.log('error', error);

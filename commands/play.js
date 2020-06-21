@@ -12,7 +12,7 @@ module.exports = {
 	music: true,
 
 
-	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
 
 		const youtube = new YouTube(ytAPI);
 		if (!msg.member.voice.channel) {
@@ -22,12 +22,12 @@ module.exports = {
 
 		logger.log('info', search);
 
-		const data = ops.active.get(msg.guild.id) || {};
+		const data = options.active.get(msg.guild.id) || {};
 
 		if (!data.connection) { data.connection = await msg.member.voice.channel.join(); }
 		else if (data.connection.status == 4) {
 			data.connection = await msg.member.voice.channel.join();
-			const guildIDData = ops.active.get(msg.guild.id);
+			const guildIDData = options.active.get(msg.guild.id);
 			guildIDData.dispatcher.emit('finish');
 		}
 
@@ -63,13 +63,13 @@ module.exports = {
 
 
 		if (!data.dispatcher) {
-			Play(bot, ops, data, logger);
+			Play(bot, options, data, logger);
 		}
 		else {
 			msg.channel.send(`Added ${video.title} to the queue - Requested by ${msg.author.tag}`);
 		}
 
-		ops.active.set(msg.guild.id, data);
+		options.active.set(msg.guild.id, data);
 
 		data.dispatcher.on('disconnect', e => {
 			data.dispatcher = null;
@@ -79,7 +79,7 @@ module.exports = {
 };
 
 
-async function Play(bot, ops, data, logger) {
+async function Play(bot, options, data, logger) {
 
 	const message = bot.channels.cache.get(data.queue[0].announceChannel);
 	message.send(`Now playing ${data.queue[0].songTitle}\nRequested by ${data.queue[0].requester}`);
@@ -91,17 +91,15 @@ async function Play(bot, ops, data, logger) {
 	}
 
 
-	const options = { type: 'opus' };
-
 	data.dispatcher = data.connection.play(await ytdl(data.queue[0].url, {
 		filter: 'audioonly',
 		highWaterMark: 1 << 25,
-	}), options);
+	}), { type: 'opus' });
 	data.dispatcher.guildID = data.guildID;
 
 	data.dispatcher.on('finish', () => {
 		logger.log('info', 'finish');
-		Finish(bot, ops, data.dispatcher, message, logger);
+		Finish(bot, options, data.dispatcher, message, logger);
 	});
 
 	data.dispatcher.on('error', e => {
@@ -117,24 +115,24 @@ async function Play(bot, ops, data, logger) {
 }
 
 
-function Finish(bot, ops, dispatcher, message, logger) {
+function Finish(bot, options, dispatcher, message, logger) {
 
-	const fetchedData = ops.active.get(dispatcher.guildID);
+	const fetchedData = options.active.get(dispatcher.guildID);
 	if (fetchedData.loop) {
 
-		ops.active.set(dispatcher.guildID, fetchedData);
-		return Play(bot, ops, fetchedData, logger);
+		options.active.set(dispatcher.guildID, fetchedData);
+		return Play(bot, options, fetchedData, logger);
 	}
 	else { fetchedData.queue.shift(); }
 
 	if (fetchedData.queue.length > 0) {
 
-		ops.active.set(dispatcher.guildID, fetchedData);
-		Play(bot, ops, fetchedData, logger);
+		options.active.set(dispatcher.guildID, fetchedData);
+		Play(bot, options, fetchedData, logger);
 	}
 	else {
 
-		ops.active.delete(dispatcher.guildID);
+		options.active.delete(dispatcher.guildID);
 		message.send('Queue has finished playing');
 		const voiceChannel = bot.guilds.cache.get(dispatcher.guildID).me.voice.channel;
 		if (voiceChannel) voiceChannel.leave();

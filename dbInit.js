@@ -17,9 +17,25 @@ sequelize.import('models/UserItems');
 // Execute node dbInit.js --sync or node dbInit.js -s to force update the tables (this doesnt reset the db but keeps unused tables).
 
 // Create tags
-sequelize.sync({  }).then(async () => {
+sequelize.sync({ }).then(async () => {
 	const shop = [
-		//CurrencyShop.upsert({ name: 'Tea', cost: 2, ctg: 'consumable' }),
+		// CurrencyShop.upsert({ name: 'Tea', cost: 2, ctg: 'consumable' }),
+		// CurrencyShop.upsert({ name: 'Coffee', cost: 3, ctg: 'consumable' }),
+		// CurrencyShop.upsert({ name: 'Cake', cost: 6, ctg: 'consumable' }),
+		// CurrencyShop.upsert({ name: 'Gun', cost: 30, ctg: 'consumable' }),
+		// CurrencyShop.upsert({ name: 'Steal Protection', cost: 80, ctg: 'consumable' }),
+		// CurrencyShop.upsert({ name: 'Custom Role', cost: 200, ctg: 'discord' }),
+		// CurrencyShop.upsert({ name: 'Profile Colour', cost: 40, ctg: 'consumable' }),
+		// CurrencyShop.upsert({ name: '⭐', cost: 10000, ctg: 'collectables' }),
+		// CurrencyShop.upsert({ name: '🏛️', cost: 5000, ctg: 'collectables' }),
+		// CurrencyShop.upsert({ name: '🏡', cost: 1000, ctg: 'collectables' }),
+		// CurrencyShop.upsert({ name: '🚗', cost: 65, ctg: 'collectables' }),
+		// CurrencyShop.upsert({ name: '🏍️', cost: 40, ctg: 'collectables' }),
+		// CurrencyShop.upsert({ name: '✈️', cost: 700, ctg: 'collectables' }),
+		// CurrencyShop.upsert({ name: '🛩️', cost: 300, ctg: 'collectables' }),
+		// CurrencyShop.upsert({ name: '⛵', cost: 200, ctg: 'collectables' }),
+		// CurrencyShop.upsert({ name: '🚤', cost: 125, ctg: 'collectables' }),
+		// CurrencyShop.upsert({ name: '🏢', cost: 50000, ctg: 'collectables' }),
 		
 	];
 	await Promise.all(shop);

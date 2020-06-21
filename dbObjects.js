@@ -16,7 +16,7 @@ const UserItems = sequelize.import('models/UserItems');
 
 UserItems.belongsTo(CurrencyShop, { foreignKey: 'item_id', as: 'item' });
 
-Users.prototype.addItem = async function (item, amount) {
+Users.prototype.addItem = async function(item, amount) {
 	const userItem = await UserItems.findOne({
 		where: { user_id: this.user_id, item_id: item.id },
 	});
@@ -30,7 +30,7 @@ Users.prototype.addItem = async function (item, amount) {
 	return UserItems.create({ user_id: this.user_id, item_id: item.id, amount: 1 });
 };
 
-Users.prototype.removeItem = async function (item, amount) {
+Users.prototype.removeItem = async function(item, amount) {
 	const userItem = await UserItems.findOne({
 		where: { user_id: this.user_id, item_id: item.id },
 	});
@@ -44,7 +44,7 @@ Users.prototype.removeItem = async function (item, amount) {
 	throw Error('User doesnt have that item');
 };
 
-Users.prototype.getItems = function () {
+Users.prototype.getItems = function() {
 	return UserItems.findAll({
 		where: { user_id: this.user_id },
 		include: ['item'],
@@ -184,7 +184,27 @@ Reflect.defineProperty(profile, 'setPColour', {
 		return user.save();
 	},
 });
-Reflect.defineProperty(profile, 'setPColour', {
+
+Reflect.defineProperty(profile, 'getVote', {
+	value: async function getVote(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		return user ? user.hasVoted : 0;
+	},
+
+});
+
+Reflect.defineProperty(profile, 'setVote', {
+	value: async function setVote(id, vote) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+
+		user.hasVoted = vote;
+		return user.save();
+	},
+});
+
+Reflect.defineProperty(profile, 'newUser', {
 	value: async function newUser(id) {
 		const day = moment().dayOfYear();
 		const user = await Users.create({
@@ -196,6 +216,7 @@ Reflect.defineProperty(profile, 'setPColour', {
 			lastWeekly: (day - 1),
 			protection: (day - 1),
 			pColour: '#ffffff',
+			hasVoted: false,
 		});
 		profile.set(id, user);
 		return user;

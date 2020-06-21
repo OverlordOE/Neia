@@ -13,7 +13,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
 		const currentAmount = await profile.getBalance(msg.author.id);
 		const pColour = await profile.getPColour(msg.author.id);
 		const bAvatar = bot.user.displayAvatarURL();
@@ -167,7 +167,7 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 			sentMessage.react('✅'); // result 2
 
 			const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
-			
+
 			for (let i = 0; i < 2; i++) {
 				getCard('player');
 				getCard('bot');

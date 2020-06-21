@@ -39,6 +39,11 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: '#fffb00',
 			allowNull: false,
 		},
+		hasVoted: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+			allowNull: false,
+		},
 
 	},
 		{

@@ -13,7 +13,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
 
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const filter = m => m.author.id === msg.author.id;

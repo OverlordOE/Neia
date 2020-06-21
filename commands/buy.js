@@ -12,7 +12,7 @@ module.exports = {
 	args: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
 
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
@@ -80,7 +80,7 @@ module.exports = {
 };
 
 async function buy(profile, sentMessage, amount, embed, item, msg) {
-	
+
 	if (!Number.isInteger(amount)) {
 		return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 	}

@@ -9,13 +9,13 @@ module.exports = {
 	music: true,
 	cooldown: 5,
 
-	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
 		if (!msg.member.voice.channel) {
 			return msg.reply('You are not in a voice channel!');
 		}
 
 		try {
-			const guildIDData = ops.active.get(msg.guild.id);
+			const guildIDData = options.active.get(msg.guild.id);
 			guildIDData.queue = [];
 			guildIDData.dispatcher.emit('finish');
 		}

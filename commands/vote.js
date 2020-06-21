@@ -1,11 +1,10 @@
-const moment = require('moment');
 const Discord = require('discord.js');
 const { Users } = require('../dbObjects');
 module.exports = {
-	name: 'daily',
+	name: 'vote',
 	description: 'Get a daily gift.',
 	admin: false,
-	aliases: ['day', 'd'],
+	aliases: ['v'],
 	args: false,
 	cooldown: 5,
 	owner: false,
@@ -13,13 +12,13 @@ module.exports = {
 	music: false,
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
-		const lastDaily = moment(await profile.getDaily(msg.author.id));
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
 
 		const pColour = await profile.getPColour(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const items = await user.getItems();
+		const hasVoted = await profile.getVote(msg.author.id);
 		let cReward = 0;
 
 		const embed = new Discord.MessageEmbed()
@@ -28,8 +27,6 @@ module.exports = {
 			.setColor(pColour)
 			.setTimestamp()
 			.setFooter('Neija', bAvatar);
-
-		const check = moment(lastDaily).add(1, 'd');
 
 
 		items.map(i => {
@@ -43,17 +40,24 @@ module.exports = {
 		});
 
 
-		const daily = check.format('dddd HH:mm');
-		const now = moment();
 		const dReward = 20 + (Math.random() * 10);
 		const finalReward = dReward + cReward;
 
-		if (moment(check).isBefore(now)) {
-			profile.addMoney(msg.author.id, finalReward);
-			await profile.setDaily(msg.author.id);
-			const balance = await profile.getBalance(msg.author.id);
-			msg.channel.send(embed.setDescription(`You got ${dReward.toFixed(1)}💰 from your daily 🎁 and ${cReward.toFixed(1)}💰 from your collectables for a total of ${finalReward.toFixed(1)}💰, come back in a day for more!\n\nYour current balance is ${balance}💰`));
-		}
-		else { msg.channel.send(embed.setDescription(`You have already gotten your daily 🎁\n\nYou can get you next daily ${daily}`)); }
+
+		dbl.hasVoted(msg.author.id).then(async voted => {
+			if (voted) {
+				if (hasVoted) msg.channel.send(embed.setDescription('You have already voted in the last 12 hours.'));
+				else {
+					profile.addMoney(msg.author.id, finalReward);
+					const balance = await profile.getBalance(msg.author.id);
+					profile.setVote(msg.author.id, true);
+					msg.channel.send(embed.setDescription(`Thank you for voting!!!\nYou got ${dReward.toFixed(1)}💰 from your vote 🎁 and ${cReward.toFixed(1)}💰 from your collectables for a total of ${finalReward.toFixed(1)}💰\n\nCome back in 12 hours for more!\nYour current balance is ${balance}💰`));
+				}
+			}
+			else msg.channel.send(embed.setDescription(`Vote for Neija and get up to 2 extra daily's a day.\nTo get the daily's just vote [here](https://top.gg/bot/684458276129079320/vote) and then use this command again, you can do this every 12 hours!`));
+
+		});
+
+
 	},
 };

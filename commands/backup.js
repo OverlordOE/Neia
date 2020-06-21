@@ -14,7 +14,7 @@ module.exports = {
 	usage: 'modifier',
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
 		let total = 0;
 		const now = moment();
 
@@ -27,8 +27,8 @@ module.exports = {
 			for (let i = 0; i < data.length; i++) {
 				try {
 					profile.addMoney(data[i].user_id, data[i].balance);
-					profile.setWeekly(data[i].user_id),
-						profile.setDaily(data[i].user_id);
+					profile.setWeekly(data[i].user_id);
+					profile.setDaily(data[i].user_id);
 					profile.setHourly(data[i].user_id);
 					profile.addCount(data[i].user_id, data[i].msgCount);
 					profile.setProtection(data[i].user_id, now);
