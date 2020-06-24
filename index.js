@@ -252,12 +252,13 @@ bot.on('message', async msg => {
 	// check for prefix
 	if (!msg.content.startsWith(prefix)) return;
 
-	logger.log('info', `${msg.author.tag} Called command: ${commandName}`);
+	
 
 	const command = bot.commands.get(commandName)
 		|| bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 	if (!command) return;
+	
 
 	// check for admin
 	if (command.admin) {
@@ -312,6 +313,7 @@ bot.on('message', async msg => {
 	};
 
 	// execute command
+	logger.log('info', `${msg.author.tag} Called command: ${commandName} in guild: ${msg.guild.name}`);
 	try {
 		command.execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns);
 	}
