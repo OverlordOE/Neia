@@ -11,7 +11,7 @@ module.exports = {
 	admin: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const lotteryJob = new cron.CronJob('0 0-23/3 * * *', async () => {
 
 			let writeData;

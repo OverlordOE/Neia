@@ -13,7 +13,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 
 		const pColour = await profile.getPColour(msg.author.id);
 		const bAvatar = bot.user.displayAvatarURL();

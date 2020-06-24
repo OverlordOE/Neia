@@ -11,7 +11,7 @@ module.exports = {
 	usage: '',
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const lastWeekly = moment(await profile.getWeekly(msg.author.id));
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();

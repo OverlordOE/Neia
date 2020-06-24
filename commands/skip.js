@@ -8,7 +8,7 @@ module.exports = {
 	owner: false,
 	music: true,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		if (!msg.member.voice.channel) {
 			return msg.reply('You are not in a voice channel!');
 		}

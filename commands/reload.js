@@ -10,7 +10,7 @@ module.exports = {
 	music: false,
 
 
-	execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
+	execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const commandName = args[0].toLowerCase();
 		const command = msg.client.commands.get(commandName)
 			|| msg.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));

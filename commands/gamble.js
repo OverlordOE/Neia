@@ -13,7 +13,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const currentAmount = await profile.getBalance(msg.author.id);
 		const pColour = await profile.getPColour(msg.author.id);
 		const bAvatar = bot.user.displayAvatarURL();
@@ -102,7 +102,7 @@ async function oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed)
 	const answer = Math.floor((Math.random() * 5) + 1);
 	const winAmount = numberRate * gambleAmount;
 
-	await sentMessage.edit(embed.setDescription(`You have bet **${gambleAmount}💰**.\nGuess the number between 1 and 5.`))
+	await sentMessage.edit(embed.setDescription(`You have bet **${gambleAmount}💰**.\nGuess the number between 1 and 5.`).setTitle('Numbers'))
 		.then(() => {
 			sentMessage.react(emojiCharacters[1]);
 			sentMessage.react(emojiCharacters[2]);
@@ -159,8 +159,9 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 	const winAmount = blackjackRate * gambleAmount;
 
 
-	await sentMessage.edit(embed
-		.setDescription('Blackjack')
+	sentMessage.edit(embed
+		.setDescription(`[Click here for the rules](https://bicyclecards.com/how-to-play/blackjack/)\nPress 🃏 to hit or ✅ to stand\nYou can win ${winAmount}💰\n`)
+		.setTitle('Blackjack')
 	)
 		.then(() => {
 			sentMessage.react('🃏'); // result 1
@@ -171,12 +172,9 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 			for (let i = 0; i < 2; i++) {
 				getCard('player');
 				getCard('bot');
+				setEmbed();
 			}
-			setEmbed();
 
-			if (playerHandValue > 21 || botHandValue > 21) {
-				collector.stop();
-			}
 
 			collector.on('collect', (reaction) => {
 				reaction.users.remove(msg.author.id);
@@ -189,7 +187,7 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 						getCard('player');
 						if (botHandValue < 17) getCard('bot');
 						setEmbed();
-						if (playerHandValue > 20) {
+						if (playerHandValue >= 21 || botHandValue > 21 || (botHandValue > 16 && playerHandValue > botHandValue) || (botHandValue == 21 && playerHandValue == 21)) {
 							collector.stop();
 							return;
 						}
@@ -207,7 +205,11 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 			});
 
 			collector.on('end', async () => {
-				if (playerHandValue > 21) {
+				if (botHandValue == 21 && playerHandValue == 21) {
+					const balance = await profile.getBalance(msg.author.id);
+					sentMessage.edit(embed.setDescription(`__**Its a draw**__\n\nYour balance is **${balance}💰**`));
+				}
+				else if (playerHandValue > 21) {
 
 					profile.addMoney(msg.author.id, -gambleAmount);
 					const balance = await profile.getBalance(msg.author.id);
@@ -243,9 +245,12 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 		});
 
 	function setEmbed() {
-		embed.spliceFields(0, 2, [
-			{ name: 'Player Hand', value: playerHand },
-			{ name: 'Bot Hand', value: botHand },
+		embed.spliceFields(0, 5, [
+			{ name: 'Player Hand', value: playerHand, inline: true },
+			{ name: 'Bot Hand', value: botHand, inline: true },
+			{ name: '\u200B', value: '\u200B' },
+			{ name: 'Player Value', value: playerHandValue, inline: true },
+			{ name: 'Bot Value', value: botHandValue, inline: true },
 		]);
 		sentMessage.edit(embed);
 	}
@@ -265,8 +270,20 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 			botHandValue += card.weight;
 		}
 		else if (player == 'player') {
-			playerHand += `${card.suit}${card.value} `;
-			playerHandValue += card.weight;
+			if (card.value == 'A') {
+				if ((playerHandValue + 11) < 21 && (playerHandValue + 11) > botHandValue && botHandValue > 17 || ((playerHandValue + 11) < 21 && botHandValue < 17) || (playerHandValue + 11) == 21) {
+					playerHand += `${card.suit}${card.value}(11) `;
+					playerHandValue += card.weight;
+				}
+				else {
+					playerHand += `${card.suit}${card.value}(1) `;
+					playerHandValue++;
+				}
+			}
+			else {
+				playerHand += `${card.suit}${card.value} `;
+				playerHandValue += card.weight;
+			}
 		}
 		return card;
 	}
@@ -280,7 +297,7 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessag
 	const winAmount = rpsRate * gambleAmount;
 	const answer = Math.floor((Math.random() * 3) + 1);
 
-	await sentMessage.edit(embed.setDescription(`You have bet **${gambleAmount}💰**.\nChoose rock✊, paper🧻 or scissors✂️!`))
+	await sentMessage.edit(embed.setDescription(`You have bet **${gambleAmount}💰**.\nChoose rock✊, paper🧻 or scissors✂️!`).setTitle('Rock, paper, scissors'))
 		.then(() => {
 			sentMessage.react('✊'); // result 1
 			sentMessage.react('🧻'); // result 2
@@ -296,7 +313,9 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessag
 		.then(async collected => {
 			const reaction = collected.first();
 			switch (reaction.emoji.name) {
+
 				case '✊':
+
 					if (answer == 1) { return sentMessage.edit(embed.setDescription(`The bot chooses ✊. **It's a tie!**\nYour balance is **${currentAmount}💰**`)); }
 					else if (answer == 2) {
 						profile.addMoney(msg.author.id, -gambleAmount);
@@ -315,6 +334,7 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessag
 					break;
 
 				case '🧻':
+
 					if (answer == 1) {
 						profile.addMoney(msg.author.id, winAmount);
 						const balance = await profile.getBalance(msg.author.id);

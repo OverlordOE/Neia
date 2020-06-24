@@ -9,7 +9,7 @@ module.exports = {
 	music: true,
 
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const guildIDData = options.active.get(msg.guild.id);
 
 		if (!guildIDData) return msg.channel.send('No music queued at the moment.');

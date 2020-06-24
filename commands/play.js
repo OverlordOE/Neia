@@ -12,7 +12,7 @@ module.exports = {
 	music: true,
 
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 
 		const youtube = new YouTube(ytAPI);
 		if (!msg.member.voice.channel) {

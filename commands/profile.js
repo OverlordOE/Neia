@@ -12,7 +12,7 @@ module.exports = {
 	music: false,
 
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns, dbl) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		const target = msg.mentions.users.first() || msg.author;
 		const user = await Users.findOne({ where: { user_id: target.id } });
 		const items = await user.getItems();
