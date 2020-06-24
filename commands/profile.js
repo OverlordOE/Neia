@@ -17,17 +17,24 @@ module.exports = {
 		const user = await Users.findOne({ where: { user_id: target.id } });
 		const items = await user.getItems();
 		const filter = (reaction, user) => {
-			return ['🗒️', '📦'].includes(reaction.emoji.name) && user.id === msg.author.id;
+			return ['💰', '🗒️', '📦'].includes(reaction.emoji.name) && user.id === msg.author.id;
 		};
 
 
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = target.displayAvatarURL();
 		const balance = await profile.getBalance(target.id);
-		const count = await profile.getCount(target.id);
+		const msgCount = await profile.getCount(target.id);
 		const prot = moment(await profile.getProtection(target.id));
 		const pColour = await profile.getPColour(target.id);
 		const hasVoted = await profile.getVote(target.id);
+		const gamblingSpent = await profile.getGamblingSpent(target.id);
+		const gamblingEarned = await profile.getGamblingEarned(target.id);
+		const stealingEarned = await profile.getStealingEarned(target.id);
+		const shopSpent = await profile.getShopSpent(target.id);
+		const botUsage = await profile.getBotUsage(target.id);
+		const totalSpent = await profile.getTotalSpent(target.id);
+		const totalEarned = await profile.getTotalEarned(target.id);
 
 		let lastDaily;
 		let lastHourly;
@@ -61,12 +68,12 @@ module.exports = {
 		if (moment(hCheck).isBefore(now)) hourly = 'now';
 		if (moment(wCheck).isBefore(now)) weekly = 'now';
 
-		const statEmbed = new Discord.MessageEmbed()
+		const moneyEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s Stats`)
 			.setThumbnail(avatar)
 			.addField('Balance:', `${balance}💰`, true)
-			.addField('Message Count:', count, true)
+			.addField('Message Count:', msgCount, true)
 			.addField('Next weekly:', weekly)
 			.addField('Next daily:', daily, true)
 			.addField('Next hourly:', hourly, true)
@@ -81,7 +88,22 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neija', bAvatar);
 
-		if (!pCheck) { statEmbed.addField('Steal protection untill:', protection); }
+		const statEmbed = new Discord.MessageEmbed()
+			.setColor(pColour)
+			.setTitle(`${target.tag}'s Inventory`)
+			.setThumbnail(avatar)
+			.addField('Total Spent:', totalSpent, true)
+			.addField('Total Earned:', totalEarned, true)
+			.addField('Earned with Gambling:', gamblingEarned, true)
+			.addField('Spent at Gambling:', gamblingSpent, true)
+			.addField('Earned with Stealing:', stealingEarned, true)
+			.addField('Spent at Shop:', shopSpent, true)
+			.addField('Total Bot Usage:', botUsage, true)
+
+			.setTimestamp()
+			.setFooter('Neija', bAvatar);
+
+		if (!pCheck) { moneyEmbed.addField('Steal protection untill:', protection); }
 
 
 		items.map(i => {
@@ -110,16 +132,18 @@ module.exports = {
 		if (!items.length) { invEmbed.addField('Inventory:', `${target.tag} has nothing!`); }
 
 
-		msg.channel.send(statEmbed)
+		msg.channel.send(moneyEmbed)
 			.then(sentMessage => {
-				sentMessage.react('🗒️');
+				sentMessage.react('💰');
 				sentMessage.react('📦');
+				sentMessage.react('🗒️');
 				const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
 
 				collector.on('collect', (reaction) => {
 					reaction.users.remove(msg.author.id);
-					if (reaction.emoji.name == '🗒️') { sentMessage.edit(statEmbed); }
+					if (reaction.emoji.name == '💰') { sentMessage.edit(moneyEmbed); }
 					else if (reaction.emoji.name == '📦') { sentMessage.edit(invEmbed); }
+					else if (reaction.emoji.name == '🗒️') { sentMessage.edit(statEmbed); }
 				});
 			});
 	},

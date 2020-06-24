@@ -31,6 +31,7 @@ module.exports = {
 
 		if (moment(check).isBefore(now)) {
 			profile.addMoney(msg.author.id, reward);
+			profile.addTotalEarned(msg.author.id, reward);
 			await profile.setWeekly(msg.author.id);
 			const balance = await profile.getBalance(msg.author.id);
 			msg.channel.send(embed.setDescription(`You got ${reward.toFixed(1)}💰 from your weekly 🎁, come back in a week for more!\n\nYour current balance is ${balance}💰`));

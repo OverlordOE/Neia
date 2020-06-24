@@ -159,7 +159,7 @@ bot.on('message', async msg => {
 	const options = {
 		active: active,
 	};
-
+	profile.addBotUsage(msg.author.id, 1);
 	// execute command
 	try {
 		command.execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns);

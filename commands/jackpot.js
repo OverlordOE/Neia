@@ -72,7 +72,12 @@ module.exports = {
 
 					for (let i = 0; i < participants.length; i++) {
 						profile.addMoney(participants[i].id, -buyin);
-						if (i == winner) profile.addMoney(participants[i].id, jackpot);
+						profile.addTotalSpent(msg.author.id, buyin);
+
+						if (i == winner) {
+							profile.addTotalEarned(msg.author.id, jackpot);
+							profile.addMoney(participants[i].id, jackpot);
+						}
 					}
 
 					sentMessage.edit(embed.setDescription(`Current jackpot: ${jackpot}💰\n${players}\n\nBuy-in time has ended\n${participants[winner]} has won the jackpot of **${jackpot}💰**`));
