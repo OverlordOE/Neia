@@ -75,7 +75,7 @@ module.exports = {
 
 			})
 			.catch(e => {
-				logger.log('error', `One of the emojis failed to react because of:\n${e}`);
+				logger.log('error', `One of the emojis failed to react because of:\n${e.info}`);
 				return msg.reply('Something went wrong.');
 			});
 	},

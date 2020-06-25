@@ -16,9 +16,9 @@ module.exports = {
 			msg.channel.bulkDelete(args[0]);
 			logger.log('info', `${msg.author.tag} deleted ${args[0]} messages in channel ${msg.channel.name}`);
 		}
-		catch (e) {
+		catch (error) {
 			msg.channel.send('Something went wrong');
-			logger.log('error', e);
+			return logger.error(error.stack);
 		}
 	},
 };

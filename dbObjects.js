@@ -3,6 +3,7 @@ const moment = require('moment');
 const Discord = require('discord.js');
 const profile = new Discord.Collection();
 
+
 const sequelize = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
 	dialect: 'sqlite',
@@ -21,13 +22,12 @@ Users.prototype.addItem = async function (item, amount) {
 		where: { user_id: this.user_id, item_id: item.id },
 	});
 
-	const add = parseInt(amount);
 	if (userItem) {
-		userItem.amount += add;
+		userItem.amount += parseInt(amount);
 		return userItem.save();
 	}
 
-	return UserItems.create({ user_id: this.user_id, item_id: item.id, amount: 1 });
+	return UserItems.create({ user_id: this.user_id, item_id: item.id, amount: parseInt(amount) });
 };
 
 Users.prototype.removeItem = async function (item, amount) {
@@ -51,21 +51,51 @@ Users.prototype.getItems = function () {
 	});
 };
 
+Users.prototype.setItems = function (items) {
+	let uItems = UserItems.findAll({
+		where: { user_id: this.user_id },
+		include: ['item'],
+	});
+	uItems = items;
+	uItems.save();
+
+};
+
 // Add db commands
-Reflect.defineProperty(profile, 'addMoney', {
-	value: async function addMoney(id, amount) {
+Reflect.defineProperty(profile, 'getUser', {
+	value: async function getUser(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		user.balance += Number(amount);
+		return user;
+	},
+});
+Reflect.defineProperty(profile, 'setUser', {
+	value: async function setUser(id, newUser) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		
+		user = newUser;
 		return user.save();
 	},
 });
 
+
+Reflect.defineProperty(profile, 'addMoney', {
+	value: async function addMoney(id, amount) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+
+		user.balance += Number(amount);
+		if (amount < 0) user.totalSpent -= Number(amount);
+		else user.totalEarned += Number(amount);
+		return user.save();
+	},
+});
 Reflect.defineProperty(profile, 'getBalance', {
 	value: async function getBalance(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		return user ? Math.floor(user.balance) : 0;
+		return user ? user.balance.toFixed(1) : 0;
 	},
 });
 
@@ -78,7 +108,6 @@ Reflect.defineProperty(profile, 'getDaily', {
 	},
 
 });
-
 Reflect.defineProperty(profile, 'setDaily', {
 	value: async function setDaily(id) {
 		let user = profile.get(id);
@@ -99,7 +128,6 @@ Reflect.defineProperty(profile, 'getHourly', {
 	},
 
 });
-
 Reflect.defineProperty(profile, 'setHourly', {
 	value: async function setHourly(id) {
 		let user = profile.get(id);
@@ -120,7 +148,6 @@ Reflect.defineProperty(profile, 'getWeekly', {
 	},
 
 });
-
 Reflect.defineProperty(profile, 'setWeekly', {
 	value: async function setWeekly(id) {
 		let user = profile.get(id);
@@ -142,14 +169,6 @@ Reflect.defineProperty(profile, 'addCount', {
 	},
 });
 
-Reflect.defineProperty(profile, 'getCount', {
-	value: async function getCount(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user ? Math.floor(user.msgCount) : 0;
-	},
-});
-
 
 Reflect.defineProperty(profile, 'getProtection', {
 	value: async function getProtection(id) {
@@ -159,7 +178,6 @@ Reflect.defineProperty(profile, 'getProtection', {
 	},
 
 });
-
 Reflect.defineProperty(profile, 'setProtection', {
 	value: async function setProtection(id, day) {
 		let user = profile.get(id);
@@ -179,7 +197,6 @@ Reflect.defineProperty(profile, 'getPColour', {
 	},
 
 });
-
 Reflect.defineProperty(profile, 'setPColour', {
 	value: async function setPColour(id, colour) {
 		let user = profile.get(id);
@@ -200,7 +217,6 @@ Reflect.defineProperty(profile, 'getVote', {
 	},
 
 });
-
 Reflect.defineProperty(profile, 'setVote', {
 	value: async function setVote(id, vote) {
 		let user = profile.get(id);
@@ -208,42 +224,6 @@ Reflect.defineProperty(profile, 'setVote', {
 
 		user.hasVoted = vote;
 		return user.save();
-	},
-});
-
-
-Reflect.defineProperty(profile, 'addTotalEarned', {
-	value: async function addTotalEarned(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		user.totalEarned += amount;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getTotalEarned', {
-	value: async function getTotalEarned(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user ? Math.floor(user.totalEarned) : 0;
-	},
-});
-
-
-Reflect.defineProperty(profile, 'addTotalSpent', {
-	value: async function addTotalSpent(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		user.totalSpent += amount;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getTotalSpent', {
-	value: async function getTotalSpent(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user ? Math.floor(user.totalSpent) : 0;
 	},
 });
 
@@ -257,14 +237,6 @@ Reflect.defineProperty(profile, 'addGamblingSpent', {
 	},
 });
 
-Reflect.defineProperty(profile, 'getGamblingSpent', {
-	value: async function getGamblingSpent(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user ? Math.floor(user.gamblingSpent) : 0;
-	},
-});
-
 
 Reflect.defineProperty(profile, 'addGamblingEarned', {
 	value: async function addGamblingEarned(id, amount) {
@@ -275,29 +247,12 @@ Reflect.defineProperty(profile, 'addGamblingEarned', {
 	},
 });
 
-Reflect.defineProperty(profile, 'getGamblingEarned', {
-	value: async function getGamblingEarned(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user ? Math.floor(user.gamblingEarned) : 0;
-	},
-});
-
-
 Reflect.defineProperty(profile, 'addStealingEarned', {
 	value: async function addStealingEarned(id, amount) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 		user.stealingEarned += amount;
 		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getStealingEarned', {
-	value: async function getStealingEarned(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user ? Math.floor(user.stealingEarned) : 0;
 	},
 });
 
@@ -311,14 +266,6 @@ Reflect.defineProperty(profile, 'addShopSpent', {
 	},
 });
 
-Reflect.defineProperty(profile, 'getShopSpent', {
-	value: async function getShopSpent(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user ? Math.floor(user.shopSpent) : 0;
-	},
-});
-
 
 Reflect.defineProperty(profile, 'addBotUsage', {
 	value: async function addBotUsage(id, amount) {
@@ -326,14 +273,6 @@ Reflect.defineProperty(profile, 'addBotUsage', {
 		if (!user) user = await profile.newUser(id);
 		user.botUsage += amount;
 		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getBotUsage', {
-	value: async function getBotUsage(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user ? Math.floor(user.botUsage) : 0;
 	},
 });
 

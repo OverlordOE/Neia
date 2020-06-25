@@ -49,7 +49,6 @@ module.exports = {
 
 		if (moment(check).isBefore(now)) {
 			profile.addMoney(msg.author.id, finalReward);
-			profile.addTotalEarned(msg.author.id, finalReward);
 			await profile.setHourly(msg.author.id);
 			const balance = await profile.getBalance(msg.author.id);
 			msg.channel.send(embed.setDescription(`You got ${hReward.toFixed(1)}💰 from your hourly 🎁 and ${cReward.toFixed(1)}💰 from your collectables for a total of ${finalReward.toFixed(1)}💰, come back in an hour for more!\n\nYour current balance is ${balance}💰`));

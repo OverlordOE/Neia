@@ -57,7 +57,6 @@ module.exports = {
 							if (bCheck >= buyin) {
 								participants.push(user);
 								profile.addMoney(user.id, -buyin);
-								profile.addTotalSpent(msg.author.id, buyin);
 								players += `\n${participants.length}: ${user}`;
 								lottery = misc.lastLottery + (participants.length * buyin);
 								sentMessage.edit(embed.setDescription(`Press 💰 to participate in the lottery!\n${buyin}💰 buy-in.\nCurrent lottery: ${lottery}💰\n${players}`));
@@ -77,7 +76,6 @@ module.exports = {
 						for (let i = 0; i < participants.length; i++) {
 							if (i == winner) {
 								profile.addMoney(participants[i].id, lottery);
-								profile.addTotalEarned(msg.author.id, lottery);
 
 								channel.send(`Congrats ${participants[i]} on winning the jackpot of **${lottery}💰**!!!`);
 								misc.lastLottery = 50;
@@ -95,7 +93,7 @@ module.exports = {
 
 				})
 				.catch(e => {
-					logger.log('error', `One of the emojis failed to react because of:\n${e}`);
+					logger.error(e.stack);
 					return msg.reply('Something went wrong.');
 				});
 		});

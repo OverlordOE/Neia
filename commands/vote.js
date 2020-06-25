@@ -61,7 +61,7 @@ module.exports = {
 			}
 			else {
 				profile.setVote(msg.author.id, false);
-				return msg.channel.send(embed.setDescription('Vote for Neija and get up to 2 extra daily\'s a day.\nTo get the daily\'s just vote [here](https://top.gg/bot/684458276129079320/vote) and then use this command again, you can do this every 12 hours!'));
+				return msg.channel.send(embed.setDescription('Vote for Neija and get up to 2 extra daily\'s a day.\nTo get the daily\'s just vote [here](https://top.gg/bot/684458276129079320/vote) and then use this command again (this usually takes about 2-3 mins to update), you can do this every 12 hours!'));
 			}
 		});
 

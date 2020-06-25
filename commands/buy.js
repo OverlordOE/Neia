@@ -51,20 +51,20 @@ module.exports = {
 					.then(async collected => {
 						item = await CurrencyShop.findOne({ where: { name: { [Op.like]: collected.first().content } } });
 						if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not an item.`));
-						collected.first().delete().catch(e => logger.log('error', e));
+						collected.first().delete().catch(e => logger.error(e.stack));
 
 						sentMessage.edit(embed.setDescription(`How many ${item.name} do you want to buy (max of 10000)?`)).then(() => {
 							msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 								.then(async collected => {
 									amount = parseInt(collected.first().content);
-									collected.first().delete().catch(e => logger.log('error', e));
+									collected.first().delete().catch(e => logger.error(e.stack));
 
 									buy(profile, sentMessage, amount, embed, item, msg);
 
 								})
 								.catch(e => {
-									logger.log('error', e);
+									logger.error(e.stack);
 									msg.reply('you didn\'t answer in time or something went wrong.');
 								});
 						});
@@ -72,7 +72,7 @@ module.exports = {
 			}
 		})
 			.catch(e => {
-				logger.log('error', e);
+				logger.error(e.stack);
 				msg.reply('you didn\'t answer in time or something went wrong.');
 			});
 
@@ -96,7 +96,6 @@ async function buy(profile, sentMessage, amount, embed, item, msg) {
 	}
 
 	profile.addMoney(msg.author.id, -cost);
-	profile.addTotalSpent(msg.author.id, cost);
 	profile.addShopSpent(msg.author.id, cost);
 	await user.addItem(item, amount);
 	balance = await profile.getBalance(msg.author.id);

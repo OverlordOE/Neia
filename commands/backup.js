@@ -3,7 +3,6 @@ const backup = require('../backup');
 const iBackup = require('../ibackup');
 const { Users, CurrencyShop } = require('../dbObjects');
 const { Op } = require('sequelize');
-const moment = require('moment');
 module.exports = {
 	name: 'backup',
 	description: 'Makes a backup of the database.',
@@ -16,7 +15,6 @@ module.exports = {
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 		let total = 0;
-		const now = moment();
 
 		if (args[0] == 'restore') {
 			const rawdata = fs.readFileSync('backup.json');
@@ -26,17 +24,13 @@ module.exports = {
 
 			for (let i = 0; i < data.length; i++) {
 				try {
-					profile.addMoney(data[i].user_id, data[i].balance);
-					profile.setWeekly(data[i].user_id);
-					profile.setDaily(data[i].user_id);
-					profile.setHourly(data[i].user_id);
-					profile.addCount(data[i].user_id, data[i].msgCount);
-					profile.setProtection(data[i].user_id, now);
-					profile.setPColour(data[i].user_id, data[i].pColour);
+					logger.info(data[i].user_id);
+					const id = data[i].user_id;
+					profile.setUser(id, data[i]);
 					total++;
 				}
 				catch (error) {
-					logger.log('warn', 'something went wrong with applying the backup');
+					return logger.error(error.stack);
 				}
 			}
 
@@ -46,10 +40,10 @@ module.exports = {
 					const user = await Users.findOne({ where: { user_id: iData[i].user_id } });
 
 					await user.addItem(item, iData[i].amount);
-
+					total++;
 				}
 				catch (error) {
-					logger.log('warn', 'something went wrong with applying the backup');
+					return logger.error(error.stack);
 				}
 			}
 
@@ -57,47 +51,29 @@ module.exports = {
 
 		}
 
-
-		profile.map((u) => {
-
-			const user = {
-				user_id: u.user_id,
-				balance: u.balance,
-				msgCount: u.msgCount,
-				pColour: u.pColour,
-
-			};
-			backup.push(user);
-			total++;
-		});
-
-
-		profile.map(async (u) => {
-			const userInfo = await Users.findOne({ where: { user_id: u.user_id } });
-			const items = await userInfo.getItems();
-			items.map(i => {
-				if (i.amount < 1) return;
-				const inv = {
-					user_id: u.user_id,
-					itemName: i.item.name,
-					amount: i.amount,
-				};
-				iBackup.push(inv);
+		try {
+			profile.map(async (u) => {
+				const userItems = await Users.findOne({ where: { user_id: u.user_id } });
+				const items = await userItems.getItems();
+				await backup.push(u);
+				await iBackup.push(items);
+				total++;
 			});
-		});
+		} catch (error) {
+			return logger.error(error.stack);
+		}
 
-
-		fs.writeFile('ibackup.json', JSON.stringify(iBackup), err => {
+		fs.writeFile('ibackup.json', JSON.stringify(iBackup), e => {
 
 			// Checking for errors
-			if (err) return logger.log('error', err);
+			if (e) return logger.error(e.stack);
 			logger.log('info', 'Done writing items'); // Success
 		});
 
-		fs.writeFile('backup.json', JSON.stringify(backup), err => {
+		fs.writeFile('backup.json', JSON.stringify(backup), e => {
 
 			// Checking for errors
-			if (err) return logger.log('error', err);
+			if (e) return logger.error(e.stack);
 			msg.channel.send(`Backup succesfull, backed up ${total} users!`);
 			logger.log('info', 'Done writing profiles'); // Success
 		});

@@ -23,18 +23,9 @@ module.exports = {
 
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = target.displayAvatarURL();
-		const balance = await profile.getBalance(target.id);
-		const msgCount = await profile.getCount(target.id);
-		const prot = moment(await profile.getProtection(target.id));
-		const pColour = await profile.getPColour(target.id);
-		const hasVoted = await profile.getVote(target.id);
-		const gamblingSpent = await profile.getGamblingSpent(target.id);
-		const gamblingEarned = await profile.getGamblingEarned(target.id);
-		const stealingEarned = await profile.getStealingEarned(target.id);
-		const shopSpent = await profile.getShopSpent(target.id);
-		const botUsage = await profile.getBotUsage(target.id);
-		const totalSpent = await profile.getTotalSpent(target.id);
-		const totalEarned = await profile.getTotalEarned(target.id);
+		const userProfile = await profile.getUser(target.id);
+		const pColour = userProfile.pColour;
+		const prot = moment(userProfile.protection);
 
 		let lastDaily;
 		let lastHourly;
@@ -44,8 +35,8 @@ module.exports = {
 			lastDaily = moment(await profile.getDaily(target.id));
 			lastHourly = moment(await profile.getHourly(target.id));
 			lastWeekly = moment(await profile.getWeekly(target.id));
-		} catch (error) {
-			logger.error(error);
+		} catch (e) {
+			return logger.error(e.stack);
 		}
 
 
@@ -72,12 +63,12 @@ module.exports = {
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s Stats`)
 			.setThumbnail(avatar)
-			.addField('Balance:', `${balance}💰`, true)
-			.addField('Message Count:', msgCount, true)
+			.addField('Balance:', `${userProfile.balance.toFixed(1)}💰`, true)
+			.addField('Message Count:', userProfile.msgCount, true)
 			.addField('Next weekly:', weekly)
 			.addField('Next daily:', daily, true)
 			.addField('Next hourly:', hourly, true)
-			.addField('Can vote', !hasVoted)
+			.addField('Can vote', !userProfile.hasVoted)
 			.setTimestamp()
 			.setFooter('Neija', bAvatar);
 
@@ -92,13 +83,13 @@ module.exports = {
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s Inventory`)
 			.setThumbnail(avatar)
-			.addField('Total Spent:', totalSpent, true)
-			.addField('Total Earned:', totalEarned, true)
-			.addField('Earned with Gambling:', gamblingEarned, true)
-			.addField('Spent at Gambling:', gamblingSpent, true)
-			.addField('Earned with Stealing:', stealingEarned, true)
-			.addField('Spent at Shop:', shopSpent, true)
-			.addField('Total Bot Usage:', botUsage, true)
+			.addField('Total Spent:', userProfile.totalSpent.toFixed(1), true)
+			.addField('Total Earned:', userProfile.totalEarned.toFixed(1), true)
+			.addField('Earned with Gambling:', userProfile.gamblingEarned.toFixed(1), true)
+			.addField('Spent at Gambling:', userProfile.gamblingSpent.toFixed(1), true)
+			.addField('Earned with Stealing:', userProfile.stealingEarned.toFixed(1), true)
+			.addField('Spent at Shop:', userProfile.shopSpent.toFixed(1), true)
+			.addField('Total Bot Usage:', userProfile.botUsage, true)
 
 			.setTimestamp()
 			.setFooter('Neija', bAvatar);

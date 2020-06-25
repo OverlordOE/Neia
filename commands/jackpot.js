@@ -72,10 +72,8 @@ module.exports = {
 
 					for (let i = 0; i < participants.length; i++) {
 						profile.addMoney(participants[i].id, -buyin);
-						profile.addTotalSpent(msg.author.id, buyin);
 
 						if (i == winner) {
-							profile.addTotalEarned(msg.author.id, jackpot);
 							profile.addMoney(participants[i].id, jackpot);
 						}
 					}
@@ -85,7 +83,7 @@ module.exports = {
 
 			})
 			.catch(e => {
-				logger.log('error', `One of the emojis failed to react because of:\n${e}`);
+				logger.error(e.stack);
 				return msg.reply('Something went wrong.');
 			});
 	},

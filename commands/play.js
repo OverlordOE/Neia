@@ -73,7 +73,7 @@ module.exports = {
 
 		data.dispatcher.on('disconnect', e => {
 			data.dispatcher = null;
-			logger.log('info', `left voice channel for reason: ${e}`);
+			logger.log('info', `left voice channel for reason: ${e.info}`);
 		});
 	},
 };
@@ -86,8 +86,8 @@ async function Play(bot, options, data, logger) {
 	try {
 		logger.log('info', `Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
 	}
-	catch (error) {
-		console.log(error);
+	catch (e) {
+		return logger.error(e.stack);
 	}
 
 
@@ -103,13 +103,13 @@ async function Play(bot, options, data, logger) {
 	});
 
 	data.dispatcher.on('error', e => {
-		message.send(`error:  ${e}`);
-		logger.log('error', e);
+		message.send(`error:  ${e.info}`);
+		logger.error(e.stack);
 	});
 
 	data.dispatcher.on('failed', e => {
 		message.send('error:  failed to join voice channel');
-		logger.log('error', `failed to join voice channel for reason: ${e}`);
+		logger.log('error', `failed to join voice channel for reason: ${e.info}`);
 	});
 
 }

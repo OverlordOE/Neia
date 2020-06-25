@@ -33,7 +33,7 @@ module.exports = {
 
 					.then(async collected => {
 						let mention = collected.first().content;
-						collected.first().delete().catch(e => logger.log('error', e));
+						collected.first().delete().catch(e => logger.error(e.stack));
 
 						if (mention.startsWith('<@') && mention.endsWith('>')) {
 							mention = mention.slice(2, -1);
@@ -55,7 +55,7 @@ module.exports = {
 
 									.then(async collected => {
 										const goods = collected.first().content.toLowerCase();
-										collected.first().delete().catch(e => logger.log('error', e));
+										collected.first().delete().catch(e => logger.error(e.stack));
 
 										if (goods == 'money') {
 											sentMessage.edit(embed.setDescription(`Trading with **${target.username}**\n\nHow much money do you want to send?`)).then(() => {
@@ -64,7 +64,7 @@ module.exports = {
 													.then(async collected => {
 														const balance = await profile.getBalance(msg.author.id);
 														const transferAmount = collected.first().content;
-														collected.first().delete().catch(e => logger.log('error', e));
+														collected.first().delete().catch(e => logger.error(e.stack));
 
 														if (!transferAmount || isNaN(transferAmount)) return sentMessage.edit(embed.setDescription(`Sorry ${msg.author}, that's an invalid amount.`));
 														if (transferAmount > balance) return sentMessage.edit(embed.setDescription(`Sorry ${msg.author}, you only have **${balance}💰**.`));
@@ -78,7 +78,7 @@ module.exports = {
 
 													})
 													.catch(e => {
-														logger.log('error', e);
+														logger.error(e.stack);
 														msg.reply('you didn\'t answer in time.');
 													});
 											});
@@ -92,7 +92,7 @@ module.exports = {
 
 													.then(async collected => {
 														const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: collected.first().content } } });
-														collected.first().delete().catch(e => logger.log('error', e));
+														collected.first().delete().catch(e => logger.error(e.stack));
 														if (!item) return sentMessage.edit(embed.setDescription(`${item} doesn't exist.`));
 
 														// item trade
@@ -115,7 +115,7 @@ module.exports = {
 
 																.then(async collected => {
 																	const amount = collected.first().content;
-																	collected.first().delete().catch(e => logger.log('error', e));
+																	collected.first().delete().catch(e => logger.error(e.stack));
 
 																	await user.removeItem(item, amount);
 																	await userTarget.addItem(item, amount);
@@ -124,13 +124,13 @@ module.exports = {
 
 																})
 																.catch(e => {
-																	logger.log('error', e);
+																	logger.error(e.stack);
 																	msg.reply('you didn\'t answer in time.');
 																});
 														});
 													})
 													.catch(e => {
-														logger.log('error', e);
+														logger.error(e.stack);
 														msg.reply('you didn\'t answer in time.');
 													});
 
@@ -140,12 +140,12 @@ module.exports = {
 
 									})
 									.catch(e => {
-										logger.log('error', e);
+										logger.error(e.stack);
 										msg.reply('you didn\'t answer in time.');
 									});
 							})
 							.catch(e => {
-								logger.log('error', e);
+								logger.error(e.stack);
 								msg.reply('you didn\'t answer in time.');
 							});
 					});

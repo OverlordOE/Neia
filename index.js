@@ -48,7 +48,7 @@ bot.on('ready', async () => {
 		logger.log('info', `Logged in as ${bot.user.tag}!`);
 	}
 	catch (error) {
-		logger.log('error', error);
+		logger.error(e.stack);
 	}
 
 });
@@ -165,7 +165,7 @@ bot.on('message', async msg => {
 		command.execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns);
 	}
 	catch (error) {
-		logger.log('error', error);
+		logger.error(e.stack);
 		msg.reply('there was an error trying to execute that command!');
 	}
 });

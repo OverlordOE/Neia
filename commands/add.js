@@ -22,7 +22,7 @@ module.exports = {
 
 		profile.addMoney(transferTarget.id, transferAmount);
 		const balance = await profile.getBalance(transferTarget.id);
-		profile.addTotalEarned(transferTarget.id, transferAmount);
+
 		if (transferAmount <= 0) return msg.channel.send(`Successfully removed ${transferAmount * -1}💰 from ${transferTarget.tag}. Their current balance is ${balance}💰`);
 		return msg.channel.send(`Successfully added ${transferAmount}💰 to ${transferTarget.tag}. Their current balance is ${balance}💰`);
 

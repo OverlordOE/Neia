@@ -20,7 +20,7 @@ module.exports = {
 			guildIDData.dispatcher.emit('finish');
 		}
 		catch (error) {
-			logger.log('error', error);
+			return logger.error(error.stack);
 		}
 	},
 };

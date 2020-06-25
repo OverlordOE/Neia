@@ -17,8 +17,8 @@ module.exports = {
 			const guildIDData = options.active.get(msg.guild.id);
 			guildIDData.dispatcher.emit('finish');
 		}
-		catch (error) {
-			logger.log('error', error);
+		catch (e) {
+			logger.error(e.stack);
 		}
 	},
 };

@@ -62,7 +62,7 @@ module.exports = {
 				msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 					.then(async collected => {
 						item = await CurrencyShop.findOne({ where: { name: { [Op.like]: collected.first().content } } });
-						collected.first().delete().catch(e => logger.log('error', e));
+						collected.first().delete().catch(e => logger.error(e.stack));
 
 						if (item) {
 							uitems.map(i => {
@@ -77,12 +77,12 @@ module.exports = {
 									.then(async collected => {
 
 										amount = parseInt(collected.first().content);
-										collected.first().delete().catch(e => logger.log('error', e));
+										collected.first().delete().catch(e => logger.error(e.stack));
 										if (iAmount >= amount) use(profile, sentMessage, amount, embed, item, msg, filter);
 										else return sentMessage.edit(embed.setDescription(`You only have ${iAmount}/${amount} of the ${item.name}(s) needed!`));
 
 									}).catch(e => {
-										logger.log('error', e);
+										logger.error(e.stack);
 										msg.reply('you didn\'t answer in time or something went wrong.');
 									});
 							});
@@ -90,7 +90,7 @@ module.exports = {
 						else return sentMessage.edit(embed.setDescription(`${collected.first().content} is not an item.`));
 					})
 					.catch(e => {
-						logger.log('error', e);
+						logger.error(e.stack);
 						msg.reply('you didn\'t answer in time or something went wrong.');
 					});
 			}

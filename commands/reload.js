@@ -25,8 +25,8 @@ module.exports = {
 			const newCommand = require(`./${commandName}.js`);
 			msg.client.commands.set(newCommand.name, newCommand);
 		}
-		catch (error) {
-			logger.log('error', error);
+		catch (e) {
+			logger.error(e.stack);
 			return msg.channel.send(`There was an error while reloading a command \`${commandName}\`:\n\`${error.message}\``);
 		}
 		msg.channel.send(`Command \`${commandName}\` was reloaded!`);

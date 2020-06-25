@@ -39,7 +39,7 @@ module.exports = {
 
 					let hasItem = false;
 					const uitems = await user.getItems();
-					collected.first().delete().catch(e => logger.log('error', e));
+					collected.first().delete().catch(e => logger.error(e.stack));
 
 					sentMessage.edit(embed.setDescription(`How much ${item.name} do you want to sell?`)).then(() => {
 						msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
@@ -68,13 +68,13 @@ module.exports = {
 
 							})
 							.catch(e => {
-								logger.log('error', e);
+								logger.error(e.stack);
 								msg.reply('you didn\'t answer in time.');
 							});
 					});
 				})
 				.catch(e => {
-					logger.log('error', e);
+					logger.error(e.stack);
 					msg.reply('you didn\'t answer in time.');
 				});
 		});

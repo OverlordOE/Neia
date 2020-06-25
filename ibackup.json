@@ -1,1 +1,34 @@
-[]
+[
+	[],
+	[],
+	[
+		{
+			"id": 1,
+			"user_id": "137920111754346496",
+			"item_id": "1",
+			"amount": 234,
+			"item": {
+				"id": 1,
+				"name": "Tea",
+				"cost": 2,
+				"ctg": "consumable"
+			}
+		},
+		{
+			"id": 2,
+			"user_id": "137920111754346496",
+			"item_id": "7",
+			"amount": 2,
+			"item": {
+				"id": 7,
+				"name": "Profile Colour",
+				"cost": 40,
+				"ctg": "consumable"
+			}
+		}
+	],
+	[],
+	[],
+	[],
+	[]
+]
