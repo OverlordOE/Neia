@@ -56,9 +56,9 @@ module.exports = {
 
 
 		const luck = Math.floor(Math.random() * 100);
-		if (luck >= 20) {
+		if (luck >= 30) {
 
-			let stealAmount = 35 + (Math.random() * 30);
+			let stealAmount = Math.random() * targetBalance * 0.05;
 			if (targetBalance < stealAmount) stealAmount = targetBalance;
 
 			profile.addMoney(msg.author.id, stealAmount);
@@ -70,7 +70,11 @@ module.exports = {
 			await profile.setProtection(target.id, prot);
 			return msg.channel.send(`Successfully stolen ${Math.floor(stealAmount)}💰 from ${target.tag}. Your current balance is ${balance}💰`);
 		}
-		else if (luck < 20) {
+		else if (luck >= 15) {
+			await user.removeItem(item, 1);
+			return msg.channel.send(`You got caught trying to steal from ${target.tag}, but managed to get away safely.`);
+		}
+		else if (luck < 15) {
 			const fine = 10 + (Math.random() * 20);
 			profile.addMoney(msg.author.id, -fine);
 			const balance = await profile.getBalance(msg.author.id);
