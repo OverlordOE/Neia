@@ -92,7 +92,7 @@ async function buy(profile, sentMessage, amount, embed, item, msg) {
 	let balance = await profile.getBalance(msg.author.id);
 	const cost = amount * item.cost;
 	if (cost > balance) {
-		return sentMessage.edit(embed.setDescription(`You currently have ${balance}, but ${amount} ${item.name}(s) costs ${cost}💰!`));
+		return sentMessage.edit(embed.setDescription(`You currently have ${balance}💰, but ${amount} ${item.name}(s) costs ${cost}💰!`));
 	}
 
 	profile.addMoney(msg.author.id, -cost);
