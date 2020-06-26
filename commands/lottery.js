@@ -12,7 +12,7 @@ module.exports = {
 	music: false,
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
-		//	crontime: 0 0-23/3 * * *	collectortime: 10796250		channelID: 721743056528867393		winchance: 50
+		//	crontime: 0 0-23/3 * * *	collectortime: 10740000	channelID: 721743056528867393		winchance: 50
 		const lotteryJob = new cron.CronJob('0 0-23/3 * * *', async () => {
 
 			let writeData;
@@ -25,7 +25,7 @@ module.exports = {
 			const participants = [];
 			const notifyList = [];
 			let lottery = misc.lastLottery;
-			const description = `Press 💰 to participate in the lottery!\n${buyin}💰 buy-in.`;
+			const description = `Press 💰 to participate in the lottery!\nPress 🔔 to get notified when the lottery ends\n\n${buyin}💰 buy-in.`;
 			let duplicate = false;
 
 			const embed = new Discord.MessageEmbed()
@@ -44,7 +44,7 @@ module.exports = {
 					sentMessage.react('💰');
 					sentMessage.react('🔔');
 
-					const collector = sentMessage.createReactionCollector(filter, { time: 10796250 });
+					const collector = sentMessage.createReactionCollector(filter, { time: 10740000 });
 
 					collector.on('collect', async (r, user) => {
 
