@@ -1,7 +1,7 @@
 module.exports = {
 	name: 'reload',
 	description: '"Admin debug tool" Reloads a command.',
-	usage: '[command]',
+	usage: '<command>',
 	aliases: ['r', 're'],
 	owner: true,
 	args: true,
@@ -19,16 +19,16 @@ module.exports = {
 			return msg.channel.send(`There is no command with name or alias \`${commandName}\`, ${msg.author}!`);
 		}
 
-		delete require.cache[require.resolve(`./${commandName}.js`)];
+		delete require.cache[require.resolve(`./${command.name}.js`)];
 
 		try {
-			const newCommand = require(`./${commandName}.js`);
+			const newCommand = require(`./${command.name}.js`);
 			msg.client.commands.set(newCommand.name, newCommand);
 		}
 		catch (e) {
 			logger.error(e.stack);
-			return msg.channel.send(`There was an error while reloading a command \`${commandName}\`:\n\`${error.message}\``);
+			return msg.channel.send(`There was an error while reloading a command \`${commandName}\`:\n\`${e.message}\``);
 		}
-		msg.channel.send(`Command \`${commandName}\` was reloaded!`);
+		msg.channel.send(`Command \`${command.name}\` was reloaded!`);
 	},
 };

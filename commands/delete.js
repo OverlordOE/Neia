@@ -11,10 +11,15 @@ module.exports = {
 
 	execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
 
+		const amount = args[0];
+		if (isNaN(amount)) return msg.channel.send(`${amount} is not a valid number`);
+		if (amount < 1 || amount > 100) return msg.channel.send('Input a number between 1 and 100');
+
+
 		try {
 			msg.delete();
-			msg.channel.bulkDelete(args[0]);
-			logger.log('info', `${msg.author.tag} deleted ${args[0]} messages in channel ${msg.channel.name}`);
+			msg.channel.bulkDelete(amount);
+			logger.log('info', `${msg.author.tag} deleted ${amount} messages in channel ${msg.channel.name}`);
 		}
 		catch (error) {
 			msg.channel.send('Something went wrong');
