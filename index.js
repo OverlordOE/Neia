@@ -10,6 +10,7 @@ const moment = require('moment');
 const bot = new Discord.Client();
 const cooldowns = new Discord.Collection();
 const active = new Map();
+const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 bot.commands = new Discord.Collection();
 moment().format();
@@ -47,7 +48,7 @@ bot.on('ready', async () => {
 		storedBalances.forEach(b => profile.set(b.user_id, b));
 		logger.log('info', `Logged in as ${bot.user.tag}!`);
 	}
-	catch (error) {
+	catch (e) {
 		logger.error(e.stack);
 	}
 
@@ -65,41 +66,19 @@ process.on('uncaughtException', m => logger.log('error', m));
 // Execute for every message
 bot.on('message', async msg => {
 	// split message for further use
-	const args = msg.content.slice(prefix.length).split(/ +/);
+	const prefixRegex = new RegExp(`^(<@!?${bot.user.id}>|${escapeRegex(prefix)})\\s*`);
+	if (!prefixRegex.test(msg.content) || msg.author.bot) return;
+
+	const [, matchedPrefix] = msg.content.match(prefixRegex);
+	const args = msg.content.slice(matchedPrefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
+	
 	const now = Date.now();
 	const id = msg.author.id;
 	const user = profile.get(id);
-	if (!user) {
-		await profile.newUser(id);
-	}
+	if (!user) await profile.newUser(id);
 
 	profile.addCount(id, 1);
-
-	// money reward
-	if (!msg.author.bot && !msg.content.startsWith(prefix)) {
-		if (!cooldowns.has('reward')) {
-			cooldowns.set('reward', new Discord.Collection());
-		}
-
-		const cd = cooldowns.get('reward');
-		const cdAmount = 8000;
-
-		if (cd.has(msg.author.tag)) {
-			const cdTime = cd.get(msg.author.tag) + cdAmount;
-
-			if (now < cdTime) {
-				return;
-			}
-		}
-		const reward = 0.8 + (Math.random() * 0.6);
-		profile.addMoney(msg.author.id, reward);
-
-		cd.set(msg.author.tag, now);
-		setTimeout(() => cd.delete(msg.author.tag), cdAmount);
-	}
-	// check for prefix
-	if (!msg.content.startsWith(prefix)) return;
 
 	logger.log('info', `${msg.author.tag} Called command: ${commandName}`);
 
@@ -117,7 +96,7 @@ bot.on('message', async msg => {
 
 	// check for owner
 	if (command.owner) {
-		if (msg.author.id != 137920111754346496) {
+		if (id != 137920111754346496) {
 			return msg.channel.send('You are not the owner of this bot!');
 		}
 	}
@@ -141,8 +120,8 @@ bot.on('message', async msg => {
 	const timestamps = cooldowns.get(command.name);
 	const cooldownAmount = (command.cooldown || 1.5) * 1000;
 
-	if (timestamps.has(msg.author.id)) {
-		const expirationTime = timestamps.get(msg.author.id) + cooldownAmount;
+	if (timestamps.has(id)) {
+		const expirationTime = timestamps.get(id) + cooldownAmount;
 
 		if (now < expirationTime) {
 			const timeLeft = (expirationTime - now) / 1000;
@@ -152,19 +131,19 @@ bot.on('message', async msg => {
 			else { return msg.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`); }
 		}
 	}
-	timestamps.set(msg.author.id, now);
-	setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
+	timestamps.set(id, now);
+	setTimeout(() => timestamps.delete(id), cooldownAmount);
 
 
 	const options = {
 		active: active,
 	};
-	profile.addBotUsage(msg.author.id, 1);
+	profile.addBotUsage(id, 1);
 	// execute command
 	try {
 		command.execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns);
 	}
-	catch (error) {
+	catch (e) {
 		logger.error(e.stack);
 		msg.reply('there was an error trying to execute that command!');
 	}

@@ -101,7 +101,6 @@ module.exports = {
 										}
 
 										else {
-
 											const balance = await profile.getBalance(msg.author.id);
 
 											if (!goods || isNaN(goods)) return sentMessage.edit(embed.setDescription(`Sorry ${msg.author}, that's an invalid amount.`));

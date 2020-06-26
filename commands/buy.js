@@ -53,7 +53,7 @@ module.exports = {
 						if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not an item.`));
 						collected.first().delete().catch(e => logger.error(e.stack));
 
-						sentMessage.edit(embed.setDescription(`How many ${item.name} do you want to buy (max of 10000)?`)).then(() => {
+						sentMessage.edit(embed.setDescription(`How many \`${item.name}(s)\` do you want to buy?`)).then(() => {
 							msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 								.then(async collected => {
@@ -82,7 +82,7 @@ module.exports = {
 async function buy(profile, sentMessage, amount, embed, item, msg) {
 
 	if (!Number.isInteger(amount)) {
-		return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
+		return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
 	}
 	else if (amount < 1 || amount > 10000) {
 		amount = 1;
@@ -92,7 +92,7 @@ async function buy(profile, sentMessage, amount, embed, item, msg) {
 	let balance = await profile.getBalance(msg.author.id);
 	const cost = amount * item.cost;
 	if (cost > balance) {
-		return sentMessage.edit(embed.setDescription(`You currently have ${balance}💰, but ${amount} ${item.name}(s) costs ${cost}💰!`));
+		return sentMessage.edit(embed.setDescription(`You currently have **${balance}💰**, but **${amount}** \`${item.name}(s)\` costs **${cost}💰**!`));
 	}
 
 	profile.addMoney(msg.author.id, -cost);
