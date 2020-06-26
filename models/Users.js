@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		pColour: {
 			type: DataTypes.STRING,
-			defaultValue: '#fffb00',
+			defaultValue: '#fcfcfc',
 			allowNull: false,
 		},
 		hasVoted: {

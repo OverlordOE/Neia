@@ -193,7 +193,7 @@ Reflect.defineProperty(profile, 'getPColour', {
 	value: async function getPColour(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		return user ? user.pColour : 0;
+		return user ? user.pColour : '#fcfcfc';
 	},
 
 });
@@ -286,7 +286,7 @@ Reflect.defineProperty(profile, 'newUser', {
 			lastHourly: 0,
 			lastWeekly: 0,
 			protection: 0,
-			pColour: '#ffffff',
+			pColour: '#fcfcfc',
 			hasVoted: false,
 			msgCount: 1,
 			gamblingEarned: 0,
