@@ -1,7 +1,7 @@
 module.exports = {
 	Help: require('./help'),
 	Avatar: require('./avatar'),
-	Hackedandbanned: require('./hackedandbanned'),
+	Hack: require('./hack'),
 	Shop: require('./shop'),
 	Buy: require('./buy'),
 	Sell: require('./sell'),
@@ -13,7 +13,6 @@ module.exports = {
 	Daily: require('./daily'),
 	Weekly: require('./weekly'),
 	Leaderboard: require('./leaderboard'),
-	Jackpot: require('./jackpot'),
 	Lottery: require('./lottery'),
 	Gamble: require('./gamble'),
 	Steal: require('./steal'),
@@ -28,5 +27,4 @@ module.exports = {
 	Reload: require('./reload'),
 	Delete: require('./delete'),
 	Backup: require('./backup'),
-	Test: require('./test'),
 };

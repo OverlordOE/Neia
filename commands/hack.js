@@ -1,14 +1,14 @@
 module.exports = {
-	name: 'hackedandbanned',
-	aliases: ['hack', 'ban', 'hackandban'],
+	name: 'hack',
+	aliases: ['hackedandbanned', 'ban', 'hackandban'],
 	admin: false,
 	description: 'HACK AND BAN OTHER PEOPLE.',
 	args: true,
-	usage: '<target>',
+	usage: '<targets>',
 	owner: false,
 	music: false,
 
-	execute(msg, args) {
+	execute(msg) {
 
 		
 		const hacked = msg.mentions.users.map(user => {

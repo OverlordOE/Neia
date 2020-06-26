@@ -12,9 +12,9 @@ module.exports = {
 	async execute(message, args, profile) {
 		const pColour = await profile.getPColour(message.author.id);
 		const { commands } = message.client;
-		let adminCommands = ``;
-		let musicCommands = ``;
-		let normalCommands = ``;
+		let adminCommands = '';
+		let musicCommands = '';
+		let normalCommands = '';
 
 		const help = new Discord.MessageEmbed()
 			.setColor(pColour)
