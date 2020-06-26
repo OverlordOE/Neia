@@ -10,7 +10,7 @@ module.exports = {
 	admin: true,
 	aliases: ['b'],
 	args: false,
-	usage: 'modifier',
+	usage: '<modifier>',
 	music: false,
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {

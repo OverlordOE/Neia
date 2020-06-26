@@ -4,7 +4,7 @@ module.exports = {
 	admin: true,
 	aliases: ['remove'],
 	args: false,
-	usage: '(amount of messaged to delete)',
+	usage: '<amount>',
 	owner: false,
 	cooldown: 4,
 	music: false,

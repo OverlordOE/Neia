@@ -5,7 +5,7 @@ module.exports = {
 	admin: false,
 	aliases: ['roll'],
 	args: true,
-	usage: 'sides (amount of roles)',
+	usage: '<sides> <amount>',
 	owner: false,
 	music: false,
 

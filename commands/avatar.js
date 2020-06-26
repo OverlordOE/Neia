@@ -5,7 +5,7 @@ module.exports = {
 	admin: false,
 	description: 'Gets avatar of mentioned users, if there are no mentions it shows the senders avatar.',
 	args: false,
-	usage: 'user',
+	usage: '<target>',
 	owner: false,
 	music: false,
 

@@ -5,7 +5,7 @@ module.exports = {
 	owner: false,
 	aliases: ['fight'],
 	args: true,
-	usage: '(target)',
+	usage: '<target>',
 	admin: false,
 	music: false,
 

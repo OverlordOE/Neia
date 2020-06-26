@@ -9,7 +9,7 @@ module.exports = {
 	admin: false,
 	aliases: ['guess'],
 	args: true,
-	usage: 'money',
+	usage: '<amount>',
 	owner: false,
 	music: false,
 

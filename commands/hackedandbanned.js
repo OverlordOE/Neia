@@ -4,7 +4,7 @@ module.exports = {
 	admin: false,
 	description: 'HACK AND BAN OTHER PEOPLE.',
 	args: true,
-	usage: 'user',
+	usage: '<target>',
 	owner: false,
 	music: false,
 

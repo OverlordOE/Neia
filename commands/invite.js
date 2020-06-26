@@ -5,17 +5,27 @@ module.exports = {
 	admin: false,
 	args: false,
 	usage: '',
-	aliases: ['inv'],
+	aliases: ['inv', 'bug', 'join', 'support'],
 	owner: false,
 	music: false,
 
-	async execute(msg) {
+	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+
+		const pColour = await profile.getPColour(msg.author.id);
+		const bAvatar = bot.user.displayAvatarURL();
 		const embed = new Discord.MessageEmbed()
-			.setColor('#0099ff')
-			.setTitle('Click here to invite me to your own server!')
-			.setURL('https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=bot&permissions=2146958711');
+			.setTitle('Neia Invites')
+			.setColor(pColour)
+			.setThumbnail(bAvatar)
+			.setTimestamp()
+			.setFooter('Neija', bAvatar)
+			.setDescription(`[Click here to invite me to your server](https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=bot&permissions=372517968)\n
+							 [Click here to join the support server](https://discord.gg/hFGxVDT)\n
+							 [Click here to submit a bug or request  feature](https://github.com/OverlordOE/Neija/issues/new/choose)\n
+							 For more info contact: OverlordOE#0717
+			`);
 		msg.channel.send(embed);
 	},
 };
-// https://discord.gg/duQjgAn
-// https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=bot&permissions=2146958711
+// https://discord.gg/hFGxVDT
+// https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=bot&permissions=372517968

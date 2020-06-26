@@ -3,7 +3,7 @@ module.exports = {
 	description: 'Adds money too the mentioned user.',
 	owner: true,
 	args: true,
-	usage: 'money user',
+	usage: '<money> <target>',
 	aliases: [],
 	admin: false,
 	music: false,

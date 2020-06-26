@@ -5,7 +5,7 @@ module.exports = {
 	admin: false,
 	aliases: ['lead', 'top', 'ranking'],
 	args: false,
-	usage: '',
+	usage: '<page>',
 	owner: false,
 	music: false,
 
