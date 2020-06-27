@@ -26,6 +26,18 @@ module.exports = {
 			return msg.channel.send('Incorrect mention');
 		}
 
+		const opted = await profile.getOptIn(msg.author.id);
+		if (!opted) {
+			timestamps.delete(msg.author.id);
+			return msg.reply('you are not opted into pvp for the bot.\nYou can use the command `optin` to enable pvp.');
+		}
+		const targetOpted = await profile.getOptIn(target.id);
+		if (!targetOpted) {
+			timestamps.delete(msg.author.id);
+			return msg.channel.send(`${target.tag} is not opted into pvp for the bot.\nThey can use the command \`optin\` to enable pvp.`);
+		}
+
+
 		const now = moment();
 		const protection = moment(await profile.getProtection(target.id));
 		const checkProtection = moment(protection).isBefore(now);

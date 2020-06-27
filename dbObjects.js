@@ -278,6 +278,24 @@ Reflect.defineProperty(profile, 'addBotUsage', {
 	},
 });
 
+Reflect.defineProperty(profile, 'getOptIn', {
+	value: async function getOptIn(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		return user ? user.optIn : 0;
+	},
+
+});
+Reflect.defineProperty(profile, 'setOptIn', {
+	value: async function setOptIn(id, opt) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+
+		user.optIn = opt;
+		return user.save();
+	},
+});
+
 
 Reflect.defineProperty(profile, 'newUser', {
 	value: async function newUser(id) {
@@ -290,6 +308,7 @@ Reflect.defineProperty(profile, 'newUser', {
 			protection: 0,
 			pColour: '#fcfcfc',
 			hasVoted: false,
+			optIn: false,
 			msgCount: 1,
 			gamblingEarned: 0,
 			gamblingSpent: 0,

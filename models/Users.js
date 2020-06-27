@@ -9,6 +9,13 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
+		optIn: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+			allowNull: false,
+		},
+
+		// cooldowns
 		lastDaily: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
@@ -29,21 +36,32 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
-		pColour: {
-			type: DataTypes.STRING,
-			defaultValue: '#fcfcfc',
-			allowNull: false,
-		},
 		hasVoted: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 			allowNull: false,
 		},
+
+		pColour: {
+			type: DataTypes.STRING,
+			defaultValue: '#fcfcfc',
+			allowNull: false,
+		},
+
+
+		// usage stats
 		msgCount: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
 			allowNull: false,
 		},
+		botUsage: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+
+		// misc stats
 		totalEarned: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
@@ -74,12 +92,6 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
-		botUsage: {
-			type: DataTypes.INTEGER,
-			defaultValue: 0,
-			allowNull: false,
-		},
-
 
 	},
 		{
