@@ -65,22 +65,26 @@ process.on('uncaughtException', m => logger.error(m.stack));
 
 // Execute for every message
 bot.on('message', async msg => {
+	if (msg.author.bot) return;
+
 	const guild = guildProfile.get(msg.guild.id);
 	if (!guild) await guildProfile.newGuild(msg.guild.id);
 	const prefix = await guildProfile.getPrefix(msg.guild.id);
+	const now = Date.now();
+	const id = msg.author.id;
+	const user = profile.get(id);
+	if (!user) await profile.newUser(id);
+
 
 	// split message for further use
 	const prefixRegex = new RegExp(`^(<@!?${bot.user.id}>|${escapeRegex(prefix)})\\s*`);
-	if (!prefixRegex.test(msg.content) || msg.author.bot) return;
+	if (!prefixRegex.test(msg.content)) return;
 
 	const [, matchedPrefix] = msg.content.match(prefixRegex);
 	const args = msg.content.slice(matchedPrefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
-	const now = Date.now();
-	const id = msg.author.id;
-	const user = profile.get(id);
-	if (!user) await profile.newUser(id);
+	
 
 	profile.addCount(id, 1);
 

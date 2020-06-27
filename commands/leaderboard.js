@@ -10,7 +10,7 @@ module.exports = {
 	music: false,
 
 
-	async execute(msg, args, profile, bot) {
+	async execute(msg, args, profile, guildProfile, bot) {
 
 		const filter = (reaction, user) => {
 			return ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === msg.author.id;
