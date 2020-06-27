@@ -1,10 +1,10 @@
 const Discord = require('discord.js');
-const { Users, CurrencyShop } = require('../dbObjects');
+const { CurrencyShop } = require('../dbObjects');
 module.exports = {
 	name: 'shop',
 	description: 'Shows all the shop items.',
 	admin: false,
-	aliases: ['store', 'item', 'items'],
+	aliases: ['store'],
 	args: false,
 	usage: '',
 	owner: false,
@@ -15,16 +15,14 @@ module.exports = {
 		const bAvatar = msg.author.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
 		let consumable = '__**Consumables:**__\n';
-		let discord = '__**Discord related items:**__\n';
 		let collectables = '__**Collectables:**__\n';
 
 		await items.map(item => {
-			if (item.ctg == 'consumable') { consumable += `${item.name}: ${item.cost}💰\n`; }
-			else if (item.ctg == 'collectables') { collectables += `${item.name}: ${item.cost}💰\n`; }
-			else if (item.ctg == 'discord') { discord += `${item.name}: ${item.cost}💰\n`; }
+			if (item.ctg == 'consumable') { consumable += `${item.emoji}__${item.name}__: **${item.cost}💰**\n`; }
+			else if (item.ctg == 'collectables') { collectables += `${item.emoji}__${item.name}__: **${item.cost}💰**\n`; }
 		});
 
-		const description = `${consumable}\n${collectables}\n${discord}`;
+		const description = `${consumable}\n${collectables}`;
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neija Shop')
