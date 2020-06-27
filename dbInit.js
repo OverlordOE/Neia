@@ -12,6 +12,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 const CurrencyShop = sequelize.import('models/CurrencyShop');
 sequelize.import('models/Users');
 sequelize.import('models/UserItems');
+sequelize.import('models/Guilds');
 
 // Execute node dbInit.js --force or node dbInit.js -f to force update the tables (this resets the db but removes unused tables).
 // Execute node dbInit.js --sync or node dbInit.js -s to force update the tables (this doesnt reset the db but keeps unused tables).
@@ -36,7 +37,6 @@ sequelize.sync({ force: true }).then(async () => {
 		CurrencyShop.upsert({ name: '⛵', cost: 200, ctg: 'collectables' }),
 		CurrencyShop.upsert({ name: '🚤', cost: 125, ctg: 'collectables' }),
 		CurrencyShop.upsert({ name: '🏢', cost: 50000, ctg: 'collectables' }),
-
 	];
 	await Promise.all(shop);
 	console.log('Database synced');

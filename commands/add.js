@@ -9,12 +9,12 @@ module.exports = {
 	music: false,
 	cooldown: 0,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		const transferAmount = args.find(arg => !/<@!?\d+>/g.test(arg));
 		const transferTarget = msg.mentions.users.first() || msg.author;
 
 		if (args[0] == 'all') {
-			return profile.map( (user) => {
+			return profile.map((user) => {
 				profile.addMoney(user.user_id, args[1]);
 			});
 		}

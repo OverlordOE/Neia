@@ -12,7 +12,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 
 		if (!cooldowns.has('steal')) {
 			cooldowns.set('steal', new Discord.Collection());

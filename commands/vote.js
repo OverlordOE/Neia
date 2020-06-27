@@ -14,9 +14,9 @@ module.exports = {
 	usage: '',
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
-		
-		
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+
+
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
 

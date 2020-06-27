@@ -9,7 +9,7 @@ module.exports = {
 	cooldown: 4,
 	music: false,
 
-	execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 
 		const amount = args[0];
 		if (isNaN(amount)) return msg.channel.send(`${amount} is not a valid number`);

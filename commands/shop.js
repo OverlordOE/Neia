@@ -10,7 +10,7 @@ module.exports = {
 	owner: false,
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		const items = await CurrencyShop.findAll();
 		const bAvatar = msg.author.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);

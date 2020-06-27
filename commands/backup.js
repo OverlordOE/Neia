@@ -13,7 +13,7 @@ module.exports = {
 	usage: '<modifier>',
 	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		let total = 0;
 
 		if (args[0] == 'restore') {

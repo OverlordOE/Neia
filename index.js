@@ -1,10 +1,9 @@
 const Discord = require('discord.js');
 const winston = require('winston');
 require('dotenv').config();
-const prefix = process.env.PREFIX;
 const token = process.env.TEST_TOKEN;
 const ytAPI = process.env.YT_API;
-const { Users, profile } = require('./dbObjects');
+const { Users, profile, Guilds, guildProfile } = require('./dbObjects');
 const botCommands = require('./commands');
 const moment = require('moment');
 const bot = new Discord.Client();
@@ -17,7 +16,7 @@ moment().format();
 
 
 const logger = winston.createLogger({
-	level: 'info',
+	level: 'debug',
 	format: winston.format.combine(
 		winston.format.timestamp({
 			format: 'MM-DD HH:mm:ss',
@@ -44,8 +43,10 @@ bot.login(token);
 // Execute on bot start
 bot.on('ready', async () => {
 	try {
-		const storedBalances = await Users.findAll();
-		storedBalances.forEach(b => profile.set(b.user_id, b));
+		const storedUsers = await Users.findAll();
+		storedUsers.forEach(b => profile.set(b.user_id, b));
+		const storedGuilds = await Guilds.findAll();
+		storedGuilds.forEach(b => guildProfile.set(b.guild_id, b));
 		logger.log('info', `Logged in as ${bot.user.tag}!`);
 	}
 	catch (e) {
@@ -56,15 +57,19 @@ bot.on('ready', async () => {
 
 
 // Logger
-bot.on('debug', m => logger.log('debug', m));
-bot.on('warn', m => logger.log('warn', m));
-bot.on('error', m => logger.log('error', m));
-process.on('unhandledRejection', m => logger.log('error', m));
-process.on('TypeError', m => logger.log('error', m));
-process.on('uncaughtException', m => logger.log('error', m));
+bot.on('debug', m => logger.log('debug', m.stack));
+bot.on('warn', m => logger.log('warn', m.stack));
+bot.on('error', m => logger.log('error', m.stack));
+process.on('unhandledRejection', m => logger.log('error', m.stack));
+process.on('TypeError', m => logger.log('error', m.stack));
+process.on('uncaughtException', m => logger.log('error', m.stack));
 
 // Execute for every message
 bot.on('message', async msg => {
+	const guild = guildProfile.get(msg.guild.id);
+	if (!guild) await guildProfile.newGuild(msg.guild.id);
+	const prefix = await guildProfile.getPrefix(msg.guild.id);
+
 	// split message for further use
 	const prefixRegex = new RegExp(`^(<@!?${bot.user.id}>|${escapeRegex(prefix)})\\s*`);
 	if (!prefixRegex.test(msg.content) || msg.author.bot) return;
@@ -72,7 +77,7 @@ bot.on('message', async msg => {
 	const [, matchedPrefix] = msg.content.match(prefixRegex);
 	const args = msg.content.slice(matchedPrefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
-	
+
 	const now = Date.now();
 	const id = msg.author.id;
 	const user = profile.get(id);
@@ -141,7 +146,7 @@ bot.on('message', async msg => {
 	profile.addBotUsage(id, 1);
 	// execute command
 	try {
-		command.execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns);
+		command.execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns);
 	}
 	catch (e) {
 		logger.error(e.stack);

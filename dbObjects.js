@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const moment = require('moment');
 const Discord = require('discord.js');
 const profile = new Discord.Collection();
+const guildProfile = new Discord.Collection();
 
 
 const sequelize = new Sequelize('database', 'username', 'password', {
@@ -12,6 +13,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 const Users = sequelize.import('models/Users');
+const Guilds = sequelize.import('models/Guilds');
 const CurrencyShop = sequelize.import('models/CurrencyShop');
 const UserItems = sequelize.import('models/UserItems');
 
@@ -73,7 +75,7 @@ Reflect.defineProperty(profile, 'setUser', {
 	value: async function setUser(id, newUser) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		
+
 		user = newUser;
 		return user.save();
 	},
@@ -302,4 +304,33 @@ Reflect.defineProperty(profile, 'newUser', {
 	},
 });
 
-module.exports = { Users, CurrencyShop, UserItems, profile };
+Reflect.defineProperty(guildProfile, 'newGuild', {
+	value: async function newGuild(id) {
+		const guild = await Guilds.create({
+			guild_id: id,
+			prefix: '-',
+		});
+		guildProfile.set(id, guild);
+		return guild;
+	},
+});
+
+Reflect.defineProperty(guildProfile, 'getPrefix', {
+	value: async function getPrefix(id) {
+		let guild = guildProfile.get(id);
+		if (!guild) guild = await guildProfile.newGuild(id);
+		return guild ? guild.prefix : 0;
+	},
+
+});
+Reflect.defineProperty(guildProfile, 'setPrefix', {
+	value: async function setPrefix(id, newPrefix) {
+		let guild = guildProfile.get(id);
+		if (!guild) guild = await guildProfile.newGuild(id);
+
+		guild.prefix = newPrefix;
+		return guild.save();
+	},
+});
+
+module.exports = { Users, Guilds, CurrencyShop, UserItems, profile, guildProfile };
