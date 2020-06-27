@@ -27,7 +27,7 @@ const logger = winston.createLogger({
 
 	transports: [
 		new winston.transports.Console(),
-		new winston.transports.File({ filename: 'error.log', level: 'error' }),
+		new winston.transports.File({ filename: 'error.log', level: 'warn' }),
 		new winston.transports.File({ filename: 'log.log' }),
 	],
 });
@@ -57,12 +57,11 @@ bot.on('ready', async () => {
 
 
 // Logger
-bot.on('debug', m => logger.log('debug', m.stack));
-bot.on('warn', m => logger.log('warn', m.stack));
-bot.on('error', m => logger.log('error', m.stack));
-process.on('unhandledRejection', m => logger.log('error', m.stack));
-process.on('TypeError', m => logger.log('error', m.stack));
-process.on('uncaughtException', m => logger.log('error', m.stack));
+bot.on('warn', m => logger.warn(m.stack));
+bot.on('error', m => logger.error(m.stack));
+process.on('unhandledRejection', m => logger.error(m.stack));
+process.on('TypeError', m => logger.error(m.stack));
+process.on('uncaughtException', m => logger.error(m.stack));
 
 // Execute for every message
 bot.on('message', async msg => {

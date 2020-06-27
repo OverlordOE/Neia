@@ -24,9 +24,9 @@ module.exports = {
 			help.setTitle('Neija command list');
 			commands.map(command => {
 				if (!command.owner) {
-					if (command.admin) { adminCommands += `**-${command.name}** - ${command.description}\n`; }
-					else if (command.music) { musicCommands += `**-${command.name}** - ${command.description}\n`; }
-					else { normalCommands += `**-${command.name}** - ${command.description}\n`; }
+					if (command.admin) { adminCommands += `**${command.name}** - ${command.description}\n`; }
+					else if (command.music) { musicCommands += `**${command.name}** - ${command.description}\n`; }
+					else { normalCommands += `**${command.name}** - ${command.description}\n`; }
 				}
 
 			});
@@ -35,7 +35,7 @@ module.exports = {
 			help.setDescription(`**Normal commands**\n${normalCommands}`);
 			help.addField('**Music commands**', musicCommands);
 			help.addField('**Admin commands**', adminCommands);
-			help.addField('**Help**', '**You can send `-help [command name]` to get info on a specific command!**');
+			help.addField('**Help**', '**You can send `help [command name]` to get info on a specific command!**');
 		}
 		else {
 			const name = args[0].toLowerCase();
@@ -49,8 +49,8 @@ module.exports = {
 			help.setTitle(command.name);
 
 			if (command.description) help.addField('**Description:**', command.description);
-			if (command.usage) help.addField('**Usage:**', `-${command.name} ${command.usage}`);
-			if (command.aliases) help.addField('**Aliases:**', `-${command.aliases.join(', ')}`);
+			if (command.usage) help.addField('**Usage:**', `${command.name} ${command.usage}`);
+			if (command.aliases) help.addField('**Aliases:**', command.aliases.join(', '));
 			if (command.admin) help.addField('**Need Admin:**', command.admin);
 		}
 

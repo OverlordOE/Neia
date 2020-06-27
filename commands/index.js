@@ -3,6 +3,7 @@ module.exports = {
 	Avatar: require('./avatar'),
 	Hack: require('./hack'),
 	Shop: require('./shop'),
+	Item: require('./item'),
 	Buy: require('./buy'),
 	Sell: require('./sell'),
 	Use: require('./use'),

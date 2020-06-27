@@ -195,7 +195,7 @@ async function use(profile, sentMessage, amount, embed, item, msg, filter) {
 
 		case 'Profile Colour': {
 
-			sentMessage.edit(embed.setDescription('Specify the colour you want for your profile in the format #0099ff\n(look up hex color on google to get a colour chooser)')).then(() => {
+			sentMessage.edit(embed.setDescription('Specify the colour you want for your profile in the format #0099ff\n[hex colour picker](https://www.color-hex.com/)')).then(() => {
 				msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 					.then(async collected => {
