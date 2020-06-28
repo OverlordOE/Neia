@@ -53,15 +53,6 @@ Users.prototype.getItems = function () {
 	});
 };
 
-Users.prototype.setItems = function (items) {
-	let uItems = UserItems.findAll({
-		where: { user_id: this.user_id },
-		include: ['item'],
-	});
-	uItems = items;
-	uItems.save();
-
-};
 
 // Add db commands
 Reflect.defineProperty(profile, 'getUser', {
@@ -69,15 +60,6 @@ Reflect.defineProperty(profile, 'getUser', {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 		return user;
-	},
-});
-Reflect.defineProperty(profile, 'setUser', {
-	value: async function setUser(id, newUser) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
-		user = newUser;
-		return user.save();
 	},
 });
 
