@@ -5,7 +5,7 @@ module.exports = {
 	category: 'admin',
 	args: false,
 	usage: '',
-	aliases: [],
+
 	cooldown: 3,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
