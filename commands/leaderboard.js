@@ -20,7 +20,7 @@ module.exports = {
 		const list = profile.sort((a, b) => b.balance - a.balance)
 			.filter(user => bot.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}.**__ *${(bot.users.cache.get(user.user_id))}*: **${Math.floor(user.balance)}💰**`);
+			.map((user, position) => `\n__**${position + 1}.**__ *${bot.users.cache.get(user.user_id).tag}*: **${Math.floor(user.balance)}💰**`);
 
 		let page = 0;
 		if (!isNaN(args[0]) && args[0] > 0 && args[0] < 6) page = args[0] - 1;
