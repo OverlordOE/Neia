@@ -7,11 +7,9 @@ module.exports = {
 	name: 'trade',
 	description: 'Trade money and items to other people.',
 	aliases: ['give', 'donate', 'transfer'],
-	admin: false,
+	category: 'money',
 	args: false,
 	usage: '',
-	owner: false,
-	music: false,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 
@@ -50,7 +48,7 @@ module.exports = {
 						else { return sentMessage.edit(embed.setDescription(`${mention} is not a valid response`)); }
 
 
-						sentMessage.edit(embed.setDescription(`Trading with **${target.username}**\n\nWhat do you want to send (answer with a number to send money)?`))
+						sentMessage.edit(embed.setDescription(`Trading with *${target.username}*\n\nWhat do you want to send (answer with a number to send money)?`))
 							.then(() => {
 								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
@@ -69,7 +67,7 @@ module.exports = {
 
 
 
-											sentMessage.edit(embed.setDescription(`Trading with **${target.username}**\n\nHow much ${item.name} do you want to send?`)).then(() => {
+											sentMessage.edit(embed.setDescription(`Trading with *${target.username}*\n\nHow much __${item.name}(s)__ do you want to send?`)).then(() => {
 												msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 													.then(async collected => {
@@ -83,13 +81,13 @@ module.exports = {
 															}
 														});
 														if (!hasItem) {
-															return sentMessage.edit(embed.setDescription(`You don't have ${amount} ${item.name}(s)!`));
+															return sentMessage.edit(embed.setDescription(`You don't have **${amount}** __${item.name}(s)__!`));
 														}
 
 														await user.removeItem(item, amount);
 														await userTarget.addItem(item, amount);
 
-														sentMessage.edit(embed.setDescription(`Trade with **${target.username}** succesfull!\n\nTraded ${amount} ${item.name} to **${target.username}**.`));
+														sentMessage.edit(embed.setDescription(`Trade with *${target.username}* succesfull!\n\nTraded **${amount}** __${item.name}__ to *${target.username}*.`));
 
 													})
 													.catch(e => {
@@ -103,14 +101,14 @@ module.exports = {
 										else {
 											const balance = await profile.getBalance(msg.author.id);
 
-											if (!goods || isNaN(goods)) return sentMessage.edit(embed.setDescription(`Sorry ${msg.author}, that's an invalid amount.`));
-											if (goods > balance) return sentMessage.edit(embed.setDescription(`Sorry ${msg.author}, you only have **${balance}💰**.`));
-											if (goods <= 0) return sentMessage.edit(embed.setDescription(`Please enter an amount greater than zero, ${msg.author}.`));
+											if (!goods || isNaN(goods)) return sentMessage.edit(embed.setDescription(`Sorry *${msg.author}*, that's an invalid amount.`));
+											if (goods > balance) return sentMessage.edit(embed.setDescription(`You only have **${balance}💰** but need **${goods}**.`));
+											if (goods <= 0) return sentMessage.edit(embed.setDescription(`Please enter an amount greater than zero, *${msg.author}*.`));
 
 											profile.addMoney(msg.author.id, -goods);
 											profile.addMoney(target.id, goods);
 											const balance2 = await profile.getBalance(msg.author.id);
-											return sentMessage.edit(embed.setDescription(`Trade with **${target.username}** succesfull!\n\nTransferred **${goods}💰** to **${target.username}**.\nYour current balance is **${balance2}💰**`));
+											return sentMessage.edit(embed.setDescription(`Trade with *${target.username}* succesfull!\n\nTransferred **${goods}💰** to *${target.username}*.\nYour current balance is **${balance2}💰**`));
 
 										}
 									})

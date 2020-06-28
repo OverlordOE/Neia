@@ -2,12 +2,10 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'avatar',
 	aliases: ['icon', 'pfp', 'picture'],
-	admin: false,
+	category: 'misc',
 	description: 'Gets avatar of mentioned users, if there are no mentions it shows the senders avatar.',
 	args: false,
 	usage: '<target>',
-	owner: false,
-	music: false,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 

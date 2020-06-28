@@ -1,12 +1,10 @@
 module.exports = {
 	name: 'clear',
 	description: 'clears the song queue.',
-	admin: false,
+	category: 'music',
 	aliases: ['stop'],
 	args: false,
-	owner: false,
 	usage: '',
-	music: true,
 	cooldown: 5,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {

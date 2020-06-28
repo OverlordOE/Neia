@@ -1,12 +1,10 @@
 module.exports = {
 	name: 'queue',
 	description: 'Shows the song queue.',
-	admin: false,
+	category: 'music',
 	aliases: ['list'],
 	args: false,
 	usage: '',
-	owner: false,
-	music: true,
 
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
@@ -16,7 +14,7 @@ module.exports = {
 
 		const queue = guildIDData.queue;
 		const nowPlaying = queue[0];
-		let response = ``;
+		let response = '';
 
 		if (guildIDData.loop) { response = `Now looping: **${nowPlaying.songTitle}**\nDuration: ${nowPlaying.duration}\nRequested by ${nowPlaying.requester}\n\nType -loop to stop the looping \n`; }
 

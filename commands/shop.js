@@ -3,12 +3,10 @@ const { CurrencyShop } = require('../dbObjects');
 module.exports = {
 	name: 'shop',
 	description: 'Shows all the shop items.',
-	admin: false,
+	category: 'info',
 	aliases: ['store'],
 	args: false,
 	usage: '',
-	owner: false,
-	music: false,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		const items = await CurrencyShop.findAll();

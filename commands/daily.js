@@ -4,13 +4,11 @@ const { Users } = require('../dbObjects');
 module.exports = {
 	name: 'daily',
 	description: 'Get a daily gift.',
-	admin: false,
+	category: 'money',
 	aliases: ['day', 'd'],
 	args: false,
 	cooldown: 5,
-	owner: false,
 	usage: '',
-	music: false,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		const lastDaily = moment(await profile.getDaily(msg.author.id));
@@ -53,8 +51,8 @@ module.exports = {
 
 			await profile.setDaily(msg.author.id);
 			const balance = await profile.getBalance(msg.author.id);
-			msg.channel.send(embed.setDescription(`You got ${dReward.toFixed(1)}💰 from your daily 🎁 and ${cReward.toFixed(1)}💰 from your collectables for a total of ${finalReward.toFixed(1)}💰, come back in a day for more!\n\nYour current balance is ${balance}💰`));
+			msg.channel.send(embed.setDescription(`You got **${dReward.toFixed(1)}💰** from your daily 🎁 and **${cReward.toFixed(1)}💰** from your collectables for a total of **${finalReward.toFixed(1)}💰**\nCome back in a day for more!\n\nYour current balance is **${balance}💰**`));
 		}
-		else { msg.channel.send(embed.setDescription(`You have already gotten your daily 🎁\n\nYou can get you next daily ${daily}`)); }
+		else { msg.channel.send(embed.setDescription(`You have already gotten your daily 🎁\n\nYou can get you next daily __${daily}__`)); }
 	},
 };

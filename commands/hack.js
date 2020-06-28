@@ -1,12 +1,10 @@
 module.exports = {
 	name: 'hack',
 	aliases: ['hackedandbanned', 'ban', 'hackandban'],
-	admin: false,
+	category: 'misc',
 	description: 'HACK AND BAN OTHER PEOPLE.',
 	args: true,
 	usage: '<targets>',
-	owner: false,
-	music: false,
 
 	execute(msg) {
 

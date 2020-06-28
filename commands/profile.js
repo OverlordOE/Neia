@@ -4,12 +4,10 @@ const moment = require('moment');
 module.exports = {
 	name: 'profile',
 	description: 'Shows profile of you or the tagger user.',
-	admin: false,
+	category: 'info',
 	aliases: ['inv', 'items', 'prof', 'inventory', 'balance', 'money', 'p'],
 	args: false,
-	usage: 'user',
-	owner: false,
-	music: false,
+	usage: '<user>',
 
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
@@ -81,7 +79,7 @@ module.exports = {
 
 		const statEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
-			.setTitle(`${target.tag}'s Inventory`)
+			.setTitle(`*${target.tag}'s* Inventory`)
 			.setThumbnail(avatar)
 			.addField('Total Spent:', userProfile.totalSpent.toFixed(1), true)
 			.addField('Total Earned:', userProfile.totalEarned.toFixed(1), true)
@@ -112,18 +110,18 @@ module.exports = {
 			if (collectables) {
 				const pIncome = (networth / 20) + ((networth / 200) * 24);
 				invEmbed.addField('Assets', assets);
-				invEmbed.addField('Max passive income', `${pIncome.toFixed(1)}💰`);
-				invEmbed.addField('Networth', `${networth}💰`, true);
+				invEmbed.addField('Max passive income', `**${pIncome.toFixed(1)}💰**`);
+				invEmbed.addField('Networth', `**${networth}💰**`, true);
 			}
 
 			items.map(i => {
 				if (i.amount < 1) return;
 				if (i.item.ctg == 'collectables') return;
-				inventory += `${i.item.emoji} ${i.item.name}: x${i.amount}\n`;
+				inventory += `${i.item.emoji}__${i.item.name}__: **x${i.amount}**\n`;
 				invEmbed.setDescription(inventory);
 			});
 		}
-		else invEmbed.addField('Inventory:', `${target.tag} has nothing!`);
+		else invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`);
 
 
 		msg.channel.send(moneyEmbed)

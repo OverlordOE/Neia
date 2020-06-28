@@ -3,14 +3,12 @@ const { Users, CurrencyShop } = require('../dbObjects');
 const { Op } = require('sequelize');
 module.exports = {
 	name: 'buy',
-	description: 'buy an item from the shop.',
-	admin: false,
+	description: 'Buy an item from the shop.',
+	category: 'money',
 	aliases: ['get'],
 	usage: '<item> <amount>',
 	cooldown: 5,
-	owner: false,
 	args: false,
-	music: false,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 
@@ -53,7 +51,7 @@ module.exports = {
 						if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not an item.`));
 						collected.first().delete().catch(e => logger.error(e.stack));
 
-						sentMessage.edit(embed.setDescription(`How many \`${item.name}(s)\` do you want to buy?`)).then(() => {
+						sentMessage.edit(embed.setDescription(`How many __${item.name}(s)__ do you want to buy?`)).then(() => {
 							msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 								.then(async collected => {
@@ -92,12 +90,12 @@ async function buy(profile, sentMessage, amount, embed, item, msg) {
 	let balance = await profile.getBalance(msg.author.id);
 	const cost = amount * item.cost;
 	if (cost > balance) {
-		return sentMessage.edit(embed.setDescription(`You currently have **${balance}💰**, but **${amount}** \`${item.name}(s)\` costs **${cost}💰**!`));
+		return sentMessage.edit(embed.setDescription(`You currently have **${balance}💰**, but __**${amount}**__ __${item.name}(s)__ costs **${cost}💰**!`));
 	}
 
 	profile.addMoney(msg.author.id, -cost);
 	profile.addShopSpent(msg.author.id, cost);
 	await user.addItem(item, amount);
 	balance = await profile.getBalance(msg.author.id);
-	sentMessage.edit(embed.setDescription(`You've bought: ${amount} ${item.name}(s).\n\nCurrent balance is ${balance}💰.`));
+	sentMessage.edit(embed.setDescription(`You've bought: __**${amount}**__ __${item.name}(s)__.\n\nCurrent balance is **${balance}💰**.`));
 }

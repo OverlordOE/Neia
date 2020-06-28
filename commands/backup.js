@@ -3,12 +3,11 @@ const backup = require('../backup');
 module.exports = {
 	name: 'backup',
 	description: 'Makes a backup of the database.',
-	owner: true,
-	admin: true,
+	category: 'debug',
 	aliases: ['b'],
 	args: false,
 	usage: '<modifier>',
-	music: false,
+
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		let total = 0;
@@ -32,7 +31,7 @@ module.exports = {
 				}
 			}
 
-			return msg.channel.send(`backup of ${total} users restored`);
+			return msg.channel.send(`backup of __**${total}**__ users restored`);
 		}
 
 		try {
@@ -45,7 +44,7 @@ module.exports = {
 
 			// Checking for errors
 			if (e) return logger.error(e.stack);
-			msg.channel.send(`Backup succesfull, backed up ${total} users!`);
+			msg.channel.send(`Backup succesfull, backed up __**${total}**__ users!`);
 			logger.log('info', 'Done writing profiles'); // Success
 		});
 	},

@@ -1,12 +1,10 @@
 module.exports = {
 	name: 'prefix',
 	description: 'Change the prefix of the bot for this server.',
-	owner: false,
+	category: 'admin',
 	args: false,
 	usage: '',
 	aliases: [],
-	admin: true,
-	music: false,
 	cooldown: 3,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
@@ -15,7 +13,7 @@ module.exports = {
 		if (args[0]) {
 			const newPrefix = args[0];
 			guildProfile.setPrefix(id, newPrefix);
-			return msg.channel.send(`Chnaged the prefix for this server too: ${newPrefix}`);
+			return msg.channel.send(`Changed the prefix for this server too: ${newPrefix}`);
 		}
 		const prefix = await guildProfile.getPrefix(id);
 		return msg.channel.send(`The prefix for this server is: ${prefix}`);

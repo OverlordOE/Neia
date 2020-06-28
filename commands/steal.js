@@ -7,10 +7,8 @@ module.exports = {
 	cooldown: 2400,
 	args: true,
 	usage: 'target',
-	admin: false,
+	category: 'money',
 	aliases: ['shoot'],
-	owner: false,
-	music: false,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 
@@ -29,12 +27,12 @@ module.exports = {
 		const opted = await profile.getOptIn(msg.author.id);
 		if (!opted) {
 			timestamps.delete(msg.author.id);
-			return msg.reply('you are not opted into pvp for the bot.\nYou can use the command `optin` to enable pvp.');
+			return msg.reply('You are not opted into pvp for the bot.\nYou can use the command `optin` to enable pvp.');
 		}
 		const targetOpted = await profile.getOptIn(target.id);
 		if (!targetOpted) {
 			timestamps.delete(msg.author.id);
-			return msg.channel.send(`${target.tag} is not opted into pvp for the bot.\nThey can use the command \`optin\` to enable pvp.`);
+			return msg.channel.send(`*${target.tag}* is not opted into pvp for the bot.\nThey can use the command \`optin\` to enable pvp.`);
 		}
 
 
@@ -44,7 +42,7 @@ module.exports = {
 
 		if (!checkProtection) {
 			timestamps.delete(msg.author.id);
-			return msg.channel.send(`${target.tag} has steal protection on, you cannot steal from them right now.`);
+			return msg.channel.send(`*${target.tag}* has steal protection on, you cannot steal from them right now.`);
 		}
 
 		const targetBalance = await profile.getBalance(target.id);
@@ -80,18 +78,18 @@ module.exports = {
 			await user.removeItem(item, 1);
 			const prot = moment(now).add(1, 'h');
 			await profile.setProtection(target.id, prot);
-			return msg.channel.send(`Successfully stolen ${Math.floor(stealAmount)}💰 from ${target.tag}. Your current balance is ${balance}💰`);
+			return msg.channel.send(`Successfully stolen **${Math.floor(stealAmount)}💰** from *${target.tag}*. Your current balance is **${balance}💰**`);
 		}
 		else if (luck >= 15) {
 			await user.removeItem(item, 1);
-			return msg.channel.send(`You got caught trying to steal from ${target.tag}, but managed to get away safely.`);
+			return msg.channel.send(`You got caught trying to steal from *${target.tag}*, but managed to get away safely.`);
 		}
 		else if (luck < 15) {
 			const fine = 10 + (Math.random() * 20);
 			profile.addMoney(msg.author.id, -fine);
 			const balance = await profile.getBalance(msg.author.id);
 			await user.removeItem(item, 1);
-			return msg.channel.send(`You got caught trying to steal from ${target.tag}, you get fined ${Math.floor(fine)}💰. Your current balance is ${balance}💰`);
+			return msg.channel.send(`You got caught trying to steal from *${target.tag}*, you get fined **${Math.floor(fine)}💰**. Your current balance is **${balance}💰**`);
 		}
 		else {
 			timestamps.delete(msg.author.id);

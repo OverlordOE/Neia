@@ -4,12 +4,10 @@ const { CurrencyShop } = require('../dbObjects');
 module.exports = {
 	name: 'item',
 	description: 'Shows information about a specific item.',
-	admin: false,
+	category: 'info',
 	aliases: ['items'],
 	args: true,
 	usage: '<item>',
-	owner: false,
-	music: false,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		const bAvatar = msg.author.displayAvatarURL();
@@ -21,10 +19,10 @@ module.exports = {
 		}
 
 		const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: temp } } });
-		if (!item) return msg.channel.send(`${temp} is not a valid item.`, { code: true });
+		if (!item) return msg.channel.send(`\`${temp}\` is not a valid item.`, { code: true });
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle(`${item.emoji}__${item.name}__`)
+			.setTitle(`${item.emoji}__${item.name}(s)__`)
 			.setDescription(item.description)
 			.addField('Cost', `**${item.cost}💰**`, true)
 			.addField('Category', item.ctg, true)

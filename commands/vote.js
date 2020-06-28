@@ -6,13 +6,11 @@ const dbl = new DBL(dblToken);
 module.exports = {
 	name: 'vote',
 	description: 'Get a daily gift.',
-	admin: false,
+	category: 'money',
 	aliases: ['v'],
 	args: false,
 	cooldown: 5,
-	owner: false,
 	usage: '',
-	music: false,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 
@@ -56,12 +54,12 @@ module.exports = {
 					profile.addMoney(msg.author.id, finalReward);
 					const balance = await profile.getBalance(msg.author.id);
 					profile.setVote(msg.author.id, true);
-					return msg.channel.send(embed.setDescription(`Thank you for voting!!!\nYou got ${dReward.toFixed(1)}💰 from your vote 🎁 and ${cReward.toFixed(1)}💰 from your collectables for a total of ${finalReward.toFixed(1)}💰\n\nCome back in 12 hours for more!\nYour current balance is ${balance}💰`));
+					return msg.channel.send(embed.setDescription(`Thank you for voting!!!\nYou got **${dReward.toFixed(1)}💰** from your vote 🎁 and **${cReward.toFixed(1)}💰** from your collectables for a total of **${finalReward.toFixed(1)}💰**\n\nCome back in 12 hours for more!\nYour current balance is **${balance}💰**`));
 				}
 			}
 			else {
 				profile.setVote(msg.author.id, false);
-				return msg.channel.send(embed.setDescription('Vote for Neia and get up to 2 extra daily\'s a day.\nTo get the daily\'s just vote [here](https://top.gg/bot/684458276129079320/vote) and then use this command again (this usually takes about 2-3 mins to update), you can do this every 12 hours!'));
+				return msg.channel.send(embed.setDescription('Vote for Neia and get up to **2 extra daily\'s** a day.\nTo get the daily\'s just vote [here](https://top.gg/bot/684458276129079320/vote) and then use this command again (this usually takes about 2-3 mins to update), you can do this every 12 hours!'));
 			}
 		});
 

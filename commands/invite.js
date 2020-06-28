@@ -1,13 +1,11 @@
 const Discord = require('discord.js');
 module.exports = {
 	name: 'invite',
-	description: 'Sends an invite link to add the bot to other servers.',
-	admin: false,
+	description: 'Sends a bunch of helpfull links.',
+	category: 'misc',
 	args: false,
 	usage: '',
-	aliases: ['inv', 'bug', 'join', 'support'],
-	owner: false,
-	music: false,
+	aliases: ['inv', 'bug', 'join', 'support', 'link'],
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 

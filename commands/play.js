@@ -4,12 +4,10 @@ const YouTube = require('discord-youtube-api');
 module.exports = {
 	name: 'play',
 	description: 'Play a song.',
-	admin: false,
+	category: 'music',
 	aliases: ['song'],
 	args: true,
 	usage: 'search criteria',
-	owner: false,
-	music: true,
 
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {

@@ -3,10 +3,9 @@ module.exports = {
 	description: 'Loops the current song.',
 	admin: false,
 	aliases: ['repeat'],
-	args: false,
+	category: 'music',
 	usage: '',
-	owner: false,
-	music: true,
+
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		if (!msg.member.voice.channel) {

@@ -2,12 +2,10 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'dice',
 	description: 'Roll any amount of any sided die.',
-	admin: false,
+	category: 'misc',
 	aliases: ['roll'],
 	args: true,
 	usage: '<sides> <amount>',
-	owner: false,
-	music: false,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 

@@ -3,11 +3,9 @@ module.exports = {
 	description: '"Admin debug tool" Reloads a command.',
 	usage: '<command>',
 	aliases: ['r', 're'],
-	owner: true,
+	category: 'debug',
 	args: true,
 	cooldown: 0,
-	admin: false,
-	music: false,
 
 
 	execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {

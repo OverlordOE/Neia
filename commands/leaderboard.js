@@ -2,13 +2,10 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'leaderboard',
 	description: 'Shows global leaderboard.',
-	admin: false,
+	category: 'info',
 	aliases: ['lead', 'top', 'ranking'],
 	args: false,
 	usage: '<page>',
-	owner: false,
-	music: false,
-
 
 	async execute(msg, args, profile, guildProfile, bot) {
 
@@ -22,7 +19,7 @@ module.exports = {
 		const list = profile.sort((a, b) => b.balance - a.balance)
 			.filter(user => bot.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}.**__ ${(bot.users.cache.get(user.user_id))}: **${Math.floor(user.balance)}💰**`);
+			.map((user, position) => `\n__**${position + 1}.**__ *${(bot.users.cache.get(user.user_id))}*: **${Math.floor(user.balance)}💰**`);
 
 		let page = 0;
 		if (!isNaN(args[0]) && args[0] > 0 && args[0] < 6) page = args[0] - 1;

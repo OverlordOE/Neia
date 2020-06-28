@@ -1,12 +1,10 @@
 module.exports = {
 	name: 'skip',
 	description: 'Skip a song.',
-	admin: false,
+	category: 'music',
 	aliases: ['next'],
 	args: false,
 	usage: '',
-	owner: false,
-	music: true,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		if (!msg.member.voice.channel) {

@@ -1,13 +1,11 @@
 module.exports = {
 	name: 'optin',
 	description: 'Opt in to the pvp elements of the bot.',
-	admin: false,
+	category: 'misc',
 	aliases: ['pvp'],
 	args: false,
 	cooldown: 3600,
-	owner: false,
 	usage: '',
-	music: false,
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		const opt = await profile.getOptIn(msg.author.id);
