@@ -158,6 +158,7 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 	let botHandValue = 0;
 	let playerHand = '';
 	let botHand = '';
+	const winAmount = blackjackRate * gambleAmount;
 
 	sentMessage.edit(embed
 		.setDescription(`[Click here for the rules](https://bicyclecards.com/how-to-play/blackjack/)\nPress 🃏 to hit or ✅ to stand\nYou can win **${winAmount}💰**\n`)
