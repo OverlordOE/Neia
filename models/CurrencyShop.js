@@ -8,11 +8,26 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
+		emoji: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		rarity: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		picture: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
 		ctg: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-
+		description: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
 	}, {
 		timestamps: false,
 	});

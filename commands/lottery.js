@@ -3,97 +3,118 @@ const cron = require('cron');
 const fs = require('fs');
 module.exports = {
 	name: 'lottery',
-	description: 'Daily lottery everyone can enter.',
-	owner: true,
-	aliases: [],
-	args: false,
-	usage: '',
-	admin: false,
-	music: false,
+	category: 'debug',
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
-		const lotteryJob = new cron.CronJob('0 0-23/4 * * *', async () => {
-			
+
+	async execute(msg, args, profile, bot, options, ytAPI, logger) {
+		//	crontime: 0 0-23/3 * * *	collectortime: 10796250		channelID: 721743056528867393
+		const lotteryJob = new cron.CronJob('0 0-23/3 * * *', async () => {
+
 			let writeData;
+			const ticketAmount = 50;
 			const misc = JSON.parse(fs.readFileSync('miscData.json'));
-			const channel = bot.channels.cache.get('720083496420376616');
+			const channel = bot.channels.cache.get('721743056528867393');
 			const bAvatar = bot.user.displayAvatarURL();
 			const pColour = await profile.getPColour(msg.author.id);
 			const buyin = 5;
-			let players = 'Current participants:';
-			const participants = [];
+
 			let lottery = misc.lastLottery;
-			const description = `Press 💰 to participate in the lottery!\n${buyin}💰 buy-in.\nCurrent jackpot: ${lottery}💰!`;
 			let duplicate = false;
+			let players = 'Current participants:';
+			const description = `Press 💰 to participate in the lottery!\nPress 🔔 to get notified when the lottery ends.\n**${buyin}💰** buy-in.`;
+
+			const participants = [];
+			const tickets = [];
+			for (let i = 0; i < ticketAmount; i++) tickets[i] = i;
+
 
 			const embed = new Discord.MessageEmbed()
-				.setTitle('Syndicate Lottery')
-				.setDescription(description)
+				.setTitle('Neia Lottery')
+				.setDescription(`${description}\nCurrent jackpot: **${lottery}💰**!`)
 				.setColor(pColour)
 				.setTimestamp()
-				.setFooter('Syndicate Imporium', bAvatar);
+				.setFooter('Neia', bAvatar);
 
 			const filter = (reaction, user) => {
-				return ['💰'].includes(reaction.emoji.name) && !user.bot;
+				return ['💰', '🔔'].includes(reaction.emoji.name) && !user.bot;
 			};
 
 			await channel.send(embed)
 				.then(sentMessage => {
 					sentMessage.react('💰');
+					sentMessage.react('🔔');
 
-					const collector = sentMessage.createReactionCollector(filter, { time: 14395000 });
+					const collector = sentMessage.createReactionCollector(filter, { time: 10796250 });
 
 					collector.on('collect', async (r, user) => {
 
-						for (let i = 0; i < participants.length; i++) {
-							if (user.id == participants[i].id) {
-								duplicate = true;
-								break;
-							}
+						if (r.emoji.name == '🔔') {
+							const info = participants.findIndex(ticket => ticket.user.id == user.id);
+							participants[info].notify = true;
+							user.send(`You will be notified when the lottery will end\n\nThis lottery has a jackpot of **${lottery}💰** \nYour ticket number is __**${parseInt(participants[info].ticketNumber) + 1}**__.`);
 						}
-						if (!duplicate) {
-							const bCheck = await profile.getBalance(user.id);
+						else if (r.emoji.name == '💰') {
+							for (let i = 0; i < participants.length; i++) {
+								if (user.id == participants[i].id) {
+									duplicate = true;
+									break;
+								}
+							}
+							if (!duplicate) {
+								const bCheck = await profile.getBalance(user.id);
 
-							if (bCheck >= buyin) {
-								participants.push(user);
-								profile.addMoney(user.id, -buyin);
-								players += `\n${participants.length}: ${user}`;
-								lottery = misc.lastLottery + (participants.length * buyin);
-								sentMessage.edit(embed.setDescription(`Press 💰 to participate in the lottery!\n${buyin}💰 buy-in.\nCurrent lottery: ${lottery}💰\n${players}`));
+								if (bCheck >= buyin) {
+									const ticketNumber = tickets.splice(Math.floor(Math.random() * tickets.length), 1);
+									const ticket = {
+										user: user,
+										ticketNumber: ticketNumber,
+										notify: false,
+									};
+									participants.push(ticket);
+									profile.addMoney(user.id, -buyin);
+									players += `\n${parseInt(ticketNumber) + 1}: ${user}`;
+									lottery = misc.lastLottery + (participants.length * buyin);
+									sentMessage.edit(embed.setDescription(`${description}\nCurrent lottery: **${lottery}💰**\n${players}`));
+								}
+								else {
+									user.send(`You only have **${bCheck}💰** but the buy-in is **${buyin}💰**.`);
+								}
 							}
-							else {
-								user.send(`You only have ${bCheck}💰 but the buy-in is ${buyin}💰.`);
-							}
+							duplicate = false;
 						}
-						duplicate = false;
 					});
 
 
-					collector.on('end', collected => {
+					collector.on('end', () => {
 
-						const winner = Math.floor(Math.random() * 50);
+						const winNumber = Math.floor(Math.random() * ticketAmount);
+						const winner = participants.find(ticket => ticket.ticketNumber == winNumber);
+
+						if (winner) {
+							profile.addMoney(winner.user.id, lottery);
+							channel.send(`Congrats ${winner.user} on winning the jackpot of **${lottery}💰**!!!`);
+							sentMessage.edit(embed.setDescription(`Current lottery: **${lottery}💰**\n${players}\n\nLottery has ended and the winning number is __**${winNumber + 1}**__\n*${winner.user}* has won the lottery of **${lottery}💰**`));
+							misc.lastLottery = ticketAmount;
+						}
 
 						for (let i = 0; i < participants.length; i++) {
-							if (i == winner) {
-								profile.addMoney(participants[i].id, lottery);
+							if (participants[i].notify) {
+								if (winner) winner.user.send(`The lottery has ended\nYou have won the lottery with lucky number __**${winNumber + 1}**__ and won **${lottery}💰**!\n\nThe next jackpot will be **${ticketAmount}💰** and is starting in 1 minute`);
+								else participants[i].user.send(`The lottery has ended\nThe winning number is __**${winNumber + 1}**__ but you had the number __**${parseInt(participants[i].ticketNumber) + 1}**__.\n\nThe next jackpot will be **${misc.lastLottery}💰** and is starting in 1 minute`);
 
-								channel.send(`Congrats ${participants[i]} on winning the jackpot of **${lottery}💰**!!!`);
-								misc.lastLottery = 50;
-								writeData = JSON.stringify(misc);
-								fs.writeFileSync('miscData.json', writeData);
-								return sentMessage.edit(embed.setDescription(`Current lottery: ${lottery}💰\n${players}\n\nLottery has ended and the winning number is __**${winner + 1}**__\n${participants[winner]} has won the lottery of **${lottery}💰**`));
 							}
 						}
 
-						misc.lastLottery = lottery + 50;
+						if (!winner) {
+							misc.lastLottery = lottery + ticketAmount;
+							sentMessage.edit(embed.setDescription(`Current lottery: **${lottery}💰**\n${players}\n\nLottery has ended and the winning number is __**${winNumber + 1}**__\n\nNoone won the lottery of **${lottery}💰**, it will be added to next days lottery!`));
+						}
 						writeData = JSON.stringify(misc);
 						fs.writeFileSync('miscData.json', writeData);
-						sentMessage.edit(embed.setDescription(`Current lottery: ${lottery}💰\n${players}\n\nLottery has ended and the winning number is __**${winner + 1}**__\n\nNoone won the lottery of **${lottery}💰**, it will be added to next days lottery!`));
 					});
-
 				})
 				.catch(e => {
-					logger.log('error', `One of the emojis failed to react because of:\n${e}`);
+					logger.error(e.stack);
 					return msg.reply('Something went wrong.');
 				});
 		});

@@ -1,26 +1,25 @@
 module.exports = {
 	name: 'clear',
-	description: 'clears the song queue.',
-	admin: false,
+	summary: 'Clears the song queue',
+	description: 'Clears the song queue and makes the bot leave the voice channel.',
+	category: 'music',
 	aliases: ['stop'],
 	args: false,
-	owner: false,
 	usage: '',
-	music: true,
 	cooldown: 5,
 
-	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		if (!msg.member.voice.channel) {
 			return msg.reply('You are not in a voice channel!');
 		}
 
 		try {
-			const guildIDData = ops.active.get(msg.guild.id);
+			const guildIDData = options.active.get(msg.guild.id);
 			guildIDData.queue = [];
 			guildIDData.dispatcher.emit('finish');
 		}
 		catch (error) {
-			logger.log('error', error);
+			return logger.error(error.stack);
 		}
 	},
 };

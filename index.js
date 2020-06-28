@@ -1,22 +1,22 @@
 const Discord = require('discord.js');
 const winston = require('winston');
 require('dotenv').config();
-const prefix = process.env.PREFIX;
-const token = process.env.TOKEN;
+const token = process.env.TEST_TOKEN;
 const ytAPI = process.env.YT_API;
-const { Users } = require('./dbObjects');
+const { Users, profile, Guilds, guildProfile } = require('./dbObjects');
 const botCommands = require('./commands');
 const moment = require('moment');
 const bot = new Discord.Client();
-const profile = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 const active = new Map();
+const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 bot.commands = new Discord.Collection();
 moment().format();
 
 
 const logger = winston.createLogger({
-	level: 'info',
+	level: 'debug',
 	format: winston.format.combine(
 		winston.format.timestamp({
 			format: 'MM-DD HH:mm:ss',
@@ -27,7 +27,7 @@ const logger = winston.createLogger({
 
 	transports: [
 		new winston.transports.Console(),
-		new winston.transports.File({ filename: 'error.log', level: 'error' }),
+		new winston.transports.File({ filename: 'error.log', level: 'warn' }),
 		new winston.transports.File({ filename: 'log.log' }),
 	],
 });
@@ -42,211 +42,51 @@ bot.login(token);
 
 // Execute on bot start
 bot.on('ready', async () => {
-	const storedBalances = await Users.findAll();
-	storedBalances.forEach(b => profile.set(b.user_id, b));
-	logger.log('info', `Logged in as ${bot.user.tag}!`);
-	bot.user.setActivity('The Syndicate', { type: 'WATCHING' });
-});
-
-
-// Add db commands
-Reflect.defineProperty(profile, 'addMoney', {
-	value: async function addMoney(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		user.balance += Number(amount);
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getBalance', {
-	value: async function getBalance(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? Math.floor(user.balance) : 0;
-	},
-});
-
-Reflect.defineProperty(profile, 'getDaily', {
-	value: async function getDaily(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? user.lastDaily : 0;
-	},
+	try {
+		const storedUsers = await Users.findAll();
+		storedUsers.forEach(b => profile.set(b.user_id, b));
+		const storedGuilds = await Guilds.findAll();
+		storedGuilds.forEach(b => guildProfile.set(b.guild_id, b));
+		logger.log('info', `Logged in as ${bot.user.tag}!`);
+	}
+	catch (e) {
+		logger.error(e.stack);
+	}
 
 });
 
-Reflect.defineProperty(profile, 'setDaily', {
-	value: async function setDaily(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-
-		const currentDay = moment();
-		user.lastDaily = currentDay;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getHourly', {
-	value: async function getHourly(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? user.lastHourly : 0;
-	},
-
-});
-
-Reflect.defineProperty(profile, 'setHourly', {
-	value: async function setHourly(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-
-		const day = moment();
-		user.lastHourly = day;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getWeekly', {
-	value: async function getWeekly(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? user.lastWeekly : 0;
-	},
-
-});
-
-Reflect.defineProperty(profile, 'setWeekly', {
-	value: async function setWeekly(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-
-		const day = moment();
-		user.lastWeekly = day;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'addCount', {
-	value: async function addCount(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		user.msgCount += amount;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getCount', {
-	value: async function getCount(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? Math.floor(user.msgCount) : 0;
-	},
-});
-
-Reflect.defineProperty(profile, 'getProtection', {
-	value: async function getProtection(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? user.protection : 0;
-	},
-
-});
-
-Reflect.defineProperty(profile, 'setProtection', {
-	value: async function setProtection(id, day) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-
-		user.protection = day;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'getPColour', {
-	value: async function getPColour(id) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		return user ? user.pColour : 0;
-	},
-
-});
-
-Reflect.defineProperty(profile, 'setPColour', {
-	value: async function setPColour(id, colour) {
-		let user = profile.get(id);
-		if (!user) user = await newUser(id);
-		if (!colour.startsWith('#')) throw 'not a valid colour!';
-
-		user.pColour = colour;
-		return user.save();
-	},
-});
-
-async function newUser(id) {
-	const day = moment().dayOfYear();
-	const newUser = await Users.create({
-		user_id: id,
-		balance: 1,
-		msgCount: 1,
-		lastDaily: (day - 1),
-		lastHourly: (day - 1),
-		lastWeekly: (day - 1),
-		protection: (day - 1),
-		pColour: '#fffb00',
-	});
-	profile.set(id, newUser);
-	return newUser;
-}
-
-module.exports = { profile };
 
 // Logger
-bot.on('debug', m => logger.log('debug', m));
-bot.on('warn', m => logger.log('warn', m));
-bot.on('error', m => logger.log('error', m));
-process.on('unhandledRejection', m => logger.log('error', m));
-process.on('TypeError', m => logger.log('error', m));
-process.on('uncaughtException', m => logger.log('error', m));
+bot.on('warn', m => logger.warn(m.stack));
+bot.on('error', m => logger.error(m.stack));
+process.on('unhandledRejection', m => logger.error(m.stack));
+process.on('TypeError', m => logger.error(m.stack));
+process.on('uncaughtException', m => logger.error(m.stack));
 
 // Execute for every message
 bot.on('message', async msg => {
-	// split message for further use
-	const args = msg.content.slice(prefix.length).split(/ +/);
-	const commandName = args.shift().toLowerCase();
+	if (msg.author.bot) return;
+
+	const guild = guildProfile.get(msg.guild.id);
+	if (!guild) await guildProfile.newGuild(msg.guild.id);
+	const prefix = await guildProfile.getPrefix(msg.guild.id);
 	const now = Date.now();
 	const id = msg.author.id;
 	const user = profile.get(id);
-	if (!user) {
-		await newUser(id);
-	}
+	if (!user) await profile.newUser(id);
+
+
+	// split message for further use
+	const prefixRegex = new RegExp(`^(<@!?${bot.user.id}>|${escapeRegex(prefix)})\\s*`);
+	if (!prefixRegex.test(msg.content)) return;
+
+	const [, matchedPrefix] = msg.content.match(prefixRegex);
+	const args = msg.content.slice(matchedPrefix.length).trim().split(/ +/);
+	const commandName = args.shift().toLowerCase();
+
+	
 
 	profile.addCount(id, 1);
-
-	// money reward
-	if (!msg.author.bot && !msg.content.startsWith(prefix)) {
-		if (!cooldowns.has('reward')) {
-			cooldowns.set('reward', new Discord.Collection());
-		}
-
-		const cd = cooldowns.get('reward');
-		const cdAmount = 8000;
-
-		if (cd.has(msg.author.tag)) {
-			const cdTime = cd.get(msg.author.tag) + cdAmount;
-
-			if (now < cdTime) {
-				return;
-			}
-		}
-		const reward = 0.8 + (Math.random() * 0.6);
-		profile.addMoney(msg.author.id, reward);
-
-		cd.set(msg.author.tag, now);
-		setTimeout(() => cd.delete(msg.author.tag), cdAmount);
-	}
-	// check for prefix
-	if (!msg.content.startsWith(prefix)) return;
 
 	logger.log('info', `${msg.author.tag} Called command: ${commandName}`);
 
@@ -256,15 +96,15 @@ bot.on('message', async msg => {
 	if (!command) return;
 
 	// check for admin
-	if (command.admin) {
+	if (command.category == 'admin') {
 		if (!msg.member.hasPermission('ADMINISTRATOR')) {
 			return msg.channel.send('You need Admin privileges to use this command!');
 		}
 	}
 
 	// check for owner
-	if (command.owner) {
-		if (msg.author.id != 137920111754346496) {
+	if (command.category == 'debug') {
+		if (id != 137920111754346496) {
 			return msg.channel.send('You are not the owner of this bot!');
 		}
 	}
@@ -288,8 +128,8 @@ bot.on('message', async msg => {
 	const timestamps = cooldowns.get(command.name);
 	const cooldownAmount = (command.cooldown || 1.5) * 1000;
 
-	if (timestamps.has(msg.author.id)) {
-		const expirationTime = timestamps.get(msg.author.id) + cooldownAmount;
+	if (timestamps.has(id)) {
+		const expirationTime = timestamps.get(id) + cooldownAmount;
 
 		if (now < expirationTime) {
 			const timeLeft = (expirationTime - now) / 1000;
@@ -299,20 +139,20 @@ bot.on('message', async msg => {
 			else { return msg.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`); }
 		}
 	}
-	timestamps.set(msg.author.id, now);
-	setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
+	timestamps.set(id, now);
+	setTimeout(() => timestamps.delete(id), cooldownAmount);
 
 
 	const options = {
 		active: active,
 	};
-
+	profile.addBotUsage(id, 1);
 	// execute command
 	try {
-		command.execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns);
+		command.execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns);
 	}
-	catch (error) {
-		logger.log('error', error);
+	catch (e) {
+		logger.error(e.stack);
 		msg.reply('there was an error trying to execute that command!');
 	}
 });

@@ -1,38 +1,35 @@
 const Discord = require('discord.js');
-const { Users, CurrencyShop } = require('../dbObjects');
+const { CurrencyShop } = require('../dbObjects');
 module.exports = {
 	name: 'shop',
+	summary: 'Shows all the shop items',
 	description: 'Shows all the shop items.',
-	admin: false,
-	aliases: ['store', 'item', 'items'],
+	category: 'info',
+	aliases: ['store'],
 	args: false,
 	usage: '',
-	owner: false,
-	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		const items = await CurrencyShop.findAll();
-		const bAvatar = bot.user.displayAvatarURL();
+		const bAvatar = msg.author.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
 		let consumable = '__**Consumables:**__\n';
-		let discord = '__**Discord related items:**__\n';
 		let collectables = '__**Collectables:**__\n';
-		
+
 		await items.map(item => {
-			if (item.ctg == 'consumable') { consumable += `${item.name}: ${item.cost}💰\n`; }
-			else if (item.ctg == 'collectables') { collectables += `${item.name}: ${item.cost}💰\n`; }
-			else if (item.ctg == 'discord') { discord += `${item.name}: ${item.cost}💰\n`; }
+			if (item.ctg == 'consumable') { consumable += `${item.emoji}__${item.name}__: **${item.cost}💰**\n`; }
+			else if (item.ctg == 'collectables') { collectables += `${item.emoji}__${item.name}__: **${item.cost}💰**\n`; }
 		});
 
-		const description = `${consumable}\n${collectables}\n${discord}`;
+		const description = `${consumable}\n${collectables}`;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Syndicate Shop')
+			.setTitle('Neia Shop')
 			.setThumbnail(bAvatar)
 			.setDescription(description)
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Syndicate Imporium', bAvatar);
+			.setFooter('Neia', bAvatar);
 
 		return msg.channel.send(embed);
 	},
