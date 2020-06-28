@@ -13,6 +13,7 @@ module.exports = {
 	usage: '<amount>',
 
 	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+
 		const currentAmount = await profile.getBalance(msg.author.id);
 		const pColour = await profile.getPColour(msg.author.id);
 		const bAvatar = bot.user.displayAvatarURL();
@@ -158,9 +159,6 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 	let playerHand = '';
 	let botHand = '';
 
-	const winAmount = blackjackRate * gambleAmount;
-
-
 	sentMessage.edit(embed
 		.setDescription(`[Click here for the rules](https://bicyclecards.com/how-to-play/blackjack/)\nPress 🃏 to hit or ✅ to stand\nYou can win **${winAmount}💰**\n`)
 		.setTitle('Blackjack'))
@@ -214,6 +212,7 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 
 					profile.addMoney(msg.author.id, -gambleAmount);
 					profile.addGamblingSpent(msg.author.id, gambleAmount);
+
 					const balance = await profile.getBalance(msg.author.id);
 					embed.setColor('#fc0303');
 					sentMessage.edit(embed.setDescription(`__**You busted**__\n\nYour balance is **${balance}💰**`));
@@ -223,6 +222,7 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 					profile.addMoney(msg.author.id, winAmount);
 					profile.addGamblingEarned(msg.author.id, winAmount);
 					profile.addGamblingSpent(msg.author.id, gambleAmount);
+
 					const balance = await profile.getBalance(msg.author.id);
 					embed.setColor('#00fc43');
 					return sentMessage.edit(embed.setDescription(`__**The bot busted**__. **You Win!**\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
@@ -239,7 +239,6 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 
 					profile.addMoney(msg.author.id, winAmount);
 					profile.addGamblingEarned(msg.author.id, winAmount);
-
 					profile.addGamblingSpent(msg.author.id, gambleAmount);
 
 					const balance = await profile.getBalance(msg.author.id);
@@ -249,8 +248,8 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 				return;
 			});
 		})
-		.catch(error => {
-			logger.error(error.stack);
+		.catch(e => {
+			logger.error(e.stack);
 			return msg.reply('Something went wrong, please report this as a bug.');
 		});
 

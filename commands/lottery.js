@@ -5,7 +5,6 @@ module.exports = {
 	name: 'lottery',
 	category: 'debug',
 
-
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		//	crontime: 0 0-23/3 * * *	collectortime: 10796250		channelID: 721743056528867393
 		const lotteryJob = new cron.CronJob('0 0-23/3 * * *', async () => {
@@ -26,8 +25,7 @@ module.exports = {
 			const participants = [];
 			const tickets = [];
 			for (let i = 0; i < ticketAmount; i++) tickets[i] = i;
-
-
+			
 			const embed = new Discord.MessageEmbed()
 				.setTitle('Neia Lottery')
 				.setDescription(`${description}\nCurrent jackpot: **${lottery}💰**!`)

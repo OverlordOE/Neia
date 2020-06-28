@@ -88,12 +88,13 @@ bot.on('message', async msg => {
 
 	profile.addCount(id, 1);
 
-	logger.log('info', `${msg.author.tag} Called command: ${commandName}`);
+	
 
 	const command = bot.commands.get(commandName)
 		|| bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 	if (!command) return;
+	
 
 	// check for admin
 	if (command.category == 'admin') {
@@ -148,6 +149,7 @@ bot.on('message', async msg => {
 	};
 	profile.addBotUsage(id, 1);
 	// execute command
+	logger.log('info', `${msg.author.tag} Called command: ${commandName} in guild: ${msg.guild.name}`);
 	try {
 		command.execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns);
 	}
