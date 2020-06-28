@@ -27,7 +27,7 @@ module.exports = {
 			.setThumbnail(avatar)
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neija', bAvatar);
+			.setFooter('Neia', bAvatar);
 
 		const check = moment(lastDaily).add(1, 'd');
 

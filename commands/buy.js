@@ -6,7 +6,7 @@ module.exports = {
 	description: 'buy an item from the shop.',
 	admin: false,
 	aliases: ['get'],
-	usage: '',
+	usage: '<item> <amount>',
 	cooldown: 5,
 	owner: false,
 	args: false,
@@ -23,12 +23,12 @@ module.exports = {
 		let item;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neija Shop')
+			.setTitle('Neia Shop')
 			.setThumbnail(avatar)
 			.setDescription('What item do you want to buy?')
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neija Imporium', bAvatar);
+			.setFooter('Neia Imporium', bAvatar);
 
 
 		msg.channel.send(embed).then(async sentMessage => {
@@ -84,7 +84,7 @@ async function buy(profile, sentMessage, amount, embed, item, msg) {
 	if (!Number.isInteger(amount)) {
 		return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
 	}
-	else if (amount < 1 || amount > 10000) {
+	else if (amount < 1) {
 		amount = 1;
 	}
 

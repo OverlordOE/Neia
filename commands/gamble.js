@@ -29,8 +29,8 @@ module.exports = {
 			.setColor(pColour)
 			.setThumbnail(avatar)
 			.setTimestamp()
-			.setTitle('Neija\'s Gambling Imporium')
-			.setFooter('Neija', bAvatar);
+			.setTitle('Neia\'s Gambling Imporium')
+			.setFooter('Neia', bAvatar);
 
 
 		await msg.channel.send(embed)

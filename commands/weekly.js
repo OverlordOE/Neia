@@ -22,7 +22,7 @@ module.exports = {
 			.setThumbnail(avatar)
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neija', bAvatar);
+			.setFooter('Neia', bAvatar);
 
 		const check = moment(lastWeekly).add(1, 'w');
 		const weekly = check.format('dddd HH:mm');

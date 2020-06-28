@@ -22,10 +22,10 @@ module.exports = {
 		const filter = m => m.author.id === msg.author.id;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neija Trading Center')
+			.setTitle('Neia Trading Center')
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neija', bAvatar);
+			.setFooter('Neia', bAvatar);
 
 
 		msg.channel.send(embed.setDescription('Who do you want to trade with? __mention the user__\n'))

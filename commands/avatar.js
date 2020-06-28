@@ -22,7 +22,7 @@ module.exports = {
 			.setImage(avatar)
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neija', bAvatar);
+			.setFooter('Neia', bAvatar);
 
 		msg.channel.send(embed);
 	},

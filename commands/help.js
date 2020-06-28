@@ -21,7 +21,7 @@ module.exports = {
 			.setTimestamp();
 
 		if (!args.length) {
-			help.setTitle('Neija command list');
+			help.setTitle('Neia command list');
 			commands.map(command => {
 				if (!command.owner) {
 					if (command.admin) { adminCommands += `**${command.name}** - ${command.description}\n`; }

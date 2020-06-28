@@ -35,7 +35,7 @@ module.exports = {
 			.setDescription('What item do you want to use?')
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neija', bAvatar);
+			.setFooter('Neia', bAvatar);
 
 
 		msg.channel.send(embed).then(async sentMessage => {

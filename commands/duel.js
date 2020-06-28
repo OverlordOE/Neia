@@ -29,7 +29,7 @@ module.exports = {
 			.setDescription(description)
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neija', bAvatar);
+			.setFooter('Neia', bAvatar);
 
 
 

@@ -30,12 +30,12 @@ module.exports = {
 		const description = editDescription(list, page);
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neija leaderboard')
+			.setTitle('Neia leaderboard')
 			.setDescription(description)
 			.setThumbnail(bAvatar)
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neija', bAvatar);
+			.setFooter('Neia', bAvatar);
 
 		msg.channel.send(embed).then(sentMessage => {
 			sentMessage.react('◀️');

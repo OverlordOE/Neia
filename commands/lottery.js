@@ -36,11 +36,11 @@ module.exports = {
 
 
 			const embed = new Discord.MessageEmbed()
-				.setTitle('Neija Lottery')
+				.setTitle('Neia Lottery')
 				.setDescription(`${description}\nCurrent jackpot: ${lottery}💰!`)
 				.setColor(pColour)
 				.setTimestamp()
-				.setFooter('Neija', bAvatar);
+				.setFooter('Neia', bAvatar);
 
 			const filter = (reaction, user) => {
 				return ['💰', '🔔'].includes(reaction.emoji.name) && !user.bot;

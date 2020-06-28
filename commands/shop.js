@@ -25,12 +25,12 @@ module.exports = {
 		const description = `${consumable}\n${collectables}`;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neija Shop')
+			.setTitle('Neia Shop')
 			.setThumbnail(bAvatar)
 			.setDescription(description)
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neija', bAvatar);
+			.setFooter('Neia', bAvatar);
 
 		return msg.channel.send(embed);
 	},

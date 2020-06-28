@@ -70,14 +70,14 @@ module.exports = {
 			.addField('Next hourly:', hourly, true)
 			.addField('Can vote', !userProfile.hasVoted)
 			.setTimestamp()
-			.setFooter('Neija', bAvatar);
+			.setFooter('Neia', bAvatar);
 
 		const invEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s Inventory`)
 			.setThumbnail(avatar)
 			.setTimestamp()
-			.setFooter('Neija', bAvatar);
+			.setFooter('Neia', bAvatar);
 
 		const statEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
@@ -92,7 +92,7 @@ module.exports = {
 			.addField('Total Bot Usage:', userProfile.botUsage, true)
 
 			.setTimestamp()
-			.setFooter('Neija', bAvatar);
+			.setFooter('Neia', bAvatar);
 
 		if (!pCheck) { moneyEmbed.addField('Steal protection untill:', protection); }
 

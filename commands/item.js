@@ -30,7 +30,7 @@ module.exports = {
 			.addField('Category', item.ctg, true)
 			.addField('Rarity', item.rarity, true)
 			.setTimestamp()
-			.setFooter('Neija', bAvatar)
+			.setFooter('Neia', bAvatar)
 			.attachFiles(`pictures/${item.rarity}.jpg`)
 			.setImage(`attachment://${item.rarity}.jpg`);
 
