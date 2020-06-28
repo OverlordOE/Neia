@@ -3,7 +3,8 @@ const YouTube = require('discord-youtube-api');
 
 module.exports = {
 	name: 'play',
-	description: 'Play a song.',
+	summary: 'Play a song',
+	description: 'Play a song, support youtube videos.',
 	category: 'music',
 	aliases: ['song'],
 	args: true,

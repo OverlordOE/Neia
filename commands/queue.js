@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'queue',
-	description: 'Shows the song queue.',
+	description: 'Shows the song queue',
+	summary: 'Shows the song queue.',
 	category: 'music',
 	aliases: ['list'],
 	args: false,

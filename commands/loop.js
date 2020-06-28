@@ -1,5 +1,6 @@
 module.exports = {
 	name: 'loop',
+	summary: 'Loops the current song',
 	description: 'Loops the current song.',
 	admin: false,
 	aliases: ['repeat'],

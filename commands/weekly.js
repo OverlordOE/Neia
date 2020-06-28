@@ -2,6 +2,7 @@ const moment = require('moment');
 const Discord = require('discord.js');
 module.exports = {
 	name: 'weekly',
+	summary: 'Get a weekly gift',
 	description: 'Get a weekly gift.',
 	category: 'money',
 	aliases: ['week', 'w'],

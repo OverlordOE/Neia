@@ -3,6 +3,7 @@ const { Users } = require('../dbObjects');
 const moment = require('moment');
 module.exports = {
 	name: 'profile',
+	summary: 'Shows profile of you or the tagger user',
 	description: 'Shows profile of you or the tagger user.',
 	category: 'info',
 	aliases: ['inv', 'items', 'prof', 'inventory', 'balance', 'money', 'p'],

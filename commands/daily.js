@@ -3,7 +3,8 @@ const Discord = require('discord.js');
 const { Users } = require('../dbObjects');
 module.exports = {
 	name: 'daily',
-	description: 'Get a daily gift.',
+	summary: 'Get a daily gift',
+	description: 'Get a daily gift and part of your passive income from your collectables.',
 	category: 'money',
 	aliases: ['day', 'd'],
 	args: false,

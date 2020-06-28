@@ -3,11 +3,8 @@ const cron = require('cron');
 const fs = require('fs');
 module.exports = {
 	name: 'lottery',
-	description: 'Daily lottery everyone can enter.',
 	category: 'debug',
-	aliases: [],
-	args: false,
-	usage: '',
+
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		//	crontime: 0 0-23/3 * * *	collectortime: 10796250		channelID: 721743056528867393

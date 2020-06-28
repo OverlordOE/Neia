@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 module.exports = {
 	name: 'leaderboard',
+	summary: 'Shows global leaderboard',
 	description: 'Shows global leaderboard.',
 	category: 'info',
 	aliases: ['lead', 'top', 'ranking'],

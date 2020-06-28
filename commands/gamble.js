@@ -5,7 +5,8 @@ const numberRate = 2.2;
 const blackjackRate = 1;
 module.exports = {
 	name: 'gamble',
-	description: 'Gives you a list of minigames to play to make some money with.',
+	summary: 'Gives you a list of minigames to play to make some money with',
+	description: 'Play 1 of 3 minigameL Rock, paper, scissors; Number guessing or Blackjack.',
 	category: 'money',
 	aliases: ['guess'],
 	args: true,

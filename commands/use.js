@@ -6,6 +6,7 @@ const moment = require('moment');
 const { Op } = require('sequelize');
 module.exports = {
 	name: 'use',
+	summary: 'Use an item from your inventory',
 	description: 'Use an item from your inventory.',
 	category: 'money',
 	aliases: ['item'],

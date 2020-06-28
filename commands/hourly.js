@@ -3,7 +3,8 @@ const Discord = require('discord.js');
 const { Users } = require('../dbObjects');
 module.exports = {
 	name: 'hourly',
-	description: 'Get an hourly gift.',
+	summary: 'Get an hourly gift',
+	description: 'Get an hourly gift and part of your passive income from your collectables.',
 	aliases: ['h', 'hour'],
 	args: false,
 	usage: '',

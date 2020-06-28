@@ -3,6 +3,7 @@ const { Op } = require('sequelize');
 const { CurrencyShop } = require('../dbObjects');
 module.exports = {
 	name: 'item',
+	summary: 'Shows information about a specific item',
 	description: 'Shows information about a specific item.',
 	category: 'info',
 	aliases: ['items'],

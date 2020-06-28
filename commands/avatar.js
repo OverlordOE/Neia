@@ -3,7 +3,8 @@ module.exports = {
 	name: 'avatar',
 	aliases: ['icon', 'pfp', 'picture'],
 	category: 'misc',
-	description: 'Gets avatar of mentioned users, if there are no mentions it shows the senders avatar.',
+	summary: 'Gets avatar of mentioned users or yourself',
+	description: 'Will show a preview of the avatar together with a link to download the avatar.\nIf you tag someone it will show their avatar instead.',
 	args: false,
 	usage: '<target>',
 

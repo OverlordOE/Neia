@@ -5,6 +5,7 @@ const { Users, CurrencyShop } = require('../dbObjects');
 const { Op } = require('sequelize');
 module.exports = {
 	name: 'trade',
+	summary: 'Trade money or items to other people',
 	description: 'Trade money and items to other people.',
 	aliases: ['give', 'donate', 'transfer'],
 	category: 'money',

@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const { CurrencyShop } = require('../dbObjects');
 module.exports = {
 	name: 'shop',
+	summary: 'Shows all the shop items',
 	description: 'Shows all the shop items.',
 	category: 'info',
 	aliases: ['store'],

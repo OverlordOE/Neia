@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
 module.exports = {
 	name: 'dice',
-	description: 'Roll any amount of any sided die.',
+	summary: 'Roll up to 100 of any sided die',
+	description: 'Rolls dice and shows the total.\nThe first argument is the amount of sides you want the dice to have, the second argument is how many times to roll it(up to 100).',
 	category: 'misc',
 	aliases: ['roll'],
 	args: true,
@@ -37,6 +38,6 @@ module.exports = {
 			total += roll;
 		}
 
-		msg.channel.send(embed.setDescription(`You rolled a D${sides} ${amount} times, these are the results: \n${message}\n= __**${total}**__`));
+		msg.channel.send(embed.setDescription(`You rolled a __D${sides}__ **${amount}** times, these are the results: \n${message}\n= __**${total}**__`));
 	},
 };

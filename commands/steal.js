@@ -3,6 +3,7 @@ const moment = require('moment');
 const Discord = require('discord.js');
 module.exports = {
 	name: 'steal',
+	summary: 'Steal money from other players',
 	description: 'Steal money from other players but have a chance to get caught **45 minute cooldown**.',
 	cooldown: 2400,
 	args: true,

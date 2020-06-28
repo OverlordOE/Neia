@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
 module.exports = {
 	name: 'invite',
-	description: 'Sends a bunch of helpfull links.',
+	summary: 'Sends a bunch of helpfull links',
+	description: 'Sends links to invite the bot to your own server, to join the support server and to request a feature or report a bug.',
 	category: 'misc',
 	args: false,
 	usage: '',

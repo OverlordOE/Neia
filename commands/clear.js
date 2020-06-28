@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'clear',
-	description: 'clears the song queue.',
+	summary: 'Clears the song queue',
+	description: 'Clears the song queue and makes the bot leave the voice channel.',
 	category: 'music',
 	aliases: ['stop'],
 	args: false,

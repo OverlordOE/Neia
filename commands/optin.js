@@ -1,5 +1,6 @@
 module.exports = {
 	name: 'optin',
+	summary: 'Opt in to the pvp elements of the bot',
 	description: 'Opt in to the pvp elements of the bot.',
 	category: 'misc',
 	aliases: ['pvp'],

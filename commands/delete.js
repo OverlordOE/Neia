@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'delete',
-	description: 'Delete messages in bulk.',
+	summary: 'Delete messages in bulk',
+	description: 'Delete up too 100 messages in bulk.',
 	category: 'admin',
 	aliases: ['remove'],
 	args: false,

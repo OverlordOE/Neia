@@ -1,20 +1,20 @@
 const Discord = require('discord.js');
 module.exports = {
 	name: 'help',
-	description: 'List all of my commands or info about a specific command.',
-	admin: false,
+	description: 'List all the commands or get info about a specific command.',
+	category: 'help',
 	aliases: ['commands'],
 	usage: '<command name>',
-	owner: false,
 	args: false,
-	music: false,
 
 	async execute(message, args, profile) {
 		const pColour = await profile.getPColour(message.author.id);
 		const { commands } = message.client;
 		let adminCommands = '';
 		let musicCommands = '';
-		let normalCommands = '';
+		let miscCommands = '';
+		let moneyCommands = '';
+		let infoCommands = '';
 
 		const help = new Discord.MessageEmbed()
 			.setColor(pColour)
@@ -23,19 +23,35 @@ module.exports = {
 		if (!args.length) {
 			help.setTitle('Neia command list');
 			commands.map(command => {
-				if (!command.owner) {
-					if (command.admin) { adminCommands += `**${command.name}** - ${command.description}\n`; }
-					else if (command.music) { musicCommands += `**${command.name}** - ${command.description}\n`; }
-					else { normalCommands += `**${command.name}** - ${command.description}\n`; }
+				switch (command.category) {
+					case 'admin':
+						adminCommands += `**${command.name}** - ${command.summary}\n`;
+						break;
+					case 'music':
+						musicCommands += `**${command.name}** - ${command.summary}\n`;
+						break;
+					case 'misc':
+						miscCommands += `**${command.name}** - ${command.summary}\n`;
+						break;
+					case 'money':
+						moneyCommands += `**${command.name}** - ${command.summary}\n`;
+						break;
+					case 'info':
+						infoCommands += `**${command.name}** - ${command.summary}\n`;
+						break;
+					default:
+						break;
 				}
-
 			});
 
 
-			help.setDescription(`**Normal commands**\n${normalCommands}`);
-			help.addField('**Music commands**', musicCommands);
-			help.addField('**Admin commands**', adminCommands);
-			help.addField('**Help**', '**You can send `help [command name]` to get info on a specific command!**');
+			help.setDescription(`__**Money/Item Commands**__\n${moneyCommands}\n
+								__**Info Commands**__\n${infoCommands}\n
+								__**Miscellaneous Commands**__\n${miscCommands}\n
+								__**Music Commands**__\n${musicCommands}\n
+								__**Admin Commands**__\n${adminCommands}\n
+								`);
+			help.addField('__**Help**__', '**You can send `help [command name]` to get info on a specific command!**');
 		}
 		else {
 			const name = args[0].toLowerCase();
@@ -51,7 +67,11 @@ module.exports = {
 			if (command.description) help.addField('**Description:**', command.description);
 			if (command.usage) help.addField('**Usage:**', `${command.name} ${command.usage}`);
 			if (command.aliases) help.addField('**Aliases:**', command.aliases.join(', '));
-			if (command.admin) help.addField('**Need Admin:**', command.admin);
+			if (command.cooldown) {
+				if (command.cooldown > 60) help.addField('**Cooldown:**', `${command.cooldown / 60} minutes`);
+				else help.addField('**Cooldown:**', `${command.cooldown} seconds`);
+			}
+				
 		}
 
 

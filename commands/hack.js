@@ -2,6 +2,7 @@ module.exports = {
 	name: 'hack',
 	aliases: ['hackedandbanned', 'ban', 'hackandban'],
 	category: 'misc',
+	summary: 'HACK AND BAN OTHER PEOPLE',
 	description: 'HACK AND BAN OTHER PEOPLE.',
 	args: true,
 	usage: '<targets>',
