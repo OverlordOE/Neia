@@ -1,18 +1,18 @@
 module.exports = {
 	name: 'loop',
+	summary: 'Loops the current song',
 	description: 'Loops the current song.',
 	admin: false,
 	aliases: ['repeat'],
-	args: false,
+	category: 'music',
 	usage: '',
-	owner: false,
-	music: true,
 
-	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
+
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		if (!msg.member.voice.channel) {
 			return msg.reply('You are not in a voice channel!');
 		}
-		const guildIDData = ops.active.get(msg.guild.id);
+		const guildIDData = options.active.get(msg.guild.id);
 		if (guildIDData.loop) {
 			msg.channel.send('Stopped looping music');
 			guildIDData.loop = false;

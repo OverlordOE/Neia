@@ -1,15 +1,14 @@
 const Discord = require('discord.js');
 module.exports = {
 	name: 'dice',
-	description: 'Roll any amount of any sided die.',
-	admin: false,
+	summary: 'Roll up to 100 of any sided die',
+	description: 'Rolls dice and shows the total.\nThe first argument is the amount of sides you want the dice to have, the second argument is how many times to roll it(up to 100).',
+	category: 'misc',
 	aliases: ['roll'],
 	args: true,
-	usage: 'sides (amount of roles)',
-	owner: false,
-	music: false,
+	usage: '<sides> <amount>',
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 
 		const pColour = await profile.getPColour(msg.author.id);
 
@@ -20,12 +19,12 @@ module.exports = {
 		let amount;
 		if (args[1]) amount = args[1];
 		else amount = 1;
-		
-		if (amount > 100 || isNaN(amount) || amount < 0) {return msg.reply('input a number between 1 and 100');}
-		
+
+		if (amount > 100 || isNaN(amount) || amount < 0) { return msg.reply('input a number between 1 and 100'); }
+
 		let total = 0;
 		let message = '';
-		
+
 
 		const firstRoll = Math.floor((Math.random() * sides) + 1);
 		total += firstRoll;
@@ -39,6 +38,6 @@ module.exports = {
 			total += roll;
 		}
 
-		msg.channel.send(embed.setDescription(`You rolled a D${sides} ${amount} times, these are the results: \n${message}\n= __**${total}**__`));
+		msg.channel.send(embed.setDescription(`You rolled a __D${sides}__ **${amount}** times, these are the results: \n${message}\n= __**${total}**__`));
 	},
 };

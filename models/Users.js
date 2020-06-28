@@ -9,11 +9,13 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
-		msgCount: {
-			type: DataTypes.INTEGER,
-			defaultValue: 0,
+		optIn: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
 			allowNull: false,
 		},
+
+		// cooldowns
 		lastDaily: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
@@ -34,9 +36,60 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
+		hasVoted: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+			allowNull: false,
+		},
+
 		pColour: {
 			type: DataTypes.STRING,
-			defaultValue: '#fffb00',
+			defaultValue: '#fcfcfc',
+			allowNull: false,
+		},
+
+
+		// usage stats
+		msgCount: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		botUsage: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+
+		// misc stats
+		totalEarned: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		totalSpent: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		gamblingEarned: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		gamblingSpent: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		stealingEarned: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		shopSpent: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
 			allowNull: false,
 		},
 

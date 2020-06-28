@@ -1,24 +1,23 @@
 module.exports = {
 	name: 'skip',
+	summary: 'Skip a song',
 	description: 'Skip a song.',
-	admin: false,
+	category: 'music',
 	aliases: ['next'],
 	args: false,
 	usage: '',
-	owner: false,
-	music: true,
-	
-	async execute(msg, args, profile, bot, ops, ytAPI, logger, cooldowns) {
+
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		if (!msg.member.voice.channel) {
 			return msg.reply('You are not in a voice channel!');
 		}
 
 		try {
-			const guildIDData = ops.active.get(msg.guild.id);
+			const guildIDData = options.active.get(msg.guild.id);
 			guildIDData.dispatcher.emit('finish');
 		}
-		catch (error) {
-			logger.log('error', error);
+		catch (e) {
+			logger.error(e.stack);
 		}
 	},
 };

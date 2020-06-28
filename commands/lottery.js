@@ -3,13 +3,7 @@ const cron = require('cron');
 const fs = require('fs');
 module.exports = {
 	name: 'lottery',
-	description: 'Daily lottery everyone can enter.',
-	owner: true,
-	aliases: [],
-	args: false,
-	usage: '',
-	admin: false,
-	music: false,
+	category: 'debug',
 
 	async execute(msg, args, profile, bot, options, ytAPI, logger) {
 		//	crontime: 0 0-23/3 * * *	collectortime: 10796250		channelID: 721743056528867393
@@ -26,21 +20,18 @@ module.exports = {
 			let lottery = misc.lastLottery;
 			let duplicate = false;
 			let players = 'Current participants:';
-			const description = `Press 💰 to participate in the lottery!\n${buyin}💰 buy-in.`;
+			const description = `Press 💰 to participate in the lottery!\nPress 🔔 to get notified when the lottery ends.\n**${buyin}💰** buy-in.`;
 
 			const participants = [];
 			const tickets = [];
 			for (let i = 0; i < ticketAmount; i++) tickets[i] = i;
-
-
-
-
+			
 			const embed = new Discord.MessageEmbed()
-				.setTitle('Neija Lottery')
-				.setDescription(`${description}\nCurrent jackpot: ${lottery}💰!`)
+				.setTitle('Neia Lottery')
+				.setDescription(`${description}\nCurrent jackpot: **${lottery}💰**!`)
 				.setColor(pColour)
 				.setTimestamp()
-				.setFooter('Neija', bAvatar);
+				.setFooter('Neia', bAvatar);
 
 			const filter = (reaction, user) => {
 				return ['💰', '🔔'].includes(reaction.emoji.name) && !user.bot;
@@ -58,7 +49,7 @@ module.exports = {
 						if (r.emoji.name == '🔔') {
 							const info = participants.findIndex(ticket => ticket.user.id == user.id);
 							participants[info].notify = true;
-							user.send(`You will be notified when the lottery will end\n\nThis lottery has a jackpot of **${lottery}💰** \nYour ticket number is ${parseInt(participants[info].ticketNumber) + 1}.`);
+							user.send(`You will be notified when the lottery will end\n\nThis lottery has a jackpot of **${lottery}💰** \nYour ticket number is __**${parseInt(participants[info].ticketNumber) + 1}**__.`);
 						}
 						else if (r.emoji.name == '💰') {
 							for (let i = 0; i < participants.length; i++) {
@@ -100,14 +91,14 @@ module.exports = {
 						if (winner) {
 							profile.addMoney(winner.user.id, lottery);
 							channel.send(`Congrats ${winner.user} on winning the jackpot of **${lottery}💰**!!!`);
-							sentMessage.edit(embed.setDescription(`Current lottery: **${lottery}💰**\n${players}\n\nLottery has ended and the winning number is __**${winNumber + 1}**__\n${winner.user} has won the lottery of **${lottery}💰**`));
+							sentMessage.edit(embed.setDescription(`Current lottery: **${lottery}💰**\n${players}\n\nLottery has ended and the winning number is __**${winNumber + 1}**__\n*${winner.user}* has won the lottery of **${lottery}💰**`));
 							misc.lastLottery = ticketAmount;
 						}
 
 						for (let i = 0; i < participants.length; i++) {
 							if (participants[i].notify) {
 								if (winner) winner.user.send(`The lottery has ended\nYou have won the lottery with lucky number __**${winNumber + 1}**__ and won **${lottery}💰**!\n\nThe next jackpot will be **${ticketAmount}💰** and is starting in 1 minute`);
-								else participants[i].user.send(`The lottery has ended\nThe winning number is __**${winNumber + 1}**__ but you had the number **${parseInt(participants[i].ticketNumber) + 1}**.\n\nThe next jackpot will be **${misc.lastLottery}💰** and is starting in 1 minute`);
+								else participants[i].user.send(`The lottery has ended\nThe winning number is __**${winNumber + 1}**__ but you had the number __**${parseInt(participants[i].ticketNumber) + 1}**__.\n\nThe next jackpot will be **${misc.lastLottery}💰** and is starting in 1 minute`);
 
 							}
 						}

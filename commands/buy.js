@@ -3,16 +3,15 @@ const { Users, CurrencyShop } = require('../dbObjects');
 const { Op } = require('sequelize');
 module.exports = {
 	name: 'buy',
-	description: 'buy an item from the shop.',
-	admin: false,
+	summary: 'Buy an item from the shop',
+	description: 'With this you can buy an item from the shop.\nYou can either use `buy <item> <amount> to instantly buy the items or just use `buy`.\nIf you use the latter you will get prompted to enter the name and amount of the item that you want into the chat.',
+	category: 'money',
 	aliases: ['get'],
-	usage: '',
+	usage: '<item> <amount>',
 	cooldown: 5,
-	owner: false,
 	args: false,
-	music: false,
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
@@ -23,12 +22,12 @@ module.exports = {
 		let item;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neija Shop')
+			.setTitle('Neia Shop')
 			.setThumbnail(avatar)
 			.setDescription('What item do you want to buy?')
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neija Imporium', bAvatar);
+			.setFooter('Neia Imporium', bAvatar);
 
 
 		msg.channel.send(embed).then(async sentMessage => {
@@ -51,20 +50,20 @@ module.exports = {
 					.then(async collected => {
 						item = await CurrencyShop.findOne({ where: { name: { [Op.like]: collected.first().content } } });
 						if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not an item.`));
-						collected.first().delete().catch(e => logger.log('error', e));
+						collected.first().delete().catch(e => logger.error(e.stack));
 
-						sentMessage.edit(embed.setDescription(`How many ${item.name} do you want to buy (max of 10000)?`)).then(() => {
+						sentMessage.edit(embed.setDescription(`How many __${item.name}(s)__ do you want to buy?`)).then(() => {
 							msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 								.then(async collected => {
 									amount = parseInt(collected.first().content);
-									collected.first().delete().catch(e => logger.log('error', e));
+									collected.first().delete().catch(e => logger.error(e.stack));
 
 									buy(profile, sentMessage, amount, embed, item, msg);
 
 								})
 								.catch(e => {
-									logger.log('error', e);
+									logger.error(e.stack);
 									msg.reply('you didn\'t answer in time or something went wrong.');
 								});
 						});
@@ -72,7 +71,7 @@ module.exports = {
 			}
 		})
 			.catch(e => {
-				logger.log('error', e);
+				logger.error(e.stack);
 				msg.reply('you didn\'t answer in time or something went wrong.');
 			});
 
@@ -80,11 +79,11 @@ module.exports = {
 };
 
 async function buy(profile, sentMessage, amount, embed, item, msg) {
-	
+
 	if (!Number.isInteger(amount)) {
-		return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
+		return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
 	}
-	else if (amount < 1 || amount > 10000) {
+	else if (amount < 1) {
 		amount = 1;
 	}
 
@@ -92,11 +91,12 @@ async function buy(profile, sentMessage, amount, embed, item, msg) {
 	let balance = await profile.getBalance(msg.author.id);
 	const cost = amount * item.cost;
 	if (cost > balance) {
-		return sentMessage.edit(embed.setDescription(`You currently have ${balance}, but ${amount} ${item.name}(s) costs ${cost}💰!`));
+		return sentMessage.edit(embed.setDescription(`You currently have **${balance}💰**, but __**${amount}**__ __${item.name}(s)__ costs **${cost}💰**!`));
 	}
 
 	profile.addMoney(msg.author.id, -cost);
+	profile.addShopSpent(msg.author.id, cost);
 	await user.addItem(item, amount);
 	balance = await profile.getBalance(msg.author.id);
-	sentMessage.edit(embed.setDescription(`You've bought: ${amount} ${item.name}(s).\n\nCurrent balance is ${balance}💰.`));
+	sentMessage.edit(embed.setDescription(`You've bought: __**${amount}**__ __${item.name}(s)__.\n\nCurrent balance is **${balance}💰**.`));
 }
