@@ -172,9 +172,9 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 			for (let i = 0; i < 2; i++) {
 				getCard('player');
 				getCard('bot');
-				setEmbed();
+				
 			}
-
+			setEmbed();
 
 			collector.on('collect', (reaction) => {
 				reaction.users.remove(msg.author.id);

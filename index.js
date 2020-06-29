@@ -149,7 +149,7 @@ bot.on('message', async msg => {
 	};
 	profile.addBotUsage(id, 1);
 	// execute command
-	logger.log('info', `${msg.author.tag} Called command: ${commandName} in guild: ${msg.guild.name}`);
+	logger.log('info', `${msg.author.tag} Called command: ${command.name}, in guild: ${msg.guild.name}`);
 	try {
 		command.execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns);
 	}

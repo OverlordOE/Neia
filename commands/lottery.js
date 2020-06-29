@@ -5,7 +5,7 @@ module.exports = {
 	name: 'lottery',
 	category: 'debug',
 
-	async execute(msg, args, profile, bot, options, ytAPI, logger) {
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 		//	crontime: 0 0-23/3 * * *	collectortime: 10796250		channelID: 721743056528867393
 		const lotteryJob = new cron.CronJob('0 0-23/3 * * *', async () => {
 
