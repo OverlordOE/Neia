@@ -8,8 +8,8 @@ module.exports = {
 	cooldown: 3600,
 	usage: '',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
-		const opt = await profile.getOptIn(msg.author.id);
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+		const opt = await msgUser.optIn;
 
 		if (opt) {
 			profile.setOptIn(msg.author.id, false);

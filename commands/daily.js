@@ -11,12 +11,12 @@ module.exports = {
 	cooldown: 5,
 	usage: '',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
-		const lastDaily = moment(await profile.getDaily(msg.author.id));
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+		const lastDaily = moment(msgUser.lastDaily);
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
 
-		const pColour = await profile.getPColour(msg.author.id);
+
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const items = await user.getItems();
 		let cReward = 0;
@@ -24,7 +24,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Daily Reward')
 			.setThumbnail(avatar)
-			.setColor(pColour)
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 

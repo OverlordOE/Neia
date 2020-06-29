@@ -7,7 +7,7 @@ module.exports = {
 
 	cooldown: 0,
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 		const transferAmount = args.find(arg => !/<@!?\d+>/g.test(arg));
 		const transferTarget = msg.mentions.users.first() || msg.author;
 

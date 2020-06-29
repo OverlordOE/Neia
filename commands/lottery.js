@@ -5,7 +5,7 @@ module.exports = {
 	name: 'lottery',
 	category: 'debug',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 		//	crontime: 0 0-23/3 * * *	collectortime: 10796250		channelID: 721743056528867393
 		const lotteryJob = new cron.CronJob('0 0-23/3 * * *', async () => {
 
@@ -14,7 +14,7 @@ module.exports = {
 			const misc = JSON.parse(fs.readFileSync('miscData.json'));
 			const channel = bot.channels.cache.get('721743056528867393');
 			const bAvatar = bot.user.displayAvatarURL();
-			const pColour = await profile.getPColour(msg.author.id);
+
 			const buyin = 5;
 
 			let lottery = misc.lastLottery;
@@ -25,11 +25,11 @@ module.exports = {
 			const participants = [];
 			const tickets = [];
 			for (let i = 0; i < ticketAmount; i++) tickets[i] = i;
-			
+
 			const embed = new Discord.MessageEmbed()
 				.setTitle('Neia Lottery')
 				.setDescription(`${description}\nCurrent jackpot: **${lottery}💰**!`)
-				.setColor(pColour)
+				.setColor(msgUser.pColour)
 				.setTimestamp()
 				.setFooter('Neia', bAvatar);
 
@@ -59,7 +59,7 @@ module.exports = {
 								}
 							}
 							if (!duplicate) {
-								const bCheck = await profile.getBalance(user.id);
+								const bCheck = msgUser.balance;
 
 								if (bCheck >= buyin) {
 									const ticketNumber = tickets.splice(Math.floor(Math.random() * tickets.length), 1);

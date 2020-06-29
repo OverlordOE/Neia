@@ -8,10 +8,10 @@ module.exports = {
 	args: false,
 	usage: '<target>',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
 		const bAvatar = bot.user.displayAvatarURL();
-		const pColour = await profile.getPColour(msg.author.id);
+
 		const target = msg.mentions.users.first() || msg.author;
 		const avatar = target.displayAvatarURL();
 
@@ -19,7 +19,7 @@ module.exports = {
 			.setTitle(`${target.tag}'s Avatar`)
 			.setDescription(avatar)
 			.setImage(avatar)
-			.setColor(pColour)
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 

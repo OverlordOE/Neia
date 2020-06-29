@@ -9,10 +9,10 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 		const items = await CurrencyShop.findAll();
 		const bAvatar = msg.author.displayAvatarURL();
-		const pColour = await profile.getPColour(msg.author.id);
+
 		let consumable = '__**Consumables:**__\n';
 		let collectables = '__**Collectables:**__\n';
 
@@ -27,7 +27,7 @@ module.exports = {
 			.setTitle('Neia Shop')
 			.setThumbnail(bAvatar)
 			.setDescription(description)
-			.setColor(pColour)
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 

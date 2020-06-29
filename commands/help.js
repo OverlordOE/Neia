@@ -7,9 +7,8 @@ module.exports = {
 	usage: '<command name>',
 	args: false,
 
-	async execute(message, args, profile) {
-		const pColour = await profile.getPColour(message.author.id);
-		const { commands } = message.client;
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+		const { commands } = msg.client;
 		let adminCommands = '';
 		let musicCommands = '';
 		let miscCommands = '';
@@ -17,7 +16,7 @@ module.exports = {
 		let infoCommands = '';
 
 		const help = new Discord.MessageEmbed()
-			.setColor(pColour)
+			.setColor(msgUser.pColour)
 			.setTimestamp();
 
 		if (!args.length) {
@@ -63,10 +62,10 @@ module.exports = {
 			const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
 			if (!command) {
-				return message.reply('that\'s not a valid command!');
+				return msg.reply('that\'s not a valid command!');
 			}
 
-			if (command.owner) { return message.channel.send('This command is for debug purposes'); }
+			if (command.owner) { return msg.channel.send('This command is for debug purposes'); }
 			help.setTitle(command.name);
 
 			if (command.description) help.addField('**Description:**', command.description);
@@ -80,6 +79,6 @@ module.exports = {
 		}
 
 
-		message.channel.send(help);
+		msg.channel.send(help);
 	},
 };

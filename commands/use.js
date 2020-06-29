@@ -13,14 +13,14 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const uitems = await user.getItems();
 
-		const pColour = await profile.getPColour(msg.author.id);
+
 		const filter = m => m.author.id === msg.author.id;
 		let iAmount = 0;
 		let amount = 0;
@@ -32,7 +32,7 @@ module.exports = {
 			.setTitle('Use Command')
 			.setThumbnail(avatar)
 			.setDescription('What item do you want to use?')
-			.setColor(pColour)
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 

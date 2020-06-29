@@ -11,11 +11,11 @@ module.exports = {
 	cooldown: 5,
 	args: false,
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
-		const pColour = await profile.getPColour(msg.author.id);
+
 		const filter = m => m.author.id === msg.author.id;
 		let amount = 0;
 		let temp = '';
@@ -25,7 +25,7 @@ module.exports = {
 			.setTitle('Neia Shop')
 			.setThumbnail(avatar)
 			.setDescription('What item do you want to buy?')
-			.setColor(pColour)
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia Imporium', bAvatar);
 

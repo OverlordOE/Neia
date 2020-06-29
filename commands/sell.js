@@ -12,12 +12,12 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const uitems = await user.getItems();
 		const filter = m => m.author.id === msg.author.id;
-		const pColour = await profile.getPColour(msg.author.id);
+
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
 		let amount = 0;
@@ -28,7 +28,7 @@ module.exports = {
 			.setTitle('Neia Refunds')
 			.setThumbnail(avatar)
 			.setDescription('What do you want to refund? `80% refund`')
-			.setColor(pColour)
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 

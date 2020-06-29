@@ -8,14 +8,14 @@ module.exports = {
 	args: false,
 	usage: '<page>',
 
-	async execute(msg, args, profile, guildProfile, bot) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
 		const filter = (reaction, user) => {
 			return ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === msg.author.id;
 		};
 
 		const bAvatar = bot.user.displayAvatarURL();
-		const pColour = await profile.getPColour(msg.author.id);
+
 
 		const list = profile.sort((a, b) => b.balance - a.balance)
 			.filter(user => bot.users.cache.has(user.user_id))
@@ -31,7 +31,7 @@ module.exports = {
 			.setTitle('Neia leaderboard')
 			.setDescription(description)
 			.setThumbnail(bAvatar)
-			.setColor(pColour)
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 

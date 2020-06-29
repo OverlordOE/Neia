@@ -10,16 +10,16 @@ module.exports = {
 	cooldown: 5,
 	usage: '',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
-		const lastWeekly = moment(await profile.getWeekly(msg.author.id));
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+		const lastWeekly = moment(msgUser.lastWeekly);
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
-		const pColour = await profile.getPColour(msg.author.id);
+
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Weekly Reward')
 			.setThumbnail(avatar)
-			.setColor(pColour)
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 

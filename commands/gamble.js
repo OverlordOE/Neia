@@ -12,10 +12,10 @@ module.exports = {
 	args: true,
 	usage: '<amount>',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
-		const currentAmount = await profile.getBalance(msg.author.id);
-		const pColour = await profile.getPColour(msg.author.id);
+		const currentAmount = msgUser.balance;
+
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
 		let gambleAmount = 0;
@@ -172,7 +172,7 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 			for (let i = 0; i < 2; i++) {
 				getCard('player');
 				getCard('bot');
-				
+
 			}
 			setEmbed();
 

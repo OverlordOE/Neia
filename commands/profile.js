@@ -11,7 +11,7 @@ module.exports = {
 	usage: '<user>',
 
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 		const target = msg.mentions.users.first() || msg.author;
 		const user = await Users.findOne({ where: { user_id: target.id } });
 		const items = await user.getItems();
@@ -31,9 +31,9 @@ module.exports = {
 		let lastWeekly;
 
 		try {
-			lastDaily = moment(await profile.getDaily(target.id));
-			lastHourly = moment(await profile.getHourly(target.id));
-			lastWeekly = moment(await profile.getWeekly(target.id));
+			lastDaily = moment(await userProfile.lastDaily);
+			lastHourly = moment(await userProfile.lastHourly);
+			lastWeekly = moment(await userProfile.lastWeekly);
 		} catch (e) {
 			return logger.error(e.stack);
 		}
@@ -67,7 +67,6 @@ module.exports = {
 			.addField('Next weekly:', weekly)
 			.addField('Next daily:', daily, true)
 			.addField('Next hourly:', hourly, true)
-			.addField('Can vote', !userProfile.hasVoted)
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 

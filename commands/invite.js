@@ -8,9 +8,9 @@ module.exports = {
 	usage: '',
 	aliases: ['inv', 'bug', 'join', 'support', 'link'],
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
-		const pColour = await profile.getPColour(msg.author.id);
+
 		const bAvatar = bot.user.displayAvatarURL();
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Invites')

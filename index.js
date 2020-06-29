@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 const winston = require('winston');
 require('dotenv').config();
 const token = process.env.TEST_TOKEN;
-const ytAPI = process.env.YT_API;
 const { Users, profile, Guilds, guildProfile } = require('./dbObjects');
 const botCommands = require('./commands');
 const moment = require('moment');
@@ -67,13 +66,14 @@ process.on('uncaughtException', m => logger.error(m.stack));
 bot.on('message', async msg => {
 	if (msg.author.bot) return;
 
-	const guild = guildProfile.get(msg.guild.id);
-	if (!guild) await guildProfile.newGuild(msg.guild.id);
+	let guild = guildProfile.get(msg.guild.id);
+	if (!guild) guild = await guildProfile.newGuild(msg.guild.id);
 	const prefix = await guildProfile.getPrefix(msg.guild.id);
 	const now = Date.now();
 	const id = msg.author.id;
-	const user = profile.get(id);
-	if (!user) await profile.newUser(id);
+	let user = profile.get(id);
+	if (!user) user = await profile.newUser(id);
+	profile.addCount(id, 1);
 
 
 	// split message for further use
@@ -84,17 +84,13 @@ bot.on('message', async msg => {
 	const args = msg.content.slice(matchedPrefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
-	
 
-	profile.addCount(id, 1);
-
-	
 
 	const command = bot.commands.get(commandName)
 		|| bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 	if (!command) return;
-	
+
 
 	// check for admin
 	if (command.category == 'admin') {
@@ -151,7 +147,7 @@ bot.on('message', async msg => {
 	// execute command
 	logger.log('info', `${msg.author.tag} Called command: ${command.name}, in guild: ${msg.guild.name}`);
 	try {
-		command.execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns);
+		command.execute(msg, args, user, profile, guildProfile, bot, options, logger, cooldowns);
 	}
 	catch (e) {
 		logger.error(e.stack);

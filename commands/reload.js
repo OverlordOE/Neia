@@ -8,7 +8,7 @@ module.exports = {
 	cooldown: 0,
 
 
-	execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 		const commandName = args[0].toLowerCase();
 		const command = msg.client.commands.get(commandName)
 			|| msg.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));

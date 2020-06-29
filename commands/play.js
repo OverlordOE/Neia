@@ -1,5 +1,6 @@
 const ytdl = require('ytdl-core-discord');
 const YouTube = require('discord-youtube-api');
+const ytAPI = process.env.YT_API;
 
 module.exports = {
 	name: 'play',
@@ -11,7 +12,7 @@ module.exports = {
 	usage: 'search criteria',
 
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
 		const youtube = new YouTube(ytAPI);
 		if (!msg.member.voice.channel) {

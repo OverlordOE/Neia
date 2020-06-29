@@ -10,7 +10,7 @@ module.exports = {
 	args: true,
 	usage: '<item>',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 		const bAvatar = msg.author.displayAvatarURL();
 		let temp = '';
 

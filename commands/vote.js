@@ -6,29 +6,29 @@ const dbl = new DBL(dblToken);
 module.exports = {
 	name: 'vote',
 	summary: 'vote for the bot to get an extra daily',
-	description: 'vote for the bot to get an extra daily and part of your passive income from your collectables.',
+	description: 'vote for the bot to get a reward and part of your passive income from your collectables.',
 	category: 'money',
 	aliases: ['v'],
 	args: false,
 	cooldown: 5,
 	usage: '',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
 
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
 
-		const pColour = await profile.getPColour(msg.author.id);
+
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const items = await user.getItems();
-		const hasVoted = await profile.getVote(msg.author.id);
+		const hasVoted = msgUser.hasVoted;
 		let cReward = 0;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Daily Reward')
+			.setTitle('Vote Reward')
 			.setThumbnail(avatar)
-			.setColor(pColour)
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 

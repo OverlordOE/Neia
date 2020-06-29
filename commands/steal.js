@@ -11,7 +11,7 @@ module.exports = {
 	category: 'money',
 	aliases: ['shoot'],
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
 		if (!cooldowns.has('steal')) {
 			cooldowns.set('steal', new Discord.Collection());
@@ -25,7 +25,7 @@ module.exports = {
 			return msg.channel.send('Incorrect mention');
 		}
 
-		const opted = await profile.getOptIn(msg.author.id);
+		const opted = msgUser.optIn;
 		if (!opted) {
 			timestamps.delete(msg.author.id);
 			return msg.reply('You are not opted into pvp for the bot.\nYou can use the command `optin` to enable pvp.');

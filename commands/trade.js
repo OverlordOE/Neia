@@ -12,9 +12,9 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
-		const pColour = await profile.getPColour(msg.author.id);
+
 		const bAvatar = bot.user.displayAvatarURL();
 		let target;
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
@@ -22,7 +22,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Trading Center')
-			.setColor(pColour)
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 
@@ -100,7 +100,7 @@ module.exports = {
 										}
 
 										else {
-											const balance = await profile.getBalance(msg.author.id);
+											const balance = msgUser.balance;
 
 											if (!goods || isNaN(goods)) return sentMessage.edit(embed.setDescription(`Sorry *${msg.author}*, that's an invalid amount.`));
 											if (goods > balance) return sentMessage.edit(embed.setDescription(`You only have **${balance}💰** but need **${goods}**.`));
