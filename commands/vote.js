@@ -14,15 +14,11 @@ module.exports = {
 	usage: '',
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
-
-
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
-
-
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const items = await user.getItems();
-		const hasVoted = msgUser.hasVoted;
+		const vote = await profile.getVote(msg.author.id);
 		let cReward = 0;
 
 		const embed = new Discord.MessageEmbed()
@@ -50,13 +46,14 @@ module.exports = {
 
 		dbl.hasVoted(msg.author.id).then(async voted => {
 			if (voted) {
-				if (hasVoted) { return msg.channel.send(embed.setDescription('You have already voted in the last 12 hours.')); }
-				else {
+				if (vote === true) {
 					profile.addMoney(msg.author.id, finalReward);
 					const balance = await profile.getBalance(msg.author.id);
 					profile.setVote(msg.author.id, true);
 					return msg.channel.send(embed.setDescription(`Thank you for voting!!!\nYou got **${dReward.toFixed(1)}💰** from your vote 🎁 and **${cReward.toFixed(1)}💰** from your collectables for a total of **${finalReward.toFixed(1)}💰**\n\nCome back in 12 hours for more!\nYour current balance is **${balance}💰**`));
 				}
+				else return msg.channel.send(embed.setDescription(`You have already voted in the last 12 hours.\nNext vote available at __${vote}__`));
+
 			}
 			else {
 				profile.setVote(msg.author.id, false);

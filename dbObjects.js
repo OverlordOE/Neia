@@ -88,7 +88,11 @@ Reflect.defineProperty(profile, 'getDaily', {
 	value: async function getDaily(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		return user ? user.lastDaily : 0;
+		const now = moment();
+
+		const dCheck = moment(user.lastDaily).add(1, 'd');
+		if (moment(dCheck).isBefore(now)) return true;
+		else return dCheck.format('dddd HH:mm');
 	},
 
 });
@@ -108,9 +112,12 @@ Reflect.defineProperty(profile, 'getHourly', {
 	value: async function getHourly(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		return user ? user.lastHourly : 0;
-	},
+		const now = moment();
 
+		const hCheck = moment(user.lastHourly).add(1, 'h');
+		if (moment(hCheck).isBefore(now)) return true;
+		else return hCheck.format('dddd HH:mm');
+	},
 });
 Reflect.defineProperty(profile, 'setHourly', {
 	value: async function setHourly(id) {
@@ -128,7 +135,11 @@ Reflect.defineProperty(profile, 'getWeekly', {
 	value: async function getWeekly(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		return user ? user.lastWeekly : 0;
+		const now = moment();
+
+		const wCheck = moment(user.lastWeekly).add(1, 'w');
+		if (moment(wCheck).isBefore(now)) return true;
+		else return wCheck.format('dddd HH:mm');
 	},
 
 });
@@ -140,6 +151,29 @@ Reflect.defineProperty(profile, 'setWeekly', {
 		const day = moment();
 		user.lastWeekly = day;
 		return user.save();
+	},
+});
+
+
+Reflect.defineProperty(profile, 'setVote', {
+	value: async function setVote(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+
+		const day = moment();
+		user.lastVote = day;
+		return user.save();
+	},
+});
+Reflect.defineProperty(profile, 'getVote', {
+	value: async function getVote(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		const now = moment();
+
+		const vCheck = moment(user.lastVote).add(12, 'h');
+		if (moment(vCheck).isBefore(now)) return true;
+		else return vCheck.format('dddd HH:mm');
 	},
 });
 
@@ -158,9 +192,12 @@ Reflect.defineProperty(profile, 'getProtection', {
 	value: async function getProtection(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		return user ? user.protection : 0;
-	},
+		const now = moment();
 
+		const prot = user.protection;
+		if (moment(prot).isBefore(now)) return true;
+		else return prot.format('dddd HH:mm');
+	},
 });
 Reflect.defineProperty(profile, 'setProtection', {
 	value: async function setProtection(id, day) {
@@ -188,25 +225,6 @@ Reflect.defineProperty(profile, 'setPColour', {
 		if (!colour.startsWith('#')) throw 'not a valid colour!';
 
 		user.pColour = colour;
-		return user.save();
-	},
-});
-
-
-Reflect.defineProperty(profile, 'getVote', {
-	value: async function getVote(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user ? user.hasVoted : 0;
-	},
-
-});
-Reflect.defineProperty(profile, 'setVote', {
-	value: async function setVote(id, vote) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
-		user.hasVoted = vote;
 		return user.save();
 	},
 });
@@ -287,9 +305,9 @@ Reflect.defineProperty(profile, 'newUser', {
 			lastDaily: 0,
 			lastHourly: 0,
 			lastWeekly: 0,
+			lastVote: 0,
 			protection: 0,
 			pColour: '#fcfcfc',
-			hasVoted: false,
 			optIn: false,
 			msgCount: 1,
 			gamblingEarned: 0,

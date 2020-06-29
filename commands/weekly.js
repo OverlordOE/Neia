@@ -1,4 +1,3 @@
-const moment = require('moment');
 const Discord = require('discord.js');
 module.exports = {
 	name: 'weekly',
@@ -11,7 +10,7 @@ module.exports = {
 	usage: '',
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
-		const lastWeekly = moment(msgUser.lastWeekly);
+		const weekly = await profile.getWeekly(msg.author.id);
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
 
@@ -23,12 +22,9 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 
-		const check = moment(lastWeekly).add(1, 'w');
-		const weekly = check.format('dddd HH:mm');
-		const now = moment();
 		const reward = 100 + (Math.random() * 50);
 
-		if (moment(check).isBefore(now)) {
+		if (weekly === true) {
 			profile.addMoney(msg.author.id, reward);
 			await profile.setWeekly(msg.author.id);
 			const balance = await profile.getBalance(msg.author.id);

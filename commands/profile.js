@@ -24,49 +24,35 @@ module.exports = {
 		const avatar = target.displayAvatarURL();
 		const userProfile = await profile.getUser(target.id);
 		const pColour = userProfile.pColour;
-		const prot = moment(userProfile.protection);
+		
+		const prot = await profile.getProtection(target.id);
+		let daily = await profile.getDaily(target.id);
+		let hourly = await profile.getHourly(target.id);
+		let weekly = await profile.getWeekly(target.id);
+		let vote = await profile.getVote(target.id);
 
-		let lastDaily;
-		let lastHourly;
-		let lastWeekly;
-
-		try {
-			lastDaily = moment(await userProfile.lastDaily);
-			lastHourly = moment(await userProfile.lastHourly);
-			lastWeekly = moment(await userProfile.lastWeekly);
-		} catch (e) {
-			return logger.error(e.stack);
-		}
+		if (daily === true) daily = 'now';
+		if (hourly === true) hourly = 'now';
+		if (weekly === true) weekly = 'now';
+		if (vote === true) vote = 'now';
 
 
 		let assets = '';
 		let networth = 0;
 		let collectables = false;
-		let inventory = `__**Inventory:**__\n`;
+		let inventory = '__**Inventory:**__\n';
 
-		const now = moment();
-		const dCheck = moment(lastDaily).add(1, 'd');
-		const hCheck = moment(lastHourly).add(1, 'h');
-		const wCheck = moment(lastWeekly).add(1, 'w');
-		const pCheck = moment(prot).isBefore(now);
-
-		let daily = dCheck.format('dddd HH:mm');
-		let hourly = hCheck.format('dddd HH:mm');
-		let weekly = wCheck.format('dddd HH:mm');
-		const protection = prot.format('dddd HH:mm');
-		if (moment(dCheck).isBefore(now)) daily = 'now';
-		if (moment(hCheck).isBefore(now)) hourly = 'now';
-		if (moment(wCheck).isBefore(now)) weekly = 'now';
-
+		
 		const moneyEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s Stats`)
 			.setThumbnail(avatar)
 			.addField('Balance:', `${userProfile.balance.toFixed(1)}💰`, true)
 			.addField('Message Count:', userProfile.msgCount, true)
-			.addField('Next weekly:', weekly)
+			.addField('Next Vote', vote)
 			.addField('Next daily:', daily, true)
 			.addField('Next hourly:', hourly, true)
+			.addField('Next weekly:', weekly, true)
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 
@@ -88,11 +74,10 @@ module.exports = {
 			.addField('Earned with Stealing:', userProfile.stealingEarned.toFixed(1), true)
 			.addField('Spent at Shop:', userProfile.shopSpent.toFixed(1), true)
 			.addField('Total Bot Usage:', userProfile.botUsage, true)
-
 			.setTimestamp()
 			.setFooter('Neia', bAvatar);
 
-		if (!pCheck) { moneyEmbed.addField('Steal protection untill:', protection); }
+		if (prot !== true) { moneyEmbed.addField('Steal protection untill:', prot); }
 
 
 		if (items.length) {
@@ -121,7 +106,7 @@ module.exports = {
 				invEmbed.setDescription(inventory);
 			});
 		}
-		else invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`);
+		else {invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`);}
 
 
 		msg.channel.send(moneyEmbed)

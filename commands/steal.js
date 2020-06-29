@@ -36,12 +36,10 @@ module.exports = {
 			return msg.channel.send(`*${target.tag}* is not opted into pvp for the bot.\nThey can use the command \`optin\` to enable pvp.`);
 		}
 
-
+		const protection = await profile.getProtection(target.id);
 		const now = moment();
-		const protection = moment(await profile.getProtection(target.id));
-		const checkProtection = moment(protection).isBefore(now);
 
-		if (!checkProtection) {
+		if (protection === true) {
 			timestamps.delete(msg.author.id);
 			return msg.channel.send(`*${target.tag}* has steal protection on, you cannot steal from them right now.`);
 		}

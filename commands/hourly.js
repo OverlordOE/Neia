@@ -1,4 +1,3 @@
-const moment = require('moment');
 const Discord = require('discord.js');
 const { Users } = require('../dbObjects');
 module.exports = {
@@ -12,7 +11,7 @@ module.exports = {
 	category: 'money',
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
-		const lastHourly = moment(msgUser.lastHourly);
+		const hourly = await profile.getHourly(msg.author.id);
 		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = msg.author.displayAvatarURL();
 
@@ -28,9 +27,6 @@ module.exports = {
 			.setFooter('Neia', bAvatar);
 
 
-		const check = moment(lastHourly).add(1, 'h');
-
-
 		items.map(i => {
 			if (i.amount < 1) return;
 
@@ -41,12 +37,10 @@ module.exports = {
 			}
 		});
 
-		const hourly = check.format('dddd HH:mm');
-		const now = moment();
 		const hReward = 3 + (Math.random() * 5);
 		const finalReward = hReward + cReward;
 
-		if (moment(check).isBefore(now)) {
+		if (hourly === true) {
 			profile.addMoney(msg.author.id, finalReward);
 			await profile.setHourly(msg.author.id);
 			const balance = await profile.getBalance(msg.author.id);
