@@ -36,7 +36,7 @@ module.exports = {
 
 			for (let i = 0; i < args.length; i++) {
 				if (!(isNaN(args[i]))) amount = parseInt(args[i]);
-
+				else if (args[i] == 'all') amount = 'all';
 				else if (temp.length > 2) temp += ` ${args[i]}`;
 				else temp += `${args[i]}`;
 			}
@@ -45,7 +45,11 @@ module.exports = {
 			if (item) {
 				uitems.map(i => {
 					if (i.item.name == item.name) {
-						if (i.item.name == item.name && i.amount >= amount) sell(profile, sentMessage, amount, embed, item, msg);
+						if (i.item.name == item.name && amount == 'all') {
+							amount = i.amount;
+							sell(profile, sentMessage, amount, embed, item, msg);
+						}
+						else if (i.item.name == item.name && i.amount >= amount) sell(profile, sentMessage, amount, embed, item, msg);
 						else return sentMessage.edit(embed.setDescription(`You only have **${i.amount}/${amount}** of the __${item.name}(s)__ needed!`));
 					}
 				});

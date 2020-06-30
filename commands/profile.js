@@ -93,7 +93,7 @@ module.exports = {
 				}
 			});
 			if (collectables) {
-				const pIncome = (networth / 20) + ((networth / 200) * 24);
+				const pIncome = (networth / 33) + ((networth / 400) * 24);
 				invEmbed.addField('Assets', assets);
 				invEmbed.addField('Max passive income', `**${pIncome.toFixed(1)}💰**`);
 				invEmbed.addField('Networth', `**${networth}💰**`, true);
