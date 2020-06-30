@@ -53,7 +53,7 @@ module.exports = {
 						}
 						else if (r.emoji.name == '💰') {
 							for (let i = 0; i < participants.length; i++) {
-								if (user.id == participants[i].id) {
+								if (user.id == participants[i].user.id) {
 									duplicate = true;
 									break;
 								}
