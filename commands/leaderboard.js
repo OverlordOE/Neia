@@ -14,7 +14,7 @@ module.exports = {
 			return ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === msg.author.id;
 		};
 
-		const bAvatar = bot.user.displayAvatarURL();
+
 
 
 		const list = profile.sort((a, b) => b.balance - a.balance)
@@ -33,7 +33,7 @@ module.exports = {
 			.setThumbnail(bAvatar)
 			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 		msg.channel.send(embed).then(sentMessage => {
 			sentMessage.react('◀️');

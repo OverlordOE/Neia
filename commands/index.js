@@ -7,6 +7,7 @@ module.exports = {
 	Buy: require('./buy'),
 	Sell: require('./sell'),
 	Use: require('./use'),
+	Open: require('./open'),
 	Trade: require('./trade'),
 	Profile: require('./profile'),
 	Vote: require('./vote'),
@@ -30,4 +31,5 @@ module.exports = {
 	Reload: require('./reload'),
 	Delete: require('./delete'),
 	Backup: require('./backup'),
+	Test: require('./test'),
 };

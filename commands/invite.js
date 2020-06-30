@@ -11,7 +11,7 @@ module.exports = {
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
 
-		const bAvatar = bot.user.displayAvatarURL();
+
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Invites')
 			.setColor(pColour)

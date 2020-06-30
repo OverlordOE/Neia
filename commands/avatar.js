@@ -10,7 +10,7 @@ module.exports = {
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
-		const bAvatar = bot.user.displayAvatarURL();
+
 
 		const target = msg.mentions.users.first() || msg.author;
 		const avatar = target.displayAvatarURL();
@@ -21,7 +21,7 @@ module.exports = {
 			.setImage(avatar)
 			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 		msg.channel.send(embed);
 	},

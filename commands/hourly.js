@@ -12,7 +12,7 @@ module.exports = {
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 		const hourly = await profile.getHourly(msg.author.id);
-		const bAvatar = bot.user.displayAvatarURL();
+
 		const avatar = msg.author.displayAvatarURL();
 
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
@@ -24,7 +24,7 @@ module.exports = {
 			.setThumbnail(avatar)
 			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 
 		items.map(i => {

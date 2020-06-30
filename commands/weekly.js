@@ -11,7 +11,7 @@ module.exports = {
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 		const weekly = await profile.getWeekly(msg.author.id);
-		const bAvatar = bot.user.displayAvatarURL();
+
 		const avatar = msg.author.displayAvatarURL();
 
 
@@ -20,7 +20,7 @@ module.exports = {
 			.setThumbnail(avatar)
 			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 		const reward = 100 + (Math.random() * 50);
 

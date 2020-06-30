@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		cost: {
 			type: DataTypes.INTEGER,
-			allowNull: false,
+			allowNull: true,
 		},
 		emoji: {
 			type: DataTypes.STRING,

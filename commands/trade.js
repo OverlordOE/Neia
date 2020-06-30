@@ -15,7 +15,7 @@ module.exports = {
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
 
-		const bAvatar = bot.user.displayAvatarURL();
+
 		let target;
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const filter = m => m.author.id === msg.author.id;
@@ -24,7 +24,7 @@ module.exports = {
 			.setTitle('Neia Trading Center')
 			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 
 		msg.channel.send(embed.setDescription('Who do you want to trade with? __mention the user__\n'))

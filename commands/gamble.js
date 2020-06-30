@@ -16,7 +16,7 @@ module.exports = {
 
 		const currentAmount = msgUser.balance;
 
-		const bAvatar = bot.user.displayAvatarURL();
+
 		const avatar = msg.author.displayAvatarURL();
 		let gambleAmount = 0;
 		let gambleType = '';
@@ -26,11 +26,11 @@ module.exports = {
 		};
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(pColour)
+			.setColor(msgUser.pColour)
 			.setThumbnail(avatar)
 			.setTimestamp()
 			.setTitle('Neia\'s Gambling Imporium')
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 
 		await msg.channel.send(embed)

@@ -13,7 +13,7 @@ module.exports = {
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
-		const bAvatar = bot.user.displayAvatarURL();
+
 		const avatar = msg.author.displayAvatarURL();
 
 		const filter = m => m.author.id === msg.author.id;
@@ -27,7 +27,7 @@ module.exports = {
 			.setDescription('What item do you want to buy?')
 			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia Imporium', bAvatar);
+			.setFooter('Neia Imporium', bot.user.displayAvatarURL());
 
 
 		msg.channel.send(embed).then(async sentMessage => {

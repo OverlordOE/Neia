@@ -30,11 +30,11 @@ module.exports = {
 			.addField('Rarity', item.rarity, true)
 			.setTimestamp()
 			.setFooter('Neia', bAvatar)
-			.attachFiles(`pictures/${item.rarity}.jpg`)
+			.attachFiles(`assets/rarity/${item.rarity}.jpg`)
 			.setImage(`attachment://${item.rarity}.jpg`);
 
-		if (item.picture) embed.attachFiles(`pictures/${item.picture}`)
-			.setThumbnail(`attachment://${item.picture}.jpg`);
+		if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
+			.setThumbnail(`attachment://${item.picture}`);
 
 		return msg.channel.send(embed);
 	},

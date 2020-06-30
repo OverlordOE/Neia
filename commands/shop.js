@@ -15,13 +15,17 @@ module.exports = {
 
 		let consumable = '__**Consumables:**__\n';
 		let collectables = '__**Collectables:**__\n';
+		let chests = '__**Collectables:**__\n';
 
 		await items.map(item => {
-			if (item.ctg == 'consumable') { consumable += `${item.emoji}__${item.name}__: **${item.cost}💰**\n`; }
-			else if (item.ctg == 'collectables') { collectables += `${item.emoji}__${item.name}__: **${item.cost}💰**\n`; }
+			if (item.cost) {
+				if (item.ctg == 'consumable') { consumable += `${item.emoji} ${item.name}: **${item.cost}💰**\n`; }
+				else if (item.ctg == 'collectables') { collectables += `${item.emoji} ${item.name}: **${item.cost}💰**\n`; }
+				else if (item.ctg == 'chests') { chests += `${item.emoji} ${item.name}: **${item.cost}💰**\n`; }
+			}
 		});
 
-		const description = `${consumable}\n${collectables}`;
+		const description = `${chests}${consumable}\n${collectables}`;
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Shop')
@@ -29,7 +33,7 @@ module.exports = {
 			.setDescription(description)
 			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 		return msg.channel.send(embed);
 	},

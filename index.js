@@ -85,26 +85,14 @@ bot.on('message', async msg => {
 	const commandName = args.shift().toLowerCase();
 
 
-
 	const command = bot.commands.get(commandName)
 		|| bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 	if (!command) return;
 
-
-	// check for admin
-	if (command.category == 'admin') {
-		if (!msg.member.hasPermission('ADMINISTRATOR')) {
-			return msg.channel.send('You need Admin privileges to use this command!');
-		}
-	}
-
-	// check for owner
-	if (command.category == 'debug') {
-		if (id != 137920111754346496) {
-			return msg.channel.send('You are not the owner of this bot!');
-		}
-	}
+	if (command.category == 'debug' && id != 137920111754346496) return msg.channel.send('You are not the owner of this bot!');
+	if (command.category == 'admin' && !msg.member.hasPermission('ADMINISTRATOR')) return msg.channel.send('You need Admin privileges to use this command!');
+	if (command.category == 'money' && !user.optIn) return msg.reply('You are not opted into pvp for the bot.\nYou can use the command `optin` to enable pvp.');
 
 	// if the command is used wrongly correct the user
 	if (command.args && !args.length) {
@@ -130,10 +118,12 @@ bot.on('message', async msg => {
 
 		if (now < expirationTime) {
 			const timeLeft = (expirationTime - now) / 1000;
-			const minLeft = timeLeft / 60;
+			const hourLeft = timeLeft / 3600;
+			const minLeft = (hourLeft - Math.floor(hourLeft)) * 60;
 			const secLeft = Math.floor((minLeft - Math.floor(minLeft)) * 60);
-			if (minLeft >= 1) { return msg.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`); }
-			else { return msg.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`); }
+			if (hourLeft >= 1) return msg.reply(`Please wait **${Math.floor(hourLeft)} hours**, **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
+			else if (minLeft >= 1) return msg.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
+			else return msg.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`);
 		}
 	}
 	timestamps.set(id, now);

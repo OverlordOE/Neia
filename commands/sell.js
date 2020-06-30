@@ -18,7 +18,7 @@ module.exports = {
 		const uitems = await user.getItems();
 		const filter = m => m.author.id === msg.author.id;
 
-		const bAvatar = bot.user.displayAvatarURL();
+
 		const avatar = msg.author.displayAvatarURL();
 		let amount = 0;
 		let temp = '';
@@ -30,7 +30,7 @@ module.exports = {
 			.setDescription('What do you want to refund? `80% refund`')
 			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 		msg.channel.send(embed).then(async sentMessage => {
 

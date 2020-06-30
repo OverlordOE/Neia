@@ -13,7 +13,7 @@ module.exports = {
 			const ticketAmount = 50;
 			const misc = JSON.parse(fs.readFileSync('miscData.json'));
 			const channel = bot.channels.cache.get('721743056528867393');
-			const bAvatar = bot.user.displayAvatarURL();
+
 
 			const buyin = 5;
 
@@ -31,7 +31,7 @@ module.exports = {
 				.setDescription(`${description}\nCurrent jackpot: **${lottery}💰**!`)
 				.setColor(msgUser.pColour)
 				.setTimestamp()
-				.setFooter('Neia', bAvatar);
+				.setFooter('Neia', bot.user.displayAvatarURL());
 
 			const filter = (reaction, user) => {
 				return ['💰', '🔔'].includes(reaction.emoji.name) && !user.bot;

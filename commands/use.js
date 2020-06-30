@@ -15,7 +15,7 @@ module.exports = {
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
-		const bAvatar = bot.user.displayAvatarURL();
+
 		const avatar = msg.author.displayAvatarURL();
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const uitems = await user.getItems();
@@ -34,7 +34,7 @@ module.exports = {
 			.setDescription('What item do you want to use?')
 			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 
 		msg.channel.send(embed).then(async sentMessage => {
@@ -50,10 +50,10 @@ module.exports = {
 			if (item) {
 				uitems.map(i => {
 					if (i.item.name == item.name) {
-						if (i.item.name == item.name && i.amount >= amount) use(profile, sentMessage, amount, embed, item, msg, filter);
+						if (i.amount >= amount) use(profile, sentMessage, amount, embed, item, msg, filter);
 						else return sentMessage.edit(embed.setDescription(`You only have **${i.amount}/${amount}** of the __${item.name}(s)__ needed!`));
 					}
-
+					else return sentMessage.edit(embed.setDescription(`You don't have any __${item.name}(s)__!`));
 				});
 			}
 			else {
@@ -68,7 +68,6 @@ module.exports = {
 								if (i.item.name == item.name && i.amount >= 1) {
 									iAmount = i.amount;
 								}
-
 							});
 
 							sentMessage.edit(embed.setDescription(`How much __${item.name}__ do you want to use?`)).then(() => {

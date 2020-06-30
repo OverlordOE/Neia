@@ -5,7 +5,7 @@ module.exports = {
 	category: 'misc',
 	aliases: ['pvp'],
 	args: false,
-	cooldown: 3600,
+	cooldown: 86400,
 	usage: '',
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {

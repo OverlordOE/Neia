@@ -20,11 +20,11 @@ module.exports = {
 		};
 
 
-		const bAvatar = bot.user.displayAvatarURL();
+
 		const avatar = target.displayAvatarURL();
 		const userProfile = await profile.getUser(target.id);
 		const pColour = userProfile.pColour;
-		
+
 		const prot = await profile.getProtection(target.id);
 		let daily = await profile.getDaily(target.id);
 		let hourly = await profile.getHourly(target.id);
@@ -42,7 +42,7 @@ module.exports = {
 		let collectables = false;
 		let inventory = '__**Inventory:**__\n';
 
-		
+
 		const moneyEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s Stats`)
@@ -54,14 +54,14 @@ module.exports = {
 			.addField('Next hourly:', hourly, true)
 			.addField('Next weekly:', weekly, true)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 		const invEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s Inventory`)
 			.setThumbnail(avatar)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 		const statEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
@@ -75,7 +75,7 @@ module.exports = {
 			.addField('Spent at Shop:', userProfile.shopSpent.toFixed(1), true)
 			.addField('Total Bot Usage:', userProfile.botUsage, true)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 		if (prot !== true) { moneyEmbed.addField('Steal protection untill:', prot); }
 
@@ -106,7 +106,7 @@ module.exports = {
 				invEmbed.setDescription(inventory);
 			});
 		}
-		else {invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`);}
+		else { invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`); }
 
 
 		msg.channel.send(moneyEmbed)

@@ -25,11 +25,6 @@ module.exports = {
 			return msg.channel.send('Incorrect mention');
 		}
 
-		const opted = msgUser.optIn;
-		if (!opted) {
-			timestamps.delete(msg.author.id);
-			return msg.reply('You are not opted into pvp for the bot.\nYou can use the command `optin` to enable pvp.');
-		}
 		const targetOpted = await profile.getOptIn(target.id);
 		if (!targetOpted) {
 			timestamps.delete(msg.author.id);
@@ -67,7 +62,8 @@ module.exports = {
 		const luck = Math.floor(Math.random() * 100);
 		if (luck >= 30) {
 
-			let stealAmount = 15 + (Math.random() * targetBalance * 0.1);
+			const stealLuck = 0.05 + (Math.random() * 0.1);
+			let stealAmount = 15 + (targetBalance * stealLuck);
 			if (targetBalance < stealAmount) stealAmount = targetBalance;
 
 			profile.addMoney(msg.author.id, stealAmount);
