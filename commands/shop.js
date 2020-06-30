@@ -15,7 +15,7 @@ module.exports = {
 
 		let consumable = '__**Consumables:**__\n';
 		let collectables = '__**Collectables:**__\n';
-		let chests = '__**Collectables:**__\n';
+		let chests = '__**Chests:**__\n';
 
 		await items.map(item => {
 			if (item.cost) {
@@ -25,7 +25,7 @@ module.exports = {
 			}
 		});
 
-		const description = `${chests}${consumable}\n${collectables}`;
+		const description = `${chests}\n${consumable}\n${collectables}`;
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Shop')

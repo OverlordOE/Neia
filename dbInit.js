@@ -36,7 +36,7 @@ sequelize
 			}),
 			CurrencyShop.upsert({
 				name: 'Rare Chest',
-				cost: 200,
+				cost: 300,
 				emoji: '<:RareBox:727513141243805776>',
 				rarity: 'rare',
 				picture: 'rare_closed.png',
@@ -45,7 +45,7 @@ sequelize
 			}),
 			CurrencyShop.upsert({
 				name: 'Epic Chest',
-				cost: 800,
+				cost: 1400,
 				emoji: '<:EpicBox:727513140849410090>',
 				rarity: 'epic',
 				picture: 'epic_closed.png',
@@ -54,7 +54,7 @@ sequelize
 			}),
 			CurrencyShop.upsert({
 				name: 'Legendary Chest',
-				cost: 5000,
+				cost: 8000,
 				emoji: '<:LegendaryBox:727513140836827247>',
 				rarity: 'legendary',
 				picture: 'legendary_closed.png',
