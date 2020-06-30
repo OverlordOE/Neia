@@ -124,10 +124,12 @@ bot.on('message', async msg => {
 
 		if (now < expirationTime) {
 			const timeLeft = (expirationTime - now) / 1000;
-			const minLeft = timeLeft / 60;
+			const hourLeft = timeLeft / 3600;
+			const minLeft = (hourLeft - Math.floor(hourLeft)) * 60;
 			const secLeft = Math.floor((minLeft - Math.floor(minLeft)) * 60);
-			if (minLeft >= 1) { return msg.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`); }
-			else { return msg.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`); }
+			if (hourLeft >= 1) return msg.reply(`Please wait **${Math.floor(hourLeft)} hours**, **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
+			else if (minLeft >= 1) return msg.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
+			else return msg.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`);
 		}
 	}
 	timestamps.set(id, now);
