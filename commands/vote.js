@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
-const { Users } = require('../dbObjects');
+const { Users, CurrencyShop } = require('../dbObjects');
+const { Op } = require('sequelize');
 const DBL = require('dblapi.js');
 const dblToken = process.env.DBL_TOKEN;
 const dbl = new DBL(dblToken);
@@ -17,9 +18,15 @@ module.exports = {
 
 		const avatar = msg.author.displayAvatarURL();
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
-		const items = await user.getItems();
 		const vote = await profile.getVote(msg.author.id);
-		let cReward = 0;
+		let reward = 0;
+		let chest;
+
+		const luck = Math.floor(Math.random() * 3);
+		if (luck >= 1) chest = 'Rare chest';
+		else chest = 'Epic chest';
+		const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: chest } } });
+
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Vote Reward')
@@ -29,28 +36,28 @@ module.exports = {
 			.setFooter('Neia', bot.user.displayAvatarURL());
 
 
+		const items = await user.getItems();
 		items.map(i => {
 			if (i.amount < 1) return;
 
 			if (i.item.ctg == 'collectables') {
 				for (let j = 0; j < i.amount; j++) {
-					cReward += i.item.cost / 100;
+					reward += i.item.cost / 100;
 				}
 			}
 		});
 
 
-		const dReward = 20 + (Math.random() * 10);
-		const finalReward = dReward + cReward;
-
-
 		dbl.hasVoted(msg.author.id).then(async voted => {
 			if (voted) {
 				if (vote === true) {
-					profile.addMoney(msg.author.id, finalReward);
+					if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
+						.setImage(`attachment://${item.picture}`);
+					profile.addMoney(msg.author.id, reward);
+					await user.addItem(item, 1);
 					const balance = await profile.getBalance(msg.author.id);
 					profile.setVote(msg.author.id, true);
-					return msg.channel.send(embed.setDescription(`Thank you for voting!!!\nYou got **${dReward.toFixed(1)}💰** from your vote 🎁 and **${cReward.toFixed(1)}💰** from your collectables for a total of **${finalReward.toFixed(1)}💰**\n\nCome back in 12 hours for more!\nYour current balance is **${balance}💰**`));
+					return msg.channel.send(embed.setDescription(`Thank you for voting!!!\nYou got a ${item.emoji}${item.name} from your vote and **${reward.toFixed(1)}💰** from your collectables.\n\nCome back in 12 hours for more!\nYour current balance is **${balance}💰**`));
 				}
 				else return msg.channel.send(embed.setDescription(`You have already voted in the last 12 hours.\nNext vote available at __${vote}__`));
 

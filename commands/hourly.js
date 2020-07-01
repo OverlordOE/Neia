@@ -30,9 +30,7 @@ module.exports = {
 			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', bot.user.displayAvatarURL());
-		
-			if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
-			.setImage(`attachment://${item.picture}`);
+				
 
 		const items = await user.getItems();
 		items.map(i => {
@@ -47,6 +45,8 @@ module.exports = {
 
 
 		if (hourly === true) {
+			if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
+				.setImage(`attachment://${item.picture}`);
 			profile.addMoney(msg.author.id, reward);
 			await user.addItem(item, 1);
 			await profile.setHourly(msg.author.id);

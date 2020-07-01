@@ -16,7 +16,7 @@ module.exports = {
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const avatar = msg.author.displayAvatarURL();
 		let chest;
-		
+
 		const luck = Math.floor(Math.random() * 2);
 		if (luck >= 1) chest = 'Legendary chest';
 		else chest = 'Epic chest';
@@ -30,11 +30,12 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neia', bot.user.displayAvatarURL());
 
-		if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
-			.setImage(`attachment://${item.picture}`);
+
 
 
 		if (weekly === true) {
+			if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
+				.setImage(`attachment://${item.picture}`);
 			await user.addItem(item, 1);
 			await profile.setWeekly(msg.author.id);
 			msg.channel.send(embed.setDescription(`You got a ${item.emoji}${item.name} from your weekly 🎁\nCome back in a week for more!`));

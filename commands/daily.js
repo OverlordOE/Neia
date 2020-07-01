@@ -12,13 +12,14 @@ module.exports = {
 	usage: '',
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+		
 		const daily = await profile.getDaily(msg.author.id);
 		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const avatar = msg.author.displayAvatarURL();
 		let reward = 0;
 		let chest;
 
-		const luck = Math.floor(Math.random() * 2);
+		const luck = Math.floor(Math.random() * 3);
 		if (luck >= 1) chest = 'Rare chest';
 		else chest = 'Epic chest';
 		const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: chest } } });
@@ -31,10 +32,7 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neia', bot.user.displayAvatarURL());
 
-		if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
-			.setImage(`attachment://${item.picture}`);
-		
-		
+
 		const items = await user.getItems();
 		items.map(i => {
 			if (i.amount < 1) return;
@@ -48,6 +46,8 @@ module.exports = {
 
 
 		if (daily === true) {
+			if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
+				.setImage(`attachment://${item.picture}`);
 			profile.addMoney(msg.author.id, reward);
 			await user.addItem(item, 1);
 			await profile.setDaily(msg.author.id);

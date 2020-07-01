@@ -299,14 +299,15 @@ Reflect.defineProperty(profile, 'setOptIn', {
 
 Reflect.defineProperty(profile, 'newUser', {
 	value: async function newUser(id) {
+		const now = moment();
 		const user = await Users.create({
 			user_id: id,
 			balance: 1,
-			lastDaily: 0,
-			lastHourly: 0,
-			lastWeekly: 0,
-			lastVote: 0,
-			protection: 0,
+			lastDaily: now,
+			lastHourly: now,
+			lastWeekly: now,
+			lastVote: now,
+			protection: now,
 			pColour: '#fcfcfc',
 			optIn: false,
 			msgCount: 1,
