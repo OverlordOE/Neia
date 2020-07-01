@@ -22,7 +22,7 @@ module.exports = {
 
 					await profile.addMoney(id, data[i].balance);
 					await profile.setPColour(id, data[i].pColour);
-					await profile.setOptIn(id, data[i].optIn);
+					await profile.setOpt(id, data[i].opt);
 					await profile.setProtection(id, data[i].protection);
 					total++;
 				}

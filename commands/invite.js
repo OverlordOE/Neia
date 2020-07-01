@@ -15,9 +15,9 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Invites')
 			.setColor(pColour)
-			.setThumbnail(bAvatar)
+			.setThumbnail(bot.user.displayAvatarURL())
 			.setTimestamp()
-			.setFooter('Neia', bAvatar)
+			.setFooter('Neia', bot.user.displayAvatarURL())
 			.setDescription(`[Click here to invite me to your server](https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=bot&permissions=372517968)\n
 							 [Click here to join the support server](https://discord.gg/hFGxVDT)\n
 							 [Click here to submit a bug or request  feature](https://github.com/OverlordOE/Neia/issues/new/choose)\n

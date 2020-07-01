@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
-		optIn: {
+		opt: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 			allowNull: false,
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 		},
 		protection: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.DATE,
 			defaultValue: 0,
 			allowNull: false,
 		},

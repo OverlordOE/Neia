@@ -11,7 +11,6 @@ module.exports = {
 	usage: '<item>',
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
-		const bAvatar = msg.author.displayAvatarURL();
 		let temp = '';
 
 		for (let i = 0; i < args.length; i++) {
@@ -29,7 +28,7 @@ module.exports = {
 			.addField('Category', item.ctg, true)
 			.addField('Rarity', item.rarity, true)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar)
+			.setFooter('Neia', bot.user.displayAvatarURL())
 			.attachFiles(`assets/rarity/${item.rarity}.jpg`)
 			.setImage(`attachment://${item.rarity}.jpg`);
 

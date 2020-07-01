@@ -77,8 +77,8 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neia', bot.user.displayAvatarURL());
 
-		if (prot !== true) { moneyEmbed.addField('Steal protection untill:', prot); }
-
+		if (prot !== false) moneyEmbed.addField('Steal protection untill:', prot);
+		else moneyEmbed.addField('Steal protection untill:', 'none');
 
 		if (items.length) {
 

@@ -11,8 +11,6 @@ module.exports = {
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 		const items = await CurrencyShop.findAll();
-		const bAvatar = msg.author.displayAvatarURL();
-
 		let consumable = '__**Consumables:**__\n';
 		let collectables = '__**Collectables:**__\n';
 		let chests = '__**Chests:**__\n';
@@ -29,7 +27,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Shop')
-			.setThumbnail(bAvatar)
+			.setThumbnail(bot.user.displayAvatarURL())
 			.setDescription(description)
 			.setColor(msgUser.pColour)
 			.setTimestamp()

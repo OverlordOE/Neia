@@ -50,7 +50,7 @@ module.exports = {
 
 		dbl.hasVoted(msg.author.id).then(async voted => {
 			if (voted) {
-				if (vote === true) {
+				if (vote === false) {
 					if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
 						.setImage(`attachment://${item.picture}`);
 					profile.addMoney(msg.author.id, reward);

@@ -92,7 +92,7 @@ bot.on('message', async msg => {
 
 	if (command.category == 'debug' && id != 137920111754346496) return msg.channel.send('You are not the owner of this bot!');
 	if (command.category == 'admin' && !msg.member.hasPermission('ADMINISTRATOR')) return msg.channel.send('You need Admin privileges to use this command!');
-	if (command.category == 'money' && !user.optIn) return msg.reply('You are not opted into pvp for the bot.\nYou can use the command `optin` to enable pvp.');
+	if (command.category == 'money' && !user.opt) return msg.reply('You are not opted into pvp for the bot.\nYou can use the command `opt in` to enable pvp.');
 
 	// if the command is used wrongly correct the user
 	if (command.args && !args.length) {

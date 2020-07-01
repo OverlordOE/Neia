@@ -30,7 +30,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia leaderboard')
 			.setDescription(description)
-			.setThumbnail(bAvatar)
+			.setThumbnail(bot.user.displayAvatarURL())
 			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', bot.user.displayAvatarURL());

@@ -194,9 +194,9 @@ Reflect.defineProperty(profile, 'getProtection', {
 		if (!user) user = await profile.newUser(id);
 		const now = moment();
 
-		const prot = user.protection;
-		if (moment(prot).isBefore(now)) return true;
-		else return prot.format('dddd HH:mm');
+		const prot = moment(user.protection);
+		if (prot.isAfter(now)) return prot.format('dddd HH:mm');
+		else return false;
 	},
 });
 Reflect.defineProperty(profile, 'setProtection', {
@@ -282,16 +282,16 @@ Reflect.defineProperty(profile, 'getOptIn', {
 	value: async function getOptIn(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		return user ? user.optIn : 0;
+		return user ? user.opt : 0;
 	},
 
 });
-Reflect.defineProperty(profile, 'setOptIn', {
-	value: async function setOptIn(id, opt) {
+Reflect.defineProperty(profile, 'setOpt', {
+	value: async function setOpt(id, opt) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 
-		user.optIn = opt;
+		user.opt = opt;
 		return user.save();
 	},
 });
@@ -309,7 +309,7 @@ Reflect.defineProperty(profile, 'newUser', {
 			lastVote: now,
 			protection: now,
 			pColour: '#fcfcfc',
-			optIn: false,
+			opt: false,
 			msgCount: 1,
 			gamblingEarned: 0,
 			gamblingSpent: 0,

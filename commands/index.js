@@ -17,7 +17,7 @@ module.exports = {
 	Leaderboard: require('./leaderboard'),
 	Lottery: require('./lottery'),
 	Gamble: require('./gamble'),
-	Optin: require('./optin'),
+	Opt: require('./opt'),
 	Steal: require('./steal'),
 	Dice: require('./dice'),
 	Invite: require('./invite'),
