@@ -32,7 +32,7 @@ sequelize
 				rarity: 'common',
 				picture: 'common_closed.png',
 				ctg: 'chests',
-				description: 'Common Chest.',
+				description: 'Loot table: \n Tea, Minimum: 10. Maximum 30. **Drop chance 20%**',
 			}),
 			CurrencyShop.upsert({
 				name: 'Rare Chest',
