@@ -264,6 +264,15 @@ sequelize
 				ctg: 'collectables',
 				description: 'Gives you passive income.',
 			}),
+			CurrencyShop.upsert({
+				name: 'Banana',
+				cost: 500000,
+				emoji: '🍌',
+				rarity: 'legendary',
+				picture: null,
+				ctg: 'collectables',
+				description: 'Only for the most prestigious amongst us.',
+			}),
 		];
 
 		await Promise.all(shop);

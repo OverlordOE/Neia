@@ -72,3 +72,4 @@ database.sqlite
 miscData.json
 build/config.gypi
 miscData.json
+env
