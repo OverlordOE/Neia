@@ -32,7 +32,18 @@ sequelize
 				rarity: 'common',
 				picture: 'common_closed.png',
 				ctg: 'chests',
-				description: 'Loot table: \n Tea, Minimum: 10. Maximum 30. **Drop chance 20%**',
+				description: `Loot table: \n
+				**__Tea__**						: Min: **1**. Max: **30**. D% **20%**
+				**__Coffee__**					: Min: **7**. Max: **22**. D% **20%**
+				**__Cake__**					: Min: **5**. Max: **10**. D% **20%** 
+				**__Car__**						: Min: **1**. Max: **2**. D% **8%**
+				**__Motorcycle__**				: Min: **1**. Max: **3**. D% **8%**
+				**__Gun__**						: Min: **1**. Max: **4**. D% **8%**
+				**__Profile Colour__**			: Min: **1**. Max: **3**. D% **8%**
+				**__Sailboat__**				: Min: **1**. Max: **2**. D% **1**
+				**__Motorboat__**				: Min: **1**. Max: **2**. D% **1%**
+				**__Lesser Healing Potion__**	: Min: **1**. Max: **4**. D% **3%**
+				**__Lesser Mana Potion__**		: Min: **1**. Max: **4**. D% **3%**`,
 			}),
 			CurrencyShop.upsert({
 				name: 'Rare Chest',
@@ -41,7 +52,16 @@ sequelize
 				rarity: 'rare',
 				picture: 'rare_closed.png',
 				ctg: 'chests',
-				description: 'Rare Chest.',
+				description: `Loot table: \n
+				**__Lesser Healing Potion__**	: Min: **5**. Max: **15**. D% **15%**
+				**__Lesser Mana Potion__**		: Min: **5**. Max: **15**. D% **15%**
+				**__Healing Potion__**			: Min: **1**. Max: **4**. D% **15%**
+				**__Mana Potion__**				: Min: **1**. Max: **4**. D% **15%**
+				**__sailboat__**				: Min: **1**. Max: **3**. D% **10%**
+				**__Motorboat__**				: Min: **1**. Max: **4**. D% **10%**
+				**__Prop plane__**				: Min: **1**. Max: **2**. D% **8%**
+				**__Jet plane__**				: Min: **1**. Max: **2**. D% **2**
+				**__Steal Protection__**		: Min: **2**. Max: **6**. D% **10%**`,
 			}),
 			CurrencyShop.upsert({
 				name: 'Epic Chest',
@@ -50,7 +70,15 @@ sequelize
 				rarity: 'epic',
 				picture: 'epic_closed.png',
 				ctg: 'chests',
-				description: 'Epic Chest.',
+				description: `Loot table: \n
+				**__Greater Healing Potion__**	: Min: **1**. Max: **4**. D% **18%**
+				**__Greater Mana Potion__**		: Min: **1**. Max: **4**. D% **18%**
+				**__Jet plane__**				: Min: **1**. Max: **4**. D% **18**
+				**__Prop plane__**				: Min: **3**. Max: **7**. D% **18%**
+				**__House__**					: Min: **1**. Max: **3**. D% **18%**
+				**__Museum__**					: Min: **1**. Max: **2**. D% **7%**
+				**__Star__**					: Min: **1**. Max: **2**. D% **2%**
+				**__Office__**					: Min: **1**. Max: **2**. D% **1%**`,
 			}),
 			CurrencyShop.upsert({
 				name: 'Legendary Chest',
@@ -59,7 +87,15 @@ sequelize
 				rarity: 'legendary',
 				picture: 'legendary_closed.png',
 				ctg: 'chests',
-				description: 'Legendary Chest.',
+				description: `Loot table: \n
+				**__Greater Healing Potion__**	: Min: **5**. Max: **10**. D% **15%**
+				**__Greater Mana Potion__**		: Min: **5**. Max: **10**. D% **15%**
+				**__Jet plane__**				: Min: **9**. Max: **15**. D% **15**
+				**__House__**					: Min: **7**. Max: **13**. D% **20%**
+				**__Museum__**					: Min: **2**. Max: **4**. D% **15%**
+				**__Star__**					: Min: **1**. Max: **2**. D% **15%**
+				**__Office__**					: Min: **1**. Max: **2**. D% **4.99%**
+				**__Banana__**					: Min: **1**. Max: **2**. D% **0.01%**`,
 			}),
 
 			// Consumables
