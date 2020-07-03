@@ -1,8 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-nested-callbacks */
 const Discord = require('discord.js');
-const { Users, CurrencyShop } = require('../dbObjects');
-const { Op } = require('sequelize');
 module.exports = {
 	name: 'sell',
 	summary: 'Sell items to get 80% of your money back',
@@ -14,11 +12,8 @@ module.exports = {
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
-		const user = await Users.findOne({ where: { user_id: msg.author.id } });
-		const uitems = await user.getItems();
+		const uitems = await profile.getInventory(msg.author.id);
 		const filter = m => m.author.id === msg.author.id;
-
-
 		const avatar = msg.author.displayAvatarURL();
 		let amount = 0;
 		let temp = '';
@@ -41,7 +36,7 @@ module.exports = {
 				else temp += `${args[i]}`;
 			}
 
-			item = await CurrencyShop.findOne({ where: { name: { [Op.like]: temp } } });
+			item = await profile.getItem(temp);
 			if (item) {
 				uitems.map(i => {
 					if (i.item.name == item.name) {
@@ -58,11 +53,10 @@ module.exports = {
 				msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 					.then(async collected => {
-						const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: collected.first().content } } });
+						const item = await profile.getItem(collected.first().content);
 						if (!item) return sentMessage.edit(embed.setDescription(`\`${item}\` is not a valid item.`));
 
 						let hasItem = false;
-						const uitems = await user.getItems();
 						collected.first().delete().catch(e => logger.error(e.stack));
 
 						sentMessage.edit(embed.setDescription(`How much __${item.name}(s)__ do you want to sell?`)).then(() => {
@@ -107,9 +101,8 @@ async function sell(profile, sentMessage, amount, embed, item, msg) {
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
 	else if (amount < 1) amount = 1;
 
-	const user = await Users.findOne({ where: { user_id: msg.author.id } });
 	const refundAmount = 0.8 * item.cost * amount;
-	await user.removeItem(item, amount);
+	await profile.removeItem(msg.author.id, item, amount);
 	await profile.addMoney(msg.author.id, refundAmount);
 
 	const balance = await profile.getBalance(msg.author.id);

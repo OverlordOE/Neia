@@ -1,9 +1,7 @@
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable indent */
 const Discord = require('discord.js');
-const { Users, CurrencyShop } = require('../dbObjects');
 const moment = require('moment');
-const { Op } = require('sequelize');
 module.exports = {
 	name: 'use',
 	summary: 'Use an item from your inventory',
@@ -15,11 +13,8 @@ module.exports = {
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
-
 		const avatar = msg.author.displayAvatarURL();
-		const user = await Users.findOne({ where: { user_id: msg.author.id } });
-		const uitems = await user.getItems();
-
+		const uitems = await profile.getInventory(msg.author.id);
 
 		const filter = m => m.author.id === msg.author.id;
 		let iAmount = 0;
@@ -46,7 +41,7 @@ module.exports = {
 				else temp += `${args[i]}`;
 			}
 
-			item = await CurrencyShop.findOne({ where: { name: { [Op.like]: temp } } });
+			item = await profile.getItem(temp);
 			if (item) {
 				uitems.map(i => {
 					if (i.item.name == item.name) {
@@ -60,7 +55,7 @@ module.exports = {
 
 				msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 					.then(async collected => {
-						item = await CurrencyShop.findOne({ where: { name: { [Op.like]: collected.first().content } } });
+						item = await profile.getItem(collected.first().content);
 						collected.first().delete().catch(e => logger.error(e.stack));
 
 						if (item) {
@@ -104,10 +99,8 @@ async function use(profile, sentMessage, amount, embed, item, msg, filter) {
 	else if (amount < 1 || amount > 10000) {
 		amount = 1;
 	}
-	const user = await Users.findOne({ where: { user_id: msg.author.id } });
 
 	switch (item.name) {
-
 
 		case 'Tea': {
 
@@ -116,7 +109,7 @@ async function use(profile, sentMessage, amount, embed, item, msg, filter) {
 			else if (amount > 3) sentMessage.edit(embed.setDescription(`☕You drink **${amount}** cups of tea☕\nYour teeth begin to ache.`));
 			else sentMessage.edit(embed.setDescription('☕You drink a cup of tea☕\nYou enjoy it.'));
 
-			await user.removeItem(item, amount);
+			await profile.removeItem(msg.author.id, item, amount);
 			break;
 		}
 
@@ -128,7 +121,7 @@ async function use(profile, sentMessage, amount, embed, item, msg, filter) {
 			else if (amount > 2) sentMessage.edit(embed.setDescription('🎂THE CAKE IS BULLYING YOU🎂\nYour mental state deteriorates.'));
 			else sentMessage.edit(embed.setDescription('🎂THE CAkE IS A LIE🎂\nYou feel deceived!'));
 
-			await user.removeItem(item, amount);
+			await profile.removeItem(msg.author.id, item, amount);
 			break;
 		}
 
@@ -139,7 +132,7 @@ async function use(profile, sentMessage, amount, embed, item, msg, filter) {
 			else if (amount == 69) sentMessage.edit(embed.setDescription(`*${msg.author.username}'s* power increased by **${amount}**%\n👁️👄👁️`));
 			else sentMessage.edit(embed.setDescription(`*${msg.author.username}'s* power increased by **${amount}**%`));
 
-			await user.removeItem(item, amount);
+			await profile.removeItem(msg.author.id, item, amount);
 			break;
 		}
 
@@ -157,7 +150,7 @@ async function use(profile, sentMessage, amount, embed, item, msg, filter) {
 						catch { return sentMessage.edit(embed.setDescription('Thats not a valid Hex code')); }
 						sentMessage.edit(embed.setDescription(`Profile colour succesfully changed to colour **${colour}**`));
 
-						await user.removeItem(item, 1);
+						await profile.removeItem(msg.author.id, item, 1);
 					})
 					.catch(e => {
 						msg.reply('you didn\'t answer in time or something went wrong.');
@@ -187,7 +180,7 @@ async function use(profile, sentMessage, amount, embed, item, msg, filter) {
 			sentMessage.edit(embed.setDescription(`You have activated steal protection.\nIt will last untill __${protection}__`));
 
 			await profile.setProtection(msg.author.id, prot);
-			await user.removeItem(item, amount);
+			await profile.removeItem(msg.author.id, item, amount);
 			break;
 		}
 

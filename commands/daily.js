@@ -1,6 +1,4 @@
 const Discord = require('discord.js');
-const { Users, CurrencyShop } = require('../dbObjects');
-const { Op } = require('sequelize');
 module.exports = {
 	name: 'daily',
 	summary: 'Get a daily gift',
@@ -12,17 +10,16 @@ module.exports = {
 	usage: '',
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
-		
+
 		const daily = await profile.getDaily(msg.author.id);
-		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const avatar = msg.author.displayAvatarURL();
 		let reward = 0;
 		let chest;
 
-		const luck = Math.floor(Math.random() * 3);
+		const luck = Math.floor(Math.random() * 5);
 		if (luck >= 1) chest = 'Rare chest';
 		else chest = 'Epic chest';
-		const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: chest } } });
+		const item = profile.getItem(chest);
 
 
 		const embed = new Discord.MessageEmbed()
@@ -33,7 +30,7 @@ module.exports = {
 			.setFooter('Neia', bot.user.displayAvatarURL());
 
 
-		const items = await user.getItems();
+		const items = await profile.getInventory(msg.author.id);
 		items.map(i => {
 			if (i.amount < 1) return;
 
@@ -49,7 +46,7 @@ module.exports = {
 			if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
 				.setImage(`attachment://${item.picture}`);
 			profile.addMoney(msg.author.id, reward);
-			await user.addItem(item, 1);
+			await profile.addItem(msg.author.id, item, 1);
 			await profile.setDaily(msg.author.id);
 			const balance = await profile.getBalance(msg.author.id);
 			msg.channel.send(embed.setDescription(`You got a ${item.emoji}${item.name} from your daily 🎁 and **${reward.toFixed(1)}💰** from your collectables.\nCome back in a day for more!\n\nYour current balance is **${balance}💰**`));

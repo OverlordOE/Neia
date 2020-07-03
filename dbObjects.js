@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 const moment = require('moment');
 const Discord = require('discord.js');
 const profile = new Discord.Collection();
@@ -15,46 +16,64 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 const Users = sequelize.import('models/Users');
 const Guilds = sequelize.import('models/Guilds');
 const CurrencyShop = sequelize.import('models/CurrencyShop');
+// const Characters = sequelize.import('models/Characters');
 const UserItems = sequelize.import('models/UserItems');
 
 UserItems.belongsTo(CurrencyShop, { foreignKey: 'item_id', as: 'item' });
 
-Users.prototype.addItem = async function (item, amount) {
-	const userItem = await UserItems.findOne({
-		where: { user_id: this.user_id, item_id: item.id },
-	});
-
-	if (userItem) {
-		userItem.amount += parseInt(amount);
-		return userItem.save();
-	}
-
-	return UserItems.create({ user_id: this.user_id, item_id: item.id, amount: parseInt(amount) });
-};
-
-Users.prototype.removeItem = async function (item, amount) {
-	const userItem = await UserItems.findOne({
-		where: { user_id: this.user_id, item_id: item.id },
-	});
-
-	const remove = parseInt(amount);
-	if (userItem.amount >= remove) {
-		userItem.amount -= remove;
-		return userItem.save();
-	}
-
-	throw Error('User doesnt have that item');
-};
-
-Users.prototype.getItems = function () {
-	return UserItems.findAll({
-		where: { user_id: this.user_id },
-		include: ['item'],
-	});
-};
-
-
 // Add db commands
+Reflect.defineProperty(profile, 'addItem', {
+	value: async function addItem(id, item, amount) {
+		const userItem = await UserItems.findOne({
+			where: { user_id: id, item_id: item.id },
+		});
+
+		if (userItem) {
+			userItem.amount += parseInt(amount);
+			return userItem.save();
+		}
+
+		return UserItems.create({ user_id: id, item_id: item.id, amount: parseInt(amount) });
+	},
+});
+
+
+Reflect.defineProperty(profile, 'removeItem', {
+	value: async function removeItem(id, item, amount) {
+		const userItem = await UserItems.findOne({
+			where: { user_id: id, item_id: item.id },
+		});
+
+		const remove = parseInt(amount);
+		if (userItem.amount >= remove) {
+			userItem.amount -= remove;
+			return userItem.save();
+		}
+
+		throw Error(`User doesn't have the item: ${item}`);
+	},
+});
+
+
+Reflect.defineProperty(profile, 'getInventory', {
+	value: async function getInventory(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		return UserItems.findAll({
+			where: { user_id: id },
+			include: ['item'],
+		});
+	},
+});
+
+
+Reflect.defineProperty(profile, 'getItem', {
+	value: async function getItem(item) {
+		return await CurrencyShop.findOne({ where: { name: { [Op.like]: item } } });
+	},
+});
+
+
 Reflect.defineProperty(profile, 'getUser', {
 	value: async function getUser(id) {
 		let user = profile.get(id);

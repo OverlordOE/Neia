@@ -1,6 +1,4 @@
 const Discord = require('discord.js');
-const { Users, CurrencyShop } = require('../dbObjects');
-const { Op } = require('sequelize');
 const loottable = require('../loottables');
 module.exports = {
 	name: 'open',
@@ -16,8 +14,7 @@ module.exports = {
 		const lootEmbed = new Discord.MessageEmbed()
 			.setTimestamp()
 			.setFooter('Neia', bot.user.displayAvatarURL());
-		const user = await Users.findOne({ where: { user_id: msg.author.id } });
-		const uitems = await user.getItems();
+		const uitems = await profile.getInventory(msg.author.id);
 		let temp = '';
 		let hasChest = false;
 
@@ -26,7 +23,7 @@ module.exports = {
 			else temp += `${args[i]}`;
 		}
 
-		const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: temp } } });
+		const item = profile.getItem(temp);
 		if (item) {
 			uitems.map(i => {
 				if (i.item.name == item.name) {
@@ -42,7 +39,7 @@ module.exports = {
 			case 'Common Chest': {
 
 				const loot = loottable.common();
-				const lootItem = await CurrencyShop.findOne({ where: { name: { [Op.like]: loot.name } } });
+				const lootItem = profile.getItem(loot.name);
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Common Chest')
@@ -57,8 +54,8 @@ module.exports = {
 					.setImage(`attachment://${lootItem.picture}`);
 
 				msg.channel.send(lootEmbed);
-				await user.addItem(lootItem, amount);
-				await user.removeItem(item, 1);
+				await profile.addItem(msg.author.id, lootItem, amount);
+				await profile.removeItem(msg.author.id, item, 1);
 
 				break;
 			}
@@ -66,7 +63,7 @@ module.exports = {
 			case 'Rare Chest': {
 
 				const loot = loottable.rare();
-				const lootItem = await CurrencyShop.findOne({ where: { name: { [Op.like]: loot.name } } });
+				const lootItem = profile.getItem(loot.name);
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Rare Chest')
@@ -81,8 +78,8 @@ module.exports = {
 					.setImage(`attachment://${lootItem.picture}`);
 
 				msg.channel.send(lootEmbed);
-				await user.addItem(lootItem, amount);
-				await user.removeItem(item, 1);
+				await profile.addItem(msg.author.id, lootItem, amount);
+				await profile.removeItem(msg.author.id, item, 1);
 
 				break;
 			}
@@ -90,7 +87,7 @@ module.exports = {
 			case 'Epic Chest': {
 
 				const loot = loottable.epic();
-				const lootItem = await CurrencyShop.findOne({ where: { name: { [Op.like]: loot.name } } });
+				const lootItem = profile.getItem(loot.name);
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Epic Chest')
@@ -106,8 +103,8 @@ module.exports = {
 					.setImage(`attachment://${lootItem.picture}`);
 
 				msg.channel.send(lootEmbed);
-				await user.addItem(lootItem, amount);
-				await user.removeItem(item, 1);
+				await profile.addItem(msg.author.id, lootItem, amount);
+				await profile.removeItem(msg.author.id, item, 1);
 
 				break;
 			}
@@ -115,7 +112,7 @@ module.exports = {
 			case 'Legendary Chest': {
 
 				const loot = loottable.legendary();
-				const lootItem = await CurrencyShop.findOne({ where: { name: { [Op.like]: loot.name } } });
+				const lootItem = profile.getItem(loot.name);
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Legendary Chest')
@@ -131,8 +128,8 @@ module.exports = {
 					.setImage(`attachment://${lootItem.picture}`);
 
 				msg.channel.send(lootEmbed);
-				await user.addItem(lootItem, amount);
-				await user.removeItem(item, 1);
+				await profile.addItem(msg.author.id, lootItem, amount);
+				await profile.removeItem(msg.author.id, item, 1);
 
 				break;
 			}

@@ -10,9 +10,11 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 
 // Import tables
 const CurrencyShop = sequelize.import('models/CurrencyShop');
+// const CharacterList = sequelize.import('models/Characters');
 sequelize.import('models/Users');
 sequelize.import('models/UserItems');
 sequelize.import('models/Guilds');
+
 
 // Execute node dbInit.js --force or node dbInit.js -f to force update the tables (this resets the db but removes unused tables).
 // Execute node dbInit.js --sync or node dbInit.js -s to force update the tables (this doesnt reset the db but keeps unused tables).
@@ -21,9 +23,9 @@ sequelize.import('models/Guilds');
 sequelize
 	.sync({ force: true })
 	.then(async () => {
-		
+
 		const shop = [
-			
+
 			// Loot Boxes
 			CurrencyShop.upsert({
 				name: 'Common Chest',
@@ -266,8 +268,12 @@ sequelize
 			}),
 		];
 
+		//	const characters = [];
+
 		await Promise.all(shop);
-		console.log('Database synced');
+		console.log('Shop synced');
+		//await Promise.all(characters);
+		console.log('Characters synced');
 		sequelize.close();
 	})
 	.catch(console.error);

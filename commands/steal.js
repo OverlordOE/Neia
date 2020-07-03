@@ -1,4 +1,3 @@
-const { Users, CurrencyShop } = require('../dbObjects');
 const moment = require('moment');
 const Discord = require('discord.js');
 module.exports = {
@@ -44,10 +43,9 @@ module.exports = {
 			timestamps.delete(msg.author.id);
 			return msg.channel.send('You cant steal from someone who has no money.');
 		}
-		const user = await Users.findOne({ where: { user_id: msg.author.id } });
-		const uitems = await user.getItems();
+		const uitems = await profile.getInventory(msg.author.id);
 		let hasItem = false;
-		const item = await CurrencyShop.findOne({ where: { name: 'Gun' } });
+		const item = await profile.getItem('gun');
 		uitems.map(i => {
 			if (i.item.name == item.name && i.amount >= 1) {
 				hasItem = true;
@@ -70,20 +68,20 @@ module.exports = {
 			profile.addStealingEarned(msg.author.id, stealAmount);
 			profile.addMoney(target.id, -stealAmount);
 			const balance = await profile.getBalance(msg.author.id);
-			await user.removeItem(item, 1);
+			await profile.removeItem(msg.author.id, item, 1);
 			const prot = moment(now).add(1, 'h');
 			await profile.setProtection(target.id, prot);
 			return msg.channel.send(`Successfully stolen **${Math.floor(stealAmount)}💰** from *${target.tag}*. Your current balance is **${balance}💰**`);
 		}
 		else if (luck >= 15) {
-			await user.removeItem(item, 1);
+			await profile.removeItem(msg.author.id, item, 1);
 			return msg.channel.send(`You got caught trying to steal from *${target.tag}*, but managed to get away safely.`);
 		}
 		else if (luck < 15) {
 			const fine = 10 + (Math.random() * 20);
 			profile.addMoney(msg.author.id, -fine);
 			const balance = await profile.getBalance(msg.author.id);
-			await user.removeItem(item, 1);
+			await profile.removeItem(msg.author.id, item, 1);
 			return msg.channel.send(`You got caught trying to steal from *${target.tag}*, you get fined **${Math.floor(fine)}💰**. Your current balance is **${balance}💰**`);
 		}
 		else {

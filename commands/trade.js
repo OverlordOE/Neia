@@ -1,8 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-nested-callbacks */
 const Discord = require('discord.js');
-const { Users, CurrencyShop } = require('../dbObjects');
-const { Op } = require('sequelize');
 module.exports = {
 	name: 'trade',
 	summary: 'Trade money or items to other people',
@@ -14,10 +12,7 @@ module.exports = {
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
-
-
 		let target;
-		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const filter = m => m.author.id === msg.author.id;
 
 		const embed = new Discord.MessageEmbed()
@@ -60,21 +55,17 @@ module.exports = {
 										// item trade
 										if (isNaN(goods)) {
 
-											const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: goods } } });
+											const item = await profile.getItem(goods);
 											if (!item) return sentMessage.edit(embed.setDescription(`${item} doesn't exist.`));
 
 											// item trade
 											let hasItem = false;
-
-
-
 											sentMessage.edit(embed.setDescription(`Trading with *${target.username}*\n\nHow much __${item.name}(s)__ do you want to send?`)).then(() => {
 												msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 													.then(async collected => {
 														const amount = collected.first().content;
-														const userTarget = await Users.findOne({ where: { user_id: target.id } });
-														const uitems = await user.getItems();
+														const uitems = await profile.getInventory(msg.author.id);
 														collected.first().delete().catch(e => logger.error(e.stack));
 														uitems.map(i => {
 															if (i.item.name == item.name && i.amount >= amount) {
@@ -85,8 +76,8 @@ module.exports = {
 															return sentMessage.edit(embed.setDescription(`You don't have **${amount}** __${item.name}(s)__!`));
 														}
 
-														await user.removeItem(item, amount);
-														await userTarget.addItem(item, amount);
+														await profile.addItem(msg.author.id, item, amount);
+														await profile.removeItem(target.id, item, amount);
 
 														sentMessage.edit(embed.setDescription(`Trade with *${target.username}* succesfull!\n\nTraded **${amount}** __${item.name}__ to *${target.username}*.`));
 

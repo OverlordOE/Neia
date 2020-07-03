@@ -1,6 +1,4 @@
 const Discord = require('discord.js');
-const { Users, CurrencyShop } = require('../dbObjects');
-const { Op } = require('sequelize');
 const DBL = require('dblapi.js');
 const dblToken = process.env.DBL_TOKEN;
 const dbl = new DBL(dblToken);
@@ -17,15 +15,14 @@ module.exports = {
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 
 		const avatar = msg.author.displayAvatarURL();
-		const user = await Users.findOne({ where: { user_id: msg.author.id } });
 		const vote = await profile.getVote(msg.author.id);
 		let reward = 0;
 		let chest;
 
-		const luck = Math.floor(Math.random() * 3);
+		const luck = Math.floor(Math.random() * 5);
 		if (luck >= 1) chest = 'Rare chest';
 		else chest = 'Epic chest';
-		const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: chest } } });
+		const item = profile.getItem(chest);
 
 
 		const embed = new Discord.MessageEmbed()
@@ -36,7 +33,7 @@ module.exports = {
 			.setFooter('Neia', bot.user.displayAvatarURL());
 
 
-		const items = await user.getItems();
+		const items = await profile.getInventory(msg.author.id);
 		items.map(i => {
 			if (i.amount < 1) return;
 
@@ -54,7 +51,7 @@ module.exports = {
 					if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
 						.setImage(`attachment://${item.picture}`);
 					profile.addMoney(msg.author.id, reward);
-					await user.addItem(item, 1);
+					await profile.addItem(msg.author.id, item, 1);
 					const balance = await profile.getBalance(msg.author.id);
 					profile.setVote(msg.author.id, true);
 					return msg.channel.send(embed.setDescription(`Thank you for voting!!!\nYou got a ${item.emoji}${item.name} from your vote and **${reward.toFixed(1)}💰** from your collectables.\n\nCome back in 12 hours for more!\nYour current balance is **${balance}💰**`));

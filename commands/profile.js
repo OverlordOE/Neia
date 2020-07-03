@@ -13,8 +13,7 @@ module.exports = {
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 		const target = msg.mentions.users.first() || msg.author;
-		const user = await Users.findOne({ where: { user_id: target.id } });
-		const items = await user.getItems();
+		const items = await profile.getInventory(target.id);
 		const filter = (reaction, user) => {
 			return ['💰', '🗒️', '📦'].includes(reaction.emoji.name) && user.id === msg.author.id;
 		};
