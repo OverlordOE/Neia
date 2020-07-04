@@ -14,11 +14,8 @@ module.exports = {
 			return ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === msg.author.id;
 		};
 
-
-
-
 		const list = profile.sort((a, b) => b.balance - a.balance)
-			.filter(user => bot.users.cache.has(user.user_id))
+			.filter(user => bot.users.cache.has(user.user_id) && user.opt)
 			.first(50)
 			.map((user, position) => `\n__**${position + 1}.**__ *${bot.users.cache.get(user.user_id).tag}*: **${Math.floor(user.balance)}💰**`);
 
