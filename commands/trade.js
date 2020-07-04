@@ -103,7 +103,7 @@ module.exports = {
 											const balance = await profile.getBalance(msg.author.id);
 
 											if (!goods || isNaN(goods)) return sentMessage.edit(embed.setDescription(`Sorry *${msg.author}*, that's an invalid amount.`));
-											if (goods > balance) return sentMessage.edit(embed.setDescription(`You only have **${balance}💰** but need **${goods}**.`));
+											if (balance < goods ) return sentMessage.edit(embed.setDescription(`You only have **${balance}💰** but need **${goods}**.`));
 											if (goods <= 0) return sentMessage.edit(embed.setDescription(`Please enter an amount greater than zero, *${msg.author}*.`));
 
 											profile.addMoney(msg.author.id, -goods);

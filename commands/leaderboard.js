@@ -8,17 +8,14 @@ module.exports = {
 	args: false,
 	usage: '<page>',
 
-	async execute(msg, args, profile, guildProfile, bot) {
+	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
 
 		const filter = (reaction, user) => {
 			return ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === msg.author.id;
 		};
-
-		const bAvatar = bot.user.displayAvatarURL();
 		const pColour = await profile.getPColour(msg.author.id);
-
 		const list = profile.sort((a, b) => b.balance - a.balance)
-			.filter(user => bot.users.cache.has(user.user_id))
+			.filter(user => bot.users.cache.has(user.user_id) && user.optIn)
 			.first(50)
 			.map((user, position) => `\n__**${position + 1}.**__ *${bot.users.cache.get(user.user_id).tag}*: **${Math.floor(user.balance)}💰**`);
 
@@ -30,10 +27,10 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia leaderboard')
 			.setDescription(description)
-			.setThumbnail(bAvatar)
+			.setThumbnail(bot.user.displayAvatarURL())
 			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', bot.user.displayAvatarURL());
 
 		msg.channel.send(embed).then(sentMessage => {
 			sentMessage.react('◀️');
