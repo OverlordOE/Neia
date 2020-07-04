@@ -16,10 +16,12 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 const Users = sequelize.import('models/Users');
 const Guilds = sequelize.import('models/Guilds');
 const CurrencyShop = sequelize.import('models/CurrencyShop');
-// const Characters = sequelize.import('models/Characters');
+const Characters = sequelize.import('models/Characters');
 const UserItems = sequelize.import('models/UserItems');
+const UserCharacters = sequelize.import('models/UserCharacters');
 
 UserItems.belongsTo(CurrencyShop, { foreignKey: 'item_id', as: 'item' });
+UserCharacters.belongsTo(Characters, { foreignKey: 'character_id', as: 'character' });
 
 // Add db commands
 Reflect.defineProperty(profile, 'addItem', {
@@ -328,7 +330,7 @@ Reflect.defineProperty(profile, 'newUser', {
 			lastVote: now.subtract(1, 'days'),
 			protection: now,
 			pColour: '#fcfcfc',
-			opt: false,
+			opt: true,
 			msgCount: 1,
 			gamblingEarned: 0,
 			gamblingSpent: 0,
