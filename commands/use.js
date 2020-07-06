@@ -44,7 +44,7 @@ module.exports = {
 			item = await profile.getItem(temp);
 			if (item) {
 				uitems.map(i => {
-					if (i.item.name == item.name) {
+					if (i.name == item.name) {
 						if (i.amount >= amount) use(profile, sentMessage, amount, embed, item, msg, filter);
 						else return sentMessage.edit(embed.setDescription(`You only have **${i.amount}/${amount}** of the __${item.name}(s)__ needed!`));
 					}
@@ -60,7 +60,7 @@ module.exports = {
 
 						if (item) {
 							uitems.map(i => {
-								if (i.item.name == item.name && i.amount >= 1) {
+								if (i.name == item.name && i.amount >= 1) {
 									iAmount = i.amount;
 								}
 							});

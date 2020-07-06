@@ -1,6 +1,4 @@
 const Discord = require('discord.js');
-const { Users } = require('../dbObjects');
-const moment = require('moment');
 module.exports = {
 	name: 'profile',
 	summary: 'Shows profile of you or the tagger user',
@@ -95,13 +93,14 @@ module.exports = {
 
 			items.map(i => {
 				if (i.amount < 1) return;
-				if (i.item.ctg == 'collectables') {
+				if (i.base.ctg == 'collectables') {
 					for (let j = 0; j < i.amount; j++) {
-						assets += `${i.item.emoji}`;
-						networth += i.item.cost;
+						assets += `${i.base.emoji}`;
+						networth += i.base.cost;
 					}
 					collectables = true;
 				}
+				else inventory += `${i.base.emoji}__${i.name}__: **x${i.amount}**\n`;
 			});
 			if (collectables) {
 				const pIncome = (networth / 33) + ((networth / 400) * 24);
@@ -109,13 +108,7 @@ module.exports = {
 				invEmbed.addField('Max passive income', `**${pIncome.toFixed(1)}💰**`);
 				invEmbed.addField('Networth', `**${networth}💰**`, true);
 			}
-
-			items.map(i => {
-				if (i.amount < 1) return;
-				if (i.item.ctg == 'collectables') return;
-				inventory += `${i.item.emoji}__${i.item.name}__: **x${i.amount}**\n`;
-				invEmbed.setDescription(inventory);
-			});
+			invEmbed.setDescription(inventory);
 		}
 		else { invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`); }
 

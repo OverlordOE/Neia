@@ -39,12 +39,12 @@ module.exports = {
 			item = await profile.getItem(temp);
 			if (item) {
 				uitems.map(i => {
-					if (i.item.name == item.name) {
-						if (i.item.name == item.name && amount == 'all') {
+					if (i.name == item.name) {
+						if (amount == 'all') {
 							amount = i.amount;
 							sell(profile, sentMessage, amount, embed, item, msg);
 						}
-						else if (i.item.name == item.name && i.amount >= amount) sell(profile, sentMessage, amount, embed, item, msg);
+						else if (i.amount >= amount) sell(profile, sentMessage, amount, embed, item, msg);
 						else return sentMessage.edit(embed.setDescription(`You only have **${i.amount}/${amount}** of the __${item.name}(s)__ needed!`));
 					}
 				});
@@ -68,7 +68,7 @@ module.exports = {
 									else if (amount < 1 || amount > 10000) return sentMessage.edit(embed.setDescription('Enter a number between 1 and 10000'));
 
 									uitems.map(i => {
-										if (i.item.name == item.name && i.amount >= amount) {
+										if (i.name == item.name && i.amount >= amount) {
 											hasItem = true;
 										}
 									});

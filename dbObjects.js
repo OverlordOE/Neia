@@ -37,6 +37,7 @@ Reflect.defineProperty(profile, 'addCharacter', {
 
 		return UserCharacters.create({
 			user_id: id,
+			base: character,
 			name: character.name,
 			nickname: nickname,
 			lvl: 1,
@@ -101,7 +102,12 @@ Reflect.defineProperty(profile, 'addItem', {
 			return userItem.save();
 		}
 
-		return UserItems.create({ user_id: id, name: item.name, amount: parseInt(amount) });
+		return UserItems.create({
+			user_id: id,
+			base: item,
+			name: item.name,
+			amount: parseInt(amount),
+		});
 	},
 });
 

@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { CurrencyShop } = require('../dbObjects');
+const fs = require('fs');
 module.exports = {
 	name: 'shop',
 	summary: 'Shows all the shop items',
@@ -10,12 +10,13 @@ module.exports = {
 	usage: '',
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
-		const items = await CurrencyShop.findAll();
+		const itemData = fs.readFileSync('data/items.json');
+		const items = JSON.parse(itemData);
 		let consumable = '__**Consumables:**__\n';
 		let collectables = '__**Collectables:**__\n';
 		let chests = '__**Chests:**__\n';
 
-		await items.map(item => {
+		items.map(item => {
 			if (item.cost) {
 				if (item.ctg == 'consumable') { consumable += `${item.emoji} ${item.name}: **${item.cost}💰**\n`; }
 				else if (item.ctg == 'collectables') { collectables += `${item.emoji} ${item.name}: **${item.cost}💰**\n`; }

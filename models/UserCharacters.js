@@ -1,6 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
 	return sequelize.define('user_character', {
 		user_id: DataTypes.STRING,
+		base: DataTypes.JSON,
 		name: DataTypes.STRING,
 		nickname: {
 			type: DataTypes.STRING,

@@ -33,12 +33,7 @@ module.exports = {
 		const items = await profile.getInventory(msg.author.id);
 		items.map(i => {
 			if (i.amount < 1) return;
-
-			if (i.item.ctg == 'collectables') {
-				for (let j = 0; j < i.amount; j++) {
-					reward += i.item.cost / 100;
-				}
-			}
+			if (i.base.ctg == 'collectables') reward += i.amount * (i.base.cost / 100);
 		});
 
 

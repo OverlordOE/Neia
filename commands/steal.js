@@ -47,7 +47,7 @@ module.exports = {
 		let hasItem = false;
 		const item = await profile.getItem('gun');
 		uitems.map(i => {
-			if (i.item.name == item.name && i.amount >= 1) {
+			if (i.name == item.name && i.amount >= 1) {
 				hasItem = true;
 			}
 		});

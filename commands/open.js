@@ -26,7 +26,7 @@ module.exports = {
 		const item = await profile.getItem(temp);
 		if (item) {
 			uitems.map(i => {
-				if (i.item.name == item.name) {
+				if (i.name == item.name) {
 					if (i.amount >= 1) hasChest = true;
 				}
 			});
