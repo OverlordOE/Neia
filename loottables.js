@@ -55,7 +55,8 @@ module.exports = {
 		loot.add({ name: 'House', amount: [7, 6] }, 20);
 		loot.add({ name: 'Museum', amount: [2, 2] }, 15);
 		loot.add({ name: 'Star', amount: [1, 1] }, 15);
-		loot.add({ name: 'Office', amount: [1, 1] }, 5);
+		loot.add({ name: 'Office', amount: [1, 1] }, 4.99);
+		loot.add({ name: 'Banana', amount: [1, 1] }, 0.01);
 		return loot.choose();
 	},
 
