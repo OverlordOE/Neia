@@ -1,10 +1,9 @@
 const Sequelize = require('sequelize');
-const { Op } = require('sequelize');
 const moment = require('moment');
 const Discord = require('discord.js');
 const profile = new Discord.Collection();
 const guildProfile = new Discord.Collection();
-
+const fs = require('fs');
 
 const sequelize = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
@@ -15,20 +14,20 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 
 const Users = sequelize.import('models/Users');
 const Guilds = sequelize.import('models/Guilds');
-const CurrencyShop = sequelize.import('models/CurrencyShop');
-const Characters = sequelize.import('models/Characters');
 const UserItems = sequelize.import('models/UserItems');
 const UserCharacters = sequelize.import('models/UserCharacters');
 
-UserItems.belongsTo(CurrencyShop, { foreignKey: 'item_id', as: 'item' });
-UserCharacters.belongsTo(Characters, { foreignKey: 'character_id', as: 'character' });
+const characterData = fs.readFileSync('data/characters.json');
+const characters = JSON.parse(characterData);
+const itemData = fs.readFileSync('data/items.json');
+const items = JSON.parse(itemData);
 
 
 // CHARACTERS
 Reflect.defineProperty(profile, 'addCharacter', {
 	value: async function addCharacter(id, character) {
 		const userChars = await UserCharacters.findAll({
-			where: { user_id: id, character_id: character.id },
+			where: { user_id: id, name: character.name },
 		});
 
 		let nickname;
@@ -37,16 +36,10 @@ Reflect.defineProperty(profile, 'addCharacter', {
 
 		return UserCharacters.create({
 			user_id: id,
-			character_id: character.id,
+			name: character.name,
 			nickname: nickname,
 			lvl: 1,
 			exp: 0,
-			hp: character.hp + (10 * character.con),
-			mp: character.mp + (10 * character.int),
-			str: character.str,
-			dex: character.dex,
-			con: character.con,
-			int: character.int,
 		});
 	},
 });
@@ -55,11 +48,11 @@ Reflect.defineProperty(profile, 'addCharacter', {
 Reflect.defineProperty(profile, 'removeCharacter', {
 	value: async function removeCharacter(id, character, nickname) {
 		const userChar = await UserCharacters.findOne({
-			where: { user_id: id, character_id: character.id, nickname: nickname },
+			where: { user_id: id, name: character.name, nickname: nickname },
 		});
 
 		if (userChar) return await UserCharacters.destroy({
-			where: { user_id: id, character_id: character.id, nickname: nickname },
+			where: { user_id: id, name: character.name, nickname: nickname },
 		});
 
 		throw Error(`User doesn't have the character: ${nickname}`);
@@ -73,15 +66,15 @@ Reflect.defineProperty(profile, 'getCharInv', {
 		if (!user) user = await profile.newUser(id);
 		return UserCharacters.findAll({
 			where: { user_id: id },
-			include: ['character'],
 		});
 	},
 });
 
 
 Reflect.defineProperty(profile, 'getCharacter', {
-	value: async function getCharacter(character) {
-		return await Characters.findOne({ where: { name: { [Op.like]: character } } });
+	value: function getCharacter(character) {
+		for (let i = 0; i < characters.length; i++) if (characters[i].name == character) return characters[i];
+		return false;
 	},
 });
 
@@ -99,7 +92,7 @@ Reflect.defineProperty(profile, 'getUserChar', {
 Reflect.defineProperty(profile, 'addItem', {
 	value: async function addItem(id, item, amount) {
 		const userItem = await UserItems.findOne({
-			where: { user_id: id, item_id: item.id },
+			where: { user_id: id, name: item.name },
 		});
 
 		if (userItem) {
@@ -107,7 +100,7 @@ Reflect.defineProperty(profile, 'addItem', {
 			return userItem.save();
 		}
 
-		return UserItems.create({ user_id: id, item_id: item.id, amount: parseInt(amount) });
+		return UserItems.create({ user_id: id, name: item.name, amount: parseInt(amount) });
 	},
 });
 
@@ -115,7 +108,7 @@ Reflect.defineProperty(profile, 'addItem', {
 Reflect.defineProperty(profile, 'removeItem', {
 	value: async function removeItem(id, item, amount) {
 		const userItem = await UserItems.findOne({
-			where: { user_id: id, item_id: item.id },
+			where: { user_id: id, name: item.name },
 		});
 
 		const remove = parseInt(amount);
@@ -124,7 +117,7 @@ Reflect.defineProperty(profile, 'removeItem', {
 			return userItem.save();
 		}
 
-		throw Error(`User doesn't have the item: ${item}`);
+		throw Error(`User doesn't have the item: ${item.name}`);
 	},
 });
 
@@ -135,15 +128,15 @@ Reflect.defineProperty(profile, 'getInventory', {
 		if (!user) user = await profile.newUser(id);
 		return UserItems.findAll({
 			where: { user_id: id },
-			include: ['item'],
 		});
 	},
 });
 
 
 Reflect.defineProperty(profile, 'getItem', {
-	value: async function getItem(item) {
-		return await CurrencyShop.findOne({ where: { name: { [Op.like]: item } } });
+	value: function getItem(item) {
+		for (let i = 0; i < items.length; i++) if (items[i].name == item.toLowerCase()) return { item: items[i], index: i };
+		return false;
 	},
 });
 
@@ -449,4 +442,4 @@ Reflect.defineProperty(guildProfile, 'setPrefix', {
 	},
 });
 
-module.exports = { Users, Guilds, CurrencyShop, UserItems, profile, guildProfile };
+module.exports = { Users, Guilds, UserItems, profile, guildProfile };

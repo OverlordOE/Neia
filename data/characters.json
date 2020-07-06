@@ -1,0 +1,32 @@
+[
+	{
+		"name": "testie",
+		"rarity": "epic",
+		"class": "mage",
+		"picture": "mage_1.png",
+		"description": "Test mage",
+		"stats": {
+			"hp": 7,
+			"mp": 16,
+			"str": 5,
+			"dex": 8,
+			"con": 6,
+			"int": 11
+		}
+	},
+	{
+		"name": "rangie",
+		"rarity": "rare",
+		"class": "ranger",
+		"picture": "ranger_1.png",
+		"description": "Test ranger",
+		"stats": {
+			"hp": 9,
+			"mp": 12,
+			"str": 7,
+			"dex": 11,
+			"con": 7,
+			"int": 5
+		}
+	}
+]
