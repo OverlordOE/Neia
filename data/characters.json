@@ -1,10 +1,10 @@
 [
 	{
-		"name": "testie",
-		"rarity": "epic",
-		"class": "mage",
+		"name": "Testie",
+		"rarity": "Epic",
+		"class": "Wizard",
 		"picture": "mage_1.png",
-		"description": "Test mage",
+		"description": "Test wizard",
 		"stats": {
 			"hp": 7,
 			"mp": 16,
@@ -15,11 +15,11 @@
 		}
 	},
 	{
-		"name": "rangie",
-		"rarity": "rare",
-		"class": "ranger",
-		"picture": "ranger_1.png",
-		"description": "Test ranger",
+		"name": "Rangie",
+		"rarity": "Rare",
+		"class": "Archer",
+		"picture": "archer_1.png",
+		"description": "Test Archer",
 		"stats": {
 			"hp": 9,
 			"mp": 12,
