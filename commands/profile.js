@@ -14,10 +14,10 @@ module.exports = {
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 		const target = msg.mentions.users.first() || msg.author;
 		const items = await profile.getInventory(target.id);
+		const characters = await profile.getCharInv(target.id);
 		const filter = (reaction, user) => {
-			return ['💰', '🗒️', '📦'].includes(reaction.emoji.name) && user.id === msg.author.id;
+			return ['💰', '🗒️', '📦', '🧍'].includes(reaction.emoji.name) && user.id === msg.author.id;
 		};
-
 
 
 		const avatar = target.displayAvatarURL();
@@ -41,10 +41,14 @@ module.exports = {
 		let collectables = false;
 		let inventory = '__**Inventory:**__\n';
 
+		let chars = '';
+		if (characters.length) characters.map(c => chars += `**${c.character.name}**: ${c.nickname}\n`);
+		else chars = `${target} has no characters`;
+
 
 		const moneyEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
-			.setTitle(`${target.tag}'s Stats`)
+			.setTitle(`${target.tag}'s General Stats`)
 			.setThumbnail(avatar)
 			.addField('Balance:', `${userProfile.balance.toFixed(1)}💰`, true)
 			.addField('Message Count:', userProfile.msgCount, true)
@@ -64,7 +68,7 @@ module.exports = {
 
 		const statEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
-			.setTitle(`*${target.tag}'s* Inventory`)
+			.setTitle(`*${target.tag}'s* Stats`)
 			.setThumbnail(avatar)
 			.addField('Total Spent:', userProfile.totalSpent.toFixed(1), true)
 			.addField('Total Earned:', userProfile.totalEarned.toFixed(1), true)
@@ -73,6 +77,14 @@ module.exports = {
 			.addField('Earned with Stealing:', userProfile.stealingEarned.toFixed(1), true)
 			.addField('Spent at Shop:', userProfile.shopSpent.toFixed(1), true)
 			.addField('Total Bot Usage:', userProfile.botUsage, true)
+			.setTimestamp()
+			.setFooter('Neia', bot.user.displayAvatarURL());
+
+		const charEmbed = new Discord.MessageEmbed()
+			.setColor(pColour)
+			.setTitle(`*${target.tag}'s* Characters`)
+			.setDescription(chars)
+			.setThumbnail(avatar)
 			.setTimestamp()
 			.setFooter('Neia', bot.user.displayAvatarURL());
 
@@ -112,6 +124,7 @@ module.exports = {
 			.then(sentMessage => {
 				sentMessage.react('💰');
 				sentMessage.react('📦');
+				sentMessage.react('🧍');
 				sentMessage.react('🗒️');
 				const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
 
@@ -119,6 +132,7 @@ module.exports = {
 					reaction.users.remove(msg.author.id);
 					if (reaction.emoji.name == '💰') { sentMessage.edit(moneyEmbed); }
 					else if (reaction.emoji.name == '📦') { sentMessage.edit(invEmbed); }
+					else if (reaction.emoji.name == '🧍') { sentMessage.edit(charEmbed); }
 					else if (reaction.emoji.name == '🗒️') { sentMessage.edit(statEmbed); }
 				});
 			});

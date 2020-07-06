@@ -1,24 +1,20 @@
 module.exports = (sequelize, DataTypes) => {
-	return sequelize.define('characters', {
-		name: {
-			type: DataTypes.STRING,
-			unique: true,
-		},
-		rarity: {
+	return sequelize.define('user_character', {
+		user_id: DataTypes.STRING,
+		character_id: DataTypes.STRING,
+		nickname: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		class: {
-			type: DataTypes.STRING,
+		lvl: {
+			type: DataTypes.INTEGER,
 			allowNull: false,
+			'default': 1,
 		},
-		picture: {
-			type: DataTypes.STRING,
-			allowNull: true,
-		},
-		description: {
-			type: DataTypes.STRING,
+		exp: {
+			type: DataTypes.INTEGER,
 			allowNull: false,
+			'default': 0,
 		},
 		hp: {
 			type: DataTypes.INTEGER,

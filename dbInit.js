@@ -10,9 +10,10 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 
 // Import tables
 const CurrencyShop = sequelize.import('models/CurrencyShop');
-// const CharacterList = sequelize.import('models/Characters');
+const Characters = sequelize.import('models/Characters');
 sequelize.import('models/Users');
 sequelize.import('models/UserItems');
+sequelize.import('models/UserCharacters');
 sequelize.import('models/Guilds');
 
 
@@ -268,11 +269,38 @@ sequelize
 			}),
 		];
 
-		//	const characters = [];
+		const characterList = [
+			Characters.upsert({
+				name: 'testie',
+				rarity: 'epic',
+				class: 'mage',
+				picture: 'mage_1.png',
+				description: 'Test mage',
+				hp: 7,
+				mp: 16,
+				str: 5,
+				dex: 8,
+				con: 6,
+				int: 11,
+			}),
+			Characters.upsert({
+				name: 'rangie',
+				rarity: 'rare',
+				class: 'ranger',
+				picture: 'ranger_1.png',
+				description: 'Test ranger',
+				hp: 9,
+				mp: 12,
+				str: 7,
+				dex: 11,
+				con: 7,
+				int: 5,
+			}),
+		];
 
 		await Promise.all(shop);
 		console.log('Shop synced');
-		//await Promise.all(characters);
+		await Promise.all(characterList);
 		console.log('Characters synced');
 		sequelize.close();
 	})

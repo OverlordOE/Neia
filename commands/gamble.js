@@ -58,15 +58,15 @@ module.exports = {
 
 							${emojiCharacters[5]}__**Number Guessing**__\n 
 							Guess which number is correct, guess right and you win.\n
-							**Potential winnings: ${(numberRate * gambleAmount)}💰**\n
+							**Potential winnings: ${(numberRate * gambleAmount).toFixed(1)}💰**\n
 
 							✂️__**Rock, paper, scissors**__\n
 							Play a game of rock, paper, scissors against the bot and see who is superior.\n
-							**Potential winnings: ${(rpsRate * gambleAmount)}💰**
+							**Potential winnings: ${(rpsRate * gambleAmount).toFixed(1)}💰**
 
 							🃏__**Blackjack**__\n
 							Play a game of blackjack against the bot and test your luck.\n
-							**Potential winnings: ${(blackjackRate * gambleAmount)}💰**
+							**Potential winnings: ${(blackjackRate * gambleAmount).toFixed(1)}💰**
 			`));
 					sentMessage.react('✂️');
 					sentMessage.react(emojiCharacters[5]);

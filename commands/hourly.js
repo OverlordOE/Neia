@@ -16,10 +16,9 @@ module.exports = {
 		let chest;
 
 		const luck = Math.floor(Math.random() * 5);
-		if (luck >= 1) chest = 'Common chest';
-		else chest = 'Rare chest';
-		const item = profile.getItem(chest);
-
+		if (luck >= 1) chest = 'Common Chest';
+		else chest = 'Rare Chest';
+		const item = await profile.getItem(chest);
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Hourly Reward')

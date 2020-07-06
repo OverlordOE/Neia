@@ -4,6 +4,7 @@ module.exports = {
 	Hack: require('./hack'),
 	Shop: require('./shop'),
 	Item: require('./item'),
+	Character: require('./character'),
 	Buy: require('./buy'),
 	Sell: require('./sell'),
 	Use: require('./use'),

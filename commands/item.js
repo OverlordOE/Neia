@@ -1,6 +1,4 @@
 const Discord = require('discord.js');
-const { Op } = require('sequelize');
-const { CurrencyShop } = require('../dbObjects');
 module.exports = {
 	name: 'item',
 	summary: 'Shows information about a specific item',
@@ -18,7 +16,7 @@ module.exports = {
 			else temp += `${args[i]}`;
 		}
 
-		const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: temp } } });
+		const item = await profile.getItem(temp);
 		if (!item) return msg.channel.send(`\`${temp}\` is not a valid item.`, { code: true });
 
 		const embed = new Discord.MessageEmbed()

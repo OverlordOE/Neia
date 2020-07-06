@@ -23,7 +23,79 @@ const UserCharacters = sequelize.import('models/UserCharacters');
 UserItems.belongsTo(CurrencyShop, { foreignKey: 'item_id', as: 'item' });
 UserCharacters.belongsTo(Characters, { foreignKey: 'character_id', as: 'character' });
 
-// Add db commands
+
+// CHARACTERS
+Reflect.defineProperty(profile, 'addCharacter', {
+	value: async function addCharacter(id, character) {
+		const userChars = await UserCharacters.findAll({
+			where: { user_id: id, character_id: character.id },
+		});
+
+		let nickname;
+		if (userChars) nickname = `${character.name}${userChars.length + 1}`;
+		else nickname = `${character.name}1`;
+
+		return UserCharacters.create({
+			user_id: id,
+			character_id: character.id,
+			nickname: nickname,
+			lvl: 1,
+			exp: 0,
+			hp: character.hp + (10 * character.con),
+			mp: character.mp + (10 * character.int),
+			str: character.str,
+			dex: character.dex,
+			con: character.con,
+			int: character.int,
+		});
+	},
+});
+
+
+Reflect.defineProperty(profile, 'removeCharacter', {
+	value: async function removeCharacter(id, character, nickname) {
+		const userChar = await UserCharacters.findOne({
+			where: { user_id: id, character_id: character.id, nickname: nickname },
+		});
+
+		if (userChar) return await UserCharacters.destroy({
+			where: { user_id: id, character_id: character.id, nickname: nickname },
+		});
+
+		throw Error(`User doesn't have the character: ${nickname}`);
+	},
+});
+
+
+Reflect.defineProperty(profile, 'getCharInv', {
+	value: async function getCharInv(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		return UserCharacters.findAll({
+			where: { user_id: id },
+			include: ['character'],
+		});
+	},
+});
+
+
+Reflect.defineProperty(profile, 'getCharacter', {
+	value: async function getCharacter(character) {
+		return await Characters.findOne({ where: { name: { [Op.like]: character } } });
+	},
+});
+
+
+Reflect.defineProperty(profile, 'getUserChar', {
+	value: async function getUserChar(id, nickname) {
+		return await UserCharacters.findOne({
+			where: { user_id: id, nickname: nickname },
+		});
+	},
+});
+
+
+// ITEMS
 Reflect.defineProperty(profile, 'addItem', {
 	value: async function addItem(id, item, amount) {
 		const userItem = await UserItems.findOne({
@@ -74,6 +146,9 @@ Reflect.defineProperty(profile, 'getItem', {
 		return await CurrencyShop.findOne({ where: { name: { [Op.like]: item } } });
 	},
 });
+
+
+// USERS
 
 
 Reflect.defineProperty(profile, 'getUser', {

@@ -22,7 +22,7 @@ module.exports = {
 		const luck = Math.floor(Math.random() * 5);
 		if (luck >= 1) chest = 'Rare chest';
 		else chest = 'Epic chest';
-		const item = profile.getItem(chest);
+		const item = await profile.getItem(chest);
 
 
 		const embed = new Discord.MessageEmbed()

@@ -23,7 +23,7 @@ module.exports = {
 			else temp += `${args[i]}`;
 		}
 
-		const item = profile.getItem(temp);
+		const item = await profile.getItem(temp);
 		if (item) {
 			uitems.map(i => {
 				if (i.item.name == item.name) {
@@ -39,7 +39,7 @@ module.exports = {
 			case 'Common Chest': {
 
 				const loot = loottable.common();
-				const lootItem = profile.getItem(loot.name);
+				const lootItem = await profile.getItem(loot.name);
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Common Chest')
@@ -63,7 +63,7 @@ module.exports = {
 			case 'Rare Chest': {
 
 				const loot = loottable.rare();
-				const lootItem = profile.getItem(loot.name);
+				const lootItem = await profile.getItem(loot.name);
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Rare Chest')
@@ -87,7 +87,7 @@ module.exports = {
 			case 'Epic Chest': {
 
 				const loot = loottable.epic();
-				const lootItem = profile.getItem(loot.name);
+				const lootItem = await profile.getItem(loot.name);
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Epic Chest')
@@ -112,7 +112,7 @@ module.exports = {
 			case 'Legendary Chest': {
 
 				const loot = loottable.legendary();
-				const lootItem = profile.getItem(loot.name);
+				const lootItem = await profile.getItem(loot.name);
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Legendary Chest')
