@@ -28,10 +28,10 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neia', bot.user.displayAvatarURL())
 			.attachFiles(`assets/rarity/${item.rarity}.jpg`)
-			.setImage(`attachment://${item.rarity}.jpg`);
+			.setThumbnail(`attachment://${item.rarity}.jpg`);
 
 		if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
-			.setThumbnail(`attachment://${item.picture}`);
+			.setImage(`attachment://${item.picture}`);
 
 		return msg.channel.send(embed);
 	},

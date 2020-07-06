@@ -42,7 +42,7 @@ module.exports = {
 		let inventory = '__**Inventory:**__\n';
 
 		let chars = '';
-		if (characters.length) characters.map(c => chars += `**${c.character.name}**: ${c.nickname}\n`);
+		if (characters.length) characters.map(c => chars += `**${c.name}**: ${c.nickname}\n`);
 		else chars = `${target} has no characters`;
 
 

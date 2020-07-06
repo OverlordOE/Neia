@@ -3,6 +3,7 @@ const moment = require('moment');
 const Discord = require('discord.js');
 const profile = new Discord.Collection();
 const guildProfile = new Discord.Collection();
+const prefix = process.env.PREFIX;
 const fs = require('fs');
 
 const sequelize = new Sequelize('database', 'username', 'password', {
@@ -73,7 +74,7 @@ Reflect.defineProperty(profile, 'getCharInv', {
 
 Reflect.defineProperty(profile, 'getCharacter', {
 	value: function getCharacter(character) {
-		for (let i = 0; i < characters.length; i++) if (characters[i].name == character) return characters[i];
+		for (let i = 0; i < characters.length; i++) if (characters[i].name.toLowerCase() == character.toLowerCase()) return characters[i];
 		return false;
 	},
 });
@@ -135,7 +136,7 @@ Reflect.defineProperty(profile, 'getInventory', {
 
 Reflect.defineProperty(profile, 'getItem', {
 	value: function getItem(item) {
-		for (let i = 0; i < items.length; i++) if (items[i].name == item.toLowerCase()) return { item: items[i], index: i };
+		for (let i = 0; i < items.length; i++) if (items[i].name.toLowerCase() == item.toLowerCase()) return items[i];
 		return false;
 	},
 });
@@ -417,7 +418,7 @@ Reflect.defineProperty(guildProfile, 'newGuild', {
 	value: async function newGuild(id) {
 		const guild = await Guilds.create({
 			guild_id: id,
-			prefix: '-',
+			prefix: prefix,
 		});
 		guildProfile.set(id, guild);
 		return guild;
