@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const itemInfo = require('../data/items');
 module.exports = {
 	name: 'profile',
 	summary: 'Shows profile of you or the tagger user',
@@ -9,20 +10,32 @@ module.exports = {
 	usage: '<user>',
 
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
-		const target = msg.mentions.users.first() || msg.author;
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+		const target = message.mentions.users.first() || message.author;
 		const items = await profile.getInventory(target.id);
-		const characters = await profile.getCharInv(target.id);
 		const filter = (reaction, user) => {
-			return ['💰', '🗒️', '📦', '🧍'].includes(reaction.emoji.name) && user.id === msg.author.id;
+			return user.id === message.author.id;
 		};
-
 
 		const avatar = target.displayAvatarURL();
 		const userProfile = await profile.getUser(target.id);
-		const pColour = userProfile.pColour;
+		const levelInfo = await profile.levelInfo(target.id, message);
 
-		const prot = await profile.getProtection(target.id);
+		const userClass = await profile.getClass(target.id);
+		let className;
+		let colour;
+		if (userClass) {
+			className = userClass.name;
+			colour = userClass.colour;
+		}
+		else {
+			className = 'No class';
+			colour = '#ffffff';
+		}
+
+		let exp = `${levelInfo.exp}/${levelInfo.expNeeded}`;
+		if (levelInfo.level == 60) exp = '__**Max**__';
+
 		let daily = await profile.getDaily(target.id);
 		let hourly = await profile.getHourly(target.id);
 		let weekly = await profile.getWeekly(target.id);
@@ -33,101 +46,104 @@ module.exports = {
 		if (weekly === true) weekly = 'now';
 		if (vote === true) vote = 'now';
 
+		const characterEmbed = new Discord.MessageEmbed()
 
-		let assets = '';
-		let networth = 0;
-		let collectables = false;
-		let inventory = '__**Inventory:**__\n';
+			.setTitle(`**${target.tag}'s profile Stats**`)
+			.setThumbnail(avatar)
+			.setColor(colour)
+			.addField('Class:', `${className} ${levelInfo.level}`, true)
+			.addField('EXP:', exp, true)
+			.setTimestamp()
+			.setFooter('DMMO', client.user.displayAvatarURL());
 
-		let chars = '';
-		if (characters.length) characters.map(c => chars += `**${c.name}**: ${c.nickname}\n`);
-		else chars = `${target} has no characters`;
+		const equipmentEmbed = new Discord.MessageEmbed()
 
+			.setTitle(`**${target.tag}'s Equipment**`)
+			.setThumbnail(avatar)
+			.setColor(colour)
+			.setTimestamp()
+			.setFooter('DMMO', client.user.displayAvatarURL());
 
 		const moneyEmbed = new Discord.MessageEmbed()
-			.setColor(pColour)
-			.setTitle(`${target.tag}'s General Stats`)
+
+			.setTitle(`**${target.tag}'s General Stats**`)
 			.setThumbnail(avatar)
-			.addField('Balance:', `${userProfile.balance.toFixed(1)}💰`, true)
-			.addField('Message Count:', userProfile.msgCount, true)
-			.addField('Next Vote', vote)
+			.setColor(colour)
+			.addField('Balance:', `${userProfile.balance.toFixed(1)}💰`)
 			.addField('Next daily:', daily, true)
 			.addField('Next hourly:', hourly, true)
 			.addField('Next weekly:', weekly, true)
+			.addField('Next Vote', vote, true)
 			.setTimestamp()
-			.setFooter('Neia', bot.user.displayAvatarURL());
+			.setFooter('DMMO', client.user.displayAvatarURL());
 
-		const invEmbed = new Discord.MessageEmbed()
-			.setColor(pColour)
+		const inventoryEmbed = new Discord.MessageEmbed()
+
 			.setTitle(`${target.tag}'s Inventory`)
 			.setThumbnail(avatar)
+			.setColor(colour)
 			.setTimestamp()
-			.setFooter('Neia', bot.user.displayAvatarURL());
+			.setFooter('DMMO', client.user.displayAvatarURL());
 
-		const statEmbed = new Discord.MessageEmbed()
-			.setColor(pColour)
-			.setTitle(`*${target.tag}'s* Stats`)
-			.setThumbnail(avatar)
-			.addField('Total Spent:', userProfile.totalSpent.toFixed(1), true)
-			.addField('Total Earned:', userProfile.totalEarned.toFixed(1), true)
-			.addField('Earned with Gambling:', userProfile.gamblingEarned.toFixed(1), true)
-			.addField('Spent at Gambling:', userProfile.gamblingSpent.toFixed(1), true)
-			.addField('Earned with Stealing:', userProfile.stealingEarned.toFixed(1), true)
-			.addField('Spent at Shop:', userProfile.shopSpent.toFixed(1), true)
-			.addField('Total Bot Usage:', userProfile.botUsage, true)
-			.setTimestamp()
-			.setFooter('Neia', bot.user.displayAvatarURL());
 
-		const charEmbed = new Discord.MessageEmbed()
-			.setColor(pColour)
-			.setTitle(`*${target.tag}'s* Characters`)
-			.setDescription(chars)
-			.setThumbnail(avatar)
-			.setTimestamp()
-			.setFooter('Neia', bot.user.displayAvatarURL());
-
-		if (prot !== false) moneyEmbed.addField('Steal protection untill:', prot);
-		else moneyEmbed.addField('Steal protection untill:', 'none');
-
+		let inventory = '__**Inventory:**__\n';
 		if (items.length) {
-
 			items.map(i => {
 				if (i.amount < 1) return;
-				if (i.base.ctg == 'collectables') {
-					for (let j = 0; j < i.amount; j++) {
-						assets += `${i.base.emoji}`;
-						networth += i.base.cost;
-					}
-					collectables = true;
-				}
-				else inventory += `${i.base.emoji}__${i.name}__: **x${i.amount}**\n`;
+				const item = itemInfo[i.name];
+				inventory += `${item.emoji}__${i.name}__: **x${i.amount}**\n`;
 			});
-			if (collectables) {
-				const pIncome = (networth / 33) + ((networth / 400) * 24);
-				invEmbed.addField('Assets', assets);
-				invEmbed.addField('Max passive income', `**${pIncome.toFixed(1)}💰**`);
-				invEmbed.addField('Networth', `**${networth}💰**`, true);
-			}
-			invEmbed.setDescription(inventory);
+			inventoryEmbed.setDescription(inventory);
 		}
-		else { invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`); }
+		else { inventoryEmbed.addField('Inventory:', `*${target.tag}* has nothing!`); }
 
 
-		msg.channel.send(moneyEmbed)
+		if (userClass) {
+			const stats = await profile.getStats(target.id);
+			const baseStats = await profile.getBaseStats(target.id);
+			characterEmbed.addFields(
+				{ name: 'Health', value: `${msgUser.curHP}/${stats.hp}<:health:730849477765890130>`, inline: true },
+				{ name: 'Mana', value: `${msgUser.curMP}/${stats.mp}<:mana:730849477640061029>`, inline: true },
+			);
+
+			let statDescription = '';
+			for (const stat in stats) {
+				if (baseStats[stat]) statDescription += `\n**${profile.stringToName(stat)}**: ${stats[stat]} (${stats[stat] - baseStats[stat]})`;
+				else statDescription += `\n**${profile.stringToName(stat)}**: ${stats[stat]}`;
+			}
+			characterEmbed.setDescription(statDescription);
+
+			const equipment = await profile.getEquipment(target.id);
+			let equipmentDescription = '';
+			for (const slot in equipment) {
+				if (equipment[slot]) {
+					const item = profile.getItem(equipment[slot]);
+					equipmentDescription += `\n**${profile.stringToName(slot)}**: ${item.emoji}${profile.stringToName(item.name)}`;
+				} else { equipmentDescription += `\n**${profile.stringToName(slot)}**: Nothing`; }
+			}
+			equipmentEmbed.setDescription(equipmentDescription);
+		}
+		else {
+			characterEmbed.setDescription(`${target} does not have a class yet.\n\nTo choose a class use the command \`class\`.`);
+			equipmentEmbed.setDescription(`${target} does not have a class yet.\n\nTo choose a class use the command \`class\`.`);
+		}
+
+		message.channel.send(characterEmbed)
 			.then(sentMessage => {
+				sentMessage.react('730807684865065005');
+				sentMessage.react('🛡️');
 				sentMessage.react('💰');
 				sentMessage.react('📦');
-				sentMessage.react('🧍');
-				sentMessage.react('🗒️');
 				const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
 
 				collector.on('collect', (reaction) => {
-					reaction.users.remove(msg.author.id);
-					if (reaction.emoji.name == '💰') { sentMessage.edit(moneyEmbed); }
-					else if (reaction.emoji.name == '📦') { sentMessage.edit(invEmbed); }
-					else if (reaction.emoji.name == '🧍') { sentMessage.edit(charEmbed); }
-					else if (reaction.emoji.name == '🗒️') { sentMessage.edit(statEmbed); }
+					reaction.users.remove(message.author.id);
+					if (reaction.emoji.name == 'profile') { sentMessage.edit(characterEmbed); }
+					else if (reaction.emoji.name == '🛡️') { sentMessage.edit(equipmentEmbed); }
+					else if (reaction.emoji.name == '💰') { sentMessage.edit(moneyEmbed); }
+					else if (reaction.emoji.name == '📦') { sentMessage.edit(inventoryEmbed); }
 				});
+				collector.on('end', () => sentMessage.reactions.removeAll());
 			});
 	},
 };

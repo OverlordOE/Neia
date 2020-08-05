@@ -7,8 +7,8 @@ module.exports = {
 	usage: '<command name>',
 	args: false,
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
-		const { commands } = msg.client;
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+		const { commands } = message.client;
 		let adminCommands = '';
 		let musicCommands = '';
 		let miscCommands = '';
@@ -44,28 +44,29 @@ module.exports = {
 			});
 
 
-			help.setDescription(`__**Money/Item Commands**__\n${moneyCommands}\n
-								__**Info Commands**__\n${infoCommands}\n
+			help.setDescription(`__**Info Commands**__\n${infoCommands}\n
+								__**Money/Item Commands**__\n${moneyCommands}\n
 								__**Miscellaneous Commands**__\n${miscCommands}\n
 								__**Music Commands**__\n${musicCommands}\n
 								__**Admin Commands**__\n${adminCommands}\n
 								`)
-			.addField('__**Help**__', '**You can send `help [command name]` to get info on a specific command!**')
-				.addField('Helpfull Links',`[Click here to invite me to your server](https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=bot&permissions=372517968)\n
+				.addField('__**Help**__', '**You can send `help [command name]` to get info on a specific command!**')
+				.addField('Helpfull Links', `[Click here to invite me to your server](https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=bot&permissions=372517968)\n
 							 [Click here to join the support server](https://discord.gg/hFGxVDT)\n
 							 [Click here to submit a bug or request  feature](https://github.com/OverlordOE/Neia/issues/new/choose)\n
 							 For more info contact: OverlordOE#0717
 			`);
 		}
+		else if (args[0] == 'viggo' || args[0] == 'virgil') message.reply('Vliegosaurus');
 		else {
 			const name = args[0].toLowerCase();
 			const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
 			if (!command) {
-				return msg.reply('that\'s not a valid command!');
+				return message.reply('that\'s not a valid command!');
 			}
 
-			if (command.owner) { return msg.channel.send('This command is for debug purposes'); }
+			if (command.owner) { return message.channel.send('This command is for debug purposes'); }
 			help.setTitle(command.name);
 
 			if (command.description) help.addField('**Description:**', command.description);
@@ -75,10 +76,10 @@ module.exports = {
 				if (command.cooldown > 60) help.addField('**Cooldown:**', `${command.cooldown / 60} minutes`);
 				else help.addField('**Cooldown:**', `${command.cooldown} seconds`);
 			}
-				
+
 		}
 
 
-		msg.channel.send(help);
+		message.channel.send(help);
 	},
 };

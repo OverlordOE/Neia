@@ -26,19 +26,19 @@ const items = JSON.parse(itemData);
 
 // CHARACTERS
 Reflect.defineProperty(profile, 'addCharacter', {
-	value: async function addCharacter(id, character) {
+	value: async function addCharacter(id, profile) {
 		const userChars = await UserCharacters.findAll({
-			where: { user_id: id, name: character.name },
+			where: { user_id: id, name: profile.name },
 		});
 
 		let nickname;
-		if (userChars) nickname = `${character.name}${userChars.length + 1}`;
-		else nickname = `${character.name}1`;
+		if (userChars) nickname = `${profile.name}${userChars.length + 1}`;
+		else nickname = `${profile.name}1`;
 
 		return UserCharacters.create({
 			user_id: id,
-			base: character,
-			name: character.name,
+			base: profile,
+			name: profile.name,
 			nickname: nickname,
 			lvl: 1,
 			exp: 0,
@@ -48,16 +48,16 @@ Reflect.defineProperty(profile, 'addCharacter', {
 
 
 Reflect.defineProperty(profile, 'removeCharacter', {
-	value: async function removeCharacter(id, character, nickname) {
+	value: async function removeCharacter(id, profile, nickname) {
 		const userChar = await UserCharacters.findOne({
-			where: { user_id: id, name: character.name, nickname: nickname },
+			where: { user_id: id, name: profile.name, nickname: nickname },
 		});
 
 		if (userChar) return await UserCharacters.destroy({
-			where: { user_id: id, name: character.name, nickname: nickname },
+			where: { user_id: id, name: profile.name, nickname: nickname },
 		});
 
-		throw Error(`User doesn't have the character: ${nickname}`);
+		throw Error(`User doesn't have the profile: ${nickname}`);
 	},
 });
 
@@ -74,8 +74,8 @@ Reflect.defineProperty(profile, 'getCharInv', {
 
 
 Reflect.defineProperty(profile, 'getCharacter', {
-	value: function getCharacter(character) {
-		for (let i = 0; i < characters.length; i++) if (characters[i].name.toLowerCase() == character.toLowerCase()) return characters[i];
+	value: function getCharacter(profile) {
+		for (let i = 0; i < characters.length; i++) if (characters[i].name.toLowerCase() == profile.toLowerCase()) return characters[i];
 		return false;
 	},
 });
@@ -188,7 +188,7 @@ Reflect.defineProperty(profile, 'getDaily', {
 
 		const dCheck = moment(user.lastDaily).add(1, 'd');
 		if (moment(dCheck).isBefore(now)) return true;
-		else return dCheck.format('dddd HH:mm');
+		else return dCheck.format('MMM Do HH:mm');
 	},
 
 });
@@ -212,7 +212,7 @@ Reflect.defineProperty(profile, 'getHourly', {
 
 		const hCheck = moment(user.lastHourly).add(1, 'h');
 		if (moment(hCheck).isBefore(now)) return true;
-		else return hCheck.format('dddd HH:mm');
+		else return hCheck.format('MMM Do HH:mm');
 	},
 });
 Reflect.defineProperty(profile, 'setHourly', {
@@ -235,7 +235,7 @@ Reflect.defineProperty(profile, 'getWeekly', {
 
 		const wCheck = moment(user.lastWeekly).add(1, 'w');
 		if (moment(wCheck).isBefore(now)) return true;
-		else return wCheck.format('dddd HH:mm');
+		else return wCheck.format('MMM Do HH:mm');
 	},
 
 });
@@ -269,7 +269,7 @@ Reflect.defineProperty(profile, 'getVote', {
 
 		const vCheck = moment(user.lastVote).add(12, 'h');
 		if (moment(vCheck).isBefore(now)) return true;
-		else return vCheck.format('dddd HH:mm');
+		else return vCheck.format('MMM Do HH:mm');
 	},
 });
 
@@ -291,7 +291,7 @@ Reflect.defineProperty(profile, 'getProtection', {
 		const now = moment();
 
 		const prot = moment(user.protection);
-		if (prot.isAfter(now)) return prot.format('dddd HH:mm');
+		if (prot.isAfter(now)) return prot.format('MMM Do HH:mm');
 		else return false;
 	},
 });
@@ -318,7 +318,7 @@ Reflect.defineProperty(profile, 'setPColour', {
 	value: async function setPColour(id, colour) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		if (!colour.startsWith('#')) throw 'not a valid colour!';
+		if (!colour.startsWith('#')) throw Error('not a valid colour!');
 
 		user.pColour = colour;
 		return user.save();
@@ -374,24 +374,6 @@ Reflect.defineProperty(profile, 'addBotUsage', {
 	},
 });
 
-Reflect.defineProperty(profile, 'getOptIn', {
-	value: async function getOptIn(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user ? user.opt : 0;
-	},
-
-});
-Reflect.defineProperty(profile, 'setOpt', {
-	value: async function setOpt(id, opt) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
-		user.opt = opt;
-		return user.save();
-	},
-});
-
 
 Reflect.defineProperty(profile, 'newUser', {
 	value: async function newUser(id) {
@@ -405,13 +387,6 @@ Reflect.defineProperty(profile, 'newUser', {
 			lastVote: now.subtract(1, 'days'),
 			protection: now,
 			pColour: '#fcfcfc',
-			opt: true,
-			msgCount: 1,
-			gamblingEarned: 0,
-			gamblingSpent: 0,
-			stealingEarned: 0,
-			shopSpent: 0,
-			botUsage: 0,
 			totalSpent: 0,
 			totalEarned: 0,
 		});
@@ -449,4 +424,4 @@ Reflect.defineProperty(guildProfile, 'setPrefix', {
 	},
 });
 
-module.exports = { Users, Guilds, UserItems, profile, guildProfile };
+module.exports = { Users, Guilds, profile, guildProfile };

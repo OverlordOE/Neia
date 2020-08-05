@@ -8,16 +8,16 @@ module.exports = {
 	args: false,
 	usage: '<page>',
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 		const filter = (reaction, user) => {
-			return ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === msg.author.id;
+			return ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id;
 		};
 
 		const list = profile.sort((a, b) => b.balance - a.balance)
-			.filter(user => bot.users.cache.has(user.user_id) && user.opt)
+			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}.**__ *${bot.users.cache.get(user.user_id).tag}*: **${Math.floor(user.balance)}💰**`);
+			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: **${Math.floor(user.balance)}💰**`);
 
 		let page = 0;
 		if (!isNaN(args[0]) && args[0] > 0 && args[0] < 6) page = args[0] - 1;
@@ -25,20 +25,20 @@ module.exports = {
 		const description = editDescription(list, page);
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neia leaderboard')
+			.setTitle('DMMO leaderboard')
 			.setDescription(description)
-			.setThumbnail(bot.user.displayAvatarURL())
-			.setColor(msgUser.pColour)
-			.setTimestamp()
-			.setFooter('Neia', bot.user.displayAvatarURL());
+			.setThumbnail(client.user.displayAvatarURL())
 
-		msg.channel.send(embed).then(sentMessage => {
+			.setTimestamp()
+			.setFooter('DMMO', client.user.displayAvatarURL());
+
+		message.channel.send(embed).then(sentMessage => {
 			sentMessage.react('◀️');
 			sentMessage.react('▶️');
 			const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
 
 			collector.on('collect', (reaction) => {
-				reaction.users.remove(msg.author.id);
+				reaction.users.remove(message.author.id);
 				if (reaction.emoji.name == '◀️') {
 					if (page > 0) {
 						page--;
@@ -52,6 +52,7 @@ module.exports = {
 					}
 				}
 			});
+			collector.on('end', () => sentMessage.reactions.removeAll());
 		});
 	},
 };

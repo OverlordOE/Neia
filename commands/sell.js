@@ -1,33 +1,33 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-nested-callbacks */
 const Discord = require('discord.js');
+const itemInfo = require('../data/items');
 module.exports = {
 	name: 'sell',
 	summary: 'Sell items to get 80% of your money back',
 	description: 'Sell items to get 80% of your money back.',
 	aliases: ['refund'],
-	category: 'money',
+	category: 'misc',
 	args: false,
 	usage: '',
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
-		const uitems = await profile.getInventory(msg.author.id);
-		const filter = m => m.author.id === msg.author.id;
-		const avatar = msg.author.displayAvatarURL();
+		const uitems = await profile.getInventory(message.author.id);
+		const filter = m => m.author.id === message.author.id;
 		let amount = 0;
 		let temp = '';
 		let item;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neia Refunds')
-			.setThumbnail(avatar)
+			.setTitle('DMMO Refunds')
+			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What do you want to refund? `80% refund`')
-			.setColor(msgUser.pColour)
-			.setTimestamp()
-			.setFooter('Neia', bot.user.displayAvatarURL());
 
-		msg.channel.send(embed).then(async sentMessage => {
+			.setTimestamp()
+			.setFooter('DMMO', client.user.displayAvatarURL());
+
+		message.channel.send(embed).then(async sentMessage => {
 
 			for (let i = 0; i < args.length; i++) {
 				if (!(isNaN(args[i]))) amount = parseInt(args[i]);
@@ -42,15 +42,15 @@ module.exports = {
 					if (i.name == item.name) {
 						if (amount == 'all') {
 							amount = i.amount;
-							sell(profile, sentMessage, amount, embed, item, msg);
+							sell(profile, sentMessage, amount, embed, item, message);
 						}
-						else if (i.amount >= amount) sell(profile, sentMessage, amount, embed, item, msg);
+						else if (i.amount >= amount) sell(profile, sentMessage, amount, embed, item, message);
 						else return sentMessage.edit(embed.setDescription(`You only have **${i.amount}/${amount}** of the __${item.name}(s)__ needed!`));
 					}
 				});
 			}
 			else {
-				msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 					.then(async collected => {
 						const item = await profile.getItem(collected.first().content);
@@ -60,7 +60,7 @@ module.exports = {
 						collected.first().delete().catch(e => logger.error(e.stack));
 
 						sentMessage.edit(embed.setDescription(`How much __${item.name}(s)__ do you want to sell?`)).then(() => {
-							msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+							message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 								.then(async collected => {
 									const amount = parseInt(collected.first().content);
@@ -77,18 +77,18 @@ module.exports = {
 										return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
 									}
 
-									sell(profile, sentMessage, amount, embed, item, msg);
+									sell(profile, sentMessage, amount, embed, item, message);
 
 								})
 								.catch(e => {
 									logger.error(e.stack);
-									msg.reply('you didn\'t answer in time.');
+									message.reply('you didn\'t answer in time.');
 								});
 						});
 					})
 					.catch(e => {
 						logger.error(e.stack);
-						msg.reply('you didn\'t answer in time.');
+						message.reply('you didn\'t answer in time.');
 					});
 			}
 		});
@@ -96,15 +96,15 @@ module.exports = {
 };
 
 
-async function sell(profile, sentMessage, amount, embed, item, msg) {
+async function sell(profile, sentMessage, amount, embed, item, message) {
 
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
 	else if (amount < 1) amount = 1;
 
-	const refundAmount = 0.8 * item.cost * amount;
-	await profile.removeItem(msg.author.id, item, amount);
-	await profile.addMoney(msg.author.id, refundAmount);
+	const refundAmount = 0.8 * item.value * amount;
+	await profile.removeItem(message.author.id, item, amount);
+	await profile.addMoney(message.author.id, refundAmount);
 
-	const balance = await profile.getBalance(msg.author.id);
+	const balance = await profile.getBalance(message.author.id);
 	sentMessage.edit(embed.setDescription(`You've refunded ${amount} __${item.name}(s)__ and received **${Math.floor(refundAmount)}💰** back.\nYour balance is **${balance}💰**!`));
 }

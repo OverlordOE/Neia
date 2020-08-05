@@ -1,16 +1,15 @@
 const Discord = require('discord.js');
 const winston = require('winston');
+const { Users, Guilds, profile, guildProfile } = require('./dbObjects');
+const clientCommands = require('./commands');
+const moment = require('moment');
+const client = new Discord.Client();
+const cooldowns = new Discord.Collection();
 require('dotenv').config();
 const token = process.env.TEST_TOKEN;
-const { Users, profile, Guilds, guildProfile } = require('./dbObjects');
-const botCommands = require('./commands');
-const moment = require('moment');
-const bot = new Discord.Client();
-const cooldowns = new Discord.Collection();
-const active = new Map();
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-bot.commands = new Discord.Collection();
+client.commands = new Discord.Collection();
 moment().format();
 
 
@@ -31,79 +30,72 @@ const logger = winston.createLogger({
 	],
 });
 
-
-Object.keys(botCommands).map(key => {
-	bot.commands.set(botCommands[key].name, botCommands[key]);
+Object.keys(clientCommands).map(key => {
+	client.commands.set(clientCommands[key].name, clientCommands[key]);
 });
 
-
-bot.login(token);
-
-// Execute on bot start
-bot.on('ready', async () => {
+client.login(token);
+client.on('ready', async () => {
 	try {
 		const storedUsers = await Users.findAll();
 		storedUsers.forEach(b => profile.set(b.user_id, b));
 		const storedGuilds = await Guilds.findAll();
 		storedGuilds.forEach(b => guildProfile.set(b.guild_id, b));
-		logger.log('info', `Logged in as ${bot.user.tag}!`);
+		logger.log('info', `Logged in as ${client.user.tag}!`);
 	}
 	catch (e) {
 		logger.error(e.stack);
 	}
-
 });
 
-
 // Logger
-bot.on('warn', m => logger.warn(m.stack));
-bot.on('error', m => logger.error(m.stack));
+client.on('warn', m => logger.warn(m.stack));
+client.on('error', m => logger.error(m.stack));
 process.on('unhandledRejection', m => logger.error(m.stack));
 process.on('TypeError', m => logger.error(m.stack));
 process.on('uncaughtException', m => logger.error(m.stack));
 
-// Execute for every message
-bot.on('message', async msg => {
-	if (msg.author.bot) return;
 
-	let guild = guildProfile.get(msg.guild.id);
-	if (!guild) guild = await guildProfile.newGuild(msg.guild.id);
-	const prefix = await guildProfile.getPrefix(msg.guild.id);
+client.on('message', async message => {
+	if (message.author.bot) return;
+
+	let guild = guildProfile.get(message.guild.id);
+	if (!guild) guild = await guildProfile.newGuild(message.guild.id);
+	const prefix = await guildProfile.getPrefix(message.guild.id);
 	const now = Date.now();
-	const id = msg.author.id;
+	const id = message.author.id;
 	let user = profile.get(id);
 	if (!user) user = await profile.newUser(id);
-	profile.addCount(id, 1);
 
 
 	// split message for further use
-	const prefixRegex = new RegExp(`^(<@!?${bot.user.id}>|${escapeRegex(prefix)})\\s*`);
-	if (!prefixRegex.test(msg.content)) return;
+	const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`);
+	if (!prefixRegex.test(message.content)) return;
 
-	const [, matchedPrefix] = msg.content.match(prefixRegex);
-	const args = msg.content.slice(matchedPrefix.length).trim().split(/ +/);
+	const [, matchedPrefix] = message.content.match(prefixRegex);
+	const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
 
-	const command = bot.commands.get(commandName)
-		|| bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+	// find command
+	const command = client.commands.get(commandName)
+		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 	if (!command) return;
+	if (command.category == 'debug' && (id != 137920111754346496 && id != 139030319784263681)) return message.channel.send('You are not the owner of this client!');
+	if (command.category == 'admin' && !message.member.hasPermission('ADMINISTRATOR') && id != 137920111754346496 && id != 139030319784263681) return message.channel.send('You need Admin privileges to use this command!');
 
-	if (command.category == 'debug' && (id != 137920111754346496 && id != 139030319784263681)) return msg.channel.send('You are not the owner of this bot!');
-	if (command.category == 'admin' && !msg.member.hasPermission('ADMINISTRATOR') && id != 137920111754346496 && id != 139030319784263681) return msg.channel.send('You need Admin privileges to use this command!');
-	if (command.category == 'money' && !user.opt) return msg.reply('You are not opted into pvp for the bot.\nYou can use the command `opt in` to enable pvp.');
 
 	// if the command is used wrongly correct the user
 	if (command.args && !args.length) {
-		let reply = `You didn't provide any arguments, ${msg.author}!`;
+		let reply = `You didn't provide any arguments, ${message.author}!`;
 
 		if (command.usage) {
 			reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
 		}
-
-		return msg.channel.send(reply);
+		return message.channel.send(reply);
 	}
+
 
 	// cooldowns
 	if (!cooldowns.has(command.name)) {
@@ -121,27 +113,22 @@ bot.on('message', async msg => {
 			const hourLeft = timeLeft / 3600;
 			const minLeft = (hourLeft - Math.floor(hourLeft)) * 60;
 			const secLeft = Math.floor((minLeft - Math.floor(minLeft)) * 60);
-			if (hourLeft >= 1) return msg.reply(`Please wait **${Math.floor(hourLeft)} hours**, **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
-			else if (minLeft >= 1) return msg.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
-			else return msg.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`);
+			if (hourLeft >= 1) return message.reply(`Please wait **${Math.floor(hourLeft)} hours**, **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
+			else if (minLeft >= 1) return message.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
+			else return message.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`);
 		}
 	}
 	timestamps.set(id, now);
 	setTimeout(() => timestamps.delete(id), cooldownAmount);
 
 
-	const options = {
-		active: active,
-	};
-	profile.addBotUsage(id, 1);
 	// execute command
-	logger.log('info', `${msg.author.tag} Called command: ${command.name}, in guild: ${msg.guild.name}`);
+	logger.log('info', `${message.author.tag} Called command: ${command.name}, in guild: ${message.guild.name}`);
 	try {
-		command.execute(msg, args, user, profile, guildProfile, bot, options, logger, cooldowns);
+		command.execute(message, args, user, guildProfile, client, logger, cooldowns);
 	}
 	catch (e) {
 		logger.error(e.stack);
-		msg.reply('there was an error trying to execute that command!');
+		message.reply('there was an error trying to execute that command!');
 	}
 });
-

@@ -2,49 +2,31 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'hourly',
 	summary: 'Get an hourly gift',
-	description: 'Get an hourly gift and part of your passive income from your collectables.',
+	description: 'Get an hourly gift.',
 	aliases: ['h', 'hour'],
 	args: false,
 	usage: '',
 	cooldown: 5,
-	category: 'money',
+	category: 'misc',
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
-		const hourly = await profile.getHourly(msg.author.id);
-		const avatar = msg.author.displayAvatarURL();
-		let reward = 0;
-		let chest;
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
-		const luck = Math.floor(Math.random() * 5);
-		if (luck >= 1) chest = 'Common Chest';
-		else chest = 'Rare Chest';
-		const item = await profile.getItem(chest);
-
+		const hourly = await profile.getHourly(message.author.id);
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Hourly Reward')
-			.setThumbnail(avatar)
-			.setColor(msgUser.pColour)
+			.setThumbnail(message.author.displayAvatarURL())
 			.setTimestamp()
-			.setFooter('Neia', bot.user.displayAvatarURL());
-
-
-		const items = await profile.getInventory(msg.author.id);
-		items.map(i => {
-			if (i.amount < 1) return;
-			if (i.base.ctg == 'collectables') reward += i.amount * (i.base.cost / 400);
-		});
+			.setFooter('DMMO', client.user.displayAvatarURL());
 
 
 		if (hourly === true) {
-			if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
-				.setImage(`attachment://${item.picture}`);
-			profile.addMoney(msg.author.id, reward);
-			await profile.addItem(msg.author.id, item, 1);
-			await profile.setHourly(msg.author.id);
-			const balance = await profile.getBalance(msg.author.id);
-			msg.channel.send(embed.setDescription(`You got a ${item.emoji}${item.name} from your hourly 🎁 and **${reward.toFixed(1)}💰** from your collectables.\nCome back in an hour for more!\n\nYour current balance is **${balance}💰**`));
+			const reward = 3 + Math.floor(Math.random() * 6);
+			profile.addMoney(message.author.id, reward);
+			await profile.setHourly(message.author.id);
+			const balance = await profile.getBalance(message.author.id);
+			message.channel.send(embed.setDescription(`You got **${reward}💰** from your hourly 🎁.\nCome back in an hour for more!\n\nYour current balance is **${balance}💰**`));
 		}
-		else { msg.channel.send(embed.setDescription(`You have already gotten your hourly 🎁\n\nYou can get your next hourly __${hourly}__.`)); }
+		else { message.channel.send(embed.setDescription(`You have already gotten your hourly 🎁\n\nYou can get your next hourly __${hourly}__.`)); }
 
 	},
 };

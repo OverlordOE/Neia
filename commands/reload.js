@@ -8,25 +8,25 @@ module.exports = {
 	cooldown: 0,
 
 
-	execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		const commandName = args[0].toLowerCase();
-		const command = msg.client.commands.get(commandName)
-			|| msg.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+		const command = message.client.commands.get(commandName)
+			|| message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 		if (!command) {
-			return msg.channel.send(`There is no command with name or alias \`${commandName}\`, ${msg.author}!`);
+			return message.channel.send(`There is no command with name or alias \`${commandName}\`, ${message.author}!`);
 		}
 
 		delete require.cache[require.resolve(`./${command.name}.js`)];
 
 		try {
 			const newCommand = require(`./${command.name}.js`);
-			msg.client.commands.set(newCommand.name, newCommand);
+			message.client.commands.set(newCommand.name, newCommand);
 		}
 		catch (e) {
 			logger.error(e.stack);
-			return msg.channel.send(`There was an error while reloading a command \`${commandName}\`:\n\`${e.message}\``);
+			return message.channel.send(`There was an error while reloading a command \`${commandName}\`:\n\`${e.message}\``);
 		}
-		msg.channel.send(`Command \`${command.name}\` was reloaded!`);
+		message.channel.send(`Command \`${command.name}\` was reloaded!`);
 	},
 };

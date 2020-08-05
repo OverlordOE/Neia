@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const fs = require('fs');
+const items = require('../data/items');
 module.exports = {
 	name: 'shop',
 	summary: 'Shows all the shop items',
@@ -9,31 +9,30 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
-		const itemData = fs.readFileSync('data/items.json');
-		const items = JSON.parse(itemData);
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+
 		let consumable = '__**Consumables:**__\n';
-		let collectables = '__**Collectables:**__\n';
-		let chests = '__**Chests:**__\n';
+		let equipment = '__**equipment:**__\n';
+		// let chests = '__**Chests:**__\n';
 
-		items.map(item => {
-			if (item.cost) {
-				if (item.ctg == 'consumable') { consumable += `${item.emoji} ${item.name}: **${item.cost}💰**\n`; }
-				else if (item.ctg == 'collectables') { collectables += `${item.emoji} ${item.name}: **${item.cost}💰**\n`; }
-				else if (item.ctg == 'chests') { chests += `${item.emoji} ${item.name}: **${item.cost}💰**\n`; }
+		let i;
+		for (i in items) {
+			if (items[i].buyable) {
+				if (items[i].type.includes('consumable')) { consumable += `${items[i].emoji} ${items[i].name}:		**${items[i].value}💰**\n`; }
+				else if (items[i].type.includes('equipment')) { equipment += `${items[i].emoji} ${items[i].name}:		**${items[i].value}💰**\n`; }
+				// else if (items[i].type == 'chests') { chests += `${items[i].emoji} ${items[i].name}: **${items[i].value}💰**\n`; }
 			}
-		});
+		}
 
-		const description = `${chests}\n${consumable}\n${collectables}`;
+		const description = `${consumable}\n${equipment}`;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neia Shop')
-			.setThumbnail(bot.user.displayAvatarURL())
+			.setTitle('DMMO Shop')
+			.setThumbnail(client.user.displayAvatarURL())
 			.setDescription(description)
-			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bot.user.displayAvatarURL());
+			.setFooter('DMMO', client.user.displayAvatarURL());
 
-		return msg.channel.send(embed);
+		return message.channel.send(embed);
 	},
 };

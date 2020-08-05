@@ -85,8 +85,8 @@ module.exports = {
 							msg.reply('You failed to react in time.');
 							return logger.error(error.stack);
 						});
-				}
-			})
+					}
+				})
 			.catch(error => {
 				logger.log('error', `One of the emojis failed to react because of:\n${error.info}`);
 				return msg.reply('One of the emojis failed to react.');
@@ -173,11 +173,10 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 			for (let i = 0; i < 2; i++) {
 				getCard('player');
 				getCard('bot');
-
 			}
 			setEmbed();
 
-			collector.on('collect', (reaction) => {
+			collector.on('collect', reaction => {
 				reaction.users.remove(msg.author.id);
 
 				switch (reaction.emoji.name) {
@@ -198,7 +197,7 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 
 						while (botHandValue < 17) {
 							getCard('bot');
-							setEmbed();
+							setTimeout(() => setEmbed(), 1000);
 						}
 						collector.stop();
 						return;
@@ -224,7 +223,7 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 
 					const balance = await profile.getBalance(msg.author.id);
 					embed.setColor('#00fc43');
-					return sentMessage.edit(embed.setDescription(`__**The bot busted**__. **You Win!**\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
+					sentMessage.edit(embed.setDescription(`__**The bot busted**__. **You Win!**\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
 				}
 				else if (botHandValue >= playerHandValue) {
 					profile.addGamblingSpent(msg.author.id, gambleAmount);

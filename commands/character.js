@@ -1,13 +1,13 @@
 const Discord = require('discord.js');
 const emojiCharacters = require('../emojiCharacters');
 module.exports = {
-	name: 'character',
-	summary: 'Shows information about a specific character',
-	description: 'Shows information about a specific character.',
+	name: 'profile',
+	summary: 'Shows information about a specific profile',
+	description: 'Shows information about a specific profile.',
 	category: 'info',
 	aliases: ['char'],
 	args: false,
-	usage: '<character>',
+	usage: '<profile>',
 
 	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
 		let temp = '';
@@ -17,26 +17,26 @@ module.exports = {
 			else temp += `${args[i]}`;
 		}
 
-		const character = await profile.getCharacter(temp);
-		if (character) {
+		const profile = await profile.getCharacter(temp);
+		if (profile) {
 			embed
-				.setTitle(`__${character.name}__`)
-				.setDescription(character.description)
-				.addField('Class', `**${character.class}**`, true)
-				.addField('Rarity', character.rarity, true)
-				.addField('HP', character.stats.hp, true)
-				.addField('MP', character.stats.mp, true)
-				.addField('Strength', character.stats.str, true)
-				.addField('Dexterity', character.stats.dex, true)
-				.addField('Constitution', character.stats.con, true)
-				.addField('intelligence', character.stats.int, true)
+				.setTitle(`__${profile.name}__`)
+				.setDescription(profile.description)
+				.addField('Class', `**${profile.class}**`, true)
+				.addField('Rarity', profile.rarity, true)
+				.addField('HP', profile.stats.hp, true)
+				.addField('MP', profile.stats.mp, true)
+				.addField('Strength', profile.stats.str, true)
+				.addField('Dexterity', profile.stats.dex, true)
+				.addField('Constitution', profile.stats.con, true)
+				.addField('intelligence', profile.stats.int, true)
 				.setTimestamp()
 				.setFooter('Neia', bot.user.displayAvatarURL())
-				.attachFiles(`assets/rarity/${character.rarity}.jpg`)
-				.setThumbnail(`attachment://${character.rarity}.jpg`);
+				.attachFiles(`assets/rarity/${profile.rarity}.jpg`)
+				.setThumbnail(`attachment://${profile.rarity}.jpg`);
 
-			if (character.picture) embed.attachFiles(`assets/characters/${character.picture}`)
-				.setImage(`attachment://${character.picture}`);
+			if (profile.picture) embed.attachFiles(`assets/characters/${profile.picture}`)
+				.setImage(`attachment://${profile.picture}`);
 
 			return msg.channel.send(embed);
 		}
@@ -85,55 +85,55 @@ module.exports = {
 			msg.channel.send(embed.setTitle('Warriors')
 				.setDescription(warrior)
 				.setColor('#b56100')).then(sentMessage => {
-				sentMessage.react(emojiCharacters[1]);
-				sentMessage.react(emojiCharacters[2]);
-				sentMessage.react(emojiCharacters[3]);
-				sentMessage.react(emojiCharacters[4]);
-				sentMessage.react(emojiCharacters[5]);
-				sentMessage.react(emojiCharacters[6]);
-				const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
+					sentMessage.react(emojiCharacters[1]);
+					sentMessage.react(emojiCharacters[2]);
+					sentMessage.react(emojiCharacters[3]);
+					sentMessage.react(emojiCharacters[4]);
+					sentMessage.react(emojiCharacters[5]);
+					sentMessage.react(emojiCharacters[6]);
+					const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
 
-				collector.on('collect', (reaction) => {
-					reaction.users.remove(msg.author.id);
-					switch (reaction.emoji.name) {
-						case emojiCharacters[1]:
-							sentMessage.edit(embed.setTitle('Warriors')
-								.setDescription(warrior)
-								.setColor('#b56100'));
-							break;
+					collector.on('collect', (reaction) => {
+						reaction.users.remove(msg.author.id);
+						switch (reaction.emoji.name) {
+							case emojiCharacters[1]:
+								sentMessage.edit(embed.setTitle('Warriors')
+									.setDescription(warrior)
+									.setColor('#b56100'));
+								break;
 
-						case emojiCharacters[2]:
-							sentMessage.edit(embed.setTitle('Assassins')
-								.setDescription(assassin)
-								.setColor('#6587c0'));
-							break;
+							case emojiCharacters[2]:
+								sentMessage.edit(embed.setTitle('Assassins')
+									.setDescription(assassin)
+									.setColor('#6587c0'));
+								break;
 
-						case emojiCharacters[3]:
-							sentMessage.edit(embed.setTitle('Archers')
-								.setDescription(archer)
-								.setColor('#0c5f2c'));
-							break;
+							case emojiCharacters[3]:
+								sentMessage.edit(embed.setTitle('Archers')
+									.setDescription(archer)
+									.setColor('#0c5f2c'));
+								break;
 
-						case emojiCharacters[4]:
-							sentMessage.edit(embed.setTitle('Crusaders')
-								.setDescription(crusader)
-								.setColor('#ffb90f'));
-							break;
+							case emojiCharacters[4]:
+								sentMessage.edit(embed.setTitle('Crusaders')
+									.setDescription(crusader)
+									.setColor('#ffb90f'));
+								break;
 
-						case emojiCharacters[5]:
-							sentMessage.edit(embed.setTitle('Wizards')
-								.setDescription(wizard)
-								.setColor('#d546a6'));
-							break;
+							case emojiCharacters[5]:
+								sentMessage.edit(embed.setTitle('Wizards')
+									.setDescription(wizard)
+									.setColor('#d546a6'));
+								break;
 
-						case emojiCharacters[6]:
-							sentMessage.edit(embed.setTitle('Necromancers')
-								.setDescription(necromancer)
-								.setColor('#4d1395'));
-							break;
-					}
+							case emojiCharacters[6]:
+								sentMessage.edit(embed.setTitle('Necromancers')
+									.setDescription(necromancer)
+									.setColor('#4d1395'));
+								break;
+						}
+					});
 				});
-			});
 		}
 	},
 };
