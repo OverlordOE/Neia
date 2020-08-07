@@ -25,12 +25,12 @@ module.exports = {
 		const description = editDescription(list, page);
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('DMMO leaderboard')
+			.setTitle('Neia leaderboard')
 			.setDescription(description)
 			.setThumbnail(client.user.displayAvatarURL())
 
 			.setTimestamp()
-			.setFooter('DMMO', client.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL());
 
 		message.channel.send(embed).then(sentMessage => {
 			sentMessage.react('◀️');

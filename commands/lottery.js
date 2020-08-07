@@ -5,14 +5,14 @@ module.exports = {
 	name: 'lottery',
 	category: 'debug',
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		//	crontime: 0 0-23/3 * * *	collectortime: 10796250		channelID: 721743056528867393
 		const lotteryJob = new cron.CronJob('0 0-23/3 * * *', async () => {
 
 			let writeData;
 			const ticketAmount = 50;
 			const misc = JSON.parse(fs.readFileSync('miscData.json'));
-			const channel = bot.channels.cache.get('721743056528867393');
+			const channel = client.channels.cache.get('721743056528867393');
 
 
 			const buyin = 5;
@@ -31,7 +31,7 @@ module.exports = {
 				.setDescription(`${description}\nCurrent jackpot: **${lottery}💰**!`)
 				.setColor(msgUser.pColour)
 				.setTimestamp()
-				.setFooter('Neia', bot.user.displayAvatarURL());
+				.setFooter('Neia', client.user.displayAvatarURL());
 
 			const filter = (reaction, user) => {
 				return ['💰', '🔔'].includes(reaction.emoji.name) && !user.bot;
@@ -113,11 +113,11 @@ module.exports = {
 				})
 				.catch(e => {
 					logger.error(e.stack);
-					return msg.reply('Something went wrong.');
+					return message.reply('Something went wrong.');
 				});
 		});
 		lotteryJob.start();
-		msg.reply('Starting lottery');
+		message.reply('Starting lottery');
 
 
 	},

@@ -11,13 +11,13 @@ module.exports = {
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('DMMO Invites')
+			.setTitle('Neia Invites')
 			.setThumbnail(client.user.displayAvatarURL())
 			.setTimestamp()
-			.setFooter('DMMO', client.user.displayAvatarURL())
+			.setFooter('Neia', client.user.displayAvatarURL())
 			.setDescription(`[Click here to invite me to your server](https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=client&permissions=372517968)\n
 							 [Click here to join the support server](https://discord.gg/hFGxVDT)\n
-							 [Click here to submit a bug or request  feature](https://github.com/OverlordOE/DMMO/issues/new/choose)\n
+							 [Click here to submit a bug or request  feature](https://github.com/OverlordOE/Neia/issues/new/choose)\n
 							 For more info contact: OverlordOE#0717
 			`);
 		message.channel.send(embed);

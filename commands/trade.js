@@ -10,21 +10,21 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 		let target;
-		const filter = m => m.author.id === msg.author.id;
+		const filter = m => m.author.id === message.author.id;
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Trading Center')
 			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bot.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL());
 
 
-		msg.channel.send(embed.setDescription('Who do you want to trade with? __mention the user__\n'))
+		message.channel.send(embed.setDescription('Who do you want to trade with? __mention the user__\n'))
 			.then(sentMessage => {
-				msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 					.then(async collected => {
 						let mention = collected.first().content;
@@ -37,7 +37,7 @@ module.exports = {
 								mention = mention.slice(1);
 							}
 
-							target = bot.users.cache.get(mention);
+							target = client.users.cache.get(mention);
 							const avatar = target.displayAvatarURL();
 							embed.setThumbnail(avatar);
 						}
@@ -46,7 +46,7 @@ module.exports = {
 
 						sentMessage.edit(embed.setDescription(`Trading with *${target.username}*\n\nWhat do you want to send (answer with a number to send money)?`))
 							.then(() => {
-								msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+								message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 									.then(async collected => {
 										const goods = collected.first().content.toLowerCase();
@@ -61,11 +61,11 @@ module.exports = {
 											// item trade
 											let hasItem = false;
 											sentMessage.edit(embed.setDescription(`Trading with *${target.username}*\n\nHow much __${item.name}(s)__ do you want to send?`)).then(() => {
-												msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+												message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 													.then(async collected => {
 														const amount = collected.first().content;
-														const uitems = await profile.getInventory(msg.author.id);
+														const uitems = await profile.getInventory(message.author.id);
 														collected.first().delete().catch(e => logger.error(e.stack));
 														uitems.map(i => {
 															if (i.item.name == item.name && i.amount >= amount) {
@@ -76,7 +76,7 @@ module.exports = {
 															return sentMessage.edit(embed.setDescription(`You don't have **${amount}** __${item.name}(s)__!`));
 														}
 
-														await profile.addItem(msg.author.id, item, amount);
+														await profile.addItem(message.author.id, item, amount);
 														await profile.removeItem(target.id, item, amount);
 
 														sentMessage.edit(embed.setDescription(`Trade with *${target.username}* succesfull!\n\nTraded **${amount}** __${item.name}__ to *${target.username}*.`));
@@ -84,7 +84,7 @@ module.exports = {
 													})
 													.catch(e => {
 														logger.error(e.stack);
-														msg.reply('you didn\'t answer in time.');
+														message.reply('you didn\'t answer in time.');
 													});
 											});
 
@@ -93,25 +93,25 @@ module.exports = {
 										else {
 											const balance = msgUser.balance;
 
-											if (!goods || isNaN(goods)) return sentMessage.edit(embed.setDescription(`Sorry *${msg.author}*, that's an invalid amount.`));
+											if (!goods || isNaN(goods)) return sentMessage.edit(embed.setDescription(`Sorry *${message.author}*, that's an invalid amount.`));
 											if (goods > balance) return sentMessage.edit(embed.setDescription(`You only have **${balance}💰** but need **${goods}**.`));
-											if (goods <= 0) return sentMessage.edit(embed.setDescription(`Please enter an amount greater than zero, *${msg.author}*.`));
+											if (goods <= 0) return sentMessage.edit(embed.setDescription(`Please enter an amount greater than zero, *${message.author}*.`));
 
-											profile.addMoney(msg.author.id, -goods);
+											profile.addMoney(message.author.id, -goods);
 											profile.addMoney(target.id, goods);
-											const balance2 = await profile.getBalance(msg.author.id);
+											const balance2 = await profile.getBalance(message.author.id);
 											return sentMessage.edit(embed.setDescription(`Trade with *${target.username}* succesfull!\n\nTransferred **${goods}💰** to *${target.username}*.\nYour current balance is **${balance2}💰**`));
 
 										}
 									})
 									.catch(e => {
 										logger.error(e.stack);
-										msg.reply('you didn\'t answer in time.');
+										message.reply('you didn\'t answer in time.');
 									});
 							})
 							.catch(e => {
 								logger.error(e.stack);
-								msg.reply('you didn\'t answer in time.');
+								message.reply('you didn\'t answer in time.');
 							});
 					});
 			});

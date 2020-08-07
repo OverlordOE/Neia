@@ -3,8 +3,8 @@ const moment = require('moment');
 const Discord = require('discord.js');
 const profile = new Discord.Collection();
 const guildProfile = new Discord.Collection();
+require('dotenv').config();
 const prefix = process.env.PREFIX;
-const fs = require('fs');
 
 const sequelize = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
@@ -16,78 +16,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 const Users = sequelize.import('models/Users');
 const Guilds = sequelize.import('models/Guilds');
 const UserItems = sequelize.import('models/UserItems');
-const UserCharacters = sequelize.import('models/UserCharacters');
-
-const characterData = fs.readFileSync('data/characters.json');
-const characters = JSON.parse(characterData);
-const itemData = fs.readFileSync('data/items.json');
-const items = JSON.parse(itemData);
-
-
-// CHARACTERS
-Reflect.defineProperty(profile, 'addCharacter', {
-	value: async function addCharacter(id, profile) {
-		const userChars = await UserCharacters.findAll({
-			where: { user_id: id, name: profile.name },
-		});
-
-		let nickname;
-		if (userChars) nickname = `${profile.name}${userChars.length + 1}`;
-		else nickname = `${profile.name}1`;
-
-		return UserCharacters.create({
-			user_id: id,
-			base: profile,
-			name: profile.name,
-			nickname: nickname,
-			lvl: 1,
-			exp: 0,
-		});
-	},
-});
-
-
-Reflect.defineProperty(profile, 'removeCharacter', {
-	value: async function removeCharacter(id, profile, nickname) {
-		const userChar = await UserCharacters.findOne({
-			where: { user_id: id, name: profile.name, nickname: nickname },
-		});
-
-		if (userChar) return await UserCharacters.destroy({
-			where: { user_id: id, name: profile.name, nickname: nickname },
-		});
-
-		throw Error(`User doesn't have the profile: ${nickname}`);
-	},
-});
-
-
-Reflect.defineProperty(profile, 'getCharInv', {
-	value: async function getCharInv(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return UserCharacters.findAll({
-			where: { user_id: id },
-		});
-	},
-});
-
-
-Reflect.defineProperty(profile, 'getCharacter', {
-	value: function getCharacter(profile) {
-		for (let i = 0; i < characters.length; i++) if (characters[i].name.toLowerCase() == profile.toLowerCase()) return characters[i];
-		return false;
-	},
-});
-
-
-Reflect.defineProperty(profile, 'getUserChar', {
-	value: async function getUserChar(id, nickname) {
-		return await UserCharacters.findOne({
-			where: { user_id: id, nickname: nickname },
-		});
-	},
-});
+const items = require('./data/items');
 
 
 // ITEMS
@@ -104,14 +33,11 @@ Reflect.defineProperty(profile, 'addItem', {
 
 		return UserItems.create({
 			user_id: id,
-			base: item,
 			name: item.name,
 			amount: parseInt(amount),
 		});
 	},
 });
-
-
 Reflect.defineProperty(profile, 'removeItem', {
 	value: async function removeItem(id, item, amount) {
 		const userItem = await UserItems.findOne({
@@ -128,7 +54,6 @@ Reflect.defineProperty(profile, 'removeItem', {
 	},
 });
 
-
 Reflect.defineProperty(profile, 'getInventory', {
 	value: async function getInventory(id) {
 		let user = profile.get(id);
@@ -138,19 +63,33 @@ Reflect.defineProperty(profile, 'getInventory', {
 		});
 	},
 });
-
-
 Reflect.defineProperty(profile, 'getItem', {
-	value: function getItem(item) {
-		for (let i = 0; i < items.length; i++) if (items[i].name.toLowerCase() == item.toLowerCase()) return items[i];
+	value: function getItem(itemName) {
+		const item = itemName.toLowerCase();
+		if (items[item]) return items[item];
 		return false;
 	},
 });
 
 
 // USERS
-
-
+Reflect.defineProperty(profile, 'newUser', {
+	value: async function newUser(id) {
+		const now = moment();
+		const user = await Users.create({
+			user_id: id,
+			balance: 1,
+			lastDaily: now.subtract(2, 'days'),
+			lastHourly: now.subtract(1, 'days'),
+			lastWeekly: now.subtract(8, 'days'),
+			lastVote: now.subtract(1, 'days'),
+			protection: now,
+			pColour: '#fcfcfc',
+		});
+		profile.set(id, user);
+		return user;
+	},
+});
 Reflect.defineProperty(profile, 'getUser', {
 	value: async function getUser(id) {
 		let user = profile.get(id);
@@ -159,15 +98,13 @@ Reflect.defineProperty(profile, 'getUser', {
 	},
 });
 
-
 Reflect.defineProperty(profile, 'addMoney', {
 	value: async function addMoney(id, amount) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 
+		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 		user.balance += Number(amount);
-		if (amount < 0) user.totalSpent -= Number(amount);
-		else user.totalEarned += Number(amount);
 		return user.save();
 	},
 });
@@ -175,10 +112,9 @@ Reflect.defineProperty(profile, 'getBalance', {
 	value: async function getBalance(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		return user ? user.balance.toFixed(1) : 0;
+		return user ? Math.floor(user.balance) : 0;
 	},
 });
-
 
 Reflect.defineProperty(profile, 'getDaily', {
 	value: async function getDaily(id) {
@@ -190,7 +126,6 @@ Reflect.defineProperty(profile, 'getDaily', {
 		if (moment(dCheck).isBefore(now)) return true;
 		else return dCheck.format('MMM Do HH:mm');
 	},
-
 });
 Reflect.defineProperty(profile, 'setDaily', {
 	value: async function setDaily(id) {
@@ -202,7 +137,6 @@ Reflect.defineProperty(profile, 'setDaily', {
 		return user.save();
 	},
 });
-
 
 Reflect.defineProperty(profile, 'getHourly', {
 	value: async function getHourly(id) {
@@ -226,7 +160,6 @@ Reflect.defineProperty(profile, 'setHourly', {
 	},
 });
 
-
 Reflect.defineProperty(profile, 'getWeekly', {
 	value: async function getWeekly(id) {
 		let user = profile.get(id);
@@ -237,7 +170,6 @@ Reflect.defineProperty(profile, 'getWeekly', {
 		if (moment(wCheck).isBefore(now)) return true;
 		else return wCheck.format('MMM Do HH:mm');
 	},
-
 });
 Reflect.defineProperty(profile, 'setWeekly', {
 	value: async function setWeekly(id) {
@@ -249,7 +181,6 @@ Reflect.defineProperty(profile, 'setWeekly', {
 		return user.save();
 	},
 });
-
 
 Reflect.defineProperty(profile, 'setVote', {
 	value: async function setVote(id) {
@@ -273,12 +204,21 @@ Reflect.defineProperty(profile, 'getVote', {
 	},
 });
 
-
-Reflect.defineProperty(profile, 'addCount', {
-	value: async function addCount(id, amount) {
+Reflect.defineProperty(profile, 'getPColour', {
+	value: async function getPColour(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		user.msgCount += amount;
+		return user ? user.pColour : '#fcfcfc';
+	},
+
+});
+Reflect.defineProperty(profile, 'setPColour', {
+	value: async function setPColour(id, colour) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		if (!colour.startsWith('#')) throw Error('not a valid colour!');
+
+		user.pColour = colour;
 		return user.save();
 	},
 });
@@ -306,95 +246,7 @@ Reflect.defineProperty(profile, 'setProtection', {
 });
 
 
-Reflect.defineProperty(profile, 'getPColour', {
-	value: async function getPColour(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user ? user.pColour : '#fcfcfc';
-	},
-
-});
-Reflect.defineProperty(profile, 'setPColour', {
-	value: async function setPColour(id, colour) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		if (!colour.startsWith('#')) throw Error('not a valid colour!');
-
-		user.pColour = colour;
-		return user.save();
-	},
-});
-
-
-Reflect.defineProperty(profile, 'addGamblingSpent', {
-	value: async function addGamblingSpent(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		user.gamblingSpent += amount;
-		return user.save();
-	},
-});
-
-
-Reflect.defineProperty(profile, 'addGamblingEarned', {
-	value: async function addGamblingEarned(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		user.gamblingEarned += amount;
-		return user.save();
-	},
-});
-
-Reflect.defineProperty(profile, 'addStealingEarned', {
-	value: async function addStealingEarned(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		user.stealingEarned += amount;
-		return user.save();
-	},
-});
-
-
-Reflect.defineProperty(profile, 'addShopSpent', {
-	value: async function addShopSpent(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		user.shopSpent += amount;
-		return user.save();
-	},
-});
-
-
-Reflect.defineProperty(profile, 'addBotUsage', {
-	value: async function addBotUsage(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		user.botUsage += amount;
-		return user.save();
-	},
-});
-
-
-Reflect.defineProperty(profile, 'newUser', {
-	value: async function newUser(id) {
-		const now = moment();
-		const user = await Users.create({
-			user_id: id,
-			balance: 1,
-			lastDaily: now.subtract(2, 'days'),
-			lastHourly: now.subtract(1, 'days'),
-			lastWeekly: now.subtract(8, 'days'),
-			lastVote: now.subtract(1, 'days'),
-			protection: now,
-			pColour: '#fcfcfc',
-			totalSpent: 0,
-			totalEarned: 0,
-		});
-		profile.set(id, user);
-		return user;
-	},
-});
-
+// GUILDS
 Reflect.defineProperty(guildProfile, 'newGuild', {
 	value: async function newGuild(id) {
 		const guild = await Guilds.create({
@@ -412,7 +264,6 @@ Reflect.defineProperty(guildProfile, 'getPrefix', {
 		if (!guild) guild = await guildProfile.newGuild(id);
 		return guild ? guild.prefix : 0;
 	},
-
 });
 Reflect.defineProperty(guildProfile, 'setPrefix', {
 	value: async function setPrefix(id, newPrefix) {
@@ -423,5 +274,6 @@ Reflect.defineProperty(guildProfile, 'setPrefix', {
 		return guild.save();
 	},
 });
+
 
 module.exports = { Users, Guilds, profile, guildProfile };

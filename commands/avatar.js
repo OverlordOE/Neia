@@ -8,11 +8,11 @@ module.exports = {
 	args: false,
 	usage: '<target>',
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 
 
-		const target = msg.mentions.users.first() || msg.author;
+		const target = message.mentions.users.first() || message.author;
 		const avatar = target.displayAvatarURL();
 
 		const embed = new Discord.MessageEmbed()
@@ -21,8 +21,8 @@ module.exports = {
 			.setImage(avatar)
 			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bot.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL());
 
-		msg.channel.send(embed);
+		message.channel.send(embed);
 	},
 };

@@ -3,8 +3,8 @@ module.exports = {
 	name: 'test',
 	aliases: ['t'],
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
-		const avatar = msg.author.displayAvatarURL();
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+		const avatar = message.author.displayAvatarURL();
 
 
 		const embed = new Discord.MessageEmbed()
@@ -12,8 +12,8 @@ module.exports = {
 			.setThumbnail(avatar)
 			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bot.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL());
 
-			msg.channel.send(embed.setDescription(`test`));
-},
+		message.channel.send(embed.setDescription(`test`));
+	},
 };

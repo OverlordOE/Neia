@@ -125,7 +125,7 @@ client.on('message', async message => {
 	// execute command
 	logger.log('info', `${message.author.tag} Called command: ${command.name}, in guild: ${message.guild.name}`);
 	try {
-		command.execute(message, args, user, guildProfile, client, logger, cooldowns);
+		command.execute(message, args, user, profile, guildProfile, client, logger, cooldowns);
 	}
 	catch (e) {
 		logger.error(e.stack);

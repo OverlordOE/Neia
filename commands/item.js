@@ -21,11 +21,11 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`${item.emoji}__${item.name}(s)__`)
 			.setDescription(item.description)
-			.addField('Value', `**${item.value}💰**`, true)
+			.addField('cost', `**${item.cost}💰**`, true)
 			.addField('Category', item.type, true)
 			.addField('Rarity', item.rarity, true)
 			.setTimestamp()
-			.setFooter('DMMO', client.user.displayAvatarURL())
+			.setFooter('Neia', client.user.displayAvatarURL())
 			.attachFiles(`assets/rarity/${item.rarity}.jpg`)
 			.setThumbnail(`attachment://${item.rarity}.jpg`);
 

@@ -3,7 +3,7 @@ module.exports = {
 	name: 'buy',
 	summary: 'Buy an item from the shop',
 	description: 'With this you can buy an item from the shop.\nYou can either use `buy <item> <amount> to instantly buy the items or just use `buy`.\nIf you use the latter you will get prompted to enter the name and amount of the item that you want into the chat.',
-	category: 'misc',
+	category: 'money',
 	aliases: ['get'],
 	usage: '<item> <amount>',
 	cooldown: 5,
@@ -17,12 +17,12 @@ module.exports = {
 		let item;
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('DMMO Shop')
+			.setTitle('Neia Shop')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What item do you want to buy?')
 
 			.setTimestamp()
-			.setFooter('DMMO Imporium', client.user.displayAvatarURL());
+			.setFooter('Neia Imporium', client.user.displayAvatarURL());
 
 
 		message.channel.send(embed).then(async sentMessage => {
@@ -36,11 +36,8 @@ module.exports = {
 			}
 
 			item = await profile.getItem(temp);
+			if (item) buy(profile, sentMessage, amount, embed, item, message);
 
-			if (item) {
-				if (item.buyable) buy(profile, sentMessage, amount, embed, item, message);
-				else return sentMessage.edit(embed.setDescription(`${item.name} is not available for purchase.`));
-			}
 			else {
 				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
@@ -48,7 +45,6 @@ module.exports = {
 						item = await profile.getItem(collected.first().content);
 
 						if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not a valid item.`));
-						if (!item.buyable) return sentMessage.edit(embed.setDescription(`${item.name} is not available for purchase.`));
 
 						collected.first().delete().catch(e => logger.error(e.stack));
 
@@ -87,7 +83,7 @@ async function buy(profile, sentMessage, amount, embed, item, message) {
 	}
 
 	let balance = await profile.getBalance(message.author.id);
-	const cost = amount * item.value;
+	const cost = amount * item.cost;
 	if (cost > balance) {
 		return sentMessage.edit(embed.setDescription(`You currently have **${balance}💰**, but __**${amount}**__ __${item.name}(s)__ costs **${cost}💰**!`));
 	}

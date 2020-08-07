@@ -12,17 +12,17 @@ module.exports = {
 	args: true,
 	usage: '<amount>',
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 		const currentAmount = msgUser.balance;
 
 
-		const avatar = msg.author.displayAvatarURL();
+		const avatar = message.author.displayAvatarURL();
 		let gambleAmount = 0;
 		let gambleType = '';
 
 		const filter = (reaction, user) => {
-			return ['✂️', emojiCharacters[5], '🃏'].includes(reaction.emoji.name) && user.id === msg.author.id;
+			return ['✂️', emojiCharacters[5], '🃏'].includes(reaction.emoji.name) && user.id === message.author.id;
 		};
 
 		const embed = new Discord.MessageEmbed()
@@ -30,10 +30,10 @@ module.exports = {
 			.setThumbnail(avatar)
 			.setTimestamp()
 			.setTitle('Neia\'s Gambling Imporium')
-			.setFooter('Neia', bot.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL());
 
 
-		await msg.channel.send(embed)
+		await message.channel.send(embed)
 			.then(sentMessage => {
 
 				for (let i = 0; i < args.length; i++) {
@@ -43,30 +43,30 @@ module.exports = {
 					else gambleType += `${args[i]}`;
 				}
 
-				if (!gambleAmount || isNaN(gambleAmount)) return sentMessage.edit(embed.setDescription(`Sorry *${msg.author}*, that's an invalid amount.`));
-				if (gambleAmount > currentAmount) return sentMessage.edit(embed.setDescription(`Sorry *${msg.author}*, you only have **${currentAmount}💰**.`));
-				if (gambleAmount <= 0) return sentMessage.edit(embed.setDescription(`Please enter an amount greater than zero, *${msg.author}*.`));
+				if (!gambleAmount || isNaN(gambleAmount)) return sentMessage.edit(embed.setDescription(`Sorry *${message.author}*, that's an invalid amount.`));
+				if (gambleAmount > currentAmount) return sentMessage.edit(embed.setDescription(`Sorry *${message.author}*, you only have **${currentAmount}💰**.`));
+				if (gambleAmount <= 0) return sentMessage.edit(embed.setDescription(`Please enter an amount greater than zero, *${message.author}*.`));
 
-				profile.addMoney(msg.author.id, -gambleAmount);
+				profile.addMoney(message.author.id, -gambleAmount);
 
-				if (gambleType == 'rock' || gambleType == 'rps' || gambleType == 'rock paper scissors' || gambleType == 'r') RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed);
-				else if (gambleType == 'number' || gambleType == 'numbers') oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed);
-				else if (gambleType == 'blackjack' || gambleType == 'jack' || gambleType == 'black') blackjack(msg, profile, logger, gambleAmount, sentMessage, embed);
+				if (gambleType == 'rock' || gambleType == 'rps' || gambleType == 'rock paper scissors' || gambleType == 'r') RPS(message, profile, logger, gambleAmount, currentAmount, sentMessage, embed);
+				else if (gambleType == 'number' || gambleType == 'numbers') oneInFive(message, profile, logger, gambleAmount, sentMessage, embed);
+				else if (gambleType == 'blackjack' || gambleType == 'jack' || gambleType == 'black') blackjack(message, profile, logger, gambleAmount, sentMessage, embed);
 
 				else {
 					sentMessage.edit(embed.setDescription(`You have bet **${gambleAmount}💰**, you can play the following games:\n
 
 							${emojiCharacters[5]}__**Number Guessing**__\n 
 							Guess which number is correct, guess right and you win.\n
-							**Potential winnings: ${(numberRate * gambleAmount).toFixed(1)}💰**\n
+							**Potential winnings: ${Math.floor(numberRate * gambleAmount)}💰**\n
 
 							✂️__**Rock, paper, scissors**__\n
 							Play a game of rock, paper, scissors against the bot and see who is superior.\n
-							**Potential winnings: ${(rpsRate * gambleAmount).toFixed(1)}💰**
+							**Potential winnings: ${Math.floor(rpsRate * gambleAmount)}💰**
 
 							🃏__**Blackjack**__\n
 							Play a game of blackjack against the bot and test your luck.\n
-							**Potential winnings: ${(blackjackRate * gambleAmount).toFixed(1)}💰**
+							**Potential winnings: ${Math.floor(blackjackRate * gambleAmount)}💰**
 			`));
 					sentMessage.react('✂️');
 					sentMessage.react(emojiCharacters[5]);
@@ -77,27 +77,28 @@ module.exports = {
 							const reaction = collected.first();
 
 							sentMessage.reactions.removeAll();
-							if (reaction.emoji.name == emojiCharacters[5]) oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed);
-							else if (reaction.emoji.name == '✂️') RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed);
-							else if (reaction.emoji.name == '🃏') blackjack(msg, profile, logger, gambleAmount, sentMessage, embed);
+							if (reaction.emoji.name == emojiCharacters[5]) oneInFive(message, profile, logger, gambleAmount, sentMessage, embed);
+							else if (reaction.emoji.name == '✂️') RPS(message, profile, logger, gambleAmount, currentAmount, sentMessage, embed);
+							else if (reaction.emoji.name == '🃏') blackjack(message, profile, logger, gambleAmount, sentMessage, embed);
 						})
 						.catch(error => {
-							msg.reply('You failed to react in time.');
+							message.reply('You failed to react in time.');
+							sentMessage.reactions.removeAll();
 							return logger.error(error.stack);
 						});
-					}
-				})
+				}
+			})
 			.catch(error => {
 				logger.log('error', `One of the emojis failed to react because of:\n${error.info}`);
-				return msg.reply('One of the emojis failed to react.');
+				return message.reply('One of the emojis failed to react.');
 			});
 	},
 };
 
 
-async function oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed) {
+async function oneInFive(message, profile, logger, gambleAmount, sentMessage, embed) {
 	const filter = (reaction, user) => {
-		return [emojiCharacters[1], emojiCharacters[2], emojiCharacters[3], emojiCharacters[4], emojiCharacters[5]].includes(reaction.emoji.name) && user.id === msg.author.id;
+		return [emojiCharacters[1], emojiCharacters[2], emojiCharacters[3], emojiCharacters[4], emojiCharacters[5]].includes(reaction.emoji.name) && user.id === message.author.id;
 	};
 
 	const answer = Math.floor((Math.random() * 5) + 1);
@@ -113,7 +114,7 @@ async function oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed)
 		})
 		.catch(error => {
 			logger.log('error', `One of the emojis failed to react because of:\n${error.info}`);
-			return msg.reply('One of the emojis failed to react.');
+			return message.reply('One of the emojis failed to react.');
 		});
 
 
@@ -123,34 +124,36 @@ async function oneInFive(msg, profile, logger, gambleAmount, sentMessage, embed)
 
 
 			if (reaction.emoji.name === emojiCharacters[answer]) {
-				profile.addMoney(msg.author.id, winAmount);
-				profile.addGamblingEarned(msg.author.id, winAmount);
-				profile.addGamblingSpent(msg.author.id, gambleAmount);
-				const balance = await profile.getBalance(msg.author.id);
+				profile.addMoney(message.author.id, winAmount);
+				profile.addGamblingEarned(message.author.id, winAmount);
+				profile.addGamblingSpent(message.author.id, gambleAmount);
+				const balance = await profile.getBalance(message.author.id);
 
 				embed.setColor('#00fc43');
+				sentMessage.reactions.removeAll();
 				return sentMessage.edit(embed.setDescription(`Correct! You have successfully won **${winAmount}💰**.\nYour current balance is **${balance}💰**`));
 			}
 			else {
 
-				profile.addGamblingSpent(msg.author.id, gambleAmount);
-				const balance = await profile.getBalance(msg.author.id);
+				profile.addGamblingSpent(message.author.id, gambleAmount);
+				const balance = await profile.getBalance(message.author.id);
 
 				embed.setColor('#fc0303');
+				sentMessage.reactions.removeAll();
 				return sentMessage.edit(embed.setDescription(`The correct answer was __**${answer}**__. You lost **${gambleAmount}💰**.\nYour current balance is **${balance}💰**`));
 			}
 		})
 		.catch(collected => {
-			msg.reply('You failed to react in time.');
+			message.reply('You failed to react in time.');
 			logger.log('error', collected);
 		});
 
 }
 
 
-async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed) {
+async function blackjack(message, profile, logger, gambleAmount, sentMessage, embed) {
 	const filter = (reaction, user) => {
-		return ['🃏', '✅'].includes(reaction.emoji.name) && user.id === msg.author.id;
+		return ['🃏', '✅'].includes(reaction.emoji.name) && user.id === message.author.id;
 	};
 
 	const suits = ['♠️', '♥️', '♦️', '♣️'];
@@ -172,20 +175,20 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 
 			for (let i = 0; i < 2; i++) {
 				getCard('player');
-				getCard('bot');
+				getCard('client');
 			}
 			setEmbed();
 
 			collector.on('collect', reaction => {
-				reaction.users.remove(msg.author.id);
+				reaction.users.remove(message.author.id);
 
 				switch (reaction.emoji.name) {
 
 					case '🃏':
 
-						reaction.users.remove(msg.author.id);
+						reaction.users.remove(message.author.id);
 						getCard('player');
-						if (botHandValue < 17) getCard('bot');
+						if (botHandValue < 17) getCard('client');
 						setEmbed();
 						if (playerHandValue >= 21 || botHandValue > 21 || (botHandValue > 16 && playerHandValue > botHandValue) || (botHandValue == 21 && playerHandValue == 21)) {
 							collector.stop();
@@ -196,7 +199,7 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 					case '✅':
 
 						while (botHandValue < 17) {
-							getCard('bot');
+							getCard('client');
 							setTimeout(() => setEmbed(), 1000);
 						}
 						collector.stop();
@@ -206,46 +209,47 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 
 			collector.on('end', async () => {
 				if (botHandValue == 21 && playerHandValue == 21) {
-					profile.addMoney(msg.author.id, gambleAmount);
-					const balance = await profile.getBalance(msg.author.id);
+					profile.addMoney(message.author.id, gambleAmount);
+					const balance = await profile.getBalance(message.author.id);
 					sentMessage.edit(embed.setDescription(`__**Its a draw**__\n\nYour balance is **${balance}💰**`));
 				}
 				else if (playerHandValue > 21) {
-					profile.addGamblingSpent(msg.author.id, gambleAmount);
-					const balance = await profile.getBalance(msg.author.id);
+					profile.addGamblingSpent(message.author.id, gambleAmount);
+					const balance = await profile.getBalance(message.author.id);
 					embed.setColor('#fc0303');
 					sentMessage.edit(embed.setDescription(`__**You busted**__\n\nYour balance is **${balance}💰**`));
 				}
 				else if (botHandValue > 21) {
-					profile.addMoney(msg.author.id, winAmount);
-					profile.addGamblingEarned(msg.author.id, winAmount);
-					profile.addGamblingSpent(msg.author.id, gambleAmount);
+					profile.addMoney(message.author.id, winAmount);
+					profile.addGamblingEarned(message.author.id, winAmount);
+					profile.addGamblingSpent(message.author.id, gambleAmount);
 
-					const balance = await profile.getBalance(msg.author.id);
+					const balance = await profile.getBalance(message.author.id);
 					embed.setColor('#00fc43');
 					sentMessage.edit(embed.setDescription(`__**The bot busted**__. **You Win!**\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
 				}
 				else if (botHandValue >= playerHandValue) {
-					profile.addGamblingSpent(msg.author.id, gambleAmount);
-					const balance = await profile.getBalance(msg.author.id);
+					profile.addGamblingSpent(message.author.id, gambleAmount);
+					const balance = await profile.getBalance(message.author.id);
 					embed.setColor('#fc0303');
 					sentMessage.edit(embed.setDescription(`__**The bot wins**__\n\nYour balance is **${balance}💰**`));
 				} else if (playerHandValue > botHandValue) {
 
-					profile.addMoney(msg.author.id, winAmount);
-					profile.addGamblingEarned(msg.author.id, winAmount);
-					profile.addGamblingSpent(msg.author.id, gambleAmount);
+					profile.addMoney(message.author.id, winAmount);
+					profile.addGamblingEarned(message.author.id, winAmount);
+					profile.addGamblingSpent(message.author.id, gambleAmount);
 
-					const balance = await profile.getBalance(msg.author.id);
+					const balance = await profile.getBalance(message.author.id);
 					embed.setColor('#00fc43');
 					sentMessage.edit(embed.setDescription(`__**You win**__\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
 				}
-				return;
+				
+				return sentMessage.reactions.removeAll();
 			});
 		})
 		.catch(e => {
 			logger.error(e.stack);
-			return msg.reply('Something went wrong, please report this as a bug.');
+			return message.reply('Something went wrong, please report this as a bug.');
 		});
 
 	function setEmbed() {
@@ -269,7 +273,7 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 		if (values[number] == 'A') { weight = 11; }
 		const card = { value: values[number], suit: suits[suit], weight: weight };
 
-		if (player == 'bot') {
+		if (player == 'client') {
 			if (card.value == 'A') {
 				if ((botHandValue + 11) > 21) {
 					botHand += `${card.suit}${card.value}(1) `;
@@ -305,9 +309,9 @@ async function blackjack(msg, profile, logger, gambleAmount, sentMessage, embed)
 	}
 }
 
-async function RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessage, embed) {
+async function RPS(message, profile, logger, gambleAmount, currentAmount, sentMessage, embed) {
 	const filter = (reaction, user) => {
-		return ['✊', '🧻', '✂️'].includes(reaction.emoji.name) && user.id === msg.author.id;
+		return ['✊', '🧻', '✂️'].includes(reaction.emoji.name) && user.id === message.author.id;
 	};
 
 	const winAmount = rpsRate * gambleAmount;
@@ -321,7 +325,7 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessag
 		})
 		.catch(error => {
 			logger.log('error', `One of the emojis failed to react because of:\n${error.info}`);
-			return msg.reply('One of the emojis failed to react.');
+			return message.reply('One of the emojis failed to react.');
 		});
 
 
@@ -333,21 +337,24 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessag
 				case '✊':
 
 					if (answer == 1) {
-						profile.addMoney(msg.author.id, gambleAmount);
+						profile.addMoney(message.author.id, gambleAmount);
+						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses ✊. __**It's a tie!**__\nYour balance is **${currentAmount}💰**`));
 					}
 					else if (answer == 2) {
-						profile.addGamblingSpent(msg.author.id, gambleAmount);
-						const balance = await profile.getBalance(msg.author.id);
+						profile.addGamblingSpent(message.author.id, gambleAmount);
+						const balance = await profile.getBalance(message.author.id);
 						embed.setColor('#fc0303');
+						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses 🧻. __**You lose!**__\nYour balance is **${balance}💰**`));
 					}
 					else if (answer == 3) {
-						profile.addMoney(msg.author.id, winAmount);
-						profile.addGamblingEarned(msg.author.id, winAmount);
-						profile.addGamblingSpent(msg.author.id, gambleAmount);
-						const balance = await profile.getBalance(msg.author.id);
+						profile.addMoney(message.author.id, winAmount);
+						profile.addGamblingEarned(message.author.id, winAmount);
+						profile.addGamblingSpent(message.author.id, gambleAmount);
+						const balance = await profile.getBalance(message.author.id);
 						embed.setColor('#00fc43');
+						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses ✂️. __**You Win!**__\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
 					}
 					break;
@@ -355,42 +362,48 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessag
 				case '🧻':
 
 					if (answer == 1) {
-						profile.addMoney(msg.author.id, winAmount);
-						profile.addGamblingEarned(msg.author.id, winAmount);
-						profile.addGamblingSpent(msg.author.id, gambleAmount);
-						const balance = await profile.getBalance(msg.author.id);
+						profile.addMoney(message.author.id, winAmount);
+						profile.addGamblingEarned(message.author.id, winAmount);
+						profile.addGamblingSpent(message.author.id, gambleAmount);
+						const balance = await profile.getBalance(message.author.id);
 						embed.setColor('#00fc43');
+						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses ✊. __**You Win!**__\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
 					}
 					else if (answer == 2) {
-						profile.addMoney(msg.author.id, gambleAmount);
+						profile.addMoney(message.author.id, gambleAmount);
+						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses 🧻. __**It's a tie!**__\nYour balance is **${currentAmount}💰**`));
 					}
 					else if (answer == 3) {
-						profile.addGamblingSpent(msg.author.id, gambleAmount);
-						const balance = await profile.getBalance(msg.author.id);
+						profile.addGamblingSpent(message.author.id, gambleAmount);
+						const balance = await profile.getBalance(message.author.id);
 						embed.setColor('#fc0303');
+						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses ✂️. __**You lose!**__\nYour balance is **${balance}💰**`));
 					}
 					break;
 
 				case '✂️':
 					if (answer == 1) {
-						profile.addGamblingSpent(msg.author.id, gambleAmount);
-						const balance = await profile.getBalance(msg.author.id);
+						profile.addGamblingSpent(message.author.id, gambleAmount);
+						const balance = await profile.getBalance(message.author.id);
 						embed.setColor('#fc0303');
+						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses ✊. __**You lose!**__\nYour balance is **${balance}💰**`));
 					}
 					else if (answer == 2) {
-						profile.addMoney(msg.author.id, winAmount);
-						profile.addGamblingEarned(msg.author.id, winAmount);
-						profile.addGamblingSpent(msg.author.id, gambleAmount);
-						const balance = await profile.getBalance(msg.author.id);
+						profile.addMoney(message.author.id, winAmount);
+						profile.addGamblingEarned(message.author.id, winAmount);
+						profile.addGamblingSpent(message.author.id, gambleAmount);
+						const balance = await profile.getBalance(message.author.id);
 						embed.setColor('#00fc43');
+						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses 🧻. __**You Win!**__\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
 					}
 					else if (answer == 3) {
-						profile.addMoney(msg.author.id, gambleAmount);
+						profile.addMoney(message.author.id, gambleAmount);
+						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses ✂️. __**It's a tie!**__\nYour balance is **${currentAmount}💰**`));
 					}
 					break;
@@ -399,7 +412,8 @@ async function RPS(msg, profile, logger, gambleAmount, currentAmount, sentMessag
 			sentMessage.edit(embed.setDescription('You shouldnt see this, please report the bug with the command `bug`'));
 		})
 		.catch(collected => {
-			msg.reply('You failed to react in time.');
+			message.reply('You failed to react in time.');
 			logger.log('error', collected);
+			sentMessage.reactions.removeAll();
 		});
 }

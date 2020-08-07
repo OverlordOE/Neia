@@ -9,7 +9,7 @@ module.exports = {
 	usage: '<modifier>',
 
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		let total = 0;
 
 		if (args[0] == 'restore') {
@@ -31,7 +31,7 @@ module.exports = {
 				}
 			}
 
-			return msg.channel.send(`backup of __**${total}**__ users restored`);
+			return message.channel.send(`backup of __**${total}**__ users restored`);
 		}
 
 		try {
@@ -44,7 +44,7 @@ module.exports = {
 
 			// Checking for errors
 			if (e) return logger.error(e.stack);
-			msg.channel.send(`Backup succesfull, backed up __**${total}**__ users!`);
+			message.channel.send(`Backup succesfull, backed up __**${total}**__ users!`);
 			logger.log('info', 'Done writing profiles'); // Success
 		});
 	},

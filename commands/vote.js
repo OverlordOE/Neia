@@ -6,7 +6,7 @@ module.exports = {
 	name: 'vote',
 	summary: 'vote for the client to get an extra daily',
 	description: 'vote for the client to get a reward.',
-	category: 'misc',
+	category: 'money',
 	aliases: ['v'],
 	args: false,
 	cooldown: 5,
@@ -19,7 +19,7 @@ module.exports = {
 			.setTitle('Vote Reward')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setTimestamp()
-			.setFooter('DMMO', client.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL());
 
 
 		dbl.hasVoted(message.author.id).then(async voted => {
@@ -36,7 +36,7 @@ module.exports = {
 			}
 			else {
 				profile.setVote(message.author.id, false);
-				return message.channel.send(embed.setDescription('Vote for DMMO and get up to **2 extra daily\'s** a day.\nTo get the daily\'s just vote [here](https://top.gg/bot/684458276129079320/vote) and then use this command again (this usually takes about 2-3 mins to update), you can do this every 12 hours!'));
+				return message.channel.send(embed.setDescription('Vote for Neia and get up to **2 extra daily\'s** a day.\nTo get the daily\'s just vote [here](https://top.gg/bot/684458276129079320/vote) and then use this command again (this usually takes about 2-3 mins to update), you can do this every 12 hours!'));
 			}
 		});
 

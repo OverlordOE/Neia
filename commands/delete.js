@@ -8,20 +8,20 @@ module.exports = {
 	usage: '<amount>',
 	cooldown: 4,
 
-	execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 		const amount = args[0];
-		if (isNaN(amount)) return msg.channel.send(`**${amount}** is not a valid number`);
-		if (amount < 1 || amount > 100) return msg.channel.send('Input a number between 1 and 100');
+		if (isNaN(amount)) return message.channel.send(`**${amount}** is not a valid number`);
+		if (amount < 1 || amount > 100) return message.channel.send('Input a number between 1 and 100');
 
 
 		try {
-			msg.delete();
-			msg.channel.bulkDelete(amount);
-			logger.log('info', `*${msg.author.tag}* deleted **${amount}** messages in channel ${msg.channel.name}`);
+			message.delete();
+			message.channel.bulkDelete(amount);
+			logger.log('info', `*${message.author.tag}* deleted **${amount}** messages in channel ${message.channel.name}`);
 		}
 		catch (error) {
-			msg.channel.send('Something went wrong');
+			message.channel.send('Something went wrong');
 			return logger.error(error.stack);
 		}
 	},

@@ -3,7 +3,7 @@ module.exports = {
 	name: 'weekly',
 	summary: 'Get a weekly gift',
 	description: 'Get a weekly gift.',
-	category: 'misc',
+	category: 'money',
 	aliases: ['week', 'w'],
 	args: false,
 	cooldown: 5,
@@ -16,7 +16,7 @@ module.exports = {
 			.setTitle('Weekly Reward')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setTimestamp()
-			.setFooter('DMMO', client.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL());
 
 
 		if (weekly === true) {

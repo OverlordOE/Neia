@@ -3,7 +3,7 @@ module.exports = {
 	name: 'daily',
 	summary: 'Get a daily gift',
 	description: 'Get a daily gift.',
-	category: 'misc',
+	category: 'money',
 	aliases: ['day', 'd'],
 	args: false,
 	cooldown: 5,
@@ -16,7 +16,7 @@ module.exports = {
 			.setTitle('Daily Reward')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setTimestamp()
-			.setFooter('DMMO', client.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL());
 
 
 		if (daily === true) {

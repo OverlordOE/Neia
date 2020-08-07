@@ -3,7 +3,7 @@ module.exports = {
 	name: 'use',
 	summary: 'Use an item from your inventory',
 	description: 'Use an item from your inventory.',
-	category: 'misc',
+	category: 'money',
 	aliases: ['item'],
 	args: false,
 	usage: '',
@@ -19,12 +19,12 @@ module.exports = {
 
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('DMMO Item Use')
+			.setTitle('Neia Item Use')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What item do you want to use?')
 			.setThumbnail(client.user.displayAvatarURL())
 			.setTimestamp()
-			.setFooter('DMMO', client.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL());
 
 
 		message.channel.send(embed).then(async sentMessage => {

@@ -10,11 +10,11 @@ module.exports = {
 	cooldown: 0.5,
 	args: true,
 
-	async execute(msg, args, msgUser, profile, guildProfile, bot, options, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		const lootEmbed = new Discord.MessageEmbed()
 			.setTimestamp()
-			.setFooter('Neia', bot.user.displayAvatarURL());
-		const uitems = await profile.getInventory(msg.author.id);
+			.setFooter('Neia', client.user.displayAvatarURL());
+		const uitems = await profile.getInventory(message.author.id);
 		let temp = '';
 		let hasChest = false;
 
@@ -32,7 +32,7 @@ module.exports = {
 			});
 		}
 
-		if (!hasChest) return msg.reply(`You don't have any __${item.name}(s)__!`);
+		if (!hasChest) return message.reply(`You don't have any __${item.name}(s)__!`);
 
 		switch (item.name) {
 
@@ -43,7 +43,7 @@ module.exports = {
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Common Chest')
-					.setDescription(`${msg.author}, have discovered **${amount}** **__${lootItem.emoji}${lootItem.name}__** in this chest.`)
+					.setDescription(`${message.author}, have discovered **${amount}** **__${lootItem.emoji}${lootItem.name}__** in this chest.`)
 					.attachFiles('assets/items/common_open.png')
 					.setThumbnail('attachment://common_open.png');
 
@@ -53,9 +53,9 @@ module.exports = {
 				if (lootItem.picture) lootEmbed.attachFiles(`assets/items/${lootItem.picture}`)
 					.setImage(`attachment://${lootItem.picture}`);
 
-				msg.channel.send(lootEmbed);
-				await profile.addItem(msg.author.id, lootItem, amount);
-				await profile.removeItem(msg.author.id, item, 1);
+				message.channel.send(lootEmbed);
+				await profile.addItem(message.author.id, lootItem, amount);
+				await profile.removeItem(message.author.id, item, 1);
 
 				break;
 			}
@@ -67,7 +67,7 @@ module.exports = {
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Rare Chest')
-					.setDescription(`${msg.author}, have discovered **${amount}** **__${lootItem.emoji}${lootItem.name}__** in this chest.`)
+					.setDescription(`${message.author}, have discovered **${amount}** **__${lootItem.emoji}${lootItem.name}__** in this chest.`)
 					.attachFiles('assets/items/rare_open.png')
 					.setThumbnail('attachment://rare_open.png');
 
@@ -77,9 +77,9 @@ module.exports = {
 				if (lootItem.picture) lootEmbed.attachFiles(`assets/items/${lootItem.picture}`)
 					.setImage(`attachment://${lootItem.picture}`);
 
-				msg.channel.send(lootEmbed);
-				await profile.addItem(msg.author.id, lootItem, amount);
-				await profile.removeItem(msg.author.id, item, 1);
+				message.channel.send(lootEmbed);
+				await profile.addItem(message.author.id, lootItem, amount);
+				await profile.removeItem(message.author.id, item, 1);
 
 				break;
 			}
@@ -91,7 +91,7 @@ module.exports = {
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Epic Chest')
-					.setDescription(`${msg.author}, have discovered **${amount}** **__${lootItem.emoji}${lootItem.name}__** in this chest.`)
+					.setDescription(`${message.author}, have discovered **${amount}** **__${lootItem.emoji}${lootItem.name}__** in this chest.`)
 					.attachFiles('assets/items/epic_open.png')
 					.setThumbnail('attachment://epic_open.png');
 
@@ -102,9 +102,9 @@ module.exports = {
 				if (lootItem.picture) lootEmbed.attachFiles(`assets/items/${lootItem.picture}`)
 					.setImage(`attachment://${lootItem.picture}`);
 
-				msg.channel.send(lootEmbed);
-				await profile.addItem(msg.author.id, lootItem, amount);
-				await profile.removeItem(msg.author.id, item, 1);
+				message.channel.send(lootEmbed);
+				await profile.addItem(message.author.id, lootItem, amount);
+				await profile.removeItem(message.author.id, item, 1);
 
 				break;
 			}
@@ -116,7 +116,7 @@ module.exports = {
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Legendary Chest')
-					.setDescription(`${msg.author}, have discovered **${amount}** **__${lootItem.emoji}${lootItem.name}__** in this chest.`)
+					.setDescription(`${message.author}, have discovered **${amount}** **__${lootItem.emoji}${lootItem.name}__** in this chest.`)
 					.attachFiles('assets/items/legendary_open.png')
 					.setThumbnail('attachment://legendary_open.png');
 
@@ -127,15 +127,15 @@ module.exports = {
 				if (lootItem.picture) lootEmbed.attachFiles(`assets/items/${lootItem.picture}`)
 					.setImage(`attachment://${lootItem.picture}`);
 
-				msg.channel.send(lootEmbed);
-				await profile.addItem(msg.author.id, lootItem, amount);
-				await profile.removeItem(msg.author.id, item, 1);
+				message.channel.send(lootEmbed);
+				await profile.addItem(message.author.id, lootItem, amount);
+				await profile.removeItem(message.author.id, item, 1);
 
 				break;
 			}
 
 			default:
-				msg.reply('there is no loot associated with that chest yet.');
+				message.reply('there is no loot associated with that chest yet.');
 				break;
 		}
 	},

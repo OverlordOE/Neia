@@ -7,7 +7,7 @@ module.exports = {
 	args: false,
 	usage: '',
 	cooldown: 5,
-	category: 'misc',
+	category: 'money',
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
@@ -16,7 +16,7 @@ module.exports = {
 			.setTitle('Hourly Reward')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setTimestamp()
-			.setFooter('DMMO', client.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL());
 
 
 		if (hourly === true) {
