@@ -54,6 +54,18 @@ Reflect.defineProperty(profile, 'removeItem', {
 	},
 });
 
+Reflect.defineProperty(profile, 'hasItem', {
+	value: async function hasItem(id, item, amount) {
+		const userItem = await UserItems.findOne({
+			where: { user_id: id, name: item.name },
+		});
+
+		const check = parseInt(amount);
+		if (userItem.amount >= check) return true;
+		return false;
+	},
+});
+
 Reflect.defineProperty(profile, 'getInventory', {
 	value: async function getInventory(id) {
 		let user = profile.get(id);
@@ -79,11 +91,11 @@ Reflect.defineProperty(profile, 'newUser', {
 		const user = await Users.create({
 			user_id: id,
 			balance: 1,
-			lastDaily: now.subtract(2, 'days'),
-			lastHourly: now.subtract(1, 'days'),
-			lastWeekly: now.subtract(8, 'days'),
-			lastVote: now.subtract(1, 'days'),
-			protection: now,
+			lastDaily: now.subtract(2, 'days').toString(),
+			lastHourly: now.subtract(1, 'days').toString(),
+			lastWeekly: now.subtract(8, 'days').toString(),
+			lastVote: now.subtract(1, 'days').toString(),
+			protection: now.toString(),
 			pColour: '#fcfcfc',
 		});
 		profile.set(id, user);
@@ -155,7 +167,7 @@ Reflect.defineProperty(profile, 'setHourly', {
 		if (!user) user = await profile.newUser(id);
 
 		const day = moment();
-		user.lastHourly = day;
+		user.lastHourly = moment(day).toString();
 		return user.save();
 	},
 });
@@ -177,7 +189,7 @@ Reflect.defineProperty(profile, 'setWeekly', {
 		if (!user) user = await profile.newUser(id);
 
 		const day = moment();
-		user.lastWeekly = day;
+		user.lastWeekly = moment(day).toString();
 		return user.save();
 	},
 });
@@ -188,7 +200,7 @@ Reflect.defineProperty(profile, 'setVote', {
 		if (!user) user = await profile.newUser(id);
 
 		const day = moment();
-		user.lastVote = day;
+		user.lastVote = moment(day).toString();
 		return user.save();
 	},
 });
@@ -240,7 +252,7 @@ Reflect.defineProperty(profile, 'setProtection', {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 
-		user.protection = day;
+		user.protection = moment(day).toString();
 		return user.save();
 	},
 });

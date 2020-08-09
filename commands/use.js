@@ -9,10 +9,8 @@ module.exports = {
 	usage: '',
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
-		const uitems = await profile.getInventory(message.author.id);
 		const filter = m => m.author.id === message.author.id;
 
-		let iAmount = 0;
 		let amount = 0;
 		let temp = '';
 		let item;
@@ -36,29 +34,19 @@ module.exports = {
 				else temp += `${args[i]}`;
 			}
 
-			item = await profile.getItem(temp);
+			item = profile.getItem(temp);
 			if (item) {
-				uitems.map(i => {
-					if (i.name == item.name) {
-						if (i.amount >= amount) use(profile, sentMessage, amount, embed, item, msgUser);
-						else return sentMessage.edit(embed.setDescription(`You only have **${i.amount}/${amount}** of the __${item.name}(s)__ needed!`));
-					}
-					else return sentMessage.edit(embed.setDescription(`You don't have any __${item.name}(s)__!`));
-				});
+				if (await profile.hasItem(message.author.id, item, amount)) use(profile, sentMessage, amount, embed, item, msgUser);
+				else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
 			}
 			else {
 
 				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 					.then(async collected => {
-						item = await profile.getItem(collected.first().content);
+						item = profile.getItem(collected.first().content);
 						collected.first().delete().catch(e => logger.error(e.stack));
 
 						if (item) {
-							uitems.map(i => {
-								if (i.name == item.name && i.amount >= 1) {
-									iAmount = i.amount;
-								}
-							});
 
 							sentMessage.edit(embed.setDescription(`How much __${item.name}__ do you want to use?`)).then(() => {
 								message.channel.awaitMessages(filter, { max: 1, time: 60000 })
@@ -66,8 +54,8 @@ module.exports = {
 
 										amount = parseInt(collected.first().content);
 										collected.first().delete().catch(e => logger.error(e.stack));
-										if (iAmount >= amount) use(profile, sentMessage, amount, embed, item, msgUser);
-										else return sentMessage.edit(embed.setDescription(`You only have **${iAmount}/${amount}** of the __${item.name}(s)__ needed!`));
+										if (await profile.hasItem(message.author.id, item, amount)) use(profile, sentMessage, amount, embed, item, msgUser);
+										else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
 
 									}).catch(e => {
 										logger.error(e.stack);
@@ -75,7 +63,7 @@ module.exports = {
 									});
 							});
 						}
-						else return sentMessage.edit(embed.setDescription(`${collected.first().content} is not an item.`));
+						else { return sentMessage.edit(embed.setDescription(`${collected.first().content} is not an item.`)); }
 					})
 					.catch(e => {
 						logger.error(e.stack);
@@ -96,21 +84,19 @@ async function use(profile, sentMessage, amount, embed, item, msgUser) {
 		amount = 1;
 	}
 
-	switch (item.type[0]) {
 
-		case 'consumable':
-			if (item.use) {
-				const consume = item.use(msgUser);
-				if (consume.succes) {
-					profile.removeItem(msgUser.user_id, item, amount);
-					return sentMessage.edit(embed.setDescription(consume.message));
-				}
-				else return sentMessage.edit(embed.setDescription(consume.message));
-			}
-			else return sentMessage.edit(embed.setDescription(`There is no use for __${item.name}(s)__ yet, the item was not used.`));
-
-		default: {
-			return sentMessage.edit(embed.setDescription(`There is no use for __${item.name}(s)__ yet, the item was not used.`));
+	if (item.use) {
+		const result = await item.use(profile, sentMessage, amount, embed, item, msgUser);
+		if (result.succes) {
+			profile.removeItem(msgUser.user_id, item, amount);
+			return sentMessage.edit(embed.setDescription(result.message));
 		}
+		else if (result.message) { return sentMessage.edit(embed.setDescription(result.message)); }
+		else { return sentMessage.edit(embed.setDescription('An error has occurred, please report this to OverlordOE#0717')); }
+
 	}
+
+	else if (item.ctg == 'chest') { return sentMessage.edit(embed.setDescription('Please use the `open` command to use a chest')); }
+	else if (item.ctg == 'collectable') { return sentMessage.edit(embed.setDescription('Collectables are passive items that will award you with extra money with your time based rewards.')); }
+	else { return sentMessage.edit(embed.setDescription(`There is no use for __${item.name}__ yet, the item was not used.`)); }
 }

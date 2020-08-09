@@ -67,7 +67,7 @@ module.exports = {
 				items.map(i => {
 					if (i.amount < 1) return;
 					const item = itemInfo[i.name.toLowerCase()];
-					if (item.ctg == 'collectables') networth += item.cost;
+					if (item.ctg == 'collectable') networth += item.cost;
 					inventory += `${item.emoji} ${item.name}: **x${i.amount}**\n`;
 				});
 

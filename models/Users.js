@@ -13,28 +13,28 @@ module.exports = (sequelize, DataTypes) => {
 
 		// COOLDOWNS
 		lastDaily: {
-			type: DataTypes.DATE,
-			defaultValue: 0,
+			type: DataTypes.STRING,
+			defaultValue: '',
 			allowNull: false,
 		},
 		lastHourly: {
-			type: DataTypes.DATE,
-			defaultValue: 0,
+			type: DataTypes.STRING,
+			defaultValue: '',
 			allowNull: false,
 		},
 		lastWeekly: {
-			type: DataTypes.DATE,
-			defaultValue: 0,
+			type: DataTypes.STRING,
+			defaultValue: '',
 			allowNull: false,
 		},
 		lastVote: {
-			type: DataTypes.DATE,
-			defaultValue: 0,
+			type: DataTypes.STRING,
+			defaultValue: '',
 			allowNull: false,
 		},
 		protection: {
-			type: DataTypes.DATE,
-			defaultValue: 0,
+			type: DataTypes.STRING,
+			defaultValue: '',
 			allowNull: false,
 		},
 		
