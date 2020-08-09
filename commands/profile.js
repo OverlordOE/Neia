@@ -25,12 +25,10 @@ module.exports = {
 		const prot = await profile.getProtection(target.id);
 		let daily = await profile.getDaily(target.id);
 		let hourly = await profile.getHourly(target.id);
-		let weekly = await profile.getWeekly(target.id);
 		let vote = await profile.getVote(target.id);
 
 		if (daily === true) daily = 'now';
 		if (hourly === true) hourly = 'now';
-		if (weekly === true) weekly = 'now';
 		if (vote === true) vote = 'now';
 
 
@@ -38,12 +36,11 @@ module.exports = {
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s General Stats`)
 			.setThumbnail(avatar)
-			.addField('Balance:', `${Math.floor(userProfile.balance)}💰`, true)
-			.addField('Message Count:', userProfile.msgCount, true)
-			.addField('Next Vote', vote)
+			.addField('Balance:', `${Math.floor(userProfile.balance)}💰`)
+			
 			.addField('Next hourly:', hourly, true)
 			.addField('Next daily:', daily, true)
-			.addField('Next weekly:', weekly, true)
+			.addField('Next Vote', vote, true)
 
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());

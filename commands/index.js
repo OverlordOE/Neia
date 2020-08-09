@@ -12,7 +12,6 @@ module.exports = {
 	Vote: require('./vote'),
 	Hourly: require('./hourly'),
 	Daily: require('./daily'),
-	Weekly: require('./weekly'),
 	Leaderboard: require('./leaderboard'),
 	Lottery: require('./lottery'),
 	Gamble: require('./gamble'),

@@ -144,8 +144,7 @@ Reflect.defineProperty(profile, 'setDaily', {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 
-		const currentDay = moment();
-		user.lastDaily = currentDay;
+		user.lastDaily = moment().toString();
 		return user.save();
 	},
 });
@@ -166,8 +165,7 @@ Reflect.defineProperty(profile, 'setHourly', {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 
-		const day = moment();
-		user.lastHourly = moment(day).toString();
+		user.lastHourly = moment().toString();
 		return user.save();
 	},
 });
@@ -188,8 +186,7 @@ Reflect.defineProperty(profile, 'setWeekly', {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 
-		const day = moment();
-		user.lastWeekly = moment(day).toString();
+		user.lastWeekly = moment().toString();
 		return user.save();
 	},
 });
@@ -199,8 +196,7 @@ Reflect.defineProperty(profile, 'setVote', {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 
-		const day = moment();
-		user.lastVote = moment(day).toString();
+		user.lastVote = moment().toString();
 		return user.save();
 	},
 });
@@ -248,11 +244,11 @@ Reflect.defineProperty(profile, 'getProtection', {
 	},
 });
 Reflect.defineProperty(profile, 'setProtection', {
-	value: async function setProtection(id, day) {
+	value: async function setProtection(id, date) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 
-		user.protection = moment(day).toString();
+		user.protection = moment(date).toString();
 		return user.save();
 	},
 });

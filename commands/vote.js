@@ -18,24 +18,42 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Vote Reward')
 			.setThumbnail(message.author.displayAvatarURL())
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
 
+		let reward = 0;
+		let chest;
+
+		const luck = Math.floor(Math.random() * 5);
+		if (luck >= 1) chest = 'Rare chest';
+		else chest = 'Epic chest';
+		chest = await profile.getItem(chest);
+
+		const items = await profile.getInventory(message.author.id);
+		items.map(i => {
+			if (i.amount < 1) return;
+			const item = profile.getItem(i.name);
+			if (item.ctg == 'collectables') reward += i.amount * (item.cost / 100);
+		});
 
 		dbl.hasVoted(message.author.id).then(async voted => {
 			if (voted) {
-				if (vote === false) {
-					const reward = 20 + Math.floor(Math.random() * 20);
+				if (vote === true) {
+					if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
+						.setImage(`attachment://${chest.picture}`);
+
 					profile.addMoney(message.author.id, reward);
+					profile.addItem(message.author.id, chest, 1);
+					profile.setVote(message.author.id);
+
 					const balance = await profile.getBalance(message.author.id);
-					profile.setVote(message.author.id, true);
-					return message.channel.send(embed.setDescription(`Thank you for voting!!!\nYou got **${reward}💰** from your vote.\n\nCome back in 12 hours for more!\nYour current balance is **${balance}💰**`));
+					return message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your daily 🎁 and **${Math.floor(reward)}💰** from your collectables.\nCome back in a day for more!\n\nYour current balance is **${balance}💰**`));
 				}
 				else return message.channel.send(embed.setDescription(`You have already voted in the last 12 hours.\nNext vote available at __${vote}__`));
 
 			}
 			else {
-				profile.setVote(message.author.id, false);
 				return message.channel.send(embed.setDescription('Vote for Neia and get up to **2 extra daily\'s** a day.\nTo get the daily\'s just vote [here](https://top.gg/bot/684458276129079320/vote) and then use this command again (this usually takes about 2-3 mins to update), you can do this every 12 hours!'));
 			}
 		});
