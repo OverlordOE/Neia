@@ -28,7 +28,7 @@ module.exports = {
 
 					.then(async collected => {
 						let mention = collected.first().content;
-						collected.first().delete().catch(e => logger.error(e.stack));
+						collected.first().delete();
 
 						if (mention.startsWith('<@') && mention.endsWith('>')) {
 							mention = mention.slice(2, -1);
@@ -50,7 +50,7 @@ module.exports = {
 
 									.then(async collected => {
 										const goods = collected.first().content.toLowerCase();
-										collected.first().delete().catch(e => logger.error(e.stack));
+										collected.first().delete();
 
 										// item trade
 										if (isNaN(goods)) {
@@ -66,7 +66,7 @@ module.exports = {
 													.then(async collected => {
 														const amount = collected.first().content;
 														const uitems = await profile.getInventory(message.author.id);
-														collected.first().delete().catch(e => logger.error(e.stack));
+														collected.first().delete();
 														uitems.map(i => {
 															if (i.item.name == item.name && i.amount >= amount) {
 																hasItem = true;

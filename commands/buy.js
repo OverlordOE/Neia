@@ -46,14 +46,14 @@ module.exports = {
 
 						if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not a valid item.`));
 
-						collected.first().delete().catch(e => logger.error(e.stack));
+						collected.first().delete();
 
 						sentMessage.edit(embed.setDescription(`How many __${item.name}(s)__ do you want to buy?`)).then(() => {
 							message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 								.then(async collected => {
 									amount = parseInt(collected.first().content);
-									collected.first().delete().catch(e => logger.error(e.stack));
+									collected.first().delete();
 
 									buy(profile, sentMessage, amount, embed, item, message);
 

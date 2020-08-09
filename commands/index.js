@@ -6,6 +6,7 @@ module.exports = {
 	Buy: require('./buy'),
 	Sell: require('./sell'),
 	Use: require('./use'),
+	Open: require('./open'),
 	Trade: require('./trade'),
 	Profile: require('./profile'),
 	Vote: require('./vote'),

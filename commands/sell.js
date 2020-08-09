@@ -56,7 +56,7 @@ module.exports = {
 						if (!item) return sentMessage.edit(embed.setDescription(`\`${item}\` is not a valid item.`));
 
 						let hasItem = false;
-						collected.first().delete().catch(e => logger.error(e.stack));
+						collected.first().delete();
 
 						sentMessage.edit(embed.setDescription(`How much __${item.name}(s)__ do you want to sell?`)).then(() => {
 							message.channel.awaitMessages(filter, { max: 1, time: 60000 })

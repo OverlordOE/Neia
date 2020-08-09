@@ -44,7 +44,7 @@ module.exports = {
 				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 					.then(async collected => {
 						item = profile.getItem(collected.first().content);
-						collected.first().delete().catch(e => logger.error(e.stack));
+						collected.first().delete();
 
 						if (item) {
 
@@ -53,7 +53,7 @@ module.exports = {
 									.then(async collected => {
 
 										amount = parseInt(collected.first().content);
-										collected.first().delete().catch(e => logger.error(e.stack));
+										collected.first().delete();
 										if (await profile.hasItem(message.author.id, item, amount)) use(profile, sentMessage, amount, embed, item, msgUser);
 										else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
 
@@ -76,7 +76,7 @@ module.exports = {
 
 
 async function use(profile, sentMessage, amount, embed, item, msgUser) {
-	console.log(amount);
+
 	if (!Number.isInteger(amount)) {
 		return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
 	}
@@ -87,13 +87,13 @@ async function use(profile, sentMessage, amount, embed, item, msgUser) {
 
 	if (item.use) {
 		const result = await item.use(profile, sentMessage, amount, embed, item, msgUser);
+
 		if (result.succes) {
 			profile.removeItem(msgUser.user_id, item, amount);
 			return sentMessage.edit(embed.setDescription(result.message));
 		}
 		else if (result.message) { return sentMessage.edit(embed.setDescription(result.message)); }
 		else { return sentMessage.edit(embed.setDescription('An error has occurred, please report this to OverlordOE#0717')); }
-
 	}
 
 	else if (item.ctg == 'chest') { return sentMessage.edit(embed.setDescription('Please use the `open` command to use a chest')); }

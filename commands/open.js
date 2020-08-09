@@ -14,9 +14,8 @@ module.exports = {
 		const lootEmbed = new Discord.MessageEmbed()
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
-		const uitems = await profile.getInventory(message.author.id);
+
 		let temp = '';
-		let hasChest = false;
 
 		for (let i = 0; i < args.length; i++) {
 			if (temp.length > 2) temp += ` ${args[i]}`;
@@ -24,15 +23,7 @@ module.exports = {
 		}
 
 		const item = await profile.getItem(temp);
-		if (item) {
-			uitems.map(i => {
-				if (i.name == item.name) {
-					if (i.amount >= 1) hasChest = true;
-				}
-			});
-		}
-
-		if (!hasChest) return message.reply(`You don't have any __${item.name}(s)__!`);
+		if (!await profile.hasItem(message.author.id, item, 1)) return message.reply(`You don't have any __${item.name}(s)__!`);
 
 		switch (item.name) {
 
@@ -54,8 +45,8 @@ module.exports = {
 					.setImage(`attachment://${lootItem.picture}`);
 
 				message.channel.send(lootEmbed);
-				await profile.addItem(message.author.id, lootItem, amount);
-				await profile.removeItem(message.author.id, item, 1);
+				profile.addItem(message.author.id, lootItem, amount);
+				profile.removeItem(message.author.id, item, 1);
 
 				break;
 			}
@@ -78,8 +69,8 @@ module.exports = {
 					.setImage(`attachment://${lootItem.picture}`);
 
 				message.channel.send(lootEmbed);
-				await profile.addItem(message.author.id, lootItem, amount);
-				await profile.removeItem(message.author.id, item, 1);
+				profile.addItem(message.author.id, lootItem, amount);
+				profile.removeItem(message.author.id, item, 1);
 
 				break;
 			}
@@ -103,8 +94,8 @@ module.exports = {
 					.setImage(`attachment://${lootItem.picture}`);
 
 				message.channel.send(lootEmbed);
-				await profile.addItem(message.author.id, lootItem, amount);
-				await profile.removeItem(message.author.id, item, 1);
+				profile.addItem(message.author.id, lootItem, amount);
+				profile.removeItem(message.author.id, item, 1);
 
 				break;
 			}
@@ -128,8 +119,8 @@ module.exports = {
 					.setImage(`attachment://${lootItem.picture}`);
 
 				message.channel.send(lootEmbed);
-				await profile.addItem(message.author.id, lootItem, amount);
-				await profile.removeItem(message.author.id, item, 1);
+				profile.addItem(message.author.id, lootItem, amount);
+				profile.removeItem(message.author.id, item, 1);
 
 				break;
 			}
