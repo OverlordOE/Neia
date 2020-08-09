@@ -8,7 +8,7 @@ const cooldowns = new Discord.Collection();
 require('dotenv').config();
 const token = process.env.TEST_TOKEN;
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
+const active = new Map();
 client.commands = new Discord.Collection();
 moment().format();
 
@@ -120,12 +120,15 @@ client.on('message', async message => {
 	}
 	timestamps.set(id, now);
 	setTimeout(() => timestamps.delete(id), cooldownAmount);
-
+	
+	const options = {
+		active: active,
+	};
 
 	// execute command
-	logger.log('info', `${message.author.tag} Called command: ${command.name}, in guild: ${message.guild.name}`);
+	logger.log('info', `${message.author.tag} Called command: **${command.name}** ${args.join(' ')}, in guild: ${message.guild.name}`);
 	try {
-		command.execute(message, args, user, profile, guildProfile, client, logger, cooldowns);
+		command.execute(message, args, user, profile, guildProfile, client, logger, cooldowns, options);
 	}
 	catch (e) {
 		logger.error(e.stack);
