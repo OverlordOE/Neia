@@ -5,7 +5,7 @@ module.exports = {
 	category: 'admin',
 	aliases: ['remove'],
 	args: false,
-	usage: '<amount>',
+	usage: '<message amount>',
 	cooldown: 4,
 
 	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {

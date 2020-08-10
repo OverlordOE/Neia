@@ -10,7 +10,7 @@ module.exports = {
 	category: 'music',
 	aliases: ['song'],
 	args: true,
-	usage: 'search criteria',
+	usage: '<search criteria>',
 
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {

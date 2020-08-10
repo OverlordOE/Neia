@@ -14,10 +14,10 @@ module.exports = {
 			return ['◀️', '▶️'].includes(reaction.emoji.name) && user.id === message.author.id;
 		};
 
-		const list = profile.sort((a, b) => b.balance - a.balance)
+		const list = profile.sort((a, b) => b.totalEarned - a.totalEarned)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: **${Math.floor(user.balance)}💰**`);
+			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: **${Math.floor(user.totalEarned)}💰**`);
 
 		let page = 0;
 		if (!isNaN(args[0]) && args[0] > 0 && args[0] < 6) page = args[0] - 1;
@@ -39,17 +39,13 @@ module.exports = {
 
 			collector.on('collect', (reaction) => {
 				reaction.users.remove(message.author.id);
-				if (reaction.emoji.name == '◀️') {
-					if (page > 0) {
-						page--;
-						sentMessage.edit(embed.setDescription(editDescription(list, page)));
-					}
+				if (reaction.emoji.name == '◀️' && page > 0) {
+					page--;
+					sentMessage.edit(embed.setDescription(editDescription(list, page)));
 				}
-				else if (reaction.emoji.name == '▶️') {
-					if (page < 4) {
-						page++;
-						sentMessage.edit(embed.setDescription(editDescription(list, page)));
-					}
+				else if (reaction.emoji.name == '▶️' && page < 4) {
+					page++;
+					sentMessage.edit(embed.setDescription(editDescription(list, page)));
 				}
 			});
 			collector.on('end', () => sentMessage.reactions.removeAll());
@@ -58,7 +54,7 @@ module.exports = {
 };
 
 function editDescription(list, page) {
-	let description = '';
+	let description = 'Total Earned';
 	for (let i = page * 10; i < (10 + page * 10); i++) {
 		if (list[i]) description += list[i];
 		else description += `\n__**${i + 1}.**__ noone`;

@@ -10,17 +10,15 @@ module.exports = {
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
-
-
 		const embed = new Discord.MessageEmbed()
-			.setColor(pColour);
+			.setColor(msgUser.pColour);
 
 		const sides = args[0];
 		let amount;
 		if (args[1]) amount = args[1];
 		else amount = 1;
 
-		if (amount > 100 || isNaN(amount) || amount < 0) { return message.reply('input a number between 1 and 100'); }
+		if (amount > 100 || isNaN(amount) || amount < 0) { return message.reply('maximum die amount is 100.'); }
 
 		let total = 0;
 		let result = '';
@@ -38,6 +36,6 @@ module.exports = {
 			total += roll;
 		}
 
-		message.channel.send(embed.setDescription(`You rolled a __D${sides}__ **${amount}** times, these are the results: \n${message}\n= __**${total}**__`));
+		message.channel.send(embed.setDescription(`You rolled a __D${sides}__ **${amount}** times, these are the results: \n${result}\n= __**${total}**__`));
 	},
 };

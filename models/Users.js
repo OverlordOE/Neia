@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
-		
+
 
 		// COOLDOWNS
 		lastDaily: {
@@ -37,12 +37,17 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: '',
 			allowNull: false,
 		},
-		
+
 
 		// MISC
 		pColour: {
 			type: DataTypes.STRING,
 			defaultValue: '#fcfcfc',
+			allowNull: false,
+		},
+		totalEarned: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
 			allowNull: false,
 		},
 

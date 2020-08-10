@@ -10,7 +10,7 @@ module.exports = {
 	category: 'money',
 	aliases: ['guess'],
 	args: true,
-	usage: '<amount>',
+	usage: '<gamble amount>',
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 

@@ -33,7 +33,7 @@ module.exports = {
 		items.map(i => {
 			if (i.amount < 1) return;
 			const item = profile.getItem(i.name);
-			if (item.ctg == 'collectables') reward += i.amount * (item.cost / 100);
+			if (item.ctg == 'collectable') reward += i.amount * (item.cost / 100);
 		});
 
 

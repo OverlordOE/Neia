@@ -8,9 +8,7 @@ module.exports = {
 	usage: '',
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
-		if (!message.member.voice.channel) {
-			return message.reply('You are not in a voice channel!');
-		}
+		if (!message.member.voice.channel) 	return message.reply('You are not in a voice channel!');
 
 		try {
 			const guildIDData = options.active.get(message.guild.id);

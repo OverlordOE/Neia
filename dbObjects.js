@@ -90,7 +90,8 @@ Reflect.defineProperty(profile, 'newUser', {
 		const now = moment();
 		const user = await Users.create({
 			user_id: id,
-			balance: 1,
+			balance: 0,
+			totalEarned: 0,
 			lastDaily: now.subtract(2, 'days').toString(),
 			lastHourly: now.subtract(1, 'days').toString(),
 			lastWeekly: now.subtract(8, 'days').toString(),
@@ -117,6 +118,8 @@ Reflect.defineProperty(profile, 'addMoney', {
 
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 		user.balance += Number(amount);
+		if (amount > 0) user.totalEarned += amount;
+
 		return user.save();
 	},
 });
