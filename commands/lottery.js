@@ -11,7 +11,7 @@ module.exports = {
 
 			let writeData;
 			const ticketAmount = 50;
-			const misc = JSON.parse(fs.readFileSync('miscData.json'));
+			const misc = JSON.parse(fs.readFileSync('../data/miscData.json'));
 			const channel = client.channels.cache.get('721743056528867393');
 
 
@@ -108,7 +108,7 @@ module.exports = {
 							sentMessage.edit(embed.setDescription(`Current lottery: **${lottery}💰**\n${players}\n\nLottery has ended and the winning number is __**${winNumber + 1}**__\n\nNoone won the lottery of **${lottery}💰**, it will be added to next days lottery!`));
 						}
 						writeData = JSON.stringify(misc);
-						fs.writeFileSync('miscData.json', writeData);
+						fs.writeFileSync('../data/miscData.json', writeData);
 					});
 				})
 				.catch(e => {

@@ -65,7 +65,6 @@ module.exports = {
 			if (targetBalance < stealAmount) stealAmount = targetBalance;
 
 			profile.addMoney(message.author.id, stealAmount);
-			profile.addStealingEarned(message.author.id, stealAmount);
 			profile.addMoney(target.id, -stealAmount);
 			const balance = await profile.getBalance(message.author.id);
 			await profile.removeItem(message.author.id, item, 1);

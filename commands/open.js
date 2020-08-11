@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const loottable = require('../loottables');
+const loottable = require('../data/loottables');
 module.exports = {
 	name: 'open',
 	summary: 'open chests',

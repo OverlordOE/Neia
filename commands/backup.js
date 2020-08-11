@@ -1,5 +1,5 @@
 const fs = require('fs');
-const backup = require('../backup');
+const backup = require('../data/backup.json');
 module.exports = {
 	name: 'backup',
 	description: 'Makes a backup of the database.',
