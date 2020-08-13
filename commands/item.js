@@ -19,7 +19,7 @@ module.exports = {
 		const item = await profile.getItem(temp);
 		if (!item) return msgUser.reply(`${item} is not a valid item`);
 		const embed = new Discord.MessageEmbed()
-			.setTitle(`${item.emoji}__${item.name}(s)__`)
+			.setTitle(`${item.emoji}${item.name}`)
 			.setDescription(item.description)
 			.addField('cost', `**${item.cost}💰**`, true)
 			.addField('Category', item.type, true)
