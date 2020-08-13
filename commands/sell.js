@@ -101,8 +101,8 @@ async function sell(profile, sentMessage, amount, embed, item, message) {
 	else if (amount < 1) amount = 1;
 
 	const refundAmount = 0.8 * item.cost * amount;
-	await profile.removeItem(message.author.id, item, amount);
-	await profile.addMoney(message.author.id, refundAmount);
+	profile.removeItem(message.author.id, item, amount);
+	profile.addMoney(message.author.id, refundAmount);
 
 	const balance = await profile.getBalance(message.author.id);
 	sentMessage.edit(embed.setDescription(`You've refunded ${amount} __${item.name}(s)__ and received **${Math.floor(refundAmount)}💰** back.\nYour balance is **${balance}💰**!`));

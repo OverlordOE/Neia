@@ -85,7 +85,7 @@ module.exports = {
 
 	'gun': {
 		name: 'Gun',
-		cost: 30,
+		cost: 50,
 		emoji: '<:gun:727585753818857563>',
 		rarity: 'uncommon',
 		picture: 'gun.png',
@@ -94,9 +94,9 @@ module.exports = {
 	},
 	'steal protection': {
 		name: 'Steal Protection',
-		cost: 120,
+		cost: 400,
 		emoji: '🛡️',
-		rarity: 'rare',
+		rarity: 'epic',
 		picture: null,
 		ctg: 'consumable',
 		description: 'You can use this to gain 8 hours of protection against stealing.\nThis item stacks.',

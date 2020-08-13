@@ -88,7 +88,7 @@ async function buy(profile, sentMessage, amount, embed, item, message) {
 		return sentMessage.edit(embed.setDescription(`You currently have **${balance}💰**, but __**${amount}**__ __${item.name}(s)__ costs **${cost}💰**!`));
 	}
 
-	await profile.addItem(message.author.id, item, amount);
+	profile.addItem(message.author.id, item, amount);
 	profile.addMoney(message.author.id, -cost);
 
 	balance = await profile.getBalance(message.author.id);
