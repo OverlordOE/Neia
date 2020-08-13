@@ -59,27 +59,18 @@ module.exports = {
 											if (!item) return sentMessage.edit(embed.setDescription(`${item} doesn't exist.`));
 
 											// item trade
-											let hasItem = false;
 											sentMessage.edit(embed.setDescription(`Trading with *${target.username}*\n\nHow much __${item.name}(s)__ do you want to send?`)).then(() => {
 												message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 													.then(async collected => {
 														const amount = collected.first().content;
-														const uitems = await profile.getInventory(message.author.id);
 														collected.first().delete();
-														uitems.map(i => {
-															if (i.item.name == item.name && i.amount >= amount) {
-																hasItem = true;
-															}
-														});
-														if (!hasItem) {
-															return sentMessage.edit(embed.setDescription(`You don't have **${amount}** __${item.name}(s)__!`));
+														if (await profile.hasItem(message.author.id, item, amount)) {
+															await profile.addItem(target.id, item, amount);
+															await profile.removeItem(message.author.id, item, amount);
+															sentMessage.edit(embed.setDescription(`Trade with *${target.username}* succesfull!\n\nTraded **${amount}** __${item.name}__ to *${target.username}*.`));
 														}
-
-														await profile.addItem(message.author.id, item, amount);
-														await profile.removeItem(target.id, item, amount);
-
-														sentMessage.edit(embed.setDescription(`Trade with *${target.username}* succesfull!\n\nTraded **${amount}** __${item.name}__ to *${target.username}*.`));
+														else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
 
 													})
 													.catch(e => {
