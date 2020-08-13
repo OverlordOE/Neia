@@ -1,66 +1,60 @@
 const Discord = require('discord.js');
-const { Users } = require('../dbObjects');
 const DBL = require('dblapi.js');
 const dblToken = process.env.DBL_TOKEN;
 const dbl = new DBL(dblToken);
 module.exports = {
 	name: 'vote',
-	summary: 'vote for the bot to get an extra daily',
-	description: 'vote for the bot to get an extra daily and part of your passive income from your collectables.',
+	summary: 'vote for the client to get an extra daily',
+	description: 'vote for the client to get a reward.',
 	category: 'money',
 	aliases: ['v'],
 	args: false,
 	cooldown: 5,
 	usage: '',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
-
-		const bAvatar = bot.user.displayAvatarURL();
-		const avatar = msg.author.displayAvatarURL();
-
-		const pColour = await profile.getPColour(msg.author.id);
-		const user = await Users.findOne({ where: { user_id: msg.author.id } });
-		const items = await user.getItems();
-		const hasVoted = await profile.getVote(msg.author.id);
-		let cReward = 0;
-
+		const vote = await profile.getVote(message.author.id);
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Daily Reward')
-			.setThumbnail(avatar)
-			.setColor(pColour)
+			.setTitle('Vote Reward')
+			.setThumbnail(message.author.displayAvatarURL())
+			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', client.user.displayAvatarURL());
 
+		let reward = 0;
+		let chest;
 
+		const luck = Math.floor(Math.random() * 5);
+		if (luck >= 1) chest = 'Rare chest';
+		else chest = 'Epic chest';
+		chest = await profile.getItem(chest);
+
+		const items = await profile.getInventory(message.author.id);
 		items.map(i => {
 			if (i.amount < 1) return;
-
-			if (i.item.ctg == 'collectables') {
-				for (let j = 0; j < i.amount; j++) {
-					cReward += i.item.cost / 60;
-				}
-			}
+			const item = profile.getItem(i.name);
+			if (item.ctg == 'collectable') reward += i.amount * (item.cost / 100);
 		});
 
-
-		const dReward = 20 + (Math.random() * 10);
-		const finalReward = dReward + cReward;
-
-
-		dbl.hasVoted(msg.author.id).then(async voted => {
+		dbl.hasVoted(message.author.id).then(async voted => {
 			if (voted) {
-				if (hasVoted) { return msg.channel.send(embed.setDescription('You have already voted in the last 12 hours.')); }
-				else {
-					profile.addMoney(msg.author.id, finalReward);
-					const balance = await profile.getBalance(msg.author.id);
-					profile.setVote(msg.author.id, true);
-					return msg.channel.send(embed.setDescription(`Thank you for voting!!!\nYou got **${dReward.toFixed(1)}💰** from your vote 🎁 and **${cReward.toFixed(1)}💰** from your collectables for a total of **${finalReward.toFixed(1)}💰**\n\nCome back in 12 hours for more!\nYour current balance is **${balance}💰**`));
+				if (vote === true) {
+					if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
+						.setImage(`attachment://${chest.picture}`);
+
+					profile.addMoney(message.author.id, reward);
+					profile.addItem(message.author.id, chest, 1);
+					profile.setVote(message.author.id);
+
+					const balance = await profile.getBalance(message.author.id);
+					return message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your daily 🎁 and **${Math.floor(reward)}💰** from your collectables.\nCome back in a day for more!\n\nYour current balance is **${balance}💰**`));
 				}
+				else return message.channel.send(embed.setDescription(`You have already voted in the last 12 hours.\nNext vote available at __${vote}__`));
+
 			}
 			else {
-				profile.setVote(msg.author.id, false);
-				return msg.channel.send(embed.setDescription('Vote for Neia and get up to **2 extra daily\'s** a day.\nTo get the daily\'s just vote [here](https://top.gg/bot/684458276129079320/vote) and then use this command again (this usually takes about 2-3 mins to update), you can do this every 12 hours!'));
+				return message.channel.send(embed.setDescription('Vote for Neia and get up to **2 extra daily\'s** a day.\nTo get the daily\'s just vote [here](https://top.gg/bot/684458276129079320/vote) and then use this command again (this usually takes about 2-3 mins to update), you can do this every 12 hours!'));
 			}
 		});
 

@@ -1,5 +1,5 @@
 const fs = require('fs');
-const backup = require('../backup');
+const backup = require('../data/backup.json');
 module.exports = {
 	name: 'backup',
 	description: 'Makes a backup of the database.',
@@ -9,7 +9,7 @@ module.exports = {
 	usage: '<modifier>',
 
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		let total = 0;
 
 		if (args[0] == 'restore') {
@@ -22,7 +22,7 @@ module.exports = {
 
 					await profile.addMoney(id, data[i].balance);
 					await profile.setPColour(id, data[i].pColour);
-					await profile.setOptIn(id, data[i].optIn);
+					await profile.setOpt(id, data[i].opt);
 					await profile.setProtection(id, data[i].protection);
 					total++;
 				}
@@ -31,7 +31,7 @@ module.exports = {
 				}
 			}
 
-			return msg.channel.send(`backup of __**${total}**__ users restored`);
+			return message.channel.send(`backup of __**${total}**__ users restored`);
 		}
 
 		try {
@@ -44,7 +44,7 @@ module.exports = {
 
 			// Checking for errors
 			if (e) return logger.error(e.stack);
-			msg.channel.send(`Backup succesfull, backed up __**${total}**__ users!`);
+			message.channel.send(`Backup succesfull, backed up __**${total}**__ users!`);
 			logger.log('info', 'Done writing profiles'); // Success
 		});
 	},

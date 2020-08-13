@@ -1,6 +1,4 @@
-const moment = require('moment');
 const Discord = require('discord.js');
-const { Users } = require('../dbObjects');
 module.exports = {
 	name: 'hourly',
 	summary: 'Get an hourly gift',
@@ -11,48 +9,44 @@ module.exports = {
 	cooldown: 5,
 	category: 'money',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
-		const lastHourly = moment(await profile.getHourly(msg.author.id));
-		const bAvatar = bot.user.displayAvatarURL();
-		const avatar = msg.author.displayAvatarURL();
-		const pColour = await profile.getPColour(msg.author.id);
-		const user = await Users.findOne({ where: { user_id: msg.author.id } });
-		const items = await user.getItems();
-		let cReward = 0;
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+		const hourly = await profile.getHourly(message.author.id);
+		let reward = 0;
+		let chest;
+
+		const luck = Math.floor(Math.random() * 5);
+		if (luck >= 1) chest = 'Common Chest';
+		else chest = 'Rare Chest';
+		chest = await profile.getItem(chest);
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Hourly Reward')
-			.setThumbnail(avatar)
-			.setColor(pColour)
+			.setThumbnail(message.author.displayAvatarURL())
+			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', client.user.displayAvatarURL());
 
 
-		const check = moment(lastHourly).add(1, 'h');
-
-
+		const items = await profile.getInventory(message.author.id);
 		items.map(i => {
 			if (i.amount < 1) return;
-
-			if (i.item.ctg == 'collectables') {
-				for (let j = 0; j < i.amount; j++) {
-					cReward += i.item.cost / 200;
-				}
-			}
+			const item = profile.getItem(i.name);
+			if (item.ctg == 'collectable') reward += i.amount * (item.cost / 400);
 		});
 
-		const hourly = check.format('dddd HH:mm');
-		const now = moment();
-		const hReward = 3 + (Math.random() * 5);
-		const finalReward = hReward + cReward;
 
-		if (moment(check).isBefore(now)) {
-			profile.addMoney(msg.author.id, finalReward);
-			await profile.setHourly(msg.author.id);
-			const balance = await profile.getBalance(msg.author.id);
-			msg.channel.send(embed.setDescription(`You got **${hReward.toFixed(1)}💰** from your hourly 🎁 and **${cReward.toFixed(1)}💰** from your collectables for a total of **${finalReward.toFixed(1)}💰**\nCome back in an hour for more!\n\nYour current balance is **${balance}💰**`));
+		if (hourly === true) {
+			if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
+				.setImage(`attachment://${chest.picture}`);
+
+			profile.addMoney(message.author.id, reward);
+			profile.addItem(message.author.id, chest, 1);
+			profile.setHourly(message.author.id);
+			const balance = await profile.getBalance(message.author.id);
+
+			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your hourly 🎁 and **${reward.toFixed(1)}💰** from your collectables.\nCome back in an hour for more!\n\nYour current balance is **${balance}💰**`));
 		}
-		else { msg.channel.send(embed.setDescription(`You have already gotten your hourly 🎁\n\nYou can get your next hourly __${hourly}__.`)); }
+		else { message.channel.send(embed.setDescription(`You have already gotten your hourly 🎁\n\nYou can get your next hourly __${hourly}__.`)); }
 
 	},
 };

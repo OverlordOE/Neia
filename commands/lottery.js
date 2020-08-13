@@ -5,16 +5,16 @@ module.exports = {
 	name: 'lottery',
 	category: 'debug',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		//	crontime: 0 0-23/3 * * *	collectortime: 10796250		channelID: 721743056528867393
 		const lotteryJob = new cron.CronJob('0 0-23/3 * * *', async () => {
 
 			let writeData;
 			const ticketAmount = 50;
-			const misc = JSON.parse(fs.readFileSync('miscData.json'));
-			const channel = bot.channels.cache.get('721743056528867393');
-			const bAvatar = bot.user.displayAvatarURL();
-			const pColour = await profile.getPColour(msg.author.id);
+			const misc = JSON.parse(fs.readFileSync('data/miscData.json'));
+			const channel = client.channels.cache.get('721743056528867393');
+
+
 			const buyin = 5;
 
 			let lottery = misc.lastLottery;
@@ -25,13 +25,13 @@ module.exports = {
 			const participants = [];
 			const tickets = [];
 			for (let i = 0; i < ticketAmount; i++) tickets[i] = i;
-			
+
 			const embed = new Discord.MessageEmbed()
 				.setTitle('Neia Lottery')
 				.setDescription(`${description}\nCurrent jackpot: **${lottery}💰**!`)
-				.setColor(pColour)
+				.setColor(msgUser.pColour)
 				.setTimestamp()
-				.setFooter('Neia', bAvatar);
+				.setFooter('Neia', client.user.displayAvatarURL());
 
 			const filter = (reaction, user) => {
 				return ['💰', '🔔'].includes(reaction.emoji.name) && !user.bot;
@@ -59,7 +59,7 @@ module.exports = {
 								}
 							}
 							if (!duplicate) {
-								const bCheck = await profile.getBalance(user.id);
+								const bCheck = msgUser.balance;
 
 								if (bCheck >= buyin) {
 									const ticketNumber = tickets.splice(Math.floor(Math.random() * tickets.length), 1);
@@ -108,16 +108,16 @@ module.exports = {
 							sentMessage.edit(embed.setDescription(`Current lottery: **${lottery}💰**\n${players}\n\nLottery has ended and the winning number is __**${winNumber + 1}**__\n\nNoone won the lottery of **${lottery}💰**, it will be added to next days lottery!`));
 						}
 						writeData = JSON.stringify(misc);
-						fs.writeFileSync('miscData.json', writeData);
+						fs.writeFileSync('data/miscData.json', writeData);
 					});
 				})
 				.catch(e => {
 					logger.error(e.stack);
-					return msg.reply('Something went wrong.');
+					return message.reply('Something went wrong.');
 				});
 		});
 		lotteryJob.start();
-		msg.reply('Starting lottery');
+		message.reply('Starting lottery');
 
 
 	},

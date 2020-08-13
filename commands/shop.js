@@ -1,36 +1,38 @@
 const Discord = require('discord.js');
-const { CurrencyShop } = require('../dbObjects');
+const items = require('../data/items');
 module.exports = {
 	name: 'shop',
 	summary: 'Shows all the shop items',
 	description: 'Shows all the shop items.',
-	category: 'info',
+	category: 'money',
 	aliases: ['store'],
 	args: false,
 	usage: '',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
-		const items = await CurrencyShop.findAll();
-		const bAvatar = msg.author.displayAvatarURL();
-		const pColour = await profile.getPColour(msg.author.id);
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+
 		let consumable = '__**Consumables:**__\n';
-		let collectables = '__**Collectables:**__\n';
+		let collectables = '__**collectables:**__\n';
+		let chests = '__**Chests:**__\n';
 
-		await items.map(item => {
-			if (item.ctg == 'consumable') { consumable += `${item.emoji}__${item.name}__: **${item.cost}💰**\n`; }
-			else if (item.ctg == 'collectables') { collectables += `${item.emoji}__${item.name}__: **${item.cost}💰**\n`; }
-		});
+		let i;
+		for (i in items) {
+			if (items[i].cost) {
+				if (items[i].ctg == 'consumable') { consumable += `${items[i].emoji} ${items[i].name}: **${items[i].cost}💰**\n`; }
+				else if (items[i].ctg == 'collectable') { collectables += `${items[i].emoji} ${items[i].name}: **${items[i].cost}💰**\n`; }
+				else if (items[i].ctg == 'chest') { chests += `${items[i].emoji} ${items[i].name}: **${items[i].cost}💰**\n`; }
+			}
+		}
 
-		const description = `${consumable}\n${collectables}`;
+		const description = `${chests}\n${consumable}\n${collectables}`;
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Shop')
-			.setThumbnail(bAvatar)
+			.setThumbnail(client.user.displayAvatarURL())
 			.setDescription(description)
-			.setColor(pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', client.user.displayAvatarURL());
 
-		return msg.channel.send(embed);
+		return message.channel.send(embed);
 	},
 };

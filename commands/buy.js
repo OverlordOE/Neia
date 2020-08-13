@@ -1,6 +1,4 @@
 const Discord = require('discord.js');
-const { Users, CurrencyShop } = require('../dbObjects');
-const { Op } = require('sequelize');
 module.exports = {
 	name: 'buy',
 	summary: 'Buy an item from the shop',
@@ -11,26 +9,23 @@ module.exports = {
 	cooldown: 5,
 	args: false,
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
-		const bAvatar = bot.user.displayAvatarURL();
-		const avatar = msg.author.displayAvatarURL();
-		const pColour = await profile.getPColour(msg.author.id);
-		const filter = m => m.author.id === msg.author.id;
+		const filter = m => m.author.id === message.author.id;
 		let amount = 0;
 		let temp = '';
 		let item;
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Shop')
-			.setThumbnail(avatar)
+			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What item do you want to buy?')
-			.setColor(pColour)
+
 			.setTimestamp()
-			.setFooter('Neia Imporium', bAvatar);
+			.setFooter('Neia Imporium', client.user.displayAvatarURL());
 
 
-		msg.channel.send(embed).then(async sentMessage => {
+		message.channel.send(embed).then(async sentMessage => {
 
 
 			for (let i = 0; i < args.length; i++) {
@@ -40,31 +35,32 @@ module.exports = {
 				else temp += `${args[i]}`;
 			}
 
-			item = await CurrencyShop.findOne({ where: { name: { [Op.like]: temp } } });
-			if (item) {
-				buy(profile, sentMessage, amount, embed, item, msg);
-			}
+			item = await profile.getItem(temp);
+			if (item) buy(profile, sentMessage, amount, embed, item, message);
+
 			else {
-				msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 					.then(async collected => {
-						item = await CurrencyShop.findOne({ where: { name: { [Op.like]: collected.first().content } } });
-						if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not an item.`));
-						collected.first().delete().catch(e => logger.error(e.stack));
+						item = await profile.getItem(collected.first().content);
+
+						if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not a valid item.`));
+
+						collected.first().delete();
 
 						sentMessage.edit(embed.setDescription(`How many __${item.name}(s)__ do you want to buy?`)).then(() => {
-							msg.channel.awaitMessages(filter, { max: 1, time: 60000 })
+							message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 								.then(async collected => {
 									amount = parseInt(collected.first().content);
-									collected.first().delete().catch(e => logger.error(e.stack));
+									collected.first().delete();
 
-									buy(profile, sentMessage, amount, embed, item, msg);
+									buy(profile, sentMessage, amount, embed, item, message);
 
 								})
 								.catch(e => {
 									logger.error(e.stack);
-									msg.reply('you didn\'t answer in time or something went wrong.');
+									message.reply('you didn\'t answer in time or something went wrong.');
 								});
 						});
 					});
@@ -72,13 +68,12 @@ module.exports = {
 		})
 			.catch(e => {
 				logger.error(e.stack);
-				msg.reply('you didn\'t answer in time or something went wrong.');
+				message.reply('you didn\'t answer in time or something went wrong.');
 			});
-
 	},
 };
 
-async function buy(profile, sentMessage, amount, embed, item, msg) {
+async function buy(profile, sentMessage, amount, embed, item, message) {
 
 	if (!Number.isInteger(amount)) {
 		return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
@@ -87,16 +82,15 @@ async function buy(profile, sentMessage, amount, embed, item, msg) {
 		amount = 1;
 	}
 
-	const user = await Users.findOne({ where: { user_id: msg.author.id } });
-	let balance = await profile.getBalance(msg.author.id);
+	let balance = await profile.getBalance(message.author.id);
 	const cost = amount * item.cost;
 	if (cost > balance) {
 		return sentMessage.edit(embed.setDescription(`You currently have **${balance}💰**, but __**${amount}**__ __${item.name}(s)__ costs **${cost}💰**!`));
 	}
 
-	profile.addMoney(msg.author.id, -cost);
-	profile.addShopSpent(msg.author.id, cost);
-	await user.addItem(item, amount);
-	balance = await profile.getBalance(msg.author.id);
+	profile.addItem(message.author.id, item, amount);
+	profile.addMoney(message.author.id, -cost);
+
+	balance = await profile.getBalance(message.author.id);
 	sentMessage.edit(embed.setDescription(`You've bought: __**${amount}**__ __${item.name}(s)__.\n\nCurrent balance is **${balance}💰**.`));
 }

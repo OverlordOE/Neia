@@ -1,5 +1,7 @@
 const ytdl = require('ytdl-core-discord');
 const YouTube = require('discord-youtube-api');
+const ytAPI = process.env.YT_API;
+const Discord = require('discord.js');
 
 module.exports = {
 	name: 'play',
@@ -8,87 +10,72 @@ module.exports = {
 	category: 'music',
 	aliases: ['song'],
 	args: true,
-	usage: 'search criteria',
+	usage: '<search criteria>',
 
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
+
+		if (!message.member.voice.channel) return message.reply('You are not in a voice channel!');
 
 		const youtube = new YouTube(ytAPI);
-		if (!msg.member.voice.channel) {
-			return msg.reply('You are not in a voice channel!');
-		}
 		const search = args.join(' ');
-
+		let video;
 		logger.log('info', search);
 
-		const data = options.active.get(msg.guild.id) || {};
+		const data = options.active.get(message.guild.id) || {};
 
-		if (!data.connection) { data.connection = await msg.member.voice.channel.join(); }
+		if (!data.connection) { data.connection = await message.member.voice.channel.join(); }
 		else if (data.connection.status == 4) {
-			data.connection = await msg.member.voice.channel.join();
-			const guildIDData = options.active.get(msg.guild.id);
+			data.connection = await message.member.voice.channel.join();
+			const guildIDData = options.active.get(message.guild.id);
 			guildIDData.dispatcher.emit('finish');
 		}
 
 		if (!data.queue) data.queue = [];
-		data.guildID = msg.guild.id;
+		data.guildID = message.guild.id;
 
 		const validate = await ytdl.validateURL(search);
 
 		if (!validate) {
-			var video = await youtube.searchVideos(search);
+			video = await youtube.searchVideos(search);
 
 			data.queue.push({
 				songTitle: video.title,
-				requester: msg.author.tag,
+				requester: message.author,
 				url: video.url,
-				announceChannel: msg.channel.id,
+				announceChannel: message.channel.id,
 				duration: video.length,
 			});
 		}
-		else if (validate) {
-			var video = await ytdl.getInfo(search);
+		else {
+			video = await ytdl.getInfo(search);
 
 			data.queue.push({
 				songTitle: video.title,
-				requester: msg.author.tag,
+				requester: message.author,
 				url: search,
-				announceChannel: msg.channel.id,
+				announceChannel: message.channel.id,
 				duration: video.lengthSeconds,
 			});
 
 		}
-		else { return msg.reply('Cannot play this query'); }
 
+		if (!data.dispatcher) Play(client, options, data, logger, msgUser, message);
+		else message.channel.send(`Added ${video.title} to the queue - Requested by ${message.author.tag}`);
 
-		if (!data.dispatcher) {
-			Play(bot, options, data, logger);
-		}
-		else {
-			msg.channel.send(`Added ${video.title} to the queue - Requested by ${msg.author.tag}`);
-		}
-
-		options.active.set(msg.guild.id, data);
-
-		data.dispatcher.on('disconnect', e => {
-			data.dispatcher = null;
-			logger.log('info', `left voice channel for reason: ${e.info}`);
-		});
+		options.active.set(message.guild.id, data);
 	},
 };
 
 
-async function Play(bot, options, data, logger) {
+async function Play(client, options, data, logger, msgUser, message) {
 
-	const message = bot.channels.cache.get(data.queue[0].announceChannel);
-	message.send(`Now playing ${data.queue[0].songTitle}\nRequested by ${data.queue[0].requester}`);
-	try {
-		logger.log('info', `Now playing ${data.queue[0].songTitle} - Requested by ${data.queue[0].requester}`);
-	}
-	catch (e) {
-		return logger.error(e.stack);
-	}
+	const channel = client.channels.cache.get(data.queue[0].announceChannel);
+	const embed = new Discord.MessageEmbed()
+		.setThumbnail(message.author.displayAvatarURL())
+		.setColor(msgUser.pColour);
 
+	channel.send(embed.setDescription(`Now playing ${data.queue[0].songTitle}\n\nRequested by ${data.queue[0].requester}`));	
 
 	data.dispatcher = data.connection.play(await ytdl(data.queue[0].url, {
 		filter: 'audioonly',
@@ -96,45 +83,43 @@ async function Play(bot, options, data, logger) {
 	}), { type: 'opus' });
 	data.dispatcher.guildID = data.guildID;
 
-	data.dispatcher.on('finish', () => {
-		logger.log('info', 'finish');
-		Finish(bot, options, data.dispatcher, message, logger);
-	});
+	data.dispatcher.on('finish', () => Finish(client, options, data.dispatcher, logger, msgUser, message));
 
 	data.dispatcher.on('error', e => {
-		message.send(`error:  ${e.info}`);
+		channel.send(embed.setDescription(`error:  ${e.info}`));
 		logger.error(e.stack);
 	});
 
 	data.dispatcher.on('failed', e => {
-		message.send('error:  failed to join voice channel');
+		channel.send(embed.setDescription('error:  failed to join voice channel'));
 		logger.log('error', `failed to join voice channel for reason: ${e.info}`);
 	});
 
+
+	data.dispatcher.on('disconnect', e => {
+		data.dispatcher = null;
+		logger.log('info', `left voice channel for reason: ${e.info}`);
+	});
 }
 
 
-function Finish(bot, options, dispatcher, message, logger) {
+function Finish(client, options, dispatcher, logger, msgUser, message) {
 
 	const fetchedData = options.active.get(dispatcher.guildID);
 	if (fetchedData.loop) {
-
 		options.active.set(dispatcher.guildID, fetchedData);
-		return Play(bot, options, fetchedData, logger);
+		return Play(client, options, fetchedData, logger, msgUser, message);
 	}
-	else { fetchedData.queue.shift(); }
+	else fetchedData.queue.shift();
 
 	if (fetchedData.queue.length > 0) {
-
 		options.active.set(dispatcher.guildID, fetchedData);
-		Play(bot, options, fetchedData, logger);
+		Play(client, options, fetchedData, logger, msgUser, message);
 	}
+
 	else {
-
 		options.active.delete(dispatcher.guildID);
-		message.send('Queue has finished playing');
-		const voiceChannel = bot.guilds.cache.get(dispatcher.guildID).me.voice.channel;
+		const voiceChannel = client.guilds.cache.get(dispatcher.guildID).me.voice.channel;
 		if (voiceChannel) voiceChannel.leave();
-
 	}
 }

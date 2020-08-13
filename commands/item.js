@@ -1,17 +1,14 @@
 const Discord = require('discord.js');
-const { Op } = require('sequelize');
-const { CurrencyShop } = require('../dbObjects');
 module.exports = {
 	name: 'item',
 	summary: 'Shows information about a specific item',
 	description: 'Shows information about a specific item.',
 	category: 'info',
 	aliases: ['items'],
-	args: true,
+	args: false,
 	usage: '<item>',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
-		const bAvatar = msg.author.displayAvatarURL();
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		let temp = '';
 
 		for (let i = 0; i < args.length; i++) {
@@ -19,23 +16,21 @@ module.exports = {
 			else temp += `${args[i]}`;
 		}
 
-		const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: temp } } });
-		if (!item) return msg.channel.send(`\`${temp}\` is not a valid item.`, { code: true });
-
+		const item = await profile.getItem(temp);
+		if (!item) return msgUser.reply(`${item} is not a valid item`);
 		const embed = new Discord.MessageEmbed()
-			.setTitle(`${item.emoji}__${item.name}(s)__`)
+			.setTitle(`${item.emoji}${item.name}`)
 			.setDescription(item.description)
-			.addField('Cost', `**${item.cost}💰**`, true)
-			.addField('Category', item.ctg, true)
+			.addField('cost', `**${item.cost}💰**`, true)
+			.addField('Category', item.type, true)
 			.addField('Rarity', item.rarity, true)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar)
-			.attachFiles(`pictures/${item.rarity}.jpg`)
-			.setImage(`attachment://${item.rarity}.jpg`);
+			.setFooter('Neia', client.user.displayAvatarURL())
+			.attachFiles(`assets/rarity/${item.rarity}.jpg`)
+			.setThumbnail(`attachment://${item.rarity}.jpg`);
 
-		if (item.picture) embed.attachFiles(`pictures/${item.picture}`)
-			.setThumbnail(`attachment://${item.picture}.jpg`);
-
-		return msg.channel.send(embed);
+		if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
+			.setImage(`attachment://${item.picture}`);
+		return message.channel.send(embed);
 	},
 };

@@ -7,21 +7,29 @@ module.exports = {
 
 	cooldown: 0,
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
-		const transferAmount = args.find(arg => !/<@!?\d+>/g.test(arg));
-		const transferTarget = msg.mentions.users.first() || msg.author;
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+		const amount = args.find(arg => !/<@!?\d+>/g.test(arg));
+		const target = message.mentions.users.first() || message.author;
+
 
 		if (args[0] == 'all') {
 			profile.map((user) => profile.addMoney(user.user_id, args[1]));
-			return msg.channel.send(`Added **${transferAmount}** to every available user`);
+			return message.channel.send(`Added **${amount}** to every available user`);
 		}
-		if (!transferAmount || isNaN(transferAmount)) return msg.channel.send(`Sorry *${msg.author}*, that's an invalid amount.`);
+		else if (args[0] == 'item') {
+			const item = await profile.getItem(args[1]);
+			profile.addItem(target.id, item, args[2]);
+			return message.channel.send(`Added **${args[2]}** __${args[1]}__ to ${target}`);
+		}
 
-		profile.addMoney(transferTarget.id, transferAmount);
-		const balance = await profile.getBalance(transferTarget.id);
 
-		if (transferAmount <= 0) return msg.channel.send(`Successfully removed **${transferAmount * -1}💰** from *${transferTarget}*. Their current balance is **${balance}💰**`);
-		return msg.channel.send(`Successfully added **${transferAmount}💰** to *${transferTarget}*. Their current balance is** ${balance}💰**`);
+		if (!amount || isNaN(amount)) return message.channel.send(`Sorry *${message.author}*, that's an invalid amount.`);
+
+		profile.addMoney(target.id, amount);
+		const balance = await profile.getBalance(target.id);
+
+		if (amount <= 0) return message.channel.send(`Successfully removed **${amount * -1}💰** from *${target}*. Their current balance is **${balance}💰**`);
+		return message.channel.send(`Successfully added **${amount}💰** to *${target}*. Their current balance is** ${balance}💰**`);
 
 	},
 };

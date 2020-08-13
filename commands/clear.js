@@ -8,13 +8,13 @@ module.exports = {
 	usage: '',
 	cooldown: 5,
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
-		if (!msg.member.voice.channel) {
-			return msg.reply('You are not in a voice channel!');
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
+		if (!message.member.voice.channel) {
+			return message.reply('You are not in a voice channel!');
 		}
 
 		try {
-			const guildIDData = options.active.get(msg.guild.id);
+			const guildIDData = options.active.get(message.guild.id);
 			guildIDData.queue = [];
 			guildIDData.dispatcher.emit('finish');
 		}

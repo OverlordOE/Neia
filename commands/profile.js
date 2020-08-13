@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
-const { Users } = require('../dbObjects');
-const moment = require('moment');
+const itemInfo = require('../data/items');
 module.exports = {
 	name: 'profile',
 	summary: 'Shows profile of you or the tagger user',
@@ -11,133 +10,85 @@ module.exports = {
 	usage: '<user>',
 
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
-		const target = msg.mentions.users.first() || msg.author;
-		const user = await Users.findOne({ where: { user_id: target.id } });
-		const items = await user.getItems();
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+		const target = message.mentions.users.first() || message.author;
+		const items = await profile.getInventory(target.id);
 		const filter = (reaction, user) => {
-			return ['💰', '🗒️', '📦'].includes(reaction.emoji.name) && user.id === msg.author.id;
+			return ['💰', '📦'].includes(reaction.emoji.name) && user.id === message.author.id;
 		};
 
 
-		const bAvatar = bot.user.displayAvatarURL();
 		const avatar = target.displayAvatarURL();
 		const userProfile = await profile.getUser(target.id);
 		const pColour = userProfile.pColour;
-		const prot = moment(userProfile.protection);
 
-		let lastDaily;
-		let lastHourly;
-		let lastWeekly;
+		const prot = await profile.getProtection(target.id);
+		let daily = await profile.getDaily(target.id);
+		let hourly = await profile.getHourly(target.id);
+		let vote = await profile.getVote(target.id);
 
-		try {
-			lastDaily = moment(await profile.getDaily(target.id));
-			lastHourly = moment(await profile.getHourly(target.id));
-			lastWeekly = moment(await profile.getWeekly(target.id));
-		} catch (e) {
-			return logger.error(e.stack);
-		}
+		if (daily === true) daily = 'now';
+		if (hourly === true) hourly = 'now';
+		if (vote === true) vote = 'now';
 
-
-		let assets = '';
-		let networth = 0;
-		let collectables = false;
-		let inventory = `__**Inventory:**__\n`;
-
-		const now = moment();
-		const dCheck = moment(lastDaily).add(1, 'd');
-		const hCheck = moment(lastHourly).add(1, 'h');
-		const wCheck = moment(lastWeekly).add(1, 'w');
-		const pCheck = moment(prot).isBefore(now);
-
-		let daily = dCheck.format('dddd HH:mm');
-		let hourly = hCheck.format('dddd HH:mm');
-		let weekly = wCheck.format('dddd HH:mm');
-		const protection = prot.format('dddd HH:mm');
-		if (moment(dCheck).isBefore(now)) daily = 'now';
-		if (moment(hCheck).isBefore(now)) hourly = 'now';
-		if (moment(wCheck).isBefore(now)) weekly = 'now';
 
 		const moneyEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
-			.setTitle(`${target.tag}'s Stats`)
+			.setTitle(`${target.tag}'s General Stats`)
 			.setThumbnail(avatar)
-			.addField('Balance:', `${userProfile.balance.toFixed(1)}💰`, true)
-			.addField('Message Count:', userProfile.msgCount, true)
-			.addField('Next weekly:', weekly)
-			.addField('Next daily:', daily, true)
+			.addField('Balance:', `${Math.floor(userProfile.balance)}💰`)
+			
 			.addField('Next hourly:', hourly, true)
-			.addField('Can vote', !userProfile.hasVoted)
+			.addField('Next daily:', daily, true)
+			.addField('Next Vote', vote, true)
+
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', client.user.displayAvatarURL());
 
 		const invEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s Inventory`)
 			.setThumbnail(avatar)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+			.setFooter('Neia', client.user.displayAvatarURL());
 
-		const statEmbed = new Discord.MessageEmbed()
-			.setColor(pColour)
-			.setTitle(`*${target.tag}'s* Inventory`)
-			.setThumbnail(avatar)
-			.addField('Total Spent:', userProfile.totalSpent.toFixed(1), true)
-			.addField('Total Earned:', userProfile.totalEarned.toFixed(1), true)
-			.addField('Earned with Gambling:', userProfile.gamblingEarned.toFixed(1), true)
-			.addField('Spent at Gambling:', userProfile.gamblingSpent.toFixed(1), true)
-			.addField('Earned with Stealing:', userProfile.stealingEarned.toFixed(1), true)
-			.addField('Spent at Shop:', userProfile.shopSpent.toFixed(1), true)
-			.addField('Total Bot Usage:', userProfile.botUsage, true)
 
-			.setTimestamp()
-			.setFooter('Neia', bAvatar);
+		if (prot !== false) moneyEmbed.addField('Steal protection untill:', prot);
+		else moneyEmbed.addField('Steal protection untill:', 'none');
 
-		if (!pCheck) { moneyEmbed.addField('Steal protection untill:', protection); }
-
+		let networth = 0;
+		let inventory = '__**Inventory:**__\n\n';
 
 		if (items.length) {
+			if (items.length) {
+				items.map(i => {
+					if (i.amount < 1) return;
+					const item = itemInfo[i.name.toLowerCase()];
+					if (item.ctg == 'collectable') networth += item.cost;
+					inventory += `${item.emoji} ${item.name}: **x${i.amount}**\n`;
+				});
 
-			items.map(i => {
-				if (i.amount < 1) return;
-				if (i.item.ctg == 'collectables') {
-					for (let j = 0; j < i.amount; j++) {
-						assets += `${i.item.emoji}`;
-						networth += i.item.cost;
-					}
-					collectables = true;
-				}
-			});
-			if (collectables) {
-				const pIncome = (networth / 20) + ((networth / 200) * 24);
-				invEmbed.addField('Assets', assets);
-				invEmbed.addField('Max passive income', `**${pIncome.toFixed(1)}💰**`);
+				const pIncome = (networth / 33) + ((networth / 400) * 24);
+				invEmbed.addField('Max passive income', `**${Math.floor(pIncome)}💰**`);
 				invEmbed.addField('Networth', `**${networth}💰**`, true);
-			}
 
-			items.map(i => {
-				if (i.amount < 1) return;
-				if (i.item.ctg == 'collectables') return;
-				inventory += `${i.item.emoji}__${i.item.name}__: **x${i.amount}**\n`;
 				invEmbed.setDescription(inventory);
-			});
+			}
+			else { invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`); }
 		}
-		else invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`);
 
-
-		msg.channel.send(moneyEmbed)
+		message.channel.send(moneyEmbed)
 			.then(sentMessage => {
 				sentMessage.react('💰');
 				sentMessage.react('📦');
-				sentMessage.react('🗒️');
 				const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
 
 				collector.on('collect', (reaction) => {
-					reaction.users.remove(msg.author.id);
+					reaction.users.remove(message.author.id);
 					if (reaction.emoji.name == '💰') { sentMessage.edit(moneyEmbed); }
 					else if (reaction.emoji.name == '📦') { sentMessage.edit(invEmbed); }
-					else if (reaction.emoji.name == '🗒️') { sentMessage.edit(statEmbed); }
 				});
+				collector.on('end', () => sentMessage.reactions.removeAll());
 			});
 	},
 };

@@ -1,6 +1,4 @@
-const moment = require('moment');
 const Discord = require('discord.js');
-const { Users } = require('../dbObjects');
 module.exports = {
 	name: 'daily',
 	summary: 'Get a daily gift',
@@ -11,49 +9,45 @@ module.exports = {
 	cooldown: 5,
 	usage: '',
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
-		const lastDaily = moment(await profile.getDaily(msg.author.id));
-		const bAvatar = bot.user.displayAvatarURL();
-		const avatar = msg.author.displayAvatarURL();
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
-		const pColour = await profile.getPColour(msg.author.id);
-		const user = await Users.findOne({ where: { user_id: msg.author.id } });
-		const items = await user.getItems();
-		let cReward = 0;
+		const daily = await profile.getDaily(message.author.id);
+		let reward = 0;
+		let chest;
+
+		const luck = Math.floor(Math.random() * 5);
+		if (luck >= 1) chest = 'Rare chest';
+		else chest = 'Epic chest';
+		chest = await profile.getItem(chest);
+
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Daily Reward')
-			.setThumbnail(avatar)
-			.setColor(pColour)
+			.setThumbnail(message.author.displayAvatarURL())
+			.setColor(msgUser.pColour)
 			.setTimestamp()
-			.setFooter('Neia', bAvatar);
-
-		const check = moment(lastDaily).add(1, 'd');
+			.setFooter('Neia', client.user.displayAvatarURL());
 
 
+		const items = await profile.getInventory(message.author.id);
 		items.map(i => {
 			if (i.amount < 1) return;
-
-			if (i.item.ctg == 'collectables') {
-				for (let j = 0; j < i.amount; j++) {
-					cReward += i.item.cost / 60;
-				}
-			}
+			const item = profile.getItem(i.name);
+			if (item.ctg == 'collectable') reward += i.amount * (item.cost / 100);
 		});
 
 
-		const daily = check.format('dddd HH:mm');
-		const now = moment();
-		const dReward = 20 + (Math.random() * 10);
-		const finalReward = dReward + cReward;
+		if (daily === true) {
+			if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
+				.setImage(`attachment://${chest.picture}`);
 
-		if (moment(check).isBefore(now)) {
-			profile.addMoney(msg.author.id, finalReward);
+			profile.addMoney(message.author.id, reward);
+			profile.addItem(message.author.id, chest, 1);
+			profile.setDaily(message.author.id);
 
-			await profile.setDaily(msg.author.id);
-			const balance = await profile.getBalance(msg.author.id);
-			msg.channel.send(embed.setDescription(`You got **${dReward.toFixed(1)}💰** from your daily 🎁 and **${cReward.toFixed(1)}💰** from your collectables for a total of **${finalReward.toFixed(1)}💰**\nCome back in a day for more!\n\nYour current balance is **${balance}💰**`));
+			const balance = await profile.getBalance(message.author.id);
+			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your daily 🎁 and **${Math.floor(reward)}💰** from your collectables.\nCome back in a day for more!\n\nYour current balance is **${balance}💰**`));
 		}
-		else { msg.channel.send(embed.setDescription(`You have already gotten your daily 🎁\n\nYou can get you next daily __${daily}__`)); }
+		else { message.channel.send(embed.setDescription(`You have already gotten your daily 🎁\n\nYou can get you next daily __${daily}__`)); }
 	},
 };

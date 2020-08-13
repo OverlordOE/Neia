@@ -8,15 +8,15 @@ module.exports = {
 
 	cooldown: 3,
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
-		const id = msg.guild.id;
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+		const id = message.guild.id;
 
 		if (args[0]) {
 			const newPrefix = args[0];
 			guildProfile.setPrefix(id, newPrefix);
-			return msg.channel.send(`Changed the prefix for this server too: ${newPrefix}`);
+			return message.channel.send(`Changed the prefix for this server too: ${newPrefix}`);
 		}
 		const prefix = await guildProfile.getPrefix(id);
-		return msg.channel.send(`The prefix for this server is: ${prefix}`);
+		return message.channel.send(`The prefix for this server is: ${prefix}`);
 	},
 };

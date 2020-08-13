@@ -8,10 +8,10 @@ module.exports = {
 	usage: '',
 
 
-	async execute(msg, args, profile, guildProfile, bot, options, ytAPI, logger, cooldowns) {
-		const guildIDData = options.active.get(msg.guild.id);
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
+		const guildIDData = options.active.get(message.guild.id);
 
-		if (!guildIDData) return msg.channel.send('No music queued at the moment.');
+		if (!guildIDData) return message.channel.send('No music queued at the moment.');
 
 		const queue = guildIDData.queue;
 		const nowPlaying = queue[0];
@@ -27,7 +27,7 @@ module.exports = {
 			}
 		}
 
-		msg.channel.send(response, { code: true });
+		message.channel.send(response, { code: true });
 
 
 	},
