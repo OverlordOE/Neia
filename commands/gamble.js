@@ -213,32 +213,30 @@ async function blackjack(message, profile, logger, gambleAmount, sentMessage, em
 					const balance = await profile.getBalance(message.author.id);
 					sentMessage.edit(embed.setDescription(`__**Its a draw**__\n\nYour balance is **${balance}💰**`));
 				}
+
 				else if (playerHandValue > 21) {
 
 					const balance = await profile.getBalance(message.author.id);
 					embed.setColor('#fc0303');
 					sentMessage.edit(embed.setDescription(`__**You busted**__\n\nYour balance is **${balance}💰**`));
 				}
+
 				else if (botHandValue > 21) {
 					profile.addMoney(message.author.id, winAmount);
-
-
-
 					const balance = await profile.getBalance(message.author.id);
 					embed.setColor('#00fc43');
 					sentMessage.edit(embed.setDescription(`__**The bot busted**__. **You Win!**\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
 				}
+
 				else if (botHandValue >= playerHandValue) {
 
 					const balance = await profile.getBalance(message.author.id);
 					embed.setColor('#fc0303');
 					sentMessage.edit(embed.setDescription(`__**The bot wins**__\n\nYour balance is **${balance}💰**`));
-				} else if (playerHandValue > botHandValue) {
-
+				} 
+				
+				else if (playerHandValue > botHandValue) {
 					profile.addMoney(message.author.id, winAmount);
-
-
-
 					const balance = await profile.getBalance(message.author.id);
 					embed.setColor('#00fc43');
 					sentMessage.edit(embed.setDescription(`__**You win**__\n\nYou won **${winAmount}💰** and your balance is **${balance}💰**`));
@@ -252,8 +250,8 @@ async function blackjack(message, profile, logger, gambleAmount, sentMessage, em
 			return message.reply('Something went wrong, please report this as a bug.');
 		});
 
-	function setEmbed() {
-		embed.spliceFields(0, 5, [
+	async function setEmbed() {
+		await embed.spliceFields(0, 5, [
 			{ name: 'Player Hand', value: playerHand, inline: true },
 			{ name: 'Bot Hand', value: botHand, inline: true },
 			{ name: '\u200B', value: '\u200B' },

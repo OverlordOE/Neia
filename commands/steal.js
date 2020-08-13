@@ -61,7 +61,7 @@ module.exports = {
 		if (luck >= 30) {
 
 			const stealLuck = 0.05 + (Math.random() * 0.1);
-			let stealAmount = 15 + (targetBalance * stealLuck);
+			let stealAmount = 20 + (targetBalance * stealLuck);
 			if (targetBalance < stealAmount) stealAmount = targetBalance;
 
 			profile.addMoney(message.author.id, stealAmount);
