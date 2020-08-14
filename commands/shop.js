@@ -15,14 +15,13 @@ module.exports = {
 		let collectables = '__**collectables:**__\n';
 		let chests = '__**Chests:**__\n';
 
-		let i;
-		for (i in items) {
-			if (items[i].cost) {
-				if (items[i].ctg == 'consumable') { consumable += `${items[i].emoji} ${items[i].name}: **${items[i].cost}💰**\n`; }
-				else if (items[i].ctg == 'collectable') { collectables += `${items[i].emoji} ${items[i].name}: **${items[i].cost}💰**\n`; }
-				else if (items[i].ctg == 'chest') { chests += `${items[i].emoji} ${items[i].name}: **${items[i].cost}💰**\n`; }
+		Object.values(items).sort((a, b) => a.cost - b.cost).map((i) => {
+			if (i.cost) {
+				if (i.ctg == 'consumable') consumable += `${i.emoji} ${i.name}: **${i.cost}💰**\n`;
+				else if (i.ctg == 'collectable') collectables += `${i.emoji} ${i.name}: **${i.cost}💰**\n`;
+				else if (i.ctg == 'chest') chests += `${i.emoji} ${i.name}: **${i.cost}💰**\n`;
 			}
-		}
+		});
 
 		const description = `${chests}\n${consumable}\n${collectables}`;
 
