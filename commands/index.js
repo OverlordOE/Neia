@@ -24,6 +24,7 @@ module.exports = {
 	Skip: require('./skip'),
 	Clear: require('./clear'),
 	Add: require('./add'),
+	Edituser: require('./edituser'),
 	Prefix: require('./prefix'),
 	Reload: require('./reload'),
 	Delete: require('./delete'),
