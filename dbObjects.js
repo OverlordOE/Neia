@@ -118,7 +118,7 @@ Reflect.defineProperty(profile, 'addMoney', {
 
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 		user.balance += Number(amount);
-		if (amount > 0) user.totalEarned += amount;
+		if (amount > 0) user.totalEarned += Number(amount);
 
 		return user.save();
 	},
