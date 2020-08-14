@@ -24,12 +24,6 @@ module.exports = {
 			return message.channel.send('Incorrect mention');
 		}
 
-		const targetOpted = await profile.getOptIn(target.id);
-		if (!targetOpted) {
-			timestamps.delete(message.author.id);
-			return message.channel.send(`*${target.tag}* is not opted into pvp for the client.\nThey can use the command \`opt in\` to enable pvp.`);
-		}
-
 		const protection = await profile.getProtection(target.id);
 		const now = moment();
 
