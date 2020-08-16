@@ -14,7 +14,7 @@ module.exports = {
 		let reward = 0;
 		let chest;
 
-		const luck = Math.floor(Math.random() * 5);
+		const luck = Math.floor(Math.random() * 7);
 		if (luck >= 1) chest = 'Common Chest';
 		else chest = 'Rare Chest';
 		chest = await profile.getItem(chest);
