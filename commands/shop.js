@@ -12,7 +12,7 @@ module.exports = {
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 		let consumable = '__**Consumables:**__\n';
-		let collectables = '__**collectables:**__\n';
+		let collectables = '__**Collectables:**__\n';
 		let chests = '__**Chests:**__\n';
 
 		Object.values(items).sort((a, b) => a.cost - b.cost).map((i) => {
