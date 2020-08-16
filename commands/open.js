@@ -22,12 +22,12 @@ module.exports = {
 			else temp += `${args[i]}`;
 		}
 
-		const item = await profile.getItem(temp);
-		if (!await profile.hasItem(message.author.id, item, 1)) return message.reply(`You don't have any __${item.name}(s)__!`);
+		switch (temp.toLowerCase()) {
+			case 'common':
+			case 'common chest': {
 
-		switch (item.name) {
-
-			case 'Common Chest': {
+				const item = await profile.getItem('common chest');
+				if (!await profile.hasItem(message.author.id, item, 1)) return message.reply(`You don't have any __${item.name}(s)__!`);
 
 				const loot = loottable.common();
 				const lootItem = await profile.getItem(loot.name);
@@ -51,7 +51,10 @@ module.exports = {
 				break;
 			}
 
-			case 'Rare Chest': {
+			case 'rare':
+			case 'rare chest': {
+				const item = await profile.getItem('rare chest');
+				if (!await profile.hasItem(message.author.id, item, 1)) return message.reply(`You don't have any __${item.name}(s)__!`);
 
 				const loot = loottable.rare();
 				const lootItem = await profile.getItem(loot.name);
@@ -75,7 +78,10 @@ module.exports = {
 				break;
 			}
 
-			case 'Epic Chest': {
+			case 'epic':
+			case 'epic chest': {
+				const item = await profile.getItem('epic chest');
+				if (!await profile.hasItem(message.author.id, item, 1)) return message.reply(`You don't have any __${item.name}(s)__!`);
 
 				const loot = loottable.epic();
 				const lootItem = await profile.getItem(loot.name);
@@ -100,7 +106,10 @@ module.exports = {
 				break;
 			}
 
-			case 'Legendary Chest': {
+			case 'legendary':
+			case 'legendary chest': {
+				const item = await profile.getItem('legendary chest');
+				if (!await profile.hasItem(message.author.id, item, 1)) return message.reply(`You don't have any __${item.name}(s)__!`);
 
 				const loot = loottable.legendary();
 				const lootItem = await profile.getItem(loot.name);
@@ -126,7 +135,7 @@ module.exports = {
 			}
 
 			default:
-				message.reply('there is no loot associated with that chest yet.');
+				message.reply('there is no loot associated with that chest.');
 				break;
 		}
 	},
