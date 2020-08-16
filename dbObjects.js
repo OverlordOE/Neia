@@ -118,7 +118,7 @@ Reflect.defineProperty(profile, 'addMoney', {
 
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 		user.balance += Number(amount);
-		if (amount > 0) user.totalEarned += amount;
+		if (amount > 0) user.totalEarned += Number(amount);
 
 		return user.save();
 	},
@@ -127,7 +127,8 @@ Reflect.defineProperty(profile, 'getBalance', {
 	value: async function getBalance(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		return user ? Math.floor(user.balance) : 0;
+		return Math.floor(user.balance);
+
 	},
 });
 
@@ -286,5 +287,21 @@ Reflect.defineProperty(guildProfile, 'setPrefix', {
 	},
 });
 
+
+// MISC
+Reflect.defineProperty(profile, 'formatNumber', {
+	value: function formatNumber(number) {
+		const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
+		const tier = Math.log10(number) / 3 | 0;
+
+		if (tier == 0) return Math.floor(number);
+
+		const suffix = SI_SYMBOL[tier];
+		const scale = Math.pow(10, tier * 3);
+
+		const scaled = number / scale;
+		return scaled.toFixed(1) + suffix;
+	},
+});
 
 module.exports = { Users, Guilds, profile, guildProfile };

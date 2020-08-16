@@ -15,7 +15,7 @@ module.exports = {
 		let reward = 0;
 		let chest;
 
-		const luck = Math.floor(Math.random() * 5);
+		const luck = Math.floor(Math.random() * 10);
 		if (luck >= 1) chest = 'Rare chest';
 		else chest = 'Epic chest';
 		chest = await profile.getItem(chest);
@@ -45,8 +45,8 @@ module.exports = {
 			profile.addItem(message.author.id, chest, 1);
 			profile.setDaily(message.author.id);
 
-			const balance = await profile.getBalance(message.author.id);
-			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your daily 🎁 and **${Math.floor(reward)}💰** from your collectables.\nCome back in a day for more!\n\nYour current balance is **${balance}💰**`));
+			const balance = profile.formatNumber(await profile.getBalance(message.author.id));
+			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your daily 🎁 and **${profile.formatNumber(reward)}💰** from your collectables.\nCome back in a day for more!\n\nYour current balance is **${balance}💰**`));
 		}
 		else { message.channel.send(embed.setDescription(`You have already gotten your daily 🎁\n\nYou can get you next daily __${daily}__`)); }
 	},

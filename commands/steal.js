@@ -24,12 +24,6 @@ module.exports = {
 			return message.channel.send('Incorrect mention');
 		}
 
-		const targetOpted = await profile.getOptIn(target.id);
-		if (!targetOpted) {
-			timestamps.delete(message.author.id);
-			return message.channel.send(`*${target.tag}* is not opted into pvp for the client.\nThey can use the command \`opt in\` to enable pvp.`);
-		}
-
 		const protection = await profile.getProtection(target.id);
 		const now = moment();
 
@@ -43,14 +37,12 @@ module.exports = {
 			timestamps.delete(message.author.id);
 			return message.channel.send('You cant steal from someone who has no money.');
 		}
+		
 		const uitems = await profile.getInventory(message.author.id);
 		let hasItem = false;
 		const item = await profile.getItem('gun');
-		uitems.map(i => {
-			if (i.name == item.name && i.amount >= 1) {
-				hasItem = true;
-			}
-		});
+		uitems.map(i => { if (i.name == item.name && i.amount >= 1) hasItem = true; });
+
 		if (!hasItem) {
 			timestamps.delete(message.author.id);
 			return message.channel.send('You don\'t have a gun to steal with!');
@@ -66,11 +58,11 @@ module.exports = {
 
 			profile.addMoney(message.author.id, stealAmount);
 			profile.addMoney(target.id, -stealAmount);
-			const balance = await profile.getBalance(message.author.id);
+	
 			await profile.removeItem(message.author.id, item, 1);
 			const prot = moment(now).add(1, 'h');
 			await profile.setProtection(target.id, prot);
-			return message.channel.send(`Successfully stolen **${Math.floor(stealAmount)}💰** from *${target.tag}*. Your current balance is **${balance}💰**`);
+			return message.channel.send(`Successfully stolen **${profile.formatNumber(stealAmount)}💰** from *${target.tag}*. Your current balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`);
 		}
 		else if (luck >= 15) {
 			await profile.removeItem(message.author.id, item, 1);
@@ -79,9 +71,9 @@ module.exports = {
 		else if (luck < 15) {
 			const fine = 10 + (Math.random() * 20);
 			profile.addMoney(message.author.id, -fine);
-			const balance = await profile.getBalance(message.author.id);
+			
 			await profile.removeItem(message.author.id, item, 1);
-			return message.channel.send(`You got caught trying to steal from *${target.tag}*, you get fined **${Math.floor(fine)}💰**. Your current balance is **${balance}💰**`);
+			return message.channel.send(`You got caught trying to steal from *${target.tag}*, you get fined **${Math.floor(fine)}💰**. Your current balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`);
 		}
 		else {
 			timestamps.delete(message.author.id);

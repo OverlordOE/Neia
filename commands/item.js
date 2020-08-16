@@ -22,7 +22,7 @@ module.exports = {
 			.setTitle(`${item.emoji}${item.name}`)
 			.setDescription(item.description)
 			.addField('cost', `**${item.cost}💰**`, true)
-			.addField('Category', item.type, true)
+			.addField('Category', item.ctg, true)
 			.addField('Rarity', item.rarity, true)
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL())

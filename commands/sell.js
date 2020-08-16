@@ -12,7 +12,6 @@ module.exports = {
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
-		const uitems = await profile.getInventory(message.author.id);
 		const filter = m => m.author.id === message.author.id;
 		let amount = 0;
 		let temp = '';
@@ -35,18 +34,10 @@ module.exports = {
 				else temp += `${args[i]}`;
 			}
 
-			item = await profile.getItem(temp);
+			item = profile.getItem(temp);
 			if (item) {
-				uitems.map(i => {
-					if (i.name == item.name) {
-						if (amount == 'all') {
-							amount = i.amount;
-							sell(profile, sentMessage, amount, embed, item, message);
-						}
-						else if (i.amount >= amount) sell(profile, sentMessage, amount, embed, item, message);
-						else return sentMessage.edit(embed.setDescription(`You only have **${i.amount}/${amount}** of the __${item.name}(s)__ needed!`));
-					}
-				});
+				if (await profile.hasItem(message.author.id, item, amount)) sell(profile, sentMessage, amount, embed, item, message);
+				else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
 			}
 			else {
 				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
@@ -54,8 +45,6 @@ module.exports = {
 					.then(async collected => {
 						const item = await profile.getItem(collected.first().content);
 						if (!item) return sentMessage.edit(embed.setDescription(`\`${item}\` is not a valid item.`));
-
-						let hasItem = false;
 						collected.first().delete();
 
 						sentMessage.edit(embed.setDescription(`How much __${item.name}(s)__ do you want to sell?`)).then(() => {
@@ -64,20 +53,9 @@ module.exports = {
 								.then(async collected => {
 									const amount = parseInt(collected.first().content);
 									if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number!`));
-									else if (amount < 1 || amount > 10000) return sentMessage.edit(embed.setDescription('Enter a number between 1 and 10000'));
 
-									uitems.map(i => {
-										if (i.name == item.name && i.amount >= amount) {
-											hasItem = true;
-										}
-									});
-
-									if (!hasItem) {
-										return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
-									}
-
-									sell(profile, sentMessage, amount, embed, item, message);
-
+									if (await profile.hasItem(message.author.id, item, amount)) sell(profile, sentMessage, amount, embed, item, message);
+									else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
 								})
 								.catch(e => {
 									logger.error(e.stack);
@@ -104,6 +82,5 @@ async function sell(profile, sentMessage, amount, embed, item, message) {
 	profile.removeItem(message.author.id, item, amount);
 	profile.addMoney(message.author.id, refundAmount);
 
-	const balance = await profile.getBalance(message.author.id);
-	sentMessage.edit(embed.setDescription(`You've refunded ${amount} __${item.name}(s)__ and received **${Math.floor(refundAmount)}💰** back.\nYour balance is **${balance}💰**!`));
+	sentMessage.edit(embed.setDescription(`You've refunded ${amount} __${item.name}(s)__ and received **${Math.floor(refundAmount)}💰** back.\nYour balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**!`));
 }

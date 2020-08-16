@@ -36,7 +36,7 @@ module.exports = {
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s General Stats`)
 			.setThumbnail(avatar)
-			.addField('Balance:', `${Math.floor(userProfile.balance)}💰`)
+			.addField('Balance:', `${profile.formatNumber(userProfile.balance)}💰`)
 			
 			.addField('Next hourly:', hourly, true)
 			.addField('Next daily:', daily, true)
@@ -64,13 +64,13 @@ module.exports = {
 				items.map(i => {
 					if (i.amount < 1) return;
 					const item = itemInfo[i.name.toLowerCase()];
-					if (item.ctg == 'collectable') networth += item.cost;
-					inventory += `${item.emoji} ${item.name}: **x${i.amount}**\n`;
+					if (item.ctg == 'collectable') networth += item.cost * i.amount;
+					inventory += `${item.emoji}${item.name}: **${i.amount}x**\n`;
 				});
 
 				const pIncome = (networth / 33) + ((networth / 400) * 24);
-				invEmbed.addField('Max passive income', `**${Math.floor(pIncome)}💰**`);
-				invEmbed.addField('Networth', `**${networth}💰**`, true);
+				invEmbed.addField('Max passive income', `**${profile.formatNumber(pIncome)}💰**`);
+				invEmbed.addField('Networth', `**${profile.formatNumber(networth)}💰**`, true);
 
 				invEmbed.setDescription(inventory);
 			}
