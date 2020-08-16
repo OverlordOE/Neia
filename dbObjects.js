@@ -289,7 +289,6 @@ Reflect.defineProperty(guildProfile, 'setPrefix', {
 
 
 // MISC
-
 Reflect.defineProperty(profile, 'formatNumber', {
 	value: function formatNumber(number) {
 		const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
