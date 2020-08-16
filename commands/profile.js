@@ -53,8 +53,8 @@ module.exports = {
 			.setFooter('Neia', client.user.displayAvatarURL());
 
 
-		if (prot !== false) moneyEmbed.addField('Steal protection untill:', prot);
-		else moneyEmbed.addField('Steal protection untill:', 'none');
+		if (prot !== false) moneyEmbed.addField('Steal protection:', prot);
+		else moneyEmbed.addField('Steal protection:', 'none');
 
 		let networth = 0;
 		let inventory = '__**Inventory:**__\n\n';

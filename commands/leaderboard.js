@@ -24,7 +24,7 @@ module.exports = {
 
 
 		let currentList = totalList;
-		let description = 'Total Earned';
+		let description = '**Total Earned**\n';
 		let page = 0;
 		if (!isNaN(args[0]) && args[0] > 0 && args[0] < 6) page = args[0] - 1;
 
@@ -48,11 +48,11 @@ module.exports = {
 				reaction.users.remove(message.author.id);
 				if (reaction.emoji.name == '◀️' && page > 0) {
 					page--;
-					sentMessage.edit(embed.setDescription(editDescription(currentList, page)));
+					sentMessage.edit(embed.setDescription(editDescription(currentList, page, description)));
 				}
 				else if (reaction.emoji.name == '▶️' && page < 4) {
 					page++;
-					sentMessage.edit(embed.setDescription(editDescription(currentList, page)));
+					sentMessage.edit(embed.setDescription(editDescription(currentList, page, description)));
 				}
 				else if (reaction.emoji.name == '🔀') {
 					if (currentList == totalList) {
