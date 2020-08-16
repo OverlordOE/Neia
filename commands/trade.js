@@ -85,13 +85,12 @@ module.exports = {
 											const balance = msgUser.balance;
 
 											if (!goods || isNaN(goods)) return sentMessage.edit(embed.setDescription(`Sorry *${message.author}*, that's an invalid amount.`));
-											if (goods > balance) return sentMessage.edit(embed.setDescription(`You only have **${balance}💰** but need **${goods}**.`));
+											if (goods > balance) return sentMessage.edit(embed.setDescription(`You only have **${profile.formatNumber(balance)}💰** but need **${profile.formatNumber(goods)}**.`));
 											if (goods <= 0) return sentMessage.edit(embed.setDescription(`Please enter an amount greater than zero, *${message.author}*.`));
 
 											profile.addMoney(message.author.id, -goods);
 											profile.addMoney(target.id, goods);
-											const balance2 = await profile.getBalance(message.author.id);
-											return sentMessage.edit(embed.setDescription(`Trade with *${target.username}* succesfull!\n\nTransferred **${goods}💰** to *${target.username}*.\nYour current balance is **${balance2}💰**`));
+											return sentMessage.edit(embed.setDescription(`Trade with *${target.username}* succesfull!\n\nTransferred **${profile.formatNumber(goods)}💰** to *${target.username}*.\nYour current balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 
 										}
 									})

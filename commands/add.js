@@ -26,7 +26,7 @@ module.exports = {
 		if (!amount || isNaN(amount)) return message.channel.send(`Sorry *${message.author}*, that's an invalid amount.`);
 
 		profile.addMoney(target.id, amount);
-		const balance = await profile.getBalance(target.id);
+		const balance = profile.formatNumber(await profile.getBalance(target.id));
 
 		if (amount <= 0) return message.channel.send(`Successfully removed **${amount * -1}💰** from *${target}*. Their current balance is **${balance}💰**`);
 		return message.channel.send(`Successfully added **${amount}💰** to *${target}*. Their current balance is** ${balance}💰**`);

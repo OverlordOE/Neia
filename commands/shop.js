@@ -17,9 +17,9 @@ module.exports = {
 
 		Object.values(items).sort((a, b) => a.cost - b.cost).map((i) => {
 			if (i.cost) {
-				if (i.ctg == 'consumable') consumable += `${i.emoji} ${i.name}: **${i.cost}💰**\n`;
-				else if (i.ctg == 'collectable') collectables += `${i.emoji} ${i.name}: **${i.cost}💰**\n`;
-				else if (i.ctg == 'chest') chests += `${i.emoji} ${i.name}: **${i.cost}💰**\n`;
+				if (i.ctg == 'consumable') consumable += `${i.emoji} ${i.name}: **${profile.formatNumber(i.cost)}💰**\n`;
+				else if (i.ctg == 'collectable') collectables += `${i.emoji} ${i.name}: **${profile.formatNumber(i.cost)}💰**\n`;
+				else if (i.ctg == 'chest') chests += `${i.emoji} ${i.name}: **${profile.formatNumber(i.cost)}💰**\n`;
 			}
 		});
 
