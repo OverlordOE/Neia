@@ -20,13 +20,11 @@ module.exports = {
 			.setTitle('Neia Shop')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What item do you want to buy?')
-
 			.setTimestamp()
 			.setFooter('Neia Imporium', client.user.displayAvatarURL());
 
 
 		message.channel.send(embed).then(async sentMessage => {
-
 
 			for (let i = 0; i < args.length; i++) {
 				if (!(isNaN(args[i]))) amount = parseInt(args[i]);
@@ -43,9 +41,7 @@ module.exports = {
 
 					.then(async collected => {
 						item = await profile.getItem(collected.first().content);
-
 						if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not a valid item.`));
-
 						collected.first().delete();
 
 						sentMessage.edit(embed.setDescription(`How many __${item.name}(s)__ do you want to buy?`)).then(() => {
@@ -54,9 +50,7 @@ module.exports = {
 								.then(async collected => {
 									amount = parseInt(collected.first().content);
 									collected.first().delete();
-
 									buy(profile, sentMessage, amount, embed, item, message);
-
 								})
 								.catch(e => {
 									logger.error(e.stack);
@@ -78,11 +72,9 @@ async function buy(profile, sentMessage, amount, embed, item, msgUser) {
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
 	else if (amount < 1) amount = 1;
 
-
 	const balance = msgUser.balance;
 	const cost = amount * item.cost;
 	if (cost > balance) return sentMessage.edit(embed.setDescription(`You currently have **${profile.formatNumber(balance)}💰**, but __**${amount}**__ __${item.name}(s)__ costs **${cost}💰**!`));
-
 
 	profile.addItem(msgUser.user_id, item, amount);
 	profile.addMoney(msgUser.user_id, -cost);

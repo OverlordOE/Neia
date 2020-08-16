@@ -9,9 +9,6 @@ module.exports = {
 	usage: '<target>',
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
-
-
-
 		const target = message.mentions.users.first() || message.author;
 		const avatar = target.displayAvatarURL();
 
