@@ -21,7 +21,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`${item.emoji}${item.name}`)
 			.setDescription(item.description)
-			.addField('cost', `**${item.cost}💰**`, true)
+			.addField('cost', `**${profile.formatNumber(item.cost)}💰**`, true)
 			.addField('Category', item.ctg, true)
 			.addField('Rarity', item.rarity, true)
 			.setTimestamp()

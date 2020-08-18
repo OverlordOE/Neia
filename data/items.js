@@ -4,7 +4,7 @@ module.exports = {
 	'common chest': {
 		name: 'Common Chest',
 		cost: 50,
-		emoji: '<:CommonBox:727513141260583031>',
+		emoji: '<:chest_t_01:745278856201633832>',
 		rarity: 'common',
 		picture: 'common_closed.png',
 		ctg: 'chest',
@@ -13,7 +13,7 @@ module.exports = {
 	'rare chest': {
 		name: 'Rare Chest',
 		cost: 300,
-		emoji: '<:RareBox:727513141243805776>',
+		emoji: '<:chest_t_02:745278856298102864>',
 		rarity: 'rare',
 		picture: 'rare_closed.png',
 		ctg: 'chest',
@@ -22,7 +22,7 @@ module.exports = {
 	'epic chest': {
 		name: 'Epic Chest',
 		cost: 1400,
-		emoji: '<:EpicBox:727513140849410090>',
+		emoji: '<:chest_t_03:745278856268742696>',
 		rarity: 'epic',
 		picture: 'epic_closed.png',
 		ctg: 'chest',
@@ -31,7 +31,7 @@ module.exports = {
 	'legendary chest': {
 		name: 'Legendary Chest',
 		cost: 8000,
-		emoji: '<:LegendaryBox:727513140836827247>',
+		emoji: '<:chest_t_04:745278855987593226>',
 		rarity: 'legendary',
 		picture: 'legendary_closed.png',
 		ctg: 'chest',
