@@ -188,7 +188,7 @@ module.exports = {
 		description: 'Gives you passive income.',
 	},
 	'scooter': {
-		name: 'scooter',
+		name: 'Scooter',
 		cost: 15,
 		emoji: '🛴',
 		rarity: 'common',
@@ -242,7 +242,7 @@ module.exports = {
 		description: 'Gives you passive income.',
 	},
 	'stadium': {
-		name: 'stadium',
+		name: 'Stadium',
 		cost: 100000,
 		emoji: '🏟️',
 		rarity: 'legendary',
@@ -251,7 +251,7 @@ module.exports = {
 		description: 'Gives you passive income.',
 	},
 	'ship': {
-		name: 'ship',
+		name: 'Ship',
 		cost: 500,
 		emoji: '🚢',
 		rarity: 'rare',

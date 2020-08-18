@@ -35,7 +35,7 @@ module.exports = {
 	},
 
 	epic() {
-		// cost 1200
+		// cost 1400
 		const loot = new LootTable();
 		loot.add({ name: 'Sailboat', amount: [5, 2] }, 13);
 		loot.add({ name: 'Motorboat', amount: [8, 3] }, 13);
