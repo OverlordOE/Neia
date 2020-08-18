@@ -14,7 +14,6 @@ module.exports = {
 		if (isNaN(amount)) return message.channel.send(`**${amount}** is not a valid number`);
 		if (amount < 1 || amount > 100) return message.channel.send('Input a number between 1 and 100');
 
-
 		try {
 			message.delete();
 			message.channel.bulkDelete(amount);

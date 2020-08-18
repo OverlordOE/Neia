@@ -5,8 +5,8 @@ const numberRate = 3.2;
 const blackjackRate = 2;
 module.exports = {
 	name: 'gamble',
-	summary: 'Gives you a list of minigames to play to make some money with',
-	description: 'Play 1 of 3 minigameL Rock, paper, scissors; Number guessing or Blackjack.',
+	summary: 'Gives you a list of minigames to play and make some money with',
+	description: 'Play 1 of 3 minigames Rock, paper, scissors; Number guessing or Blackjack.',
 	category: 'money',
 	aliases: ['guess'],
 	args: true,
@@ -63,6 +63,8 @@ module.exports = {
 							🃏__**Blackjack**__\n
 							Play a game of blackjack against the bot and test your luck.\n
 							**Potential winnings: ${profile.formatNumber(blackjackRate * gambleAmount)}💰**
+
+							Press one of the emojis below to start a game.
 					`));
 					sentMessage.react('✂️');
 					sentMessage.react(emojiCharacters[5]);

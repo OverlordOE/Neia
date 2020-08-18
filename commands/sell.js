@@ -29,7 +29,7 @@ module.exports = {
 
 			for (let i = 0; i < args.length; i++) {
 				if (!(isNaN(args[i]))) amount = parseInt(args[i]);
-				else if (args[i] == 'all') amount = 'all';
+				else if (args[i] == 'all') amount = Math.floor(msgUser.balance);
 				else if (temp.length > 2) temp += ` ${args[i]}`;
 				else temp += `${args[i]}`;
 			}
@@ -44,7 +44,7 @@ module.exports = {
 
 					.then(async collected => {
 						const item = await profile.getItem(collected.first().content);
-						if (!item) return sentMessage.edit(embed.setDescription(`\`${item}\` is not a valid item.`));
+						if (!item) return sentMessage.edit(embed.setDescription(`\`${collected.first().content}\` is not a valid item.`));
 						collected.first().delete();
 
 						sentMessage.edit(embed.setDescription(`How much __${item.name}(s)__ do you want to sell?`)).then(() => {
@@ -82,5 +82,5 @@ async function sell(profile, sentMessage, amount, embed, item, message) {
 	profile.removeItem(message.author.id, item, amount);
 	profile.addMoney(message.author.id, refundAmount);
 
-	sentMessage.edit(embed.setDescription(`You've refunded ${amount} __${item.name}(s)__ and received **${Math.floor(refundAmount)}💰** back.\nYour balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**!`));
+	sentMessage.edit(embed.setDescription(`You've refunded ${amount} __${item.name}(s)__ and received **${profile.formatNumber(refundAmount)}💰** back.\nYour balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**!`));
 }
