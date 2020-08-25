@@ -29,7 +29,7 @@ module.exports = {
 
 			for (let i = 0; i < args.length; i++) {
 				if (!(isNaN(args[i]))) amount = parseInt(args[i]);
-				else if (args[i] == 'all') amount = Math.floor(msgUser.balance);
+				else if (args[i] == 'all') amount = 'all';
 				else if (temp.length > 2) temp += ` ${args[i]}`;
 				else temp += `${args[i]}`;
 			}
