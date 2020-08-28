@@ -49,7 +49,7 @@ module.exports = {
 						if (r.emoji.name == '🔔') {
 							const info = participants.findIndex(ticket => ticket.user.id == user.id);
 							participants[info].notify = true;
-							user.send(`You will be notified when the lottery will end\n\nThis lottery has a jackpot of **${lottery}💰** \nYour ticket number is __**${parseInt(participants[info].ticketNumber) + 1}**__.`);
+							user.send(`You will be notified when the lottery will end\n\nThis lottery has a jackpot of **${profile.formatNumber(lottery)}💰** \nYour ticket number is __**${parseInt(participants[info].ticketNumber) + 1}**__.`);
 						}
 						else if (r.emoji.name == '💰') {
 							for (let i = 0; i < participants.length; i++) {
@@ -59,7 +59,7 @@ module.exports = {
 								}
 							}
 							if (!duplicate) {
-								const bCheck = msgUser.balance;
+								const bCheck = profile.getBalance(user.id);
 
 								if (bCheck >= buyin) {
 									const ticketNumber = tickets.splice(Math.floor(Math.random() * tickets.length), 1);
@@ -72,10 +72,10 @@ module.exports = {
 									profile.addMoney(user.id, -buyin);
 									players += `\n${parseInt(ticketNumber) + 1}: ${user}`;
 									lottery = misc.lastLottery + (participants.length * buyin);
-									sentMessage.edit(embed.setDescription(`${description}\nCurrent lottery: **${lottery}💰**\n${players}`));
+									sentMessage.edit(embed.setDescription(`${description}\nCurrent lottery: **${profile.formatNumber(lottery)}💰**\n${players}`));
 								}
 								else {
-									user.send(`You only have **${bCheck}💰** but the buy-in is **${buyin}💰**.`);
+									user.send(`You only have **${profile.formatNumber(bCheck)}💰** but the buy-in is **${buyin}💰**.`);
 								}
 							}
 							duplicate = false;
@@ -90,22 +90,22 @@ module.exports = {
 
 						if (winner) {
 							profile.addMoney(winner.user.id, lottery);
-							channel.send(`Congrats ${winner.user} on winning the jackpot of **${lottery}💰**!!!`);
-							sentMessage.edit(embed.setDescription(`Current lottery: **${lottery}💰**\n${players}\n\nLottery has ended and the winning number is __**${winNumber + 1}**__\n*${winner.user}* has won the lottery of **${lottery}💰**`));
+							channel.send(`Congrats ${winner.user} on winning the jackpot of **${profile.formatNumber(lottery)}💰**!!!`);
+							sentMessage.edit(embed.setDescription(`Current lottery: **${profile.formatNumber(lottery)}💰**\n${players}\n\nLottery has ended and the winning number is __**${winNumber + 1}**__\n*${winner.user}* has won the lottery of **${profile.formatNumber(lottery)}💰**`));
 							misc.lastLottery = ticketAmount;
 						}
 
 						for (let i = 0; i < participants.length; i++) {
 							if (participants[i].notify) {
-								if (winner) winner.user.send(`The lottery has ended\nYou have won the lottery with lucky number __**${winNumber + 1}**__ and won **${lottery}💰**!\n\nThe next jackpot will be **${ticketAmount}💰** and is starting in 1 minute`);
-								else participants[i].user.send(`The lottery has ended\nThe winning number is __**${winNumber + 1}**__ but you had the number __**${parseInt(participants[i].ticketNumber) + 1}**__.\n\nThe next jackpot will be **${misc.lastLottery}💰** and is starting in 1 minute`);
+								if (winner) winner.user.send(`The lottery has ended\nYou have won the lottery with lucky number __**${winNumber + 1}**__ and won **${profile.formatNumber(lottery)}💰**!\n\nThe next jackpot will be **${ticketAmount}💰** and is starting in 1 minute`);
+								else participants[i].user.send(`The lottery has ended\nThe winning number is __**${winNumber + 1}**__ but you had the number __**${parseInt(participants[i].ticketNumber) + 1}**__.\n\nThe next jackpot will be **${profile.formatNumber(misc.lastLottery)}💰** and is starting in 1 minute`);
 
 							}
 						}
 
 						if (!winner) {
 							misc.lastLottery = lottery + ticketAmount;
-							sentMessage.edit(embed.setDescription(`Current lottery: **${lottery}💰**\n${players}\n\nLottery has ended and the winning number is __**${winNumber + 1}**__\n\nNoone won the lottery of **${lottery}💰**, it will be added to next days lottery!`));
+							sentMessage.edit(embed.setDescription(`Current lottery: **${profile.formatNumber(lottery)}💰**\n${players}\n\nLottery has ended and the winning number is __**${winNumber + 1}**__\n\nNoone won the lottery of **${profile.formatNumber(lottery)}💰**, it will be added to next days lottery!`));
 						}
 						writeData = JSON.stringify(misc);
 						fs.writeFileSync('data/miscData.json', writeData);
