@@ -128,7 +128,33 @@ Reflect.defineProperty(profile, 'getBalance', {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 		return Math.floor(user.balance);
+	},
+});
 
+Reflect.defineProperty(profile, 'calculateIncome', {
+	value: async function calculateIncome(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+
+		const uItems = await profile.getInventory(id);
+		let networth = 0;
+		let income = 0;
+		let daily = 0;
+		let hourly = 0;
+
+		if (uItems.length) {
+			uItems.map(i => {
+				if (i.amount < 1) return;
+				const item = items[i.name.toLowerCase()];
+				if (item.ctg == 'collectable') {
+					networth += item.cost * i.amount;
+					income += Math.pow((item.cost * 149) / 1650, 1.1) * i.amount;
+					daily += Math.pow(item.cost / 100, 1.1) * i.amount;
+					hourly += Math.pow(item.cost / 400, 1.1) * i.amount;
+				}
+			});
+		}
+		return { networth: networth, income: income, daily: daily, hourly: hourly };
 	},
 });
 

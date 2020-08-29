@@ -50,7 +50,7 @@ module.exports = {
 								.then(async collected => {
 									amount = parseInt(collected.first().content);
 									collected.first().delete();
-									buy(profile, sentMessage, amount, embed, item, message);
+									buy(profile, sentMessage, amount, embed, item, msgUser);
 								})
 								.catch(e => {
 									logger.error(e.stack);
