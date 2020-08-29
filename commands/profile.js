@@ -60,7 +60,7 @@ module.exports = {
 			items.map(i => {
 				if (i.amount < 1) return;
 				const item = itemInfo[i.name.toLowerCase()];
-				inventory += `${item.emoji}${item.name}: **${i.amount}x**\n`;
+				inventory += `${item.emoji}${item.name}: **${profile.formatNumber(i.amount)}x**\n`;
 			});
 
 			const income = await profile.calculateIncome(target.id);
