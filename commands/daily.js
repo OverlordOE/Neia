@@ -31,13 +31,13 @@ module.exports = {
 			if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
 				.setImage(`attachment://${chest.picture}`);
 
-			const reward = await profile.calculateIncome(message.author.id).daily;
-			profile.addMoney(message.author.id, reward);
+			const income = await profile.calculateIncome(message.author.id);
+			profile.addMoney(message.author.id, income.daily);
 			profile.addItem(message.author.id, chest, 1);
 			profile.setDaily(message.author.id);
 
 			const balance = profile.formatNumber(await profile.getBalance(message.author.id));
-			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your daily 🎁 and **${profile.formatNumber(reward)}💰** from your collectables.\nCome back in a day for more!\n\nYour current balance is **${balance}💰**`));
+			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your daily 🎁 and **${profile.formatNumber(income.daily)}💰** from your collectables.\nCome back in a day for more!\n\nYour current balance is **${balance}💰**`));
 		}
 		else { message.channel.send(embed.setDescription(`You have already gotten your daily 🎁\n\nYou can get you next daily __${daily}__`)); }
 	},

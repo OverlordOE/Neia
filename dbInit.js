@@ -19,7 +19,7 @@ sequelize.import('models/Guilds');
 
 // Create tags
 sequelize
-	.sync()
+	.sync({ force: true })
 	.then(async () => {
 		console.log('DB synced');
 		sequelize.close();
