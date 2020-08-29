@@ -22,20 +22,12 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
 
-		let reward = 0;
 		let chest;
-
 		const luck = Math.floor(Math.random() * 10);
 		if (luck >= 1) chest = 'Rare chest';
 		else chest = 'Epic chest';
 		chest = await profile.getItem(chest);
 
-		const items = await profile.getInventory(message.author.id);
-		items.map(i => {
-			if (i.amount < 1) return;
-			const item = profile.getItem(i.name);
-			if (item.ctg == 'collectable') reward += i.amount * (item.cost / 100);
-		});
 
 		dbl.hasVoted(message.author.id).then(async voted => {
 			if (voted) {
@@ -43,6 +35,7 @@ module.exports = {
 					if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
 						.setImage(`attachment://${chest.picture}`);
 
+					const reward = await profile.calculateIncome(message.author.id).daily;
 					profile.addMoney(message.author.id, reward);
 					profile.addItem(message.author.id, chest, 1);
 					profile.setVote(message.author.id);

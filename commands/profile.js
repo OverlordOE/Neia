@@ -37,11 +37,9 @@ module.exports = {
 			.setTitle(`${target.tag}'s General Stats`)
 			.setThumbnail(avatar)
 			.addField('Balance:', `${profile.formatNumber(userProfile.balance)}💰`)
-			
 			.addField('Next hourly:', hourly, true)
 			.addField('Next daily:', daily, true)
 			.addField('Next Vote', vote, true)
-
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
 
@@ -56,26 +54,23 @@ module.exports = {
 		if (prot !== false) moneyEmbed.addField('Steal protection:', prot);
 		else moneyEmbed.addField('Steal protection:', 'none');
 
-		let networth = 0;
+
 		let inventory = '__**Inventory:**__\n\n';
-
 		if (items.length) {
-			if (items.length) {
-				items.map(i => {
-					if (i.amount < 1) return;
-					const item = itemInfo[i.name.toLowerCase()];
-					if (item.ctg == 'collectable') networth += item.cost * i.amount;
-					inventory += `${item.emoji}${item.name}: **${i.amount}x**\n`;
-				});
+			items.map(i => {
+				if (i.amount < 1) return;
+				const item = itemInfo[i.name.toLowerCase()];
+				inventory += `${item.emoji}${item.name}: **${i.amount}x**\n`;
+			});
 
-				const pIncome = (networth / 33) + ((networth / 400) * 24);
-				invEmbed.addField('Max passive income', `**${profile.formatNumber(pIncome)}💰**`);
-				invEmbed.addField('Networth', `**${profile.formatNumber(networth)}💰**`, true);
+			const income = await profile.calculateIncome(target.id);
+			invEmbed.addField('Max passive income', `**${profile.formatNumber(income.income)}💰**`);
+			invEmbed.addField('Networth', `**${profile.formatNumber(income.networth)}💰**`, true);
 
-				invEmbed.setDescription(inventory);
-			}
-			else { invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`); }
+			invEmbed.setDescription(inventory);
 		}
+		else invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`);
+
 
 		message.channel.send(moneyEmbed)
 			.then(sentMessage => {

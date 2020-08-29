@@ -11,7 +11,6 @@ module.exports = {
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		const hourly = await profile.getHourly(message.author.id);
-		let reward = 0;
 		let chest;
 
 		const luck = Math.floor(Math.random() * 7);
@@ -27,18 +26,11 @@ module.exports = {
 			.setFooter('Neia', client.user.displayAvatarURL());
 
 
-		const items = await profile.getInventory(message.author.id);
-		items.map(i => {
-			if (i.amount < 1) return;
-			const item = profile.getItem(i.name);
-			if (item.ctg == 'collectable') reward += i.amount * (item.cost / 400);
-		});
-
-
 		if (hourly === true) {
 			if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
 				.setImage(`attachment://${chest.picture}`);
 
+			const reward = await profile.calculateIncome(message.author.id).hourly;
 			profile.addMoney(message.author.id, reward);
 			profile.addItem(message.author.id, chest, 1);
 			profile.setHourly(message.author.id);
