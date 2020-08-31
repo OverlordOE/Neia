@@ -6,7 +6,7 @@ const moment = require('moment');
 const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
 require('dotenv').config();
-const token = process.env.TEST_TOKEN;
+const token = process.env.TOKEN;
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const active = new Map();
 client.commands = new Discord.Collection();
@@ -44,7 +44,7 @@ client.on('ready', async () => {
 
 		let memberTotal = 0;
 		client.guilds.cache.forEach(guild => {
-			if (!isNaN(memberTotal)) memberTotal += guild.memberCount;
+			if (!isNaN(memberTotal)) memberTotal += Number(guild.memberCount);
 		});
 		client.user.setActivity(`with ${memberTotal} users`);
 
