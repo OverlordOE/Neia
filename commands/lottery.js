@@ -59,8 +59,8 @@ module.exports = {
 								}
 							}
 							if (!duplicate) {
-								const bCheck = await profile.getBalance(user.id);
 
+								const bCheck = await profile.getBalance(user.id);
 								if (bCheck >= buyin) {
 									const ticketNumber = tickets.splice(Math.floor(Math.random() * tickets.length), 1);
 									const ticket = {

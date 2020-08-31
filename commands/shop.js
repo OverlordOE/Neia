@@ -4,7 +4,7 @@ module.exports = {
 	name: 'shop',
 	summary: 'Shows all the shop items',
 	description: 'Shows all the shop items.',
-	category: 'money',
+	category: 'info',
 	aliases: ['store'],
 	args: false,
 	usage: '',

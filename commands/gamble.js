@@ -34,7 +34,7 @@ module.exports = {
 
 				for (let i = 0; i < args.length; i++) {
 					if (!(isNaN(args[i]))) gambleAmount = parseInt(args[i]);
-					else if (args[i] == 'all') gambleAmount = parseInt(Math.floor(msgUser.balance));
+					else if (args[i] == 'all') gambleAmount = Math.floor(msgUser.balance);
 					else if (gambleType.length > 2) gambleType += ` ${args[i]}`;
 					else gambleType += `${args[i]}`;
 				}
@@ -126,7 +126,7 @@ async function oneInFive(message, profile, logger, gambleAmount, sentMessage, em
 
 				embed.setColor('#00fc43');
 				sentMessage.reactions.removeAll();
-				return sentMessage.edit(embed.setDescription(`Correct! You have successfully won **${winAmount}💰**.\nYour current balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
+				return sentMessage.edit(embed.setDescription(`Correct! You have successfully won **${profile.formatNumber(winAmount)}💰**.\nYour current balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 			}
 			else {
 				embed.setColor('#fc0303');

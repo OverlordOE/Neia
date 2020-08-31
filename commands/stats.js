@@ -1,7 +1,12 @@
 const Discord = require('discord.js');
 module.exports = {
-	name: 'test',
-	aliases: ['t'],
+	name: 'stats',
+	summary: 'Shows how much guilds and users use Neia',
+	description: 'Shows how much guilds and users use Neia.',
+	category: 'misc',
+	aliases: ['stat', 'server', 'members'],
+	args: false,
+	usage: '',
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
@@ -18,6 +23,6 @@ module.exports = {
 			guildTotal++;
 			memberTotal += guild.memberCount;
 		});
-		message.channel.send(embed.setDescription(`Neia is in **${guildTotal}** servers with a total of **${memberTotal}** members.`));
+		message.channel.send(embed.setDescription(`Neia is in **${guildTotal}** servers with a total of **${memberTotal}** users.`));
 	},
 };

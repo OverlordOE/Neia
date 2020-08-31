@@ -18,6 +18,7 @@ module.exports = {
 	Steal: require('./steal'),
 	Dice: require('./dice'),
 	Invite: require('./invite'),
+	Stats: require('./stats'),
 	Play: require('./play'),
 	Queue: require('./queue'),
 	Loop: require('./loop'),
@@ -29,4 +30,5 @@ module.exports = {
 	Reload: require('./reload'),
 	Delete: require('./delete'),
 	Backup: require('./backup'),
+	Test: require('./test'),
 };
