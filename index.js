@@ -41,6 +41,11 @@ client.on('ready', async () => {
 		storedUsers.forEach(b => profile.set(b.user_id, b));
 		const storedGuilds = await Guilds.findAll();
 		storedGuilds.forEach(b => guildProfile.set(b.guild_id, b));
+
+		let memberTotal = 0;
+		client.guilds.cache.forEach(guild => memberTotal += guild.memberCount);
+		client.user.setActivity(`with ${memberTotal} users`);
+
 		logger.log('info', `Logged in as ${client.user.tag}!`);
 	}
 	catch (e) {
@@ -101,7 +106,7 @@ client.on('message', async message => {
 
 	if (timestamps.has(id)) {
 		const expirationTime = timestamps.get(id) + cooldownAmount;
-		
+
 		if (now < expirationTime) {
 			const timeLeft = (expirationTime - now) / 1000;
 			const hourLeft = timeLeft / 3600;
