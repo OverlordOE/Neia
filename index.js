@@ -44,7 +44,7 @@ client.on('ready', async () => {
 
 		let memberTotal = 0;
 		client.guilds.cache.forEach(guild => {
-			if (!isNaN(memberTotal)) memberTotal += Number(guild.memberCount);
+			if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount);
 		});
 		client.user.setActivity(`with ${memberTotal} users`);
 
