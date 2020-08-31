@@ -68,7 +68,7 @@ client.on('message', async message => {
 	if (!guild) guild = await guildProfile.newGuild(message.guild.id);
 	const prefix = await guildProfile.getPrefix(message.guild.id);
 	const id = message.author.id;
-	let user = profile.get(id);
+	let user = await profile.get(id);
 	if (!user) user = await profile.newUser(id);
 
 
