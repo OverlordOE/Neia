@@ -21,7 +21,7 @@ module.exports = {
 		let memberTotal = 0;
 		client.guilds.cache.forEach(guild => {
 			guildTotal++;
-			memberTotal += guild.memberCount;
+			if (!isNaN(memberTotal)) memberTotal += guild.memberCount;
 		});
 		message.channel.send(embed.setDescription(`Neia is in **${guildTotal}** servers with a total of **${memberTotal}** users.`));
 	},
