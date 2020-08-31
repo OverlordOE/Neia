@@ -43,7 +43,9 @@ client.on('ready', async () => {
 		storedGuilds.forEach(b => guildProfile.set(b.guild_id, b));
 
 		let memberTotal = 0;
-		client.guilds.cache.forEach(guild => memberTotal += guild.memberCount);
+		client.guilds.cache.forEach(guild => {
+			if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount);
+		});
 		client.user.setActivity(`with ${memberTotal} users`);
 
 		logger.log('info', `Logged in as ${client.user.tag}!`);
