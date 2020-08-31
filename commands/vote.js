@@ -4,8 +4,8 @@ const dblToken = process.env.DBL_TOKEN;
 const dbl = new DBL(dblToken);
 module.exports = {
 	name: 'vote',
-	summary: 'vote for the client to get an extra daily',
-	description: 'vote for the client to get a reward.',
+	summary: 'vote for the bot to get up to 2 extra dailys',
+	description: 'vote for the bot to get up to 2 extra dailys.',
 	category: 'money',
 	aliases: ['v'],
 	args: false,
