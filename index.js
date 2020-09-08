@@ -42,11 +42,13 @@ client.on('ready', async () => {
 		const storedGuilds = await Guilds.findAll();
 		storedGuilds.forEach(b => guildProfile.set(b.guild_id, b));
 
+		let guildTotal = 0;
 		let memberTotal = 0;
 		client.guilds.cache.forEach(guild => {
+			guildTotal++;
 			if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount);
 		});
-		client.user.setActivity(`with ${memberTotal} users`);
+		client.user.setActivity(`in ${guildTotal} servers with ${memberTotal} users.`);
 
 		logger.log('info', `Logged in as ${client.user.tag}!`);
 	}

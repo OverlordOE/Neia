@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
+		hp: {
+			type: DataTypes.INTEGER,
+			defaultValue: 100,
+			allowNull: false,
+		},
 
 
 		// COOLDOWNS
@@ -50,8 +55,11 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
-
-
+		networth: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
 	},
 		{
 			timestamps: false,

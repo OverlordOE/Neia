@@ -24,6 +24,6 @@ module.exports = {
 			if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount);
 		});
 		message.channel.send(embed.setDescription(`Neia is in **${guildTotal}** servers with a total of **${memberTotal}** users.`));
-		client.user.setActivity(`with ${memberTotal} users`);
+		client.user.setActivity(`in ${guildTotal} servers with ${memberTotal} users.`);
 	},
 };
