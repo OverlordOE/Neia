@@ -12,18 +12,23 @@ module.exports = {
 
 		const filter = (reaction, user) => { return ['◀️', '▶️', '🔀'].includes(reaction.emoji.name) && user.id === message.author.id; };
 
+		const networthList = profile.sort((a, b) => b.networth - a.networth)
+			.filter(user => client.users.cache.has(user.user_id))
+			.first(50)
+			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: **${profile.formatNumber(user.networth)}💰**`);
+
 		const totalList = profile.sort((a, b) => b.totalEarned - a.totalEarned)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: **${Math.floor(user.totalEarned)}💰**`);
+			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: **${profile.formatNumber(user.totalEarned)}💰**`);
 
 		const balanceList = profile.sort((a, b) => b.balance - a.balance)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: **${Math.floor(user.balance)}💰**`);
+			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: **${profile.formatNumber(user.balance)}💰**`);
 
 
-		let currentList = totalList;
+		let currentList = networthList;
 		let description = '**Total Earned**\n';
 		let page = 0;
 		if (!isNaN(args[0]) && args[0] > 0 && args[0] < 6) page = args[0] - 1;
@@ -31,7 +36,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia leaderboard')
-			.setDescription(editDescription(currentList, page, '**Total Earned**\n'))
+			.setDescription(editDescription(currentList, page, '** Net Worth **\n'))
 			.setThumbnail(client.user.displayAvatarURL())
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
@@ -55,13 +60,17 @@ module.exports = {
 					sentMessage.edit(embed.setDescription(editDescription(currentList, page, description)));
 				}
 				else if (reaction.emoji.name == '🔀') {
-					if (currentList == totalList) {
+					if (currentList == networthList) {
 						currentList = balanceList;
 						description = '**Current Balance**\n';
 					}
-					else {
+					else if (currentList == balanceList) {
 						currentList = totalList;
 						description = '**Total Earned**\n';
+					}
+					else {
+						currentList = networthList;
+						description = '**Net Worth**\n';
 					}
 					sentMessage.edit(embed.setDescription(editDescription(currentList, page, description)));
 				}
