@@ -37,7 +37,7 @@ module.exports = {
 			item = profile.getItem(temp);
 			if (item) {
 				if (await profile.hasItem(message.author.id, item, amount)) sell(profile, sentMessage, amount, embed, item, message);
-				else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
+				else return sentMessage.edit(embed.setDescription(`You don't have enough ${item.emoji}__${item.name}(s)__!`));
 			}
 			else {
 				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
@@ -47,7 +47,7 @@ module.exports = {
 						if (!item) return sentMessage.edit(embed.setDescription(`\`${collected.first().content}\` is not a valid item.`));
 						collected.first().delete();
 
-						sentMessage.edit(embed.setDescription(`How much __${item.name}(s)__ do you want to sell?`)).then(() => {
+						sentMessage.edit(embed.setDescription(`How much ${item.emoji}__${item.name}(s)__ do you want to sell?`)).then(() => {
 							message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 								.then(async collected => {
@@ -55,7 +55,7 @@ module.exports = {
 									if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number!`));
 
 									if (await profile.hasItem(message.author.id, item, amount)) sell(profile, sentMessage, amount, embed, item, message);
-									else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
+									else return sentMessage.edit(embed.setDescription(`You don't have enough ${item.emoji}__${item.name}(s)__!`));
 								})
 								.catch(e => {
 									logger.error(e.stack);
@@ -80,7 +80,7 @@ async function sell(profile, sentMessage, amount, embed, item, message) {
 
 	const refundAmount = 0.9 * item.cost * amount;
 	profile.removeItem(message.author.id, item, amount);
-	profile.addMoney(message.author.id, refundAmount);
+	const balance = await profile.addMoney(message.author.id, refundAmount);
 
-	sentMessage.edit(embed.setDescription(`You've refunded ${amount} __${item.name}(s)__ and received **${profile.formatNumber(refundAmount)}💰** back.\nYour balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**!`));
+	sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received **${profile.formatNumber(refundAmount)}💰** back.\nYour balance is **${profile.formatNumber(balance)}💰**!`));
 }
