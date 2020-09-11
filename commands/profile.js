@@ -50,9 +50,7 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
 
-
 		if (prot !== false) moneyEmbed.addField('Steal protection:', prot);
-		else moneyEmbed.addField('Steal protection:', 'none');
 
 
 		let inventory = '__**Inventory:**__\n\n';
