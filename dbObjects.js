@@ -26,6 +26,10 @@ Reflect.defineProperty(profile, 'addItem', {
 			where: { user_id: id, name: item.name },
 		});
 
+		const user = profile.get(id);
+		user.networth += item.cost * parseInt(amount);
+		user.save();
+
 		if (userItem) {
 			userItem.amount += parseInt(amount);
 			return userItem.save();
@@ -44,9 +48,13 @@ Reflect.defineProperty(profile, 'removeItem', {
 			where: { user_id: id, name: item.name },
 		});
 
-		const remove = parseInt(amount);
-		if (userItem.amount >= remove) {
-			userItem.amount -= remove;
+		const removeAmount = parseInt(amount);
+		if (userItem.amount >= removeAmount) {
+			const user = profile.get(id);
+			user.networth -= item.cost * removeAmount;
+			user.save();
+
+			userItem.amount -= removeAmount;
 			return userItem.save();
 		}
 
@@ -92,6 +100,7 @@ Reflect.defineProperty(profile, 'newUser', {
 			user_id: id,
 			balance: 0,
 			totalEarned: 0,
+			networth: 0,
 			lastDaily: now.subtract(2, 'days').toString(),
 			lastHourly: now.subtract(1, 'days').toString(),
 			lastWeekly: now.subtract(8, 'days').toString(),
@@ -117,10 +126,12 @@ Reflect.defineProperty(profile, 'addMoney', {
 		if (!user) user = await profile.newUser(id);
 
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
+
 		user.balance += Number(amount);
 		if (amount > 0) user.totalEarned += Number(amount);
-
-		return user.save();
+		
+		user.save();
+		return Math.floor(user.balance);
 	},
 });
 Reflect.defineProperty(profile, 'getBalance', {
