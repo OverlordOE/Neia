@@ -129,7 +129,7 @@ Reflect.defineProperty(profile, 'addMoney', {
 
 		user.balance += Number(amount);
 		if (amount > 0) user.totalEarned += Number(amount);
-		
+
 		user.save();
 		return Math.floor(user.balance);
 	},
@@ -157,8 +157,8 @@ Reflect.defineProperty(profile, 'calculateIncome', {
 			uItems.map(i => {
 				if (i.amount < 1) return;
 				const item = items[i.name.toLowerCase()];
+				networth += item.cost * i.amount;
 				if (item.ctg == 'collectable') {
-					networth += item.cost * i.amount;
 					income += Math.pow((item.cost * 149) / 1650, 1.1) * i.amount;
 					daily += Math.pow(item.cost / 100, 1.1) * i.amount;
 					hourly += Math.pow(item.cost / 400, 1.1) * i.amount;
