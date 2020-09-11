@@ -4,10 +4,34 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			primaryKey: true,
 		},
+		
+		// MONEY
 		balance: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
 			allowNull: false,
+		},
+		totalEarned: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		networth: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+
+		// PVP
+		hp: {
+			type: DataTypes.INTEGER,
+			defaultValue: 100,
+			allowNull: false,
+		},
+		equipment: {
+			type: DataTypes.JSON,
+			defaultValue: null,
+			allowNull: true,
 		},
 
 
@@ -45,13 +69,6 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: '#fcfcfc',
 			allowNull: false,
 		},
-		totalEarned: {
-			type: DataTypes.INTEGER,
-			defaultValue: 0,
-			allowNull: false,
-		},
-
-
 	},
 		{
 			timestamps: false,

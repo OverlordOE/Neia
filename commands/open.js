@@ -34,11 +34,14 @@ module.exports = {
 				const amount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 				lootEmbed.setTitle('Common Chest')
-					.setDescription(`${message.author}, have discovered **${amount}** **__${lootItem.emoji}${lootItem.name}__** in this chest.`)
+					.setDescription(`${message.author} has discovered **${amount}** **__${lootItem.emoji}${lootItem.name}__**.`)
 					.attachFiles('assets/items/common_open.png')
 					.setThumbnail('attachment://common_open.png');
 
 				if (lootItem.rarity == 'uncommon') lootEmbed.setColor('#1eff00');
+				else if (lootItem.rarity == 'rare') lootEmbed.setColor('#0070dd');
+				else if (lootItem.rarity == 'epic') lootEmbed.setColor('#a335ee');
+				else if (lootItem.rarity == 'legendary') lootEmbed.setColor('#ff8000');
 				else lootEmbed.setColor('#eeeeee');
 
 				if (lootItem.picture) lootEmbed.attachFiles(`assets/items/${lootItem.picture}`)
@@ -65,8 +68,11 @@ module.exports = {
 					.attachFiles('assets/items/rare_open.png')
 					.setThumbnail('attachment://rare_open.png');
 
-				if (lootItem.rarity == 'rare') lootEmbed.setColor('#0070dd');
-				else lootEmbed.setColor('#1eff00');
+				if (lootItem.rarity == 'uncommon') lootEmbed.setColor('#1eff00');
+				else if (lootItem.rarity == 'rare') lootEmbed.setColor('#0070dd');
+				else if (lootItem.rarity == 'epic') lootEmbed.setColor('#a335ee');
+				else if (lootItem.rarity == 'legendary') lootEmbed.setColor('#ff8000');
+				else lootEmbed.setColor('#eeeeee');
 
 				if (lootItem.picture) lootEmbed.attachFiles(`assets/items/${lootItem.picture}`)
 					.setImage(`attachment://${lootItem.picture}`);
