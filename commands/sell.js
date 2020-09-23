@@ -21,7 +21,7 @@ module.exports = {
 			.setTitle('Neia Refunds')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What do you want to refund? `80% refund`')
-
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
 

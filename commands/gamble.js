@@ -199,7 +199,7 @@ async function blackjack(message, profile, logger, gambleAmount, sentMessage, em
 			});
 
 			collector.on('end', async () => {
-				if (botHandValue == 21 && playerHandValue == 21) {
+				if (botHandValue == playerHandValue) {
 					profile.addMoney(message.author.id, gambleAmount);
 					sentMessage.edit(embed.setDescription(`__**Its a draw**__\n\nYour balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 				}
@@ -215,7 +215,7 @@ async function blackjack(message, profile, logger, gambleAmount, sentMessage, em
 					sentMessage.edit(embed.setDescription(`__**The bot busted**__. **You Win!**\n\nYou won **${winAmount}💰** and your balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 				}
 
-				else if (botHandValue >= playerHandValue) {
+				else if (botHandValue > playerHandValue) {
 					embed.setColor('#fc0303');
 					sentMessage.edit(embed.setDescription(`__**The bot wins**__\n\nYour balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 				}

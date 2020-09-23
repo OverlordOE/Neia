@@ -29,6 +29,7 @@ module.exports = {
 			.setTitle('Neia Shop')
 			.setThumbnail(client.user.displayAvatarURL())
 			.setDescription(description)
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
 
