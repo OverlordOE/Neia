@@ -122,7 +122,7 @@ async function oneInFive(message, profile, logger, gambleAmount, sentMessage, em
 
 
 			if (reaction.emoji.name === emojiCharacters[answer]) {
-				profile.addMoney(message.author.id, winAmount);
+				await profile.addMoney(message.author.id, winAmount);
 
 				embed.setColor('#00fc43');
 				sentMessage.reactions.removeAll();
@@ -200,7 +200,7 @@ async function blackjack(message, profile, logger, gambleAmount, sentMessage, em
 
 			collector.on('end', async () => {
 				if (botHandValue == playerHandValue) {
-					profile.addMoney(message.author.id, gambleAmount);
+					await profile.addMoney(message.author.id, gambleAmount);
 					sentMessage.edit(embed.setDescription(`__**Its a draw**__\n\nYour balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 				}
 
@@ -210,7 +210,7 @@ async function blackjack(message, profile, logger, gambleAmount, sentMessage, em
 				}
 
 				else if (botHandValue > 21) {
-					profile.addMoney(message.author.id, winAmount);
+					await profile.addMoney(message.author.id, winAmount);
 					embed.setColor('#00fc43');
 					sentMessage.edit(embed.setDescription(`__**The bot busted**__. **You Win!**\n\nYou won **${winAmount}💰** and your balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 				}
@@ -221,7 +221,7 @@ async function blackjack(message, profile, logger, gambleAmount, sentMessage, em
 				}
 
 				else if (playerHandValue > botHandValue) {
-					profile.addMoney(message.author.id, winAmount);
+					await profile.addMoney(message.author.id, winAmount);
 					embed.setColor('#00fc43');
 					sentMessage.edit(embed.setDescription(`__**You win**__\n\nYou won **${winAmount}💰** and your balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 				}
@@ -319,7 +319,7 @@ async function RPS(message, profile, logger, gambleAmount, sentMessage, embed) {
 				case '✊':
 
 					if (answer == 1) {
-						profile.addMoney(message.author.id, gambleAmount);
+						await profile.addMoney(message.author.id, gambleAmount);
 						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses ✊. __**It's a tie!**__\nYour balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 					}
@@ -329,7 +329,7 @@ async function RPS(message, profile, logger, gambleAmount, sentMessage, embed) {
 						return sentMessage.edit(embed.setDescription(`The bot chooses 🧻. __**You lose!**__\nYour balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 					}
 					else if (answer == 3) {
-						profile.addMoney(message.author.id, winAmount);
+						await profile.addMoney(message.author.id, winAmount);
 						embed.setColor('#00fc43');
 						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses ✂️. __**You Win!**__\nYou won **${winAmount}💰** and your balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
@@ -339,13 +339,13 @@ async function RPS(message, profile, logger, gambleAmount, sentMessage, embed) {
 				case '🧻':
 
 					if (answer == 1) {
-						profile.addMoney(message.author.id, winAmount);
+						await profile.addMoney(message.author.id, winAmount);
 						embed.setColor('#00fc43');
 						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses ✊. __**You Win!**__\nYou won **${winAmount}💰** and your balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 					}
 					else if (answer == 2) {
-						profile.addMoney(message.author.id, gambleAmount);
+						await profile.addMoney(message.author.id, gambleAmount);
 						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses 🧻. __**It's a tie!**__\nYour balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 					}
@@ -363,13 +363,13 @@ async function RPS(message, profile, logger, gambleAmount, sentMessage, embed) {
 						return sentMessage.edit(embed.setDescription(`The bot chooses ✊. __**You lose!**__\nYour balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 					}
 					else if (answer == 2) {
-						profile.addMoney(message.author.id, winAmount);
+						await profile.addMoney(message.author.id, winAmount);
 						embed.setColor('#00fc43');
 						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses 🧻. __**You Win!**__\nYou won **${winAmount}💰** and your balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 					}
 					else if (answer == 3) {
-						profile.addMoney(message.author.id, gambleAmount);
+						await profile.addMoney(message.author.id, gambleAmount);
 						sentMessage.reactions.removeAll();
 						return sentMessage.edit(embed.setDescription(`The bot chooses ✂️. __**It's a tie!**__\nYour balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
 					}
