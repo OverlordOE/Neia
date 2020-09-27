@@ -14,9 +14,8 @@ module.exports = {
 		const target = message.mentions.users.first() || message.author;
 		const items = await profile.getInventory(target.id);
 		const filter = (reaction, user) => {
-			return ['💰', '📦'].includes(reaction.emoji.name) && user.id === message.author.id;
+			return ['💰', '📦', '⚔️'].includes(reaction.emoji.name) && user.id === message.author.id;
 		};
-
 
 		const avatar = target.displayAvatarURL();
 		const userProfile = await profile.getUser(target.id);
@@ -50,6 +49,13 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
 
+		const statEmbed = new Discord.MessageEmbed()
+			.setColor(pColour)
+			.setTitle(`${target.tag}'s Stats`)
+			.setThumbnail(avatar)
+			.setTimestamp()
+			.setFooter('Neia', client.user.displayAvatarURL());
+
 		if (prot !== false) moneyEmbed.addField('Steal protection:', prot);
 
 
@@ -70,16 +76,30 @@ module.exports = {
 		else invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`);
 
 
+		const equipment = await profile.getEquipment(target.id);
+		let statDescription = `**HP**: ${userProfile.hp}/100 <:health:730849477765890130>\n`;
+		for (const slot in equipment) {
+			if (equipment[slot]) {
+				const item = profile.getItem(equipment[slot]);
+				statDescription += `\n**${slot}**: ${item.emoji}${item.name}`;
+			}
+			else statDescription += `\n**${slot}**: Nothing`;
+		}
+		statEmbed.setDescription(statDescription);
+
+
 		message.channel.send(moneyEmbed)
 			.then(sentMessage => {
 				sentMessage.react('💰');
+				sentMessage.react('⚔️');
 				sentMessage.react('📦');
 				const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
 
 				collector.on('collect', (reaction) => {
 					reaction.users.remove(message.author.id);
-					if (reaction.emoji.name == '💰') { sentMessage.edit(moneyEmbed); }
-					else if (reaction.emoji.name == '📦') { sentMessage.edit(invEmbed); }
+					if (reaction.emoji.name == '💰') sentMessage.edit(moneyEmbed); 
+					else if (reaction.emoji.name == '📦') sentMessage.edit(invEmbed); 
+					else if (reaction.emoji.name == '⚔️') sentMessage.edit(statEmbed); 
 				});
 				collector.on('end', () => sentMessage.reactions.removeAll());
 			});

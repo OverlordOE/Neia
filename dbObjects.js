@@ -101,6 +101,8 @@ Reflect.defineProperty(profile, 'newUser', {
 			balance: 0,
 			totalEarned: 0,
 			networth: 0,
+			hp: 100,
+			equipment: JSON.stringify({ weapon: null, offhand: null }),
 			lastDaily: now.subtract(2, 'days').toString(),
 			lastHourly: now.subtract(1, 'days').toString(),
 			lastWeekly: now.subtract(8, 'days').toString(),
@@ -139,6 +141,14 @@ Reflect.defineProperty(profile, 'getBalance', {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 		return Math.floor(user.balance);
+	},
+});
+
+Reflect.defineProperty(profile, 'getEquipment', {
+	value: async function getEquipment(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		return JSON.parse(user.equipment);
 	},
 });
 
