@@ -42,7 +42,7 @@ client.on('ready', async () => {
 		const storedGuilds = await Guilds.findAll();
 		storedGuilds.forEach(b => guildProfile.set(b.guild_id, b));
 		let memberTotal = 0;
-		client.guilds.cache.forEach(guild => {if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount);});
+		client.guilds.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
 		client.user.setActivity(`with ${memberTotal} users.`);
 
 		logger.log('info', `Logged in as ${client.user.tag}!`);
@@ -98,26 +98,28 @@ client.on('message', async message => {
 
 
 	// cooldowns
-	if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
-	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 1.5) * 1000;
-	const now = Date.now();
+	if (id != 137920111754346496) {
+		if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
+		const timestamps = cooldowns.get(command.name);
+		const cooldownAmount = (command.cooldown || 1.5) * 1000;
+		const now = Date.now();
 
-	if (timestamps.has(id)) {
-		const expirationTime = timestamps.get(id) + cooldownAmount;
+		if (timestamps.has(id)) {
+			const expirationTime = timestamps.get(id) + cooldownAmount;
 
-		if (now < expirationTime) {
-			const timeLeft = (expirationTime - now) / 1000;
-			const hourLeft = timeLeft / 3600;
-			const minLeft = (hourLeft - Math.floor(hourLeft)) * 60;
-			const secLeft = Math.floor((minLeft - Math.floor(minLeft)) * 60);
-			if (hourLeft >= 1) return message.reply(`Please wait **${Math.floor(hourLeft)} hours**, **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
-			else if (minLeft >= 1) return message.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
-			else return message.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`);
+			if (now < expirationTime) {
+				const timeLeft = (expirationTime - now) / 1000;
+				const hourLeft = timeLeft / 3600;
+				const minLeft = (hourLeft - Math.floor(hourLeft)) * 60;
+				const secLeft = Math.floor((minLeft - Math.floor(minLeft)) * 60);
+				if (hourLeft >= 1) return message.reply(`Please wait **${Math.floor(hourLeft)} hours**, **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
+				else if (minLeft >= 1) return message.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
+				else return message.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`);
+			}
 		}
+		timestamps.set(id, now);
+		setTimeout(() => timestamps.delete(id), cooldownAmount);
 	}
-	timestamps.set(id, now);
-	setTimeout(() => timestamps.delete(id), cooldownAmount);
 
 	const options = { active: active };
 
