@@ -14,7 +14,7 @@ module.exports = {
 
 		if (args[0] == 'all') {
 			profile.map((user) => profile.addMoney(user.user_id, args[1]));
-			return message.channel.send(`Added **${amount}** to every available user`);
+			return message.channel.send(`Added ${profile.formatNumber(amount)} to every available user`);
 		}
 		else if (args[0] == 'item') {
 			const item = await profile.getItem(args[1]);
@@ -28,8 +28,8 @@ module.exports = {
 		profile.addMoney(target.id, amount);
 		const balance = profile.formatNumber(await profile.getBalance(target.id));
 
-		if (amount <= 0) return message.channel.send(`Successfully removed **${amount * -1}💰** from *${target}*. Their current balance is **${balance}💰**`);
-		return message.channel.send(`Successfully added **${amount}💰** to *${target}*. Their current balance is** ${balance}💰**`);
+		if (amount <= 0) return message.channel.send(`Successfully removed **${profile.formatNumber(amount * -1)}💰** from *${target}*. Their current balance is **${profile.formatNumber(balance)}💰**`);
+		return message.channel.send(`Successfully added ${profile.formatNumber(amount)}💰 to *${target}*. Their current balance is** ${profile.formatNumber(balance)}💰**`);
 
 	},
 };

@@ -259,4 +259,28 @@ module.exports = {
 		ctg: 'collectable',
 		description: 'Gives you passive income.',
 	},
+
+	training_sword: {
+		name: 'training sword',
+		cost: 40,
+		emoji: '<:training_sword:735471230932615198>',
+		rarity: 'common',
+		picture: 'training_sword.png',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: 13,
+		description: 'Your basic training sword.',
+	},
+
+	training_staff: {
+		name: 'training staff',
+		cost: 60,
+		emoji: '<:training_staff:735472268616007692>',
+		rarity: 'common',
+		picture: 'training_staff.png',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: 14,
+		description: 'Your basic training staff.',
+	},
 }; 

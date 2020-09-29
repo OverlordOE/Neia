@@ -152,6 +152,25 @@ Reflect.defineProperty(profile, 'getEquipment', {
 	},
 });
 
+Reflect.defineProperty(profile, 'equip', {
+	value: async function equip(id, equipment) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		const userEquipment = await UserItems.findOne({
+			where: { user_id: id, name: equipment.name },
+		});
+		
+		if (userEquipment) {
+			const equipped = JSON.parse(user.equipment);
+		
+			equipped[equipment.slot] = equipment.name;
+			user.equipment = JSON.stringify(equipped);
+			return user.save();
+		}
+		return false;
+	},
+});
+
 Reflect.defineProperty(profile, 'calculateIncome', {
 	value: async function calculateIncome(id) {
 		let user = profile.get(id);
@@ -347,7 +366,7 @@ Reflect.defineProperty(profile, 'formatNumber', {
 		const scale = Math.pow(10, tier * 3);
 
 		const scaled = number / scale;
-		return scaled.toFixed(2) + suffix;
+		return `**${scaled.toFixed(2) + suffix}**`;
 	},
 });
 
