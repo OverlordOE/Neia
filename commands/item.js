@@ -4,7 +4,7 @@ module.exports = {
 	summary: 'Shows information about a specific item',
 	description: 'Shows information about a specific item.',
 	category: 'info',
-	aliases: ['items'],
+	aliases: ['items', 'i'],
 	args: false,
 	usage: '<item>',
 
@@ -21,7 +21,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`${item.emoji}${item.name}`)
 			.setDescription(item.description)
-			.addField('cost', `**${profile.formatNumber(item.cost)}💰**`, true)
+			.addField('Value', `**${profile.formatNumber(item.cost)}💰**`, true)
 			.addField('Category', item.ctg, true)
 			.addField('Rarity', item.rarity, true)
 			.setTimestamp()
@@ -31,6 +31,11 @@ module.exports = {
 
 		if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
 			.setImage(`attachment://${item.picture}`);
-		return message.channel.send(embed);
+
+		if (item.ctg == 'equipment') {
+			if (item.slot == 'weapon') embed.addField('Damage', `**${item.damage[0]} - ${item.damage[1] + item.damage[0]}**`);
+		}
+
+			return message.channel.send(embed);
 	},
 };

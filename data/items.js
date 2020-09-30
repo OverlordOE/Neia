@@ -100,7 +100,7 @@ module.exports = {
 		ctg: 'consumable',
 		description: 'You can use this to gain 8 hours of protection against attacks. If you use any of the money commands your protection will be reset\nThis item stacks.',
 		use: async function (profile, sentMessage, amount, embed, item, msgUser) {
-			const protection = await profile.addProtection(msgUser.user_id, 8);
+			const protection = await profile.addProtection(msgUser.user_id, amount * 8);
 			return { succes: true, message: `You have activated your protection.\nIt will last untill __${protection}__` };
 		},
 	},
@@ -246,27 +246,27 @@ module.exports = {
 		description: 'Gives you passive income.',
 	},
 
-	training_sword: {
-		name: 'training sword',
-		cost: 40,
+	'training sword': {
+		name: 'Training Sword',
+		cost: 400,
 		emoji: '<:training_sword:735471230932615198>',
 		rarity: 'common',
 		picture: 'training_sword.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: 13,
+		damage: [12, 5],
 		description: 'Your basic training sword.',
 	},
 
-	training_staff: {
-		name: 'training staff',
-		cost: 60,
+	'training staff': {
+		name: 'Training Staff',
+		cost: 450,
 		emoji: '<:training_staff:735472268616007692>',
 		rarity: 'common',
 		picture: 'training_staff.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: 14,
+		damage: [10, 10],
 		description: 'Your basic training staff.',
 	},
 }; 
