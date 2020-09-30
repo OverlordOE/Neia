@@ -159,10 +159,10 @@ Reflect.defineProperty(profile, 'equip', {
 		const userEquipment = await UserItems.findOne({
 			where: { user_id: id, name: equipment.name },
 		});
-		
+
 		if (userEquipment) {
 			const equipped = JSON.parse(user.equipment);
-		
+
 			equipped[equipment.slot] = equipment.name;
 			user.equipment = JSON.stringify(equipped);
 			return user.save();
@@ -306,19 +306,39 @@ Reflect.defineProperty(profile, 'getProtection', {
 	value: async function getProtection(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		const now = moment();
 
-		const prot = moment(user.protection);
-		if (prot.isAfter(now)) return prot.format('MMM Do HH:mm');
+		const now = moment();
+		const protection = moment(user.protection);
+		if (protection.isAfter(now)) return protection.format('MMM Do HH:mm');
 		else return false;
 	},
 });
-Reflect.defineProperty(profile, 'setProtection', {
-	value: async function setProtection(id, date) {
+Reflect.defineProperty(profile, 'addProtection', {
+/**
+* Add protection to target user
+* @param {string} id - The id of the user.
+* @param {number} hours - Total amount of hours to add to the protection.
+*/
+	value: async function addProtection(id, hours) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
 
-		user.protection = moment(date).toString();
+		let protection;
+		const oldProtection = await profile.getProtection(id);
+		if (oldProtection) protection = moment(oldProtection, 'MMM Do HH:mm').add(hours, 'h');
+		else protection = moment().add(hours, 'h');
+
+		user.protection = moment(protection, 'MMM Do HH:mm').toString();
+		user.save();
+		return protection.format('MMM Do HH:mm');
+	},
+});
+Reflect.defineProperty(profile, 'resetProtection', {
+	value: async function resetProtection(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+
+		user.protection = moment().toString();
 		return user.save();
 	},
 });
