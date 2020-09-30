@@ -16,13 +16,13 @@ module.exports = {
 
 		const target = await profile.getUser(targetMention.id);
 		if (target.networth < 9000) return message.reply('the target user needs to have a networth of atleast 9000 to be attacked.');
-		if (target.hp <= 0) return message.reply('the target user is already dead.');
+	
+		const protection = await profile.getProtection(target.id);
+		if (protection !== false) return message.channel.send(`*${target.tag}* has protection against attacks, you cannot attack them untill ${protection}.`);
+		
 
 		const equipment = await profile.getEquipment(message.author.id);
-
 		let damage = Math.floor(5 + (Math.random() * 5));
-
-
 		if (equipment['weapon']) {
 			const weapon = profile.getItem(equipment['weapon']);
 			damage = Math.floor(weapon.damage + (Math.random() * 5));
@@ -37,6 +37,7 @@ module.exports = {
 			profile.addMoney(targetMention.id, -stealAmount);
 			profile.addMoney(message.author.id, stealAmount);
 			message.channel.send(`You have killed ${targetMention} and stolen **${profile.formatNumber(stealAmount)}💰**.`);
+			profile.addProtection(target.id, 24);
 			target.hp = 100;
 		}
 	},
