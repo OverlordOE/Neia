@@ -3,7 +3,7 @@ module.exports = {
 	name: 'equip',
 	summary: 'Equip an item from your inventory',
 	description: 'Equip an item from your inventory.',
-	category: 'money',
+	category: 'pvp',
 	aliases: ['item'],
 	args: false,
 	usage: '',

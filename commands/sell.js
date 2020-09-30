@@ -3,10 +3,10 @@
 const Discord = require('discord.js');
 module.exports = {
 	name: 'sell',
-	summary: 'Sell items to get 80% of your money back',
-	description: 'Sell items to get 80% of your money back.',
+	summary: 'Sell items to get 90% of your money back',
+	description: 'Sell items to get 90% of your money back.',
 	aliases: ['refund'],
-	category: 'money',
+	category: 'economy',
 	args: false,
 	usage: '',
 

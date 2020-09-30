@@ -4,7 +4,7 @@ module.exports = {
 	name: 'open',
 	summary: 'open chests',
 	description: 'Open chests to get the contents within.',
-	category: 'money',
+	category: 'economy',
 	aliases: ['o', 'chest'],
 	usage: '<chest>',
 	cooldown: 0.5,

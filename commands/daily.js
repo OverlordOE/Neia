@@ -3,7 +3,7 @@ module.exports = {
 	name: 'daily',
 	summary: 'Get a daily gift',
 	description: 'Get a daily gift and part of your passive income from your collectables.',
-	category: 'money',
+	category: 'economy',
 	aliases: ['day', 'd'],
 	args: false,
 	cooldown: 5,

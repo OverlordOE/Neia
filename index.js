@@ -87,7 +87,7 @@ client.on('message', async message => {
 	if (!command) return;
 	if (command.category == 'debug' && (id != 137920111754346496 && id != 139030319784263681)) return message.channel.send('You are not the owner of this bot!');
 	if (command.category == 'admin' && !message.member.hasPermission('ADMINISTRATOR') && id != 137920111754346496 && id != 139030319784263681) return message.channel.send('You need Admin privileges to use this command!');
-	if (command.category == 'money') profile.resetProtection(id);
+	if (command.category == 'pvp') profile.resetProtection(id);
 
 
 	// if the command is used wrongly correct the user

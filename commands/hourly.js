@@ -7,7 +7,7 @@ module.exports = {
 	args: false,
 	usage: '',
 	cooldown: 5,
-	category: 'money',
+	category: 'economy',
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		const hourly = await profile.getHourly(message.author.id);

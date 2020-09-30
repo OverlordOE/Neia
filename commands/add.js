@@ -28,8 +28,8 @@ module.exports = {
 		profile.addMoney(target.id, amount);
 		const balance = profile.formatNumber(await profile.getBalance(target.id));
 
-		if (amount <= 0) return message.channel.send(`Successfully removed **${profile.formatNumber(amount * -1)}💰** from *${target}*. Their current balance is **${profile.formatNumber(balance)}💰**`);
-		return message.channel.send(`Successfully added ${profile.formatNumber(amount)}💰 to *${target}*. Their current balance is** ${profile.formatNumber(balance)}💰**`);
+		if (amount <= 0) return message.channel.send(`Successfully removed **${profile.formatNumber(amount * -1)}💰** from *${target}*. Their current balance is **${balance}💰**`);
+		return message.channel.send(`Successfully added ${profile.formatNumber(amount)}💰 to *${target}*. Their current balance is** ${balance}💰**`);
 
 	},
 };

@@ -6,7 +6,7 @@ module.exports = {
 	name: 'vote',
 	summary: 'vote for the bot to get up to 2 extra dailys',
 	description: 'vote for the bot to get up to 2 extra dailys.',
-	category: 'money',
+	category: 'economy',
 	aliases: ['v'],
 	args: false,
 	cooldown: 5,

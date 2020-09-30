@@ -1,4 +1,3 @@
-const moment = require('moment');
 module.exports = {
 
 	'common chest': {
@@ -90,19 +89,19 @@ module.exports = {
 		rarity: 'uncommon',
 		picture: 'gun.png',
 		ctg: 'consumable',
-		description: 'You can use this with the __steal__ command to steal money from other users.',
+		description: '',
 	},
-	'steal protection': {
-		name: 'Steal Protection',
-		cost: 400,
+	'protection': {
+		name: 'Protection',
+		cost: 600,
 		emoji: '🛡️',
 		rarity: 'epic',
 		picture: null,
 		ctg: 'consumable',
-		description: 'You can use this to gain 8 hours of protection against stealing.\nThis item stacks.',
+		description: 'You can use this to gain 8 hours of protection against attacks. If you use any of the money commands your protection will be reset\nThis item stacks.',
 		use: async function (profile, sentMessage, amount, embed, item, msgUser) {
 			const protection = await profile.addProtection(msgUser.user_id, 8);
-			return { succes: true, message: `You have activated steal protection.\nIt will last untill __${protection}__` };
+			return { succes: true, message: `You have activated your protection.\nIt will last untill __${protection}__` };
 		},
 	},
 	'profile colour': {

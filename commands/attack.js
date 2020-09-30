@@ -6,7 +6,7 @@ module.exports = {
 	cooldown: 10,
 	args: true,
 	usage: '<target>',
-	category: 'money',
+	category: 'pvp',
 	aliases: ['hunt'],
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
