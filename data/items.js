@@ -101,21 +101,8 @@ module.exports = {
 		ctg: 'consumable',
 		description: 'You can use this to gain 8 hours of protection against stealing.\nThis item stacks.',
 		use: async function (profile, sentMessage, amount, embed, item, msgUser) {
-			let prot;
-			const now = moment();
-			const protTime = 8 * amount;
-			const oldProtection = await profile.getProtection(msgUser.user_id);
-			console.log(oldProtection);
-			if (!oldProtection) prot = moment(now).add(protTime, 'h');
-			else prot = moment(oldProtection, 'MMM Do HH:mm').add(protTime, 'h');
-			console.log(prot);
-
-			const protection = prot.format('MMM Do HH:mm');
-			console.log(prot);
-
-			await profile.setProtection(msgUser.user_id, prot);
+			const protection = await profile.addProtection(msgUser.user_id, 8);
 			return { succes: true, message: `You have activated steal protection.\nIt will last untill __${protection}__` };
-
 		},
 	},
 	'profile colour': {
