@@ -27,7 +27,7 @@ Reflect.defineProperty(profile, 'addItem', {
 		});
 
 		const user = profile.get(id);
-		user.networth += item.cost * parseInt(amount);
+		user.networth += item.value * parseInt(amount);
 		user.save();
 
 		if (userItem) {
@@ -51,7 +51,7 @@ Reflect.defineProperty(profile, 'removeItem', {
 		const removeAmount = parseInt(amount);
 		if (userItem.amount >= removeAmount) {
 			const user = profile.get(id);
-			user.networth -= item.cost * removeAmount;
+			user.networth -= item.value * removeAmount;
 			user.save();
 
 			userItem.amount -= removeAmount;
@@ -186,11 +186,11 @@ Reflect.defineProperty(profile, 'calculateIncome', {
 			uItems.map(i => {
 				if (i.amount < 1) return;
 				const item = items[i.name.toLowerCase()];
-				networth += item.cost * i.amount;
+				networth += item.value * i.amount;
 				if (item.ctg == 'collectable') {
-					income += Math.pow((item.cost * 149) / 1650, 1.1) * i.amount;
-					daily += Math.pow(item.cost / 100, 1.1) * i.amount;
-					hourly += Math.pow(item.cost / 400, 1.1) * i.amount;
+					income += Math.pow((item.value * 149) / 1650, 1.1) * i.amount;
+					daily += Math.pow(item.value / 100, 1.1) * i.amount;
+					hourly += Math.pow(item.value / 400, 1.1) * i.amount;
 				}
 			});
 		}
@@ -314,11 +314,11 @@ Reflect.defineProperty(profile, 'getProtection', {
 	},
 });
 Reflect.defineProperty(profile, 'addProtection', {
-/**
-* Add protection to target user
-* @param {string} id - The id of the user.
-* @param {number} hours - Total amount of hours to add to the protection.
-*/
+	/**
+	* Add protection to target user
+	* @param {string} id - The id of the user.
+	* @param {number} hours - Total amount of hours to add to the protection.
+	*/
 	value: async function addProtection(id, hours) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
@@ -380,7 +380,7 @@ Reflect.defineProperty(profile, 'formatNumber', {
 		const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
 		const tier = Math.log10(number) / 3 | 0;
 
-		if (tier == 0) return Math.floor(number);
+		if (tier == 0) return `**${Math.floor(number)}**`;
 
 		const suffix = SI_SYMBOL[tier];
 		const scale = Math.pow(10, tier * 3);

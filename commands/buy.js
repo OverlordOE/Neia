@@ -73,7 +73,7 @@ async function buy(profile, sentMessage, amount, embed, item, msgUser) {
 	else if (amount < 1) amount = 1;
 
 	const balance = msgUser.balance;
-	const cost = amount * item.cost;
+	const cost = amount * item.value;
 	if (cost > balance) return sentMessage.edit(embed.setDescription(`You currently have **${profile.formatNumber(balance)}💰**, but __**${amount}**__ ${item.emoji}__${item.name}(s)__ costs **${profile.formatNumber(cost)}💰**!`));
 
 	profile.addItem(msgUser.user_id, item, amount);

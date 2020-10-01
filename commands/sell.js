@@ -78,7 +78,7 @@ async function sell(profile, sentMessage, amount, embed, item, message) {
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
 	else if (amount < 1) amount = 1;
 
-	const refundAmount = 0.9 * item.cost * amount;
+	const refundAmount = 0.9 * item.value * amount;
 	profile.removeItem(message.author.id, item, amount);
 	const balance = await profile.addMoney(message.author.id, refundAmount);
 
