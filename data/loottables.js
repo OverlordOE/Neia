@@ -3,10 +3,11 @@ module.exports = {
 	common() {
 		// cost 50
 		const loot = new LootTable();
-		loot.add({ name: 'Scooter', amount: [2, 3] }, 25);
+		loot.add({ name: 'Scooter', amount: [2, 3] }, 20);
 		loot.add({ name: 'Car', amount: [1, 1] }, 20);
-		loot.add({ name: 'Motorcycle', amount: [1, 2] }, 25);
+		loot.add({ name: 'Motorcycle', amount: [1, 2] }, 20);
 		loot.add({ name: 'Profile Colour', amount: [1, 2] }, 20);
+		loot.add({ name: 'Water', amount: [1, 0] }, 10);
 		loot.add({ name: 'Sailboat', amount: [1, 1] }, 5);
 		loot.add({ name: 'Motorboat', amount: [1, 1] }, 5);
 		return loot.choose();
@@ -15,10 +16,10 @@ module.exports = {
 	rare() {
 		// cost 300
 		const loot = new LootTable();
+		loot.add({ name: 'Water', amount: [3, 2] }, 10);
 		loot.add({ name: 'Motorcycle', amount: [6, 3] }, 21);
 		loot.add({ name: 'Car', amount: [3, 1] }, 21);
-		loot.add({ name: 'Sailboat', amount: [1, 0] }, 15);
-		loot.add({ name: 'Sailboat', amount: [1, 0] }, 5);
+		loot.add({ name: 'Sailboat', amount: [1, 0] }, 10);
 		loot.add({ name: 'Motorboat', amount: [2, 1] }, 21);
 		loot.add({ name: 'Prop plane', amount: [1, 0] }, 5);
 		loot.add({ name: 'Prop plane', amount: [2, 0] }, 5);
@@ -29,7 +30,7 @@ module.exports = {
 	},
 
 	epic() {
-		// cost 1400
+		// cost 1250
 		const loot = new LootTable();
 		loot.add({ name: 'Sailboat', amount: [5, 4] }, 10);
 		loot.add({ name: 'Training Sword', amount: [3, 1] }, 8);

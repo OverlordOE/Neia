@@ -41,7 +41,7 @@ module.exports = {
 		description: 'Legendary Chest.',
 	},
 
-	
+
 	'protection': {
 		name: 'Protection',
 		value: 600,
@@ -247,6 +247,18 @@ module.exports = {
 		ctg: 'equipment',
 		slot: 'weapon',
 		damage: [18, 7],
-		description: '',
+		description: 'What are you gonna do with a gun? Shoot people?',
+	},
+	'water': {
+		name: 'Water',
+		value: 100,
+		buyable: false,
+		emoji: '<: Manapotion: 727508079469396028 >',
+		rarity: 'common',
+		picture: '',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: [5, 2],
+		description: 'Just a plain glass of water',
 	},
 }; 
