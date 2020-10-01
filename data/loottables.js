@@ -52,7 +52,7 @@ module.exports = {
 		// cost 8000
 		const loot = new LootTable();
 		loot.add({ name: 'Jet Plane', amount: [9, 3] }, 25);
-		loot.add({ name: 'House', amount: [7, 2] }, 25);
+		loot.add({ name: 'House', amount: [7, 4] }, 25);
 		loot.add({ name: 'Museum', amount: [1, 1] }, 15);
 		loot.add({ name: 'Museum', amount: [2, 0] }, 10);
 		loot.add({ name: 'Star', amount: [1, 0] }, 16);
