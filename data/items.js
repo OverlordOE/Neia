@@ -203,7 +203,7 @@ module.exports = {
 	},
 	'ship': {
 		name: 'Ship',
-		value: 500,
+		value: 600,
 		buyable: false,
 		emoji: '🚢',
 		rarity: 'rare',
@@ -239,7 +239,7 @@ module.exports = {
 	},
 	'gun': {
 		name: 'Gun',
-		value: 1000,
+		value: 650,
 		buyable: false,
 		emoji: '<:gun:727585753818857563>',
 		rarity: 'uncommon',
