@@ -16,7 +16,7 @@ module.exports = {
 		const nowPlaying = queue[0];
 		let response = '';
 
-		if (guildIDData.loop) response = `Now looping: **${nowPlaying.songTitle}**\nDuration: ${nowPlaying.duration}\nRequested by ${nowPlaying.requester}\n\nType -loop to stop the looping \n`;
+		if (guildIDData.loop) response = `Now looping: **${nowPlaying.songTitle}**\nDuration: ${nowPlaying.duration}\nRequested by ${nowPlaying.requester.tag}\n\nType -loop to stop the looping \n`;
 		else {
 			response = `Now playing: **${nowPlaying.songTitle}**\nDuration: ${nowPlaying.duration}\nRequested by ${nowPlaying.requester}\n\nQueue: \n`;
 			for (let i = 1; i < queue.length; i++) 	response += `${i}: **${queue[i].songTitle}**\nDuration: ${queue[i].duration}\nRequested by: ${queue[i].requester}\n\n`;

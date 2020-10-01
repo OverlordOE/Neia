@@ -72,7 +72,7 @@ async function Play(client, options, data, logger, msgUser, message) {
 
 	const channel = client.channels.cache.get(data.queue[0].announceChannel);
 	const embed = new Discord.MessageEmbed()
-		.setThumbnail(message.author.displayAvatarURL())
+		.setThumbnail(data.queue[0].displayAvatarURL())
 		.setColor(msgUser.pColour);
 
 	channel.send(embed.setDescription(`Now playing ${data.queue[0].songTitle}\n\nRequested by ${data.queue[0].requester}`));	
