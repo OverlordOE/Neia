@@ -37,7 +37,7 @@ module.exports = {
 			profile.setDaily(message.author.id);
 
 			const balance = profile.formatNumber(await profile.getBalance(message.author.id));
-			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your daily 🎁 and **${profile.formatNumber(income.daily)}💰** from your collectables.\nCome back in a day for more!\n\nYour current balance is **${balance}💰**`));
+			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your daily 🎁 and ${profile.formatNumber(income.daily)}💰 from your collectables.\nCome back in a day for more!\n\nYour current balance is ${balance}💰`));
 		}
 		else { message.channel.send(embed.setDescription(`You have already gotten your daily 🎁\n\nYou can get you next daily __${daily}__`)); }
 	},

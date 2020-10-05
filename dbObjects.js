@@ -101,7 +101,7 @@ Reflect.defineProperty(profile, 'newUser', {
 			balance: 0,
 			totalEarned: 0,
 			networth: 0,
-			hp: 100,
+			hp: 1000,
 			equipment: JSON.stringify({ weapon: null, offhand: null }),
 			lastDaily: now.subtract(2, 'days').toString(),
 			lastHourly: now.subtract(1, 'days').toString(),
@@ -195,6 +195,35 @@ Reflect.defineProperty(profile, 'calculateIncome', {
 			});
 		}
 		return { networth: networth, income: income, daily: daily, hourly: hourly };
+	},
+});
+
+Reflect.defineProperty(profile, 'addHp', {
+	value: async function addHp(id, amount) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
+
+		const hp = Number(user.hp);
+		console.log(hp);
+		console.log(amount);
+
+		if (hp >= 1000) return false;
+		else if (hp > (1000 - amount)) {
+			amount = 1000 - hp;
+			user.hp = hp + Number(amount);
+		}
+		else user.hp = hp + Number(amount);
+
+		user.save();
+		return amount;
+	},
+});
+Reflect.defineProperty(profile, 'getHp', {
+	value: async function getHp(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		return user.hp;
 	},
 });
 

@@ -3,7 +3,7 @@ module.exports = {
 	name: 'attack',
 	summary: 'Attack other users and steal their items',
 	description: 'Attack other players with your equipment. If you kill them you will gain a portion of their current items and money.',
-	cooldown: 10,
+	cooldown: 1,
 	args: true,
 	usage: '<target>',
 	category: 'pvp',
@@ -37,9 +37,9 @@ module.exports = {
 			const stealAmount = Math.floor(target.balance / (Math.random() + 4));
 			profile.addMoney(targetMention.id, -stealAmount);
 			profile.addMoney(message.author.id, stealAmount);
-			message.channel.send(`You have killed ${targetMention} and stolen **${profile.formatNumber(stealAmount)}💰**.`);
+			message.channel.send(`You have killed ${targetMention} and stolen ${profile.formatNumber(stealAmount)}💰.`);
 			profile.addProtection(targetMention.id, 24);
-			target.hp = 100;
+			target.hp = 1000;
 		}
 	},
 };

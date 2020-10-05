@@ -1,5 +1,8 @@
+/* eslint-disable space-before-function-paren */
 module.exports = {
 
+
+	// CHESTS
 	'common chest': {
 		name: 'Common Chest',
 		value: 50,
@@ -41,7 +44,7 @@ module.exports = {
 		description: 'Legendary Chest.',
 	},
 
-
+	// CONSUMABLES
 	'protection': {
 		name: 'Protection',
 		value: 600,
@@ -81,6 +84,26 @@ module.exports = {
 			});
 		},
 	},
+
+	'healing potion': {
+		name: 'Healing Potion',
+		value: 260,
+		buyable: true,
+		emoji: '<:Healingpotion:727508079498756246>',
+		rarity: 'common',
+		picture: 'hp.png',
+		ctg: 'consumable',
+		description: 'Restores 50 HP',
+		use: async function (profile, sentMessage, amount, embed, item, msgUser) {
+			const heal = await profile.addHp(msgUser.user_id, 50);
+
+			if (heal) return { succes: true, message: `You healed **${heal}**<:health:730849477765890130>.\nCurrent <:health:730849477765890130> is **${await profile.getHp(msgUser.user_id)}/${1000}<:health:730849477765890130>**.` };
+			else return { succes: false, message: 'You are already at max health' };
+		},
+	},
+
+
+	// COLLECTABLES
 	'star': {
 		name: 'Star',
 		value: 10000,
@@ -212,6 +235,8 @@ module.exports = {
 		description: 'Gives you passive income.',
 	},
 
+
+	// WEAPONS
 	'training sword': {
 		name: 'Training Sword',
 		value: 400,
@@ -253,7 +278,7 @@ module.exports = {
 		name: 'Water',
 		value: 100,
 		buyable: false,
-		emoji: '<: Manapotion: 727508079469396028 >',
+		emoji: '<:manapotion:727508079469396028>',
 		rarity: 'common',
 		picture: '',
 		ctg: 'equipment',

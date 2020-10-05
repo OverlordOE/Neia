@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
 		// PVP
 		hp: {
 			type: DataTypes.INTEGER,
-			defaultValue: 100,
+			defaultValue: 1000,
 			allowNull: false,
 		},
 		equipment: {

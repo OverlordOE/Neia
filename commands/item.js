@@ -26,7 +26,7 @@ module.exports = {
 			embed = new Discord.MessageEmbed()
 				.setTitle(`${item.emoji}${item.name}`)
 				.setDescription(item.description)
-				.addField('Value', `**${profile.formatNumber(item.value)}💰**`, true)
+				.addField('Value', `${profile.formatNumber(item.value)}💰`, true)
 				.addField('Category', item.ctg, true)
 				.addField('Rarity', item.rarity, true)
 				.setTimestamp()
@@ -38,14 +38,14 @@ module.exports = {
 				.setImage(`attachment://${item.picture}`);
 
 			if (item.ctg == 'equipment') {
-				if (item.slot == 'weapon') embed.addField('Damage', `**${item.damage[0]} - ${item.damage[1] + item.damage[0]}**`);
+				if (item.slot == 'weapon') embed.addField('Damage', `${item.damage[0]} - ${item.damage[1] + item.damage[0]}`);
 			}
 		}
 		else {
-			let consumable = '__**Consumables:**__\n';
-			let collectables = '__**Collectables:**__\n';
-			let chests = '__**Chests:**__\n';
-			let equipment = '__**Equipment:**__\n';
+			let consumable = '__Consumables:__\n';
+			let collectables = '__Collectables:__\n';
+			let chests = '__Chests:__\n';
+			let equipment = '__Equipment:__\n';
 
 			Object.values(items).sort((a, b) => {
 				if (a.name < b.name) return -1;

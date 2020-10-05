@@ -59,17 +59,17 @@ module.exports = {
 		if (prot !== false) moneyEmbed.addField('Steal protection:', prot);
 
 
-		let inventory = '__**Inventory:**__\n\n';
+		let inventory = '__Inventory:__\n\n';
 		if (items.length) {
 			items.map(i => {
 				if (i.amount < 1) return;
 				const item = itemInfo[i.name.toLowerCase()];
-				inventory += `${item.emoji}${item.name}: **${profile.formatNumber(i.amount)}x**\n`;
+				inventory += `${item.emoji}${item.name}: ${profile.formatNumber(i.amount)}x\n`;
 			});
 
 			const income = await profile.calculateIncome(target.id);
-			invEmbed.addField('Max passive income', `**${profile.formatNumber(income.income)}💰**`);
-			invEmbed.addField('Networth', `**${profile.formatNumber(income.networth)}💰**`, true);
+			invEmbed.addField('Max passive income', `${profile.formatNumber(income.income)}💰`);
+			invEmbed.addField('Networth', `${profile.formatNumber(income.networth)}💰`, true);
 
 			invEmbed.setDescription(inventory);
 		}
@@ -77,13 +77,13 @@ module.exports = {
 
 
 		const equipment = await profile.getEquipment(target.id);
-		let statDescription = `**HP**: ${userProfile.hp}/100 <:health:730849477765890130>\n`;
+		let statDescription = `HP: ${userProfile.hp}/1000 <:health:730849477765890130>\n`;
 		for (const slot in equipment) {
 			if (equipment[slot]) {
 				const item = profile.getItem(equipment[slot]);
-				statDescription += `\n**${slot}**: ${item.emoji}${item.name}`;
+				statDescription += `\n${slot}: ${item.emoji}${item.name}`;
 			}
-			else statDescription += `\n**${slot}**: Nothing`;
+			else statDescription += `\n${slot}: Nothing`;
 		}
 		statEmbed.setDescription(statDescription);
 
