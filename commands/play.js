@@ -15,29 +15,34 @@ module.exports = {
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
 
-		if (!message.member.voice.channel) return message.reply('You are not in a voice channel!');
+		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');
 
 		const youtube = new YouTube(ytAPI);
 		const search = args.join(' ');
 		let video;
-		logger.log('info', search);
-
 		const data = options.active.get(message.guild.id) || {};
 
-		if (!data.connection) { data.connection = await message.member.voice.channel.join(); }
-		else if (data.connection.status == 4) {
-			data.connection = await message.member.voice.channel.join();
-			const guildIDData = options.active.get(message.guild.id);
-			guildIDData.dispatcher.emit('finish');
+		try {
+			if (!data.connection) data.connection = await message.member.voice.channel.join();
+			else if (data.connection.status == 4) {
+				data.connection = await message.member.voice.channel.join();
+				const guildIDData = options.active.get(message.guild.id);
+				guildIDData.dispatcher.emit('finish');
+			}
+		}
+		catch (error) {
+			logger.warn('Neia couldnt join the voice channel');
+			return message.reply('Neia probably does not have permission to join the channel or something else went wrong');
 		}
 
+
 		if (!data.queue) data.queue = [];
+		if (data.queue.length >= 4) return message.reply('you have reached the maximum queue size for free users.\nIf you want to upgrade your queue size contact OverlordOE#0717.');
 		data.guildID = message.guild.id;
 
-		const validate = await ytdl.validateURL(search);
-
-		if (!validate) {
-			video = await youtube.searchVideos(search);
+		try {
+			if (await ytdl.validateURL(search)) video = await youtube.getVideo(search);
+			else video = await youtube.searchVideos(search);
 
 			data.queue.push({
 				songTitle: video.title,
@@ -46,18 +51,11 @@ module.exports = {
 				announceChannel: message.channel.id,
 				duration: video.length,
 			});
-		}
-		else {
-			video = await ytdl.getInfo(search);
 
-			data.queue.push({
-				songTitle: video.title,
-				requester: message.author,
-				url: search,
-				announceChannel: message.channel.id,
-				duration: video.lengthSeconds,
-			});
-
+		} catch (error) {
+			if (data.queue.length < 1) data.dispatcher.emit('finish');
+			logger.warn(`Could not find youtube video with search terms ${search}`);
+			return message.reply(`Neia could not find any video connected to the search terms of \`${search}\``);
 		}
 
 		if (!data.dispatcher) Play(client, options, data, logger, msgUser, message);
@@ -72,10 +70,10 @@ async function Play(client, options, data, logger, msgUser, message) {
 
 	const channel = client.channels.cache.get(data.queue[0].announceChannel);
 	const embed = new Discord.MessageEmbed()
-		.setThumbnail(data.queue[0].displayAvatarURL())
+		.setThumbnail(data.queue[0].requester.displayAvatarURL())
 		.setColor(msgUser.pColour);
 
-	channel.send(embed.setDescription(`Now playing ${data.queue[0].songTitle}\n\nRequested by ${data.queue[0].requester}`));	
+	channel.send(embed.setDescription(`Now playing ${data.queue[0].songTitle}\n\nRequested by ${data.queue[0].requester}`));
 
 	data.dispatcher = data.connection.play(await ytdl(data.queue[0].url, {
 		filter: 'audioonly',
