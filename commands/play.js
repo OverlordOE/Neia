@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'play',
 	summary: 'Play a song',
-	description: 'Play a song, support youtube videos.',
+	description: 'Play a song, supports youtube videos.',
 	category: 'music',
 	aliases: ['song'],
 	args: true,
@@ -57,9 +57,13 @@ module.exports = {
 			logger.warn(`Could not find youtube video with search terms ${search}`);
 			return message.reply(`Neia could not find any video connected to the search terms of \`${search}\``);
 		}
+		const embed = new Discord.MessageEmbed()
+			.setThumbnail(message.author.displayAvatarURL())
+			.setColor(msgUser.pColour);
+
 
 		if (!data.dispatcher) Play(client, options, data, logger, msgUser, message);
-		else message.channel.send(`Added ${video.title} to the queue - Requested by ${message.author.tag}`);
+		else message.channel.send(embed.setDescription(`Added **${video.title}** to the queue.\n\nRequested by ${message.author}`));
 
 		options.active.set(message.guild.id, data);
 	},
@@ -73,7 +77,7 @@ async function Play(client, options, data, logger, msgUser, message) {
 		.setThumbnail(data.queue[0].requester.displayAvatarURL())
 		.setColor(msgUser.pColour);
 
-	channel.send(embed.setDescription(`Now playing ${data.queue[0].songTitle}\n\nRequested by ${data.queue[0].requester}`));
+	channel.send(embed.setDescription(`Now playing **${data.queue[0].songTitle}**\nRequested by ${data.queue[0].requester}`));
 
 	data.dispatcher = data.connection.play(await ytdl(data.queue[0].url, {
 		filter: 'audioonly',
@@ -81,19 +85,16 @@ async function Play(client, options, data, logger, msgUser, message) {
 	}), { type: 'opus' });
 	data.dispatcher.guildID = data.guildID;
 
-	data.dispatcher.on('finish', () => Finish(client, options, data.dispatcher, logger, msgUser, message));
 
+	data.dispatcher.on('finish', () => Finish(client, options, data.dispatcher, logger, msgUser, message));
 	data.dispatcher.on('error', e => {
 		channel.send(embed.setDescription(`error:  ${e.info}`));
 		logger.error(e.stack);
 	});
-
 	data.dispatcher.on('failed', e => {
 		channel.send(embed.setDescription('error:  failed to join voice channel'));
 		logger.log('error', `failed to join voice channel for reason: ${e.info}`);
 	});
-
-
 	data.dispatcher.on('disconnect', e => {
 		data.dispatcher = null;
 		logger.log('info', `left voice channel for reason: ${e.info}`);
