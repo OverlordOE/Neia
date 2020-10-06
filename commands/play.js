@@ -15,7 +15,11 @@ module.exports = {
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
 
-		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');
+		if (!message.member.voice.channel) return message.channel.send(embed.setdescription('you are not in a voice channel.'));
+
+		const embed = new Discord.MessageEmbed()
+			.setThumbnail(message.author.displayAvatarURL())
+			.setColor(msgUser.pColour);
 
 		const youtube = new YouTube(ytAPI);
 		const search = args.join(' ');
@@ -32,12 +36,12 @@ module.exports = {
 		}
 		catch (error) {
 			logger.warn('Neia couldnt join the voice channel');
-			return message.reply('Neia probably does not have permission to join the channel or something else went wrong');
+			return message.channel.send(embed.setdescription('Neia probably does not have permission to join the channel or something else went wrong'));
 		}
 
 
 		if (!data.queue) data.queue = [];
-		if (data.queue.length >= 4) return message.reply('you have reached the maximum queue size for free users.\nIf you want to upgrade your queue size contact OverlordOE#0717.');
+		if (data.queue.length >= 4) return message.channel.send(embed.setdescription('you have reached the maximum queue size for free users.\nIf you want to upgrade your queue size contact OverlordOE#0717.'));
 		data.guildID = message.guild.id;
 
 		try {
@@ -55,12 +59,8 @@ module.exports = {
 		} catch (error) {
 			if (data.queue.length < 1) data.dispatcher.emit('finish');
 			logger.warn(`Could not find youtube video with search terms ${search}`);
-			return message.reply(`Neia could not find any video connected to the search terms of \`${search}\``);
+			return message.channel.send(embed.setdescription(`Neia could not find any video connected to the search terms of \`${search}\``));
 		}
-		const embed = new Discord.MessageEmbed()
-			.setThumbnail(message.author.displayAvatarURL())
-			.setColor(msgUser.pColour);
-
 
 		if (!data.dispatcher) Play(client, options, data, logger, msgUser, message);
 		else message.channel.send(embed.setDescription(`Added **${video.title}** to the queue.\n\nRequested by ${message.author}`));
