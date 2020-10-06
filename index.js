@@ -31,7 +31,11 @@ const logger = winston.createLogger({
 				},
 			}),
 		}),
-		new winston.transports.File({ filename: './logs/error.log', level: 'warn' }),
+		new winston.transports.File({
+			filename: './logs/error.log',
+			level: 'warn',
+			format: winston.format.json(),
+		}),
 		new winston.transports.File({ filename: './logs/log.log' }),
 	],
 });
@@ -60,11 +64,12 @@ client.on('ready', async () => {
 });
 
 // Logger
-client.on('warn', m => logger.warn(m.stack));
-client.on('error', m => logger.error(m.stack));
-process.on('unhandledRejection', m => logger.error(m.stack));
-process.on('TypeError', m => logger.error(m.stack));
-process.on('uncaughtException', m => logger.error(m.stack));
+client.on('warn', m => logger.warn(m));
+client.on('error', m => logger.error(m));
+process.on('warning', m => logger.warn(m));
+process.on('unhandledRejection', m => logger.error(m));
+process.on('TypeError', m => logger.error(m));
+process.on('uncaughtException', m => logger.error(m));
 
 
 client.on('message', async message => {
