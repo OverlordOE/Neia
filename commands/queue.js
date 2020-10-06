@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 module.exports = {
 	name: 'queue',
 	description: 'Shows the song queue',
@@ -12,15 +13,17 @@ module.exports = {
 		const guildIDData = options.active.get(message.guild.id);
 		if (!guildIDData) return message.reply('no music queued at the moment.');
 
-		const queue = guildIDData.queue;
-		const nowPlaying = queue[0];
-		let response = '';
+		const embed = new Discord.MessageEmbed()
+			.setTitle('Neia Queue')
+			.setColor(msgUser.pColour);
 
-		if (guildIDData.loop) response = `Now looping: **${nowPlaying.songTitle}**\nDuration: ${nowPlaying.duration}\nRequested by ${nowPlaying.requester.tag}\n\nType -loop to stop the looping \n`;
-		else {
-			response = `Now playing: **${nowPlaying.songTitle}**\nDuration: ${nowPlaying.duration}\nRequested by ${nowPlaying.requester}\n\nQueue: \n`;
-			for (let i = 1; i < queue.length; i++) 	response += `${i}: **${queue[i].songTitle}**\nDuration: ${queue[i].duration}\nRequested by: ${queue[i].requester}\n\n`;
+		const queue = guildIDData.queue;
+
+		if (guildIDData.loop) embed.setDescription(`Now looping: **${queue[0].songTitle}**\nDuration: ${queue[0].duration}\nRequested by ${queue[0].requester.tag}\n\nType -loop to stop the looping \n`);
+		else for (let i = 0; i < queue.length; i++) {
+			if (i == 0) embed.addField(`Now playing: **${queue[i].songTitle}**`, `Duration: ${queue[i].duration}\nRequested by: ${queue[i].requester}`);
+			else embed.addField(`${i}: **${queue[i].songTitle}**`, `Duration: ${queue[i].duration}\nRequested by: ${queue[i].requester}`);
 		}
-		message.channel.send(response, { code: true });
+		message.channel.send(embed);
 	},
 };
