@@ -14,21 +14,28 @@ moment().format();
 
 
 const logger = winston.createLogger({
-	level: 'debug',
 	format: winston.format.combine(
-		winston.format.timestamp({
-			format: 'MM-DD HH:mm:ss',
-		}),
-		winston.format.printf(log => `(${log.timestamp}) [${log.level.toUpperCase()}] - ${log.message}`),
-		winston.format.colorize(),
-	),
+		winston.format.timestamp({ format: 'MM-DD HH:mm:ss' }),
+		winston.format.printf(log => `(${log.timestamp}) [${log.level}] - ${log.message}`),
 
+	),
 	transports: [
-		new winston.transports.Console(),
+		new winston.transports.Console({
+			format: winston.format.colorize({
+				all: true,
+				colors: {
+					error: 'red',
+					info: 'cyan',
+					warn: 'yellow',
+					debug: 'green',
+				},
+			}),
+		}),
 		new winston.transports.File({ filename: './logs/error.log', level: 'warn' }),
 		new winston.transports.File({ filename: './logs/log.log' }),
 	],
 });
+
 
 Object.keys(clientCommands).map(key => {
 	client.commands.set(clientCommands[key].name, clientCommands[key]);
