@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			primaryKey: true,
 		},
-		
+
 		// MONEY
 		balance: {
 			type: DataTypes.INTEGER,
@@ -46,12 +46,17 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: '',
 			allowNull: false,
 		},
-		lastWeekly: {
+		lastVote: {
 			type: DataTypes.STRING,
 			defaultValue: '',
 			allowNull: false,
 		},
-		lastVote: {
+		lastHeal: {
+			type: DataTypes.STRING,
+			defaultValue: '',
+			allowNull: false,
+		},
+		lastAttack: {
 			type: DataTypes.STRING,
 			defaultValue: '',
 			allowNull: false,

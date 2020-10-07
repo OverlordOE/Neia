@@ -105,8 +105,9 @@ Reflect.defineProperty(profile, 'newUser', {
 			equipment: JSON.stringify({ weapon: null, offhand: null }),
 			lastDaily: now.subtract(2, 'days').toString(),
 			lastHourly: now.subtract(1, 'days').toString(),
-			lastWeekly: now.subtract(8, 'days').toString(),
 			lastVote: now.subtract(1, 'days').toString(),
+			lastHeal: now.subtract(1, 'days').toString(),
+			lastAttack: now.subtract(1, 'days').toString(),
 			protection: now.toString(),
 			pColour: '#fcfcfc',
 		});
@@ -205,9 +206,6 @@ Reflect.defineProperty(profile, 'addHp', {
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 
 		const hp = Number(user.hp);
-		console.log(hp);
-		console.log(amount);
-
 		if (hp >= 1000) return false;
 		else if (hp > (1000 - amount)) {
 			amount = 1000 - hp;
@@ -311,22 +309,47 @@ Reflect.defineProperty(profile, 'getVote', {
 	},
 });
 
-Reflect.defineProperty(profile, 'getPColour', {
-	value: async function getPColour(id) {
+
+Reflect.defineProperty(profile, 'setHeal', {
+	value: async function setHeal(id) {
 		let user = profile.get(id);
 		if (!user) user = await profile.newUser(id);
-		return user ? user.pColour : '#fcfcfc';
-	},
 
-});
-Reflect.defineProperty(profile, 'setPColour', {
-	value: async function setPColour(id, colour) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		if (!colour.startsWith('#')) throw Error('not a valid colour!');
-
-		user.pColour = colour;
+		user.lastHeal = moment().toString();
 		return user.save();
+	},
+});
+Reflect.defineProperty(profile, 'getHeal', {
+	value: async function getHeal(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		const now = moment();
+
+		const healCheck = moment(user.lastHeal).add(2, 'h');
+		if (moment(healCheck).isBefore(now)) return true;
+		else return healCheck.format('MMM Do HH:mm');
+	},
+});
+
+
+Reflect.defineProperty(profile, 'setAttack', {
+	value: async function setAttack(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+
+		user.lastAttack = moment().toString();
+		return user.save();
+	},
+});
+Reflect.defineProperty(profile, 'getAttack', {
+	value: async function getAttack(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		const now = moment();
+
+		const attackCheck = moment(user.lastAttack).add(1, 'h');
+		if (moment(attackCheck).isBefore(now)) return true;
+		else return attackCheck.format('MMM Do HH:mm');
 	},
 });
 
@@ -368,6 +391,26 @@ Reflect.defineProperty(profile, 'resetProtection', {
 		if (!user) user = await profile.newUser(id);
 
 		user.protection = moment().toString();
+		return user.save();
+	},
+});
+
+
+Reflect.defineProperty(profile, 'getPColour', {
+	value: async function getPColour(id) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		return user ? user.pColour : '#fcfcfc';
+	},
+
+});
+Reflect.defineProperty(profile, 'setPColour', {
+	value: async function setPColour(id, colour) {
+		let user = profile.get(id);
+		if (!user) user = await profile.newUser(id);
+		if (!colour.startsWith('#')) throw Error('not a valid colour!');
+
+		user.pColour = colour;
 		return user.save();
 	},
 });

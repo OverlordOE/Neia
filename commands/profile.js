@@ -25,11 +25,14 @@ module.exports = {
 		let daily = await profile.getDaily(target.id);
 		let hourly = await profile.getHourly(target.id);
 		let vote = await profile.getVote(target.id);
+		let heal = await profile.getHeal(target.id);
+		let attack = await profile.getAttack(target.id);
 
 		if (daily === true) daily = 'now';
 		if (hourly === true) hourly = 'now';
 		if (vote === true) vote = 'now';
-
+		if (heal === true) heal = 'now';
+		if (attack === true) attack = 'now';
 
 		const moneyEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
@@ -39,8 +42,11 @@ module.exports = {
 			.addField('Next hourly:', hourly, true)
 			.addField('Next daily:', daily, true)
 			.addField('Next Vote', vote, true)
+			.addField('Next Heal', heal, true)
+			.addField('Next Attack', attack, true)
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
+		if (prot !== false) moneyEmbed.addField('Protection untill:', prot);
 
 		const invEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
@@ -55,8 +61,6 @@ module.exports = {
 			.setThumbnail(avatar)
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
-
-		if (prot !== false) moneyEmbed.addField('Steal protection:', prot);
 
 
 		let inventory = '__Inventory:__\n\n';
@@ -97,9 +101,9 @@ module.exports = {
 
 				collector.on('collect', (reaction) => {
 					reaction.users.remove(message.author.id);
-					if (reaction.emoji.name == '💰') sentMessage.edit(moneyEmbed); 
-					else if (reaction.emoji.name == '📦') sentMessage.edit(invEmbed); 
-					else if (reaction.emoji.name == '⚔️') sentMessage.edit(statEmbed); 
+					if (reaction.emoji.name == '💰') sentMessage.edit(moneyEmbed);
+					else if (reaction.emoji.name == '📦') sentMessage.edit(invEmbed);
+					else if (reaction.emoji.name == '⚔️') sentMessage.edit(statEmbed);
 				});
 				collector.on('end', () => sentMessage.reactions.removeAll());
 			});

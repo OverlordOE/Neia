@@ -97,7 +97,10 @@ module.exports = {
 		use: async function (profile, sentMessage, amount, embed, item, msgUser) {
 			const heal = await profile.addHp(msgUser.user_id, 50);
 
-			if (heal) return { succes: true, message: `You healed **${heal}**<:health:730849477765890130>.\nCurrent <:health:730849477765890130> is **${await profile.getHp(msgUser.user_id)}/${1000}<:health:730849477765890130>**.` };
+			if (heal) {
+				profile.setHeal(msgUser.user_id);
+				return { succes: true, message: `You healed **${heal}**<:health:730849477765890130>.\nCurrent <:health:730849477765890130> is **${await profile.getHp(msgUser.user_id)}/${1000}<:health:730849477765890130>**.` };
+			}
 			else return { succes: false, message: 'You are already at max health' };
 		},
 	},
@@ -252,14 +255,14 @@ module.exports = {
 
 	'training staff': {
 		name: 'Training Staff',
-		value: 450,
+		value: 700,
 		buyable: true,
 		emoji: '<:training_staff:735472268616007692>',
 		rarity: 'common',
 		picture: 'training_staff.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [10, 10],
+		damage: [60, 20],
 		description: 'Your basic training staff.',
 	},
 	'gun': {
@@ -271,7 +274,7 @@ module.exports = {
 		picture: 'gun.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [18, 7],
+		damage: [65, 7],
 		description: 'What are you gonna do with a gun? Shoot people?',
 	},
 	'water': {
@@ -283,7 +286,7 @@ module.exports = {
 		picture: '',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [5, 2],
+		damage: [17, 5],
 		description: 'Just a plain glass of water',
 	},
 }; 
