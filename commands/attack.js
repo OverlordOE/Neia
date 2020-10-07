@@ -14,13 +14,16 @@ module.exports = {
 		const targetMention = message.mentions.users.first();
 		if (!targetMention) return message.reply('mention the user you want to attack.');
 
+		const lastAttack = await profile.getAttack(message.author.id);
+		if (lastAttack !== true) return message.reply(`your attack is on cooldown. Your next attack is available at ${lastAttack}`);
+
 		const target = await profile.getUser(targetMention.id);
 		if (target.networth < 9000) return message.reply('the target user needs to have a networth of atleast 9000 to be attacked.');
 		if (msgUser.networth < 9000) return message.reply('you need to have a networth of atleast 9000 to attack someone.');
 
 		const protection = await profile.getProtection(targetMention.id);
 		if (protection !== false) return message.channel.send(`*${targetMention}* has protection against attacks, you cannot attack them untill ${protection}.`);
-		
+
 
 		const equipment = await profile.getEquipment(message.author.id);
 		let damage = Math.round(1 + (Math.random() * 4));
@@ -32,6 +35,7 @@ module.exports = {
 		else message.channel.send(`You have attacked ${targetMention} with your fists for ${damage} damage`);
 
 		target.hp -= damage;
+		profile.setAttack(message.author.id);
 
 		if (target.hp <= 0) {
 			const stealAmount = Math.floor(target.balance / (Math.random() + 4));
