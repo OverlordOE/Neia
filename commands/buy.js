@@ -54,7 +54,7 @@ module.exports = {
 								})
 								.catch(e => {
 									logger.error(e.stack);
-									message.reply('you didn\'t answer in time or something went wrong.');
+									throw Error('Something went wrong');
 								});
 						});
 					});
@@ -62,7 +62,7 @@ module.exports = {
 		})
 			.catch(e => {
 				logger.error(e.stack);
-				message.reply('you didn\'t answer in time or something went wrong.');
+				throw Error('Something went wrong');
 			});
 	},
 };

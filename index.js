@@ -3,6 +3,7 @@ const winston = require('winston');
 const { Users, Guilds, profile, guildProfile } = require('./dbObjects');
 const clientCommands = require('./commands');
 const moment = require('moment');
+const cron = require('cron');
 const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
 require('dotenv').config();
@@ -56,7 +57,7 @@ client.on('ready', async () => {
 		client.guilds.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
 		client.user.setActivity(`with ${memberTotal} users.`);
 
-		logger.log('info', `Logged in as ${client.user.tag}!`);
+		logger.info(`Logged in as ${client.user.tag}!`);
 	}
 	catch (e) {
 		logger.error(e.stack);
@@ -73,6 +74,7 @@ process.on('uncaughtException', m => logger.error(m));
 
 
 client.on('message', async message => {
+
 	if (message.author.bot) return;
 
 	let guild = guildProfile.get(message.guild.id);
@@ -137,7 +139,7 @@ client.on('message', async message => {
 	const options = { active: active };
 
 	// execute command
-	logger.log('info', `${message.author.tag} Called command: **${command.name}** ${args.join(' ')}, in guild: ${message.guild.name}`);
+	logger.log('info', `${message.author.tag} Called command: ${commandName} ${args.join(' ')}, in guild: ${message.guild.name}`);
 	try {
 		command.execute(message, args, user, profile, guildProfile, client, logger, cooldowns, options);
 	}
@@ -146,3 +148,16 @@ client.on('message', async message => {
 		message.reply('there was an error trying to execute that command!');
 	}
 });
+
+//	crontime: 0 0-23/3 * * *
+const botTasks = new cron.CronJob('* * * * *', async () => {
+		const lottery = client.commands.get('lottery');
+		lottery.execute(profile, client, logger);
+
+		let memberTotal = 0;
+		client.guilds.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
+		client.user.setActivity(`with ${memberTotal} users.`);
+		
+		logger.info('Finished regular tasks!');
+});
+botTasks.start();
