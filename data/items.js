@@ -279,7 +279,7 @@ module.exports = {
 	},
 	'water': {
 		name: 'Water',
-		value: 10000,
+		value: 20000,
 		buyable: false,
 		emoji: '<:manapotion:727508079469396028>',
 		rarity: 'epic',
