@@ -3,10 +3,10 @@
 const Discord = require('discord.js');
 module.exports = {
 	name: 'sell',
-	summary: 'Sell items to get 80% of your money back',
-	description: 'Sell items to get 80% of your money back.',
+	summary: 'Sell items to get 90% of your money back',
+	description: 'Sell items to get 90% of your money back.',
 	aliases: ['refund'],
-	category: 'money',
+	category: 'economy',
 	args: false,
 	usage: '',
 
@@ -21,7 +21,7 @@ module.exports = {
 			.setTitle('Neia Refunds')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What do you want to refund? `80% refund`')
-
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
 
@@ -75,12 +75,12 @@ module.exports = {
 
 async function sell(profile, sentMessage, amount, embed, item, message) {
 
-	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
+	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 	else if (amount < 1) amount = 1;
 
-	const refundAmount = 0.9 * item.cost * amount;
+	const refundAmount = 0.9 * item.value * amount;
 	profile.removeItem(message.author.id, item, amount);
 	const balance = await profile.addMoney(message.author.id, refundAmount);
 
-	sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received **${profile.formatNumber(refundAmount)}💰** back.\nYour balance is **${profile.formatNumber(balance)}💰**!`));
+	sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${profile.formatNumber(refundAmount)}💰 back.\nYour balance is ${profile.formatNumber(balance)}💰!`));
 }

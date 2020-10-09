@@ -12,7 +12,8 @@ module.exports = {
 		let adminCommands = '';
 		let musicCommands = '';
 		let miscCommands = '';
-		let moneyCommands = '';
+		let pvpCommands = '';
+		let economyCommands = '';
 		let infoCommands = '';
 
 		const help = new Discord.MessageEmbed()
@@ -32,8 +33,11 @@ module.exports = {
 					case 'misc':
 						miscCommands += `**${command.name}** - ${command.summary}\n`;
 						break;
-					case 'money':
-						moneyCommands += `**${command.name}** - ${command.summary}\n`;
+					case 'pvp':
+						pvpCommands += `**${command.name}** - ${command.summary}\n`;
+						break;
+					case 'economy':
+						economyCommands += `**${command.name}** - ${command.summary}\n`;
 						break;
 					case 'info':
 						infoCommands += `**${command.name}** - ${command.summary}\n`;
@@ -45,13 +49,14 @@ module.exports = {
 
 
 			help.setDescription(`__**Info Commands**__\n${infoCommands}\n
-								__**Money/Item Commands**__\n${moneyCommands}\n
+								__**PvP Commands**__\n${pvpCommands}\n
+								__**Economy Commands**__\n${economyCommands}\n
 								__**Miscellaneous Commands**__\n${miscCommands}\n
 								__**Music Commands**__\n${musicCommands}\n
 								__**Admin Commands**__\n${adminCommands}\n
 								`)
 				.addField('__**Help**__', '**You can send `help [command name]` to get info on a specific command!**')
-				.addField('Helpfull Links', `[Click here to invite me to your server](https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=bot&permissions=372517968)\n
+				.addField('Helpfull Links', `[Click here to invite me to your server](https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=bot&permissions=70765633)\n
 							 [Click here to join the support server](https://discord.gg/hFGxVDT)\n
 							 [Click here to submit a bug or request  feature](https://github.com/OverlordOE/Neia/issues/new/choose)\n
 							 For more info contact: OverlordOE#0717
@@ -78,7 +83,6 @@ module.exports = {
 			}
 
 		}
-
 
 		message.channel.send(help);
 	},

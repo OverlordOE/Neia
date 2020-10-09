@@ -9,16 +9,15 @@ module.exports = {
 	cooldown: 5,
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
-		if (!message.member.voice.channel) {
-			return message.reply('You are not in a voice channel!');
-		}
-
+		if (!message.member.voice.channel)return message.reply('you are not in a voice channel.');
+		
 		try {
 			const guildIDData = options.active.get(message.guild.id);
 			guildIDData.queue = [];
 			guildIDData.dispatcher.emit('finish');
 		}
 		catch (error) {
+			message.reply('there is no queue to clear.');
 			return logger.error(error.stack);
 		}
 	},

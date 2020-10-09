@@ -3,7 +3,7 @@ module.exports = {
 	name: 'use',
 	summary: 'Use an item from your inventory',
 	description: 'Use an item from your inventory.',
-	category: 'money',
+	category: 'economy',
 	aliases: ['item'],
 	args: false,
 	usage: '',
@@ -11,7 +11,7 @@ module.exports = {
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		const filter = m => m.author.id === message.author.id;
 
-		let amount = 0;
+		let amount = 1;
 		let temp = '';
 		let item;
 
@@ -21,6 +21,7 @@ module.exports = {
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What item do you want to use?')
 			.setThumbnail(client.user.displayAvatarURL())
+			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
 
@@ -37,7 +38,7 @@ module.exports = {
 			item = profile.getItem(temp);
 			if (item) {
 				if (await profile.hasItem(message.author.id, item, amount)) use(profile, sentMessage, amount, embed, item, msgUser);
-				else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
+				else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.emoji}${item.name}(s)__!`));
 			}
 			else {
 
@@ -59,7 +60,7 @@ module.exports = {
 
 									}).catch(e => {
 										logger.error(e.stack);
-										message.reply('you didn\'t answer in time or something went wrong.');
+										throw Error('Something went wrong');
 									});
 							});
 						}
@@ -67,7 +68,7 @@ module.exports = {
 					})
 					.catch(e => {
 						logger.error(e.stack);
-						message.reply('you didn\'t answer in time or something went wrong.');
+						throw Error('Something went wrong');
 					});
 			}
 		});
@@ -77,12 +78,8 @@ module.exports = {
 
 async function use(profile, sentMessage, amount, embed, item, msgUser) {
 
-	if (!Number.isInteger(amount)) {
-		return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
-	}
-	else if (amount < 1 || amount > 10000) {
-		amount = 1;
-	}
+	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
+	else if (amount < 1 || amount > 10000 || !amount) amount = 1;
 
 
 	if (item.use) {
@@ -92,8 +89,8 @@ async function use(profile, sentMessage, amount, embed, item, msgUser) {
 			profile.removeItem(msgUser.user_id, item, amount);
 			return sentMessage.edit(embed.setDescription(result.message));
 		}
-		else if (result.message) { return sentMessage.edit(embed.setDescription(result.message)); }
-		else { return sentMessage.edit(embed.setDescription('An error has occurred, please report this to OverlordOE#0717')); }
+		else if (result.message) return sentMessage.edit(embed.setDescription(result.message));
+		else return sentMessage.edit(embed.setDescription('An error has occurred, please report this to OverlordOE#0717'));
 	}
 
 	else if (item.ctg == 'chest') { return sentMessage.edit(embed.setDescription('Please use the `open` command to use a chest')); }

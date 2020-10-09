@@ -7,7 +7,7 @@ module.exports = {
 	args: false,
 	usage: '',
 	cooldown: 5,
-	category: 'money',
+	category: 'economy',
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		const hourly = await profile.getHourly(message.author.id);
@@ -35,7 +35,7 @@ module.exports = {
 			profile.addItem(message.author.id, chest, 1);
 			profile.setHourly(message.author.id);
 		
-			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your hourly 🎁 and **${profile.formatNumber(income.hourly)}💰** from your collectables.\nCome back in an hour for more!\n\nYour current balance is **${profile.formatNumber(await profile.getBalance(message.author.id))}💰**`));
+			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your hourly 🎁 and ${profile.formatNumber(income.hourly)}💰 from your collectables.\nCome back in an hour for more!\n\nYour current balance is ${profile.formatNumber(await profile.getBalance(message.author.id))}💰`));
 		}
 		else { message.channel.send(embed.setDescription(`You have already gotten your hourly 🎁\n\nYou can get your next hourly __${hourly}__.`)); }
 

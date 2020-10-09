@@ -15,28 +15,28 @@ module.exports = {
 		const networthList = profile.sort((a, b) => b.networth - a.networth)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: **${profile.formatNumber(user.networth)}💰**`);
+			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${profile.formatNumber(user.networth)}💰`);
 
 		const totalList = profile.sort((a, b) => b.totalEarned - a.totalEarned)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: **${profile.formatNumber(user.totalEarned)}💰**`);
+			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${profile.formatNumber(user.totalEarned)}💰`);
 
 		const balanceList = profile.sort((a, b) => b.balance - a.balance)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: **${profile.formatNumber(user.balance)}💰**`);
+			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: ${profile.formatNumber(user.balance)}💰`);
 
 
 		let currentList = networthList;
-		let description = '**Total Earned**\n';
+		let description = 'Total Earned\n';
 		let page = 0;
 		if (!isNaN(args[0]) && args[0] > 0 && args[0] < 6) page = args[0] - 1;
 
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia leaderboard')
-			.setDescription(editDescription(currentList, page, '** Net Worth **\n'))
+			.setDescription(editDescription(currentList, page, ' Net Worth \n'))
 			.setThumbnail(client.user.displayAvatarURL())
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
@@ -62,15 +62,15 @@ module.exports = {
 				else if (reaction.emoji.name == '🔀') {
 					if (currentList == networthList) {
 						currentList = balanceList;
-						description = '**Current Balance**\n';
+						description = 'Current Balance\n';
 					}
 					else if (currentList == balanceList) {
 						currentList = totalList;
-						description = '**Total Earned**\n';
+						description = 'Total Earned\n';
 					}
 					else {
 						currentList = networthList;
-						description = '**Net Worth**\n';
+						description = 'Net Worth\n';
 					}
 					sentMessage.edit(embed.setDescription(editDescription(currentList, page, description)));
 				}
@@ -83,7 +83,7 @@ module.exports = {
 function editDescription(currentList, page, description) {
 	for (let i = page * 10; i < (10 + page * 10); i++) {
 		if (currentList[i]) description += currentList[i];
-		else description += `\n__**${i + 1}.**__ noone`;
+		else description += `\n__${i + 1}.__ noone`;
 	}
 	return description;
 }

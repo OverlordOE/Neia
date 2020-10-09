@@ -20,8 +20,8 @@ module.exports = {
 			logger.log('info', `*${message.author.tag}* deleted **${amount}** messages in channel ${message.channel.name}`);
 		}
 		catch (error) {
-			message.channel.send('Something went wrong');
-			return logger.error(error.stack);
+			logger.error(error.stack);
+			throw Error('Something went wrong');
 		}
 	},
 };

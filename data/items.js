@@ -1,9 +1,12 @@
-const moment = require('moment');
+/* eslint-disable space-before-function-paren */
 module.exports = {
 
+
+	// CHESTS
 	'common chest': {
 		name: 'Common Chest',
-		cost: 50,
+		value: 500,
+		buyable: true,
 		emoji: '<:chest_t_01:745278856201633832>',
 		rarity: 'common',
 		picture: 'common_closed.png',
@@ -12,7 +15,8 @@ module.exports = {
 	},
 	'rare chest': {
 		name: 'Rare Chest',
-		cost: 300,
+		value: 3000,
+		buyable: true,
 		emoji: '<:chest_t_02:745278856298102864>',
 		rarity: 'rare',
 		picture: 'rare_closed.png',
@@ -21,7 +25,8 @@ module.exports = {
 	},
 	'epic chest': {
 		name: 'Epic Chest',
-		cost: 1250,
+		value: 12500,
+		buyable: true,
 		emoji: '<:chest_t_03:745278856268742696>',
 		rarity: 'epic',
 		picture: 'epic_closed.png',
@@ -30,97 +35,34 @@ module.exports = {
 	},
 	'legendary chest': {
 		name: 'Legendary Chest',
-		cost: 8000,
+		value: 80000,
+		buyable: true,
 		emoji: '<:chest_t_04:745278855987593226>',
 		rarity: 'legendary',
 		picture: 'legendary_closed.png',
 		ctg: 'chest',
 		description: 'Legendary Chest.',
 	},
-	'tea': {
-		name: 'Tea',
-		cost: 2,
-		emoji: '🍵',
-		rarity: 'common',
-		picture: null,
-		ctg: 'consumable',
-		description: 'its tea innit.',
-		use: async function (profile, sentMessage, amount) {
-			if (amount > 50) return { succes: true, message: '☕You drink an enormous amount of tea☕\nYou die of tea poisoning!' };
-			else if (amount > 10) return { succes: true, message: '☕You drink a shit ton of tea☕\nAre you ok?' };
-			else if (amount > 3) return { succes: true, message: `☕You drink **${amount}** cups of tea☕\nYour teeth begin to ache.` };
-			else return { succes: true, message: '☕You drink a cup of tea☕\nYou enjoy it.' };
-		},
-	},
-	'coffee': {
-		name: 'Coffee',
-		cost: 3,
-		emoji: '☕',
-		rarity: 'common',
-		picture: null,
-		ctg: 'consumable',
-		description: 'its Coffee innit.',
-		use: async function (profile, sentMessage, amount) {
-			if (amount > 10) return { succes: true, message: '🎂THE CAKE HAS RIPPED A HOLE IN REALITY🎂\nNot even The Avengers can fix this...' };
-			else if (amount > 5) return { succes: true, message: '🎂THE CAKE IS EVOLVING🎂\nYou are not gonna be ok.' };
-			else if (amount > 2) return { succes: true, message: '🎂THE CAKE IS BULLYING YOU🎂\nYour mental state deteriorates.' };
-			else return { succes: true, message: '🎂THE CAkE IS A LIE🎂\nYou feel deceived!' };
-		},
-	},
-	'cake': {
-		name: 'Cake',
-		cost: 6,
-		emoji: '🍰',
-		rarity: 'common',
-		picture: null,
-		ctg: 'consumable',
-		description: 'its Cake innit.',
-		use: async function (profile, sentMessage, amount) {
-			if (amount > 9000) return { succes: true, message: `*your* power has increased by **${amount}**%\nIT'S OVER 9000` };
-			else if (amount > 5) return { succes: true, message: `*your* power has increased by **${amount}**%\n👁️👄👁️` };
-			else if (amount > 2) return { succes: true, message: '🎂THE CAKE IS BULLYING YOU🎂\nYour mental state deteriorates.' };
-			else return { succes: true, message: `*your* power has increased by **${amount}**%` };
-		},
-	},
 
-	'gun': {
-		name: 'Gun',
-		cost: 50,
-		emoji: '<:gun:727585753818857563>',
-		rarity: 'uncommon',
-		picture: 'gun.png',
-		ctg: 'consumable',
-		description: 'You can use this with the __steal__ command to steal money from other users.',
-	},
-	'steal protection': {
-		name: 'Steal Protection',
-		cost: 400,
+	// CONSUMABLES
+	'protection': {
+		name: 'Protection',
+		value: 6000,
+		buyable: true,
 		emoji: '🛡️',
 		rarity: 'epic',
 		picture: null,
 		ctg: 'consumable',
-		description: 'You can use this to gain 8 hours of protection against stealing.\nThis item stacks.',
+		description: 'You can use this to gain 8 hours of protection against attacks. If you use any of the money commands your protection will be reset\nThis item stacks.',
 		use: async function (profile, sentMessage, amount, embed, item, msgUser) {
-			let prot;
-			const now = moment();
-			const protTime = 8 * amount;
-			const oldProtection = await profile.getProtection(msgUser.user_id);
-			console.log(oldProtection);
-			if (!oldProtection) prot = moment(now).add(protTime, 'h');
-			else prot = moment(oldProtection, 'MMM Do HH:mm').add(protTime, 'h');
-			console.log(prot);
-
-			const protection = prot.format('MMM Do HH:mm');
-			console.log(prot);
-
-			await profile.setProtection(msgUser.user_id, prot);
-			return { succes: true, message: `You have activated steal protection.\nIt will last untill __${protection}__` };
-
+			const protection = await profile.addProtection(msgUser.user_id, amount * 8);
+			return { succes: true, message: `You have activated your protection.\nIt will last untill __${protection}__` };
 		},
 	},
 	'profile colour': {
 		name: 'Profile Colour',
-		cost: 40,
+		value: 400,
+		buyable: true,
 		emoji: '🌈',
 		rarity: 'uncommon',
 		picture: null,
@@ -142,9 +84,33 @@ module.exports = {
 			});
 		},
 	},
+
+	'healing potion': {
+		name: 'Healing Potion',
+		value: 2600,
+		buyable: true,
+		emoji: '<:healing_potion:764111086818557963>',
+		rarity: 'uncommon',
+		picture: 'hp.png',
+		ctg: 'consumable',
+		description: 'Restores 50 HP',
+		use: async function (profile, sentMessage, amount, embed, item, msgUser) {
+			const heal = await profile.addHp(msgUser.user_id, 50);
+
+			if (heal) {
+				profile.setHeal(msgUser.user_id);
+				return { succes: true, message: `You healed **${heal}**<:health:730849477765890130>.\nCurrent <:health:730849477765890130> is **${await profile.getHp(msgUser.user_id)}/${1000}<:health:730849477765890130>**.` };
+			}
+			else return { succes: false, message: 'You are already at max health' };
+		},
+	},
+
+
+	// COLLECTABLES
 	'star': {
 		name: 'Star',
-		cost: 10000,
+		value: 100000,
+		buyable: true,
 		emoji: '⭐',
 		rarity: 'legendary',
 		picture: null,
@@ -153,7 +119,8 @@ module.exports = {
 	},
 	'museum': {
 		name: 'Museum',
-		cost: 5000,
+		value: 50000,
+		buyable: true,
 		emoji: '🏛️',
 		rarity: 'epic',
 		picture: null,
@@ -162,7 +129,8 @@ module.exports = {
 	},
 	'house': {
 		name: 'House',
-		cost: 1000,
+		value: 10000,
+		buyable: true,
 		emoji: '🏡',
 		rarity: 'epic',
 		picture: null,
@@ -171,7 +139,8 @@ module.exports = {
 	},
 	'car': {
 		name: 'Car',
-		cost: 65,
+		value: 650,
+		buyable: false,
 		emoji: '🚗',
 		rarity: 'common',
 		picture: null,
@@ -180,7 +149,8 @@ module.exports = {
 	},
 	'motorcycle': {
 		name: 'Motorcycle',
-		cost: 40,
+		value: 400,
+		buyable: false,
 		emoji: '🏍️',
 		rarity: 'common',
 		picture: null,
@@ -189,7 +159,8 @@ module.exports = {
 	},
 	'scooter': {
 		name: 'Scooter',
-		cost: 15,
+		value: 150,
+		buyable: false,
 		emoji: '🛴',
 		rarity: 'common',
 		picture: null,
@@ -198,7 +169,8 @@ module.exports = {
 	},
 	'jet plane': {
 		name: 'Jet plane',
-		cost: 700,
+		value: 7000,
+		buyable: false,
 		emoji: '✈️',
 		rarity: 'epic',
 		picture: null,
@@ -207,7 +179,8 @@ module.exports = {
 	},
 	'prop plane': {
 		name: 'Prop plane',
-		cost: 300,
+		value: 3000,
+		buyable: false,
 		emoji: '🛩️',
 		rarity: 'rare',
 		picture: null,
@@ -216,7 +189,8 @@ module.exports = {
 	},
 	'sailboat': {
 		name: 'Sailboat',
-		cost: 200,
+		value: 2000,
+		buyable: false,
 		emoji: '⛵',
 		rarity: 'uncommon',
 		picture: null,
@@ -225,7 +199,8 @@ module.exports = {
 	},
 	'motorboat': {
 		name: 'Motorboat',
-		cost: 125,
+		value: 1250,
+		buyable: false,
 		emoji: '🚤',
 		rarity: 'uncommon',
 		picture: null,
@@ -234,7 +209,8 @@ module.exports = {
 	},
 	'office': {
 		name: 'Office',
-		cost: 50000,
+		value: 500000,
+		buyable: true,
 		emoji: '🏢',
 		rarity: 'legendary',
 		picture: null,
@@ -243,7 +219,8 @@ module.exports = {
 	},
 	'stadium': {
 		name: 'Stadium',
-		cost: 100000,
+		value: 1000000,
+		buyable: true,
 		emoji: '🏟️',
 		rarity: 'legendary',
 		picture: null,
@@ -252,11 +229,100 @@ module.exports = {
 	},
 	'ship': {
 		name: 'Ship',
-		cost: 500,
+		value: 6000,
+		buyable: false,
 		emoji: '🚢',
 		rarity: 'rare',
 		picture: null,
 		ctg: 'collectable',
 		description: 'Gives you passive income.',
+	},
+
+
+	// WEAPONS
+	'training sword': {
+		name: 'Training Sword',
+		value: 2500,
+		buyable: true,
+		emoji: '<:training_sword:735471230932615198>',
+		rarity: 'uncommon',
+		picture: 'training_sword.png',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: [30, 10],
+		description: 'Your basic training sword.',
+	},
+
+	'training staff': {
+		name: 'Training Staff',
+		value: 3000,
+		buyable: true,
+		emoji: '<:training_staff:735472268616007692>',
+		rarity: 'uncommon',
+		picture: 'training_staff.png',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: [35, 7],
+		description: 'Your basic training staff.',
+	},
+	'gun': {
+		name: 'Gun',
+		value: 6500,
+		buyable: false,
+		emoji: '<:gun:727585753818857563>',
+		rarity: 'rare',
+		picture: 'gun.png',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: [60, 13],
+		description: 'What are you gonna do with a gun, shoot people?',
+	},
+	'water': {
+		name: 'Water',
+		value: 20000,
+		buyable: false,
+		emoji: '<:water:764107424138788884>',
+		rarity: 'epic',
+		picture: 'water.png',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: [100, 20],
+		description: 'WATER! DO YOU WANT TO POISON ME!?',
+	},
+	'spiky rock': {
+		name: 'Spiky Rock',
+		value: 500,
+		buyable: false,
+		emoji: '<:m_t_01:764104296987230209>',
+		rarity: 'common',
+		picture: 'spiky_rock.png',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: [8, 4],
+		description: 'Its stoning time.',
+	},
+	'rijkszwaard': {
+		name: 'Rijkszwaard',
+		value: 64900,
+		buyable: false,
+		emoji: '<:rijkszwaard:764108434542428210>',
+		rarity: 'legendary',
+		picture: 'rijkszwaard.png',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: [167, 44],
+		description: 'The legendary Sword of the State. Handcrafted by the best Dutch blacksmiths',
+	},
+	'shortbow': {
+		name: 'Shortbow',
+		value: 5380,
+		buyable: false,
+		emoji: '<:shortbow:764109316319215667>',
+		rarity: 'rare',
+		picture: 'shortbow.png',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: [54, 9],
+		description: 'A pretty nice shortbow made of surpisingly flexible wood.',
 	},
 }; 
