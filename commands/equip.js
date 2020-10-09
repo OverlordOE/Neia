@@ -13,6 +13,13 @@ module.exports = {
 		let temp = '';
 		let item;
 
+
+		for (let i = 0; i < args.length; i++) {
+			if (temp.length > 2) temp += ` ${args[i]}`;
+			else temp += `${args[i]}`;
+		}
+		item = profile.getItem(temp);
+
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Equipping')
 			.setThumbnail(message.author.displayAvatarURL())
@@ -22,18 +29,14 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
 
+			if(item) embed.attachFiles(`assets/items/${item.picture}`)
+
 
 		message.channel.send(embed).then(async sentMessage => {
 
-			for (let i = 0; i < args.length; i++) {
-				if (temp.length > 2) temp += ` ${args[i]}`;
-				else temp += `${args[i]}`;
-			}
-
-			item = profile.getItem(temp);
 			if (item) {
 				if (await profile.hasItem(message.author.id, item, 1)) {
-					if (await profile.equip(msgUser.user_id, item)) sentMessage.edit(embed.setDescription(`Successfully equipped ${item.emoji}${item.name}.`));
+					if (await profile.equip(msgUser.user_id, item)) sentMessage.edit(embed.setDescription(`Successfully equipped ${item.emoji}${item.name}.`).setImage(`attachment://${item.picture}`));
 					else sentMessage.edit(embed.setDescription(`Something went wrong with equipping ${item.emoji}${item.name}.`));
 				}
 				else return sentMessage.edit(embed.setDescription(`You don't have a __${item.name}__!`));
@@ -47,7 +50,7 @@ module.exports = {
 
 						if (item) {
 							if (await profile.hasItem(message.author.id, item, 1)) {
-								if (await profile.equip(msgUser.user_id, item)) sentMessage.edit(embed.setDescription(`Successfully equipped ${item.emoji}${item.name}.`));
+								if (await profile.equip(msgUser.user_id, item)) sentMessage.edit(embed.setDescription(`Successfully equipped ${item.emoji}${item.name}.`).setImage(`attachment://${item.picture}`));
 								else sentMessage.edit(embed.setDescription(`Something went wrong with equipping ${item.emoji}${item.name}.`));
 							}
 							else return sentMessage.edit(embed.setDescription(`You don't have a __${item.emoji}${item.name}__!`));
