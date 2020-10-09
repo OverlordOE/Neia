@@ -3,11 +3,11 @@ module.exports = {
 	common() {
 		// cost 500
 		const loot = new LootTable();
+		loot.add({ name: 'Spiky Rock', amount: [1, 0] }, 15);
 		loot.add({ name: 'Scooter', amount: [2, 3] }, 20);
-		loot.add({ name: 'Car', amount: [1, 1] }, 20);
+		loot.add({ name: 'Car', amount: [1, 1] }, 15);
 		loot.add({ name: 'Motorcycle', amount: [1, 2] }, 20);
-		loot.add({ name: 'Profile Colour', amount: [1, 2] }, 20);
-		loot.add({ name: 'Water', amount: [1, 0] }, 10);
+		loot.add({ name: 'Profile Colour', amount: [1, 2] }, 10);
 		loot.add({ name: 'Sailboat', amount: [1, 1] }, 5);
 		loot.add({ name: 'Motorboat', amount: [1, 1] }, 5);
 		return loot.choose();
@@ -52,14 +52,14 @@ module.exports = {
 	legendary() {
 		// cost 80k
 		const loot = new LootTable();
-		loot.add({ name: 'Water', amount: [3, 1] }, 10);
+		loot.add({ name: 'Water', amount: [3, 1] }, 12);
 		loot.add({ name: 'Jet Plane', amount: [9, 3] }, 15);
 		loot.add({ name: 'House', amount: [7, 4] }, 25);
 		loot.add({ name: 'Museum', amount: [1, 1] }, 10);
 		loot.add({ name: 'Museum', amount: [2, 1] }, 15);
-		loot.add({ name: 'Star', amount: [1, 0] }, 16);
+		loot.add({ name: 'Star', amount: [1, 0] }, 15);
 		loot.add({ name: 'Star', amount: [2, 0] }, 5);
-		loot.add({ name: 'Office', amount: [1, 0] }, 3);
+		loot.add({ name: 'Office', amount: [1, 0] }, 2);
 		loot.add({ name: 'Stadium', amount: [1, 0] }, 1);
 		return loot.choose();
 	},
