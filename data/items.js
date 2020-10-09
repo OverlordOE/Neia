@@ -287,6 +287,6 @@ module.exports = {
 		ctg: 'equipment',
 		slot: 'weapon',
 		damage: [100, 20],
-		description: 'Just a plain glass of water',
+		description: 'WATER! DO YOU WANT TO POISON ME!?',
 	},
 }; 
