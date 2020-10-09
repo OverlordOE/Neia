@@ -74,6 +74,10 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: '#fcfcfc',
 			allowNull: false,
 		},
+		firstCommand:  {
+		type: DataTypes.BOOLEAN,
+		defaultValue: true,
+	},
 	},
 		{
 			timestamps: false,

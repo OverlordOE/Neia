@@ -110,6 +110,7 @@ Reflect.defineProperty(profile, 'newUser', {
 			lastAttack: now.subtract(1, 'days').toString(),
 			protection: now.toString(),
 			pColour: '#fcfcfc',
+			firstCommand: true,
 		});
 		profile.set(id, user);
 		return user;

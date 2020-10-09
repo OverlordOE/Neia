@@ -75,7 +75,7 @@ process.on('uncaughtException', m => logger.error(m));
 
 client.on('message', async message => {
 
-	if (message.author.bot) return;
+	if (message.author.bot || message.channel == 'dm') return;
 
 	let guild = guildProfile.get(message.guild.id);
 	if (!guild) guild = await guildProfile.newGuild(message.guild.id);
@@ -92,7 +92,6 @@ client.on('message', async message => {
 	const [, matchedPrefix] = message.content.match(prefixRegex);
 	const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
-
 
 	// find command
 	const command = client.commands.get(commandName)
@@ -137,6 +136,12 @@ client.on('message', async message => {
 	}
 
 	const options = { active: active };
+
+	if (user.firstCommand) {
+		client.commands.get('changelog').execute(message, args, user, profile, guildProfile, client, logger, cooldowns, options);
+		user.firstCommand = false;
+		logger.info(`New user ${message.author.tag}`);
+	}
 
 	// execute command
 	logger.log('info', `${message.author.tag} Called command: ${commandName} ${args.join(' ')}, in guild: ${message.guild.name}`);

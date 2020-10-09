@@ -19,6 +19,7 @@ module.exports = {
 	Steal: require('./attack'),
 	Dice: require('./dice'),
 	Invite: require('./invite'),
+	Changelog: require('./changelog'),
 	Stats: require('./stats'),
 	Play: require('./play'),
 	Queue: require('./queue'),
