@@ -38,6 +38,12 @@ module.exports = {
 			if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
 				.setImage(`attachment://${item.picture}`);
 
+			if (item.rarity == 'uncommon') embed.setColor('#1eff00');
+			else if (item.rarity == 'rare') embed.setColor('#0070dd');
+			else if (item.rarity == 'epic') embed.setColor('#a335ee');
+			else if (item.rarity == 'legendary') embed.setColor('#ff8000');
+			else embed.setColor('#eeeeee');
+
 			if (item.ctg == 'equipment') {
 				if (item.slot == 'weapon') embed.addField('Damage', `${item.damage[0]} - ${item.damage[1] + item.damage[0]}`);
 			}
