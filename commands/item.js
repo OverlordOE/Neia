@@ -21,7 +21,7 @@ module.exports = {
 
 		if (temp) {
 			const item = await profile.getItem(temp);
-			if (!item) return msgUser.reply(`${item} is not a valid item`);
+			if (!item) return message.reply(`${item} is not a valid item`);
 
 			embed = new Discord.MessageEmbed()
 				.setTitle(`${item.emoji}${item.name}`)
