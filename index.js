@@ -150,14 +150,14 @@ client.on('message', async message => {
 });
 
 //	crontime: 0 0-23/3 * * *
-const botTasks = new cron.CronJob('* * * * *', async () => {
-		const lottery = client.commands.get('lottery');
-		lottery.execute(profile, client, logger);
+const botTasks = new cron.CronJob('0 0-23/3 * * *', async () => {
+	const lottery = client.commands.get('lottery');
+	lottery.execute(profile, client, logger);
 
-		let memberTotal = 0;
-		client.guilds.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
-		client.user.setActivity(`with ${memberTotal} users.`);
-		
-		logger.info('Finished regular tasks!');
+	let memberTotal = 0;
+	client.guilds.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
+	client.user.setActivity(`with ${memberTotal} users.`);
+
+	logger.info('Finished regular tasks!');
 });
 botTasks.start();
