@@ -5,7 +5,7 @@ module.exports = {
 	// CHESTS
 	'common chest': {
 		name: 'Common Chest',
-		value: 50,
+		value: 500,
 		buyable: true,
 		emoji: '<:chest_t_01:745278856201633832>',
 		rarity: 'common',
@@ -15,7 +15,7 @@ module.exports = {
 	},
 	'rare chest': {
 		name: 'Rare Chest',
-		value: 300,
+		value: 3000,
 		buyable: true,
 		emoji: '<:chest_t_02:745278856298102864>',
 		rarity: 'rare',
@@ -25,7 +25,7 @@ module.exports = {
 	},
 	'epic chest': {
 		name: 'Epic Chest',
-		value: 1250,
+		value: 12500,
 		buyable: true,
 		emoji: '<:chest_t_03:745278856268742696>',
 		rarity: 'epic',
@@ -35,7 +35,7 @@ module.exports = {
 	},
 	'legendary chest': {
 		name: 'Legendary Chest',
-		value: 8000,
+		value: 80000,
 		buyable: true,
 		emoji: '<:chest_t_04:745278855987593226>',
 		rarity: 'legendary',
@@ -47,7 +47,7 @@ module.exports = {
 	// CONSUMABLES
 	'protection': {
 		name: 'Protection',
-		value: 600,
+		value: 6000,
 		buyable: true,
 		emoji: '🛡️',
 		rarity: 'epic',
@@ -61,7 +61,7 @@ module.exports = {
 	},
 	'profile colour': {
 		name: 'Profile Colour',
-		value: 40,
+		value: 400,
 		buyable: true,
 		emoji: '🌈',
 		rarity: 'uncommon',
@@ -87,7 +87,7 @@ module.exports = {
 
 	'healing potion': {
 		name: 'Healing Potion',
-		value: 260,
+		value: 2600,
 		buyable: true,
 		emoji: '<:Healingpotion:727508079498756246>',
 		rarity: 'common',
@@ -109,7 +109,7 @@ module.exports = {
 	// COLLECTABLES
 	'star': {
 		name: 'Star',
-		value: 10000,
+		value: 100000,
 		buyable: true,
 		emoji: '⭐',
 		rarity: 'legendary',
@@ -119,8 +119,8 @@ module.exports = {
 	},
 	'museum': {
 		name: 'Museum',
-		value: 5000,
-		buyable: false,
+		value: 500000,
+		buyable: true,
 		emoji: '🏛️',
 		rarity: 'epic',
 		picture: null,
@@ -129,8 +129,8 @@ module.exports = {
 	},
 	'house': {
 		name: 'House',
-		value: 1000,
-		buyable: false,
+		value: 10000,
+		buyable: true,
 		emoji: '🏡',
 		rarity: 'epic',
 		picture: null,
@@ -139,7 +139,7 @@ module.exports = {
 	},
 	'car': {
 		name: 'Car',
-		value: 65,
+		value: 650,
 		buyable: false,
 		emoji: '🚗',
 		rarity: 'common',
@@ -149,7 +149,7 @@ module.exports = {
 	},
 	'motorcycle': {
 		name: 'Motorcycle',
-		value: 40,
+		value: 400,
 		buyable: false,
 		emoji: '🏍️',
 		rarity: 'common',
@@ -159,7 +159,7 @@ module.exports = {
 	},
 	'scooter': {
 		name: 'Scooter',
-		value: 15,
+		value: 150,
 		buyable: false,
 		emoji: '🛴',
 		rarity: 'common',
@@ -169,7 +169,7 @@ module.exports = {
 	},
 	'jet plane': {
 		name: 'Jet plane',
-		value: 700,
+		value: 7000,
 		buyable: false,
 		emoji: '✈️',
 		rarity: 'epic',
@@ -179,7 +179,7 @@ module.exports = {
 	},
 	'prop plane': {
 		name: 'Prop plane',
-		value: 300,
+		value: 3000,
 		buyable: false,
 		emoji: '🛩️',
 		rarity: 'rare',
@@ -189,7 +189,7 @@ module.exports = {
 	},
 	'sailboat': {
 		name: 'Sailboat',
-		value: 200,
+		value: 2000,
 		buyable: false,
 		emoji: '⛵',
 		rarity: 'uncommon',
@@ -199,7 +199,7 @@ module.exports = {
 	},
 	'motorboat': {
 		name: 'Motorboat',
-		value: 125,
+		value: 1250,
 		buyable: false,
 		emoji: '🚤',
 		rarity: 'uncommon',
@@ -209,7 +209,7 @@ module.exports = {
 	},
 	'office': {
 		name: 'Office',
-		value: 50000,
+		value: 500000,
 		buyable: true,
 		emoji: '🏢',
 		rarity: 'legendary',
@@ -219,7 +219,7 @@ module.exports = {
 	},
 	'stadium': {
 		name: 'Stadium',
-		value: 100000,
+		value: 1000000,
 		buyable: true,
 		emoji: '🏟️',
 		rarity: 'legendary',
@@ -229,7 +229,7 @@ module.exports = {
 	},
 	'ship': {
 		name: 'Ship',
-		value: 600,
+		value: 6000,
 		buyable: false,
 		emoji: '🚢',
 		rarity: 'rare',
@@ -242,7 +242,7 @@ module.exports = {
 	// WEAPONS
 	'training sword': {
 		name: 'Training Sword',
-		value: 400,
+		value: 4000,
 		buyable: true,
 		emoji: '<:training_sword:735471230932615198>',
 		rarity: 'common',
@@ -255,7 +255,7 @@ module.exports = {
 
 	'training staff': {
 		name: 'Training Staff',
-		value: 700,
+		value: 7000,
 		buyable: true,
 		emoji: '<:training_staff:735472268616007692>',
 		rarity: 'common',
@@ -267,7 +267,7 @@ module.exports = {
 	},
 	'gun': {
 		name: 'Gun',
-		value: 650,
+		value: 6500,
 		buyable: false,
 		emoji: '<:gun:727585753818857563>',
 		rarity: 'uncommon',
@@ -279,7 +279,7 @@ module.exports = {
 	},
 	'water': {
 		name: 'Water',
-		value: 100,
+		value: 1000,
 		buyable: false,
 		emoji: '<:manapotion:727508079469396028>',
 		rarity: 'common',

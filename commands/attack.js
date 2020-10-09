@@ -18,8 +18,8 @@ module.exports = {
 		if (lastAttack !== true) return message.reply(`your attack is on cooldown. Your next attack is available at ${lastAttack}`);
 
 		const target = await profile.getUser(targetMention.id);
-		if (target.networth < 9000) return message.reply('the target user needs to have a networth of atleast 9000 to be attacked.');
-		if (msgUser.networth < 9000) return message.reply('you need to have a networth of atleast 9000 to attack someone.');
+		if (target.networth < 30000) return message.reply('the target user needs to have a networth of atleast 30k to be attacked.');
+		if (msgUser.networth < 30000) return message.reply('you need to have a networth of atleast 30k to attack someone.');
 
 		const protection = await profile.getProtection(targetMention.id);
 		if (protection !== false) return message.channel.send(`*${targetMention}* has protection against attacks, you cannot attack them untill ${protection}.`);
