@@ -141,6 +141,7 @@ client.on('message', async message => {
 		client.commands.get('changelog').execute(message, args, user, profile, guildProfile, client, logger, cooldowns, options);
 		user.firstCommand = false;
 		logger.info(`New user ${message.author.tag}`);
+		user.save();
 	}
 
 	// execute command
