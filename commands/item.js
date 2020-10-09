@@ -27,6 +27,7 @@ module.exports = {
 				.setTitle(`${item.emoji}${item.name}`)
 				.setDescription(item.description)
 				.addField('Value', `${profile.formatNumber(item.value)}💰`, true)
+				.addField('Buyable', item.buyable, true)
 				.addField('Category', item.ctg, true)
 				.addField('Rarity', item.rarity, true)
 				.setTimestamp()

@@ -33,7 +33,8 @@ module.exports = {
 			}
 
 			item = await profile.getItem(temp);
-			if (item) buy(profile, sentMessage, amount, embed, item, msgUser);
+			if (item.buyable) buy(profile, sentMessage, amount, embed, item, msgUser);
+			else if (item) sentMessage.edit(embed.setDescription('You can\'t buy this item?'));
 
 			else {
 				sentMessage.edit(embed.setDescription('What item do you want to buy?'));
@@ -41,7 +42,9 @@ module.exports = {
 
 					.then(async collected => {
 						item = await profile.getItem(collected.first().content);
-						if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not a valid item.`));
+
+						if (item && !item.buyable) return sentMessage.edit(embed.setDescription('You can\'t buy this item?'));
+						else if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not a valid item.`));
 						collected.first().delete();
 
 						sentMessage.edit(embed.setDescription(`How many __${item.name}(s)__ do you want to buy?`)).then(() => {
