@@ -227,6 +227,16 @@ module.exports = {
 		ctg: 'collectable',
 		description: 'Gives you passive income.',
 	},
+	'castle': {
+		name: 'Castle',
+		value: 7500000,
+		buyable: true,
+		emoji: '🏰',
+		rarity: 'legendary',
+		picture: null,
+		ctg: 'collectable',
+		description: 'Gives you passive income. Suggested by Garbiel.',
+	},
 	'ship': {
 		name: 'Ship',
 		value: 6000,

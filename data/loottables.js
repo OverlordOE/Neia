@@ -58,15 +58,16 @@ module.exports = {
 	legendary() {
 		// cost 80k
 		const loot = new LootTable();
-		loot.add({ name: 'Rijkszwaard', amount: [1, 0] }, 5);
+		loot.add({ name: 'Rijkszwaard', amount: [1, 0] }, 5.5);
 		loot.add({ name: 'Water', amount: [3, 1] }, 17);
 		loot.add({ name: 'Jet Plane', amount: [9, 3] }, 15);
 		loot.add({ name: 'House', amount: [7, 4] }, 20);
 		loot.add({ name: 'Museum', amount: [1, 1] }, 10);
 		loot.add({ name: 'Museum', amount: [2, 1] }, 10);
-		loot.add({ name: 'Star', amount: [1, 0] }, 15);
+		loot.add({ name: 'Star', amount: [1, 0] }, 10);
 		loot.add({ name: 'Star', amount: [2, 0] }, 5);
-		loot.add({ name: 'Office', amount: [1, 0] }, 2);
+		loot.add({ name: 'Office', amount: [1, 0] }, 4);
+		loot.add({ name: 'Stadium', amount: [1, 0] }, 1.5);
 		loot.add({ name: 'Stadium', amount: [1, 0] }, 1);
 		return loot.choose();
 	},
