@@ -26,8 +26,8 @@ module.exports = {
 			if (lastAttack !== true) return sentMessage.edit(embed.setDescription(`Your attack is on cooldown. Your next attack is available at ${lastAttack}`));
 
 			const target = await profile.getUser(targetMention.id);
-			if (target.networth < 30000) return sentMessage.edit(embed.setDescription(`${targetMention} user needs to have a networth of atleast 30k to be attacked.`));
-			if (msgUser.networth < 30000) return sentMessage.edit(embed.setDescription('You need to have a networth of atleast 30k to attack someone.'));
+			// if (target.networth < 30000) return sentMessage.edit(embed.setDescription(`${targetMention} user needs to have a networth of atleast 30k to be attacked.`));
+			// if (msgUser.networth < 30000) return sentMessage.edit(embed.setDescription('You need to have a networth of atleast 30k to attack someone.'));
 
 			const protection = await profile.getProtection(targetMention.id);
 			if (protection !== false) return sentMessage.edit(embed.setDescription(`*${targetMention}* has protection against attacks, you cannot attack them untill ${protection}.`));
