@@ -47,7 +47,7 @@ module.exports = {
 
 				for (const loot in lootlist) {
 					const lootItem = await profile.getItem(loot);
-					description += `\n**${lootlist[loot]}** ${lootItem.emoji}__${lootItem.name}__`;
+					description += `\n**${profile.formatNumber(lootlist[loot])}** ${lootItem.emoji}__${lootItem.name}__`;
 					profile.addItem(message.author.id, lootItem, lootlist[loot]);
 				}
 
@@ -65,7 +65,7 @@ module.exports = {
 				const loot = loottable[chest]();
 				const lootItem = await profile.getItem(loot.name);
 				const itemAmount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
-				
+
 
 				lootEmbed.setTitle(`${chest} Chest`)
 					.setDescription(`${message.author} has discovered **${itemAmount}** **__${lootItem.emoji}${lootItem.name}__**.`)
