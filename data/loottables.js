@@ -26,7 +26,7 @@ module.exports = {
 		loot.add({ name: 'Prop plane', amount: [1, 1] }, 10);
 		loot.add({ name: 'Ship', amount: [1, 0] }, 3);
 		loot.add({ name: 'Jet plane', amount: [1, 0] }, 1);
-		loot.add({ name: 'Steal Protection', amount: [1, 0] }, 5);
+		loot.add({ name: 'Protection', amount: [1, 0] }, 5);
 		loot.add({ name: 'Shortbow', amount: [1, 0] }, 3);
 		return loot.choose();
 	},
@@ -46,7 +46,7 @@ module.exports = {
 		loot.add({ name: 'Jet Plane', amount: [2, 1] }, 8);
 		loot.add({ name: 'Prop Plane', amount: [3, 3] }, 8);
 		loot.add({ name: 'House', amount: [1, 1] }, 8);
-		loot.add({ name: 'Steal Protection', amount: [2, 1] }, 8);
+		loot.add({ name: 'Protection', amount: [2, 1] }, 8);
 		loot.add({ name: 'Museum', amount: [1, 0] }, 5);
 		loot.add({ name: 'Star', amount: [1, 0] }, 2);
 		loot.add({ name: 'Rijkszwaard', amount: [1, 0] }, 1);
