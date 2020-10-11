@@ -46,7 +46,6 @@ module.exports = {
 				}
 
 				for (const loot in lootlist) {
-					console.log(loot);
 					const lootItem = await profile.getItem(loot);
 					description += `\n**${lootlist[loot]}** ${lootItem.emoji}__${lootItem.name}__`;
 					profile.addItem(message.author.id, lootItem, lootlist[loot]);
