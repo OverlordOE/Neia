@@ -52,6 +52,9 @@ Reflect.defineProperty(profile, 'removeItem', {
 		if (userItem.amount >= removeAmount) {
 			const user = profile.get(id);
 			user.networth -= item.value * removeAmount;
+			if (item.ctg == 'equipment') {
+				if (user.equipment[item.slot] == item.name) user.equipment[item.slot] = null;
+			}
 			user.save();
 
 			userItem.amount -= removeAmount;

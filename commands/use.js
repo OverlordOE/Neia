@@ -81,7 +81,6 @@ async function use(profile, sentMessage, amount, embed, item, msgUser) {
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
 	else if (amount < 1 || amount > 10000 || !amount) amount = 1;
 
-
 	if (item.use) {
 		const result = await item.use(profile, sentMessage, amount, embed, item, msgUser);
 
@@ -93,7 +92,8 @@ async function use(profile, sentMessage, amount, embed, item, msgUser) {
 		else return sentMessage.edit(embed.setDescription('An error has occurred, please report this to OverlordOE#0717'));
 	}
 
-	else if (item.ctg == 'chest') { return sentMessage.edit(embed.setDescription('Please use the `open` command to use a chest')); }
-	else if (item.ctg == 'collectable') { return sentMessage.edit(embed.setDescription('Collectables are passive items that will award you with extra money with your time based rewards.')); }
-	else { return sentMessage.edit(embed.setDescription(`There is no use for __${item.name}__ yet, the item was not used.`)); }
+	else if (item.ctg == 'chest') return sentMessage.edit(embed.setDescription('Please use the `open` command to use a chest'));
+	else if (item.ctg == 'equipment') return sentMessage.edit(embed.setDescription('Please use the `equip` and `attack` command to use equipment'));
+	else if (item.ctg == 'collectable') return sentMessage.edit(embed.setDescription('Collectables are passive items that will award you with extra money with your time based rewards.'));
+	else return sentMessage.edit(embed.setDescription(`There is no use for __${item.name}__ yet, the item was not used.`));
 }
