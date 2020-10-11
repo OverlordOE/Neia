@@ -229,7 +229,7 @@ module.exports = {
 	},
 	'castle': {
 		name: 'Castle',
-		value: 7500000,
+		value: 750000,
 		buyable: true,
 		emoji: '🏰',
 		rarity: 'legendary',
