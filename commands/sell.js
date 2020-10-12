@@ -13,7 +13,7 @@ module.exports = {
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 		const filter = m => m.author.id === message.author.id;
-		let amount = 0;
+		let amount = 1;
 		let temp = '';
 		let item;
 
