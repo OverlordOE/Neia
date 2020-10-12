@@ -1,6 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-nested-callbacks */
 const Discord = require('discord.js');
+const itemInfo = require('../data/items');
 module.exports = {
 	name: 'sell',
 	summary: 'Sell items to get 90% of your money back',
@@ -20,7 +21,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Refunds')
 			.setThumbnail(message.author.displayAvatarURL())
-			.setDescription('What do you want to refund? `80% refund`')
+			.setDescription('What do you want to refund? `90% refund`')
 			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
@@ -29,13 +30,37 @@ module.exports = {
 
 			for (let i = 0; i < args.length; i++) {
 				if (!(isNaN(args[i]))) amount = parseInt(args[i]);
-				else if (args[i] == 'all') amount = 'all';
+				// else if (args[i] == 'all') amount = 'all';
 				else if (temp.length > 2) temp += ` ${args[i]}`;
 				else temp += `${args[i]}`;
 			}
 
 			item = profile.getItem(temp);
-			if (item) {
+			if (temp == 'all') {
+				sentMessage.edit(embed.setDescription('Are you sure that you want to sell your WHOLE inventory?\n\nReply with yes to continue'));
+				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
+					.then(async collected => {
+						collected.first().delete();
+						if (collected.first().content.toLowerCase() == 'yes') {
+
+							const inventory = await profile.getInventory(message.author.id);
+							let totalReceived = 0;
+
+							inventory.map(i => {
+								const item = itemInfo[i.name.toLowerCase()];
+								const refundAmount = 0.9 * item.value * i.amount;
+								profile.removeItem(message.author.id, item, i.amount);
+								profile.addMoney(message.author.id, refundAmount);
+								totalReceived += refundAmount;
+							});
+							logger.debug(totalReceived);
+							sentMessage.edit(embed.setDescription(`You sold your whole inventory for ${profile.formatNumber(totalReceived)}💰\n\nCurrent balance is ${profile.formatNumber(await profile.getBalance(message.author.id))}💰`));
+						}
+						else return sentMessage.edit(embed.setDescription('Cancelled selling inventory'));
+					});
+			}
+
+			else if (item) {
 				if (await profile.hasItem(message.author.id, item, amount)) sell(profile, sentMessage, amount, embed, item, message);
 				else return sentMessage.edit(embed.setDescription(`You don't have enough ${item.emoji}__${item.name}(s)__!`));
 			}
