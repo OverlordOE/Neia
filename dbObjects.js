@@ -55,7 +55,6 @@ Reflect.defineProperty(profile, 'removeItem', {
 			if (item.ctg == 'equipment') {
 				if (user.equipment[item.slot] == item.name) user.equipment[item.slot] = null;
 			}
-			user.save();
 
 			userItem.amount -= removeAmount;
 			return userItem.save();
@@ -70,9 +69,8 @@ Reflect.defineProperty(profile, 'hasItem', {
 		const userItem = await UserItems.findOne({
 			where: { user_id: id, name: item.name },
 		});
-
 		const check = parseInt(amount);
-		if (userItem.amount >= check) return true;
+		if (userItem.amount >= check && check > 0) return true;
 		return false;
 	},
 });
