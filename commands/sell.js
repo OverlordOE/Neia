@@ -2,10 +2,11 @@
 /* eslint-disable max-nested-callbacks */
 const Discord = require('discord.js');
 const itemInfo = require('../data/items');
+const sellPercentage = 0.8;
 module.exports = {
 	name: 'sell',
-	summary: 'Sell items to get 90% of your money back',
-	description: 'Sell items to get 90% of your money back.',
+	summary: `Sell items to get ${sellPercentage * 100}% of your money back`,
+	description: `Sell items to get ${sellPercentage * 100}% of your money back.`,
 	aliases: ['refund'],
 	category: 'economy',
 	args: false,
@@ -21,7 +22,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Refunds')
 			.setThumbnail(message.author.displayAvatarURL())
-			.setDescription('What do you want to refund? `90% refund`')
+			.setDescription('What do you want to refund? `80% refund`')
 			.setColor(msgUser.pColour)
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
@@ -48,7 +49,7 @@ module.exports = {
 
 							inventory.map(i => {
 								const item = itemInfo[i.name.toLowerCase()];
-								const refundAmount = 0.9 * item.value * i.amount;
+								const refundAmount = sellPercentage * item.value * i.amount;
 								profile.removeItem(message.author.id, item, i.amount);
 								profile.addMoney(message.author.id, refundAmount);
 								totalReceived += refundAmount;
@@ -103,7 +104,7 @@ async function sell(profile, sentMessage, amount, embed, item, message) {
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 	else if (amount < 1) amount = 1;
 
-	const refundAmount = 0.9 * item.value * amount;
+	const refundAmount = sellPercentage * item.value * amount;
 	profile.removeItem(message.author.id, item, amount);
 	const balance = await profile.addMoney(message.author.id, refundAmount);
 
