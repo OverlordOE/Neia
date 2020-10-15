@@ -5,7 +5,7 @@ module.exports = {
 	// CHESTS
 	'common chest': {
 		name: 'Common Chest',
-		value: 500,
+		value: 700,
 		buyable: true,
 		emoji: '<:chest_t_01:745278856201633832>',
 		rarity: 'common',
@@ -15,7 +15,7 @@ module.exports = {
 	},
 	'rare chest': {
 		name: 'Rare Chest',
-		value: 3000,
+		value: 3500,
 		buyable: true,
 		emoji: '<:chest_t_02:745278856298102864>',
 		rarity: 'rare',
@@ -25,7 +25,7 @@ module.exports = {
 	},
 	'epic chest': {
 		name: 'Epic Chest',
-		value: 12500,
+		value: 1400,
 		buyable: true,
 		emoji: '<:chest_t_03:745278856268742696>',
 		rarity: 'epic',
@@ -35,7 +35,7 @@ module.exports = {
 	},
 	'legendary chest': {
 		name: 'Legendary Chest',
-		value: 80000,
+		value: 130000,
 		buyable: true,
 		emoji: '<:chest_t_04:745278855987593226>',
 		rarity: 'legendary',
