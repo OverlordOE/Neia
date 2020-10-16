@@ -95,13 +95,18 @@ module.exports = {
 		ctg: 'consumable',
 		description: 'Restores 50 HP',
 		use: async function (profile, sentMessage, amount, embed, item, msgUser) {
-			const heal = await profile.addHp(msgUser.user_id, 50);
+			const nextHeal = await profile.getHeal(msgUser.user_id);
+			if (nextHeal === true) {
 
-			if (heal) {
-				profile.setHeal(msgUser.user_id);
-				return { succes: true, message: `You healed **${heal}**<:health:730849477765890130>.\nCurrent <:health:730849477765890130> is **${await profile.getHp(msgUser.user_id)}/${1000}<:health:730849477765890130>**.` };
+				const heal = await profile.addHp(msgUser.user_id, 50);
+
+				if (heal) {
+					profile.setHeal(msgUser.user_id);
+					return { succes: true, message: `You healed **${heal}**<:health:730849477765890130>.\nCurrent <:health:730849477765890130> is **${await profile.getHp(msgUser.user_id)}/${1000}<:health:730849477765890130>**.` };
+				}
+				else return { succes: false, message: 'You are already at max health' };
 			}
-			else return { succes: false, message: 'You are already at max health' };
+			else return { succes: false, message: `Your healing is on cooldown, next heal at ${nextHeal}` }; 
 		},
 	},
 

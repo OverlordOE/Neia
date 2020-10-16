@@ -15,7 +15,7 @@ module.exports = {
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 		const filter = m => m.author.id === message.author.id;
-		let amount = 0;
+		let amount = 1;
 		let temp = '';
 		let item;
 
@@ -105,7 +105,12 @@ async function sell(profile, sentMessage, amount, embed, item, message) {
 	else if (amount < 1) amount = 1;
 
 	const refundAmount = sellPercentage * item.value * amount;
-	profile.removeItem(message.author.id, item, amount);
+	try {
+		profile.removeItem(message.author.id, item, amount);
+	} catch (error) {
+		return sentMessage.edit(embed.setDescription(`You do not have ${amount} ${item.emoji}__${item.name}(s)__! Selling cancelled.`));
+	}
+
 	const balance = await profile.addMoney(message.author.id, refundAmount);
 
 	sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${profile.formatNumber(refundAmount)}💰 back.\nYour balance is ${profile.formatNumber(balance)}💰!`));

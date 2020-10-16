@@ -71,9 +71,8 @@ Reflect.defineProperty(profile, 'hasItem', {
 		const userItem = await UserItems.findOne({
 			where: { user_id: id, name: item.name },
 		});
-
 		const check = parseInt(amount);
-		if (userItem.amount >= check) return true;
+		if (userItem.amount >= check && check > 0) return true;
 		return false;
 	},
 });
