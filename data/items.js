@@ -25,7 +25,7 @@ module.exports = {
 	},
 	'epic chest': {
 		name: 'Epic Chest',
-		value: 1400,
+		value: 14000,
 		buyable: true,
 		emoji: '<:chest_t_03:745278856268742696>',
 		rarity: 'epic',
