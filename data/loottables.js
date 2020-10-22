@@ -41,20 +41,20 @@ module.exports = {
 		loot.add({ name: 'Training Sword', amount: [4, 1] }, 1);
 		loot.add({ name: 'Training Staff', amount: [4, 1] }, 1);
 		loot.add({ name: 'Gun', amount: [2, 0] }, 1);
-		loot.add({ name: 'Gun', amount: [2, 1] }, 0.3);
+		loot.add({ name: 'Gun', amount: [2, 1] }, 0.5);
 		loot.add({ name: 'Motorboat', amount: [9, 4] }, 1);
-		loot.add({ name: 'Ship', amount: [2, 1] }, 0.4);
+		loot.add({ name: 'Ship', amount: [2, 1] }, 0.5);
 		loot.add({ name: 'Jet Plane', amount: [2, 0] }, 1);
 		loot.add({ name: 'Prop Plane', amount: [3, 3] }, 1);
 		loot.add({ name: 'House', amount: [1, 0] }, 1);
-		loot.add({ name: 'House', amount: [2, 0] }, 0.3);
+		loot.add({ name: 'House', amount: [2, 0] }, 0.4);
 		loot.add({ name: 'Protection', amount: [2, 0] }, 1);
-		loot.add({ name: 'Museum', amount: [1, 0] }, 0.1);
-		loot.add({ name: 'Star', amount: [1, 0] }, 0.05);
-		loot.add({ name: 'Rijkszwaard', amount: [1, 0] }, 0.01);
-		loot.add({ name: 'Castle', amount: [1, 0] }, 0.009);
-		loot.add({ name: 'Office', amount: [1, 0] }, 0.015);
-		loot.add({ name: 'Stadium', amount: [1, 0] }, 0.005);
+		loot.add({ name: 'Museum', amount: [1, 0] }, 0.2);
+		loot.add({ name: 'Star', amount: [1, 0] }, 0.1);
+		loot.add({ name: 'Rijkszwaard', amount: [1, 0] }, 0.1);
+		loot.add({ name: 'Castle', amount: [1, 0] }, 0.09);
+		loot.add({ name: 'Office', amount: [1, 0] }, 0.15);
+		loot.add({ name: 'Stadium', amount: [1, 0] }, 0.05);
 		return loot.choose();
 	},
 
