@@ -2,14 +2,12 @@ const Discord = require('discord.js');
 const winston = require('winston');
 const moment = require('moment');
 const cron = require('cron');
-const express = require('express');
-const bodyParser = require('body-parser');
-const webhook = express().use(bodyParser.json());
+const DBL = require('dblapi.js');
+const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: process.env.WEBHOOK_TOKEN });
 const clientCommands = require('./commands');
 const { Users, Guilds, profile, guildProfile } = require('./dbObjects');
 require('dotenv').config();
 const token = process.env.TEST_TOKEN;
-const webhookToken = process.env.WEBHOOK_TOKEN;
 const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
 const active = new Map();
@@ -172,40 +170,40 @@ const botTasks = new cron.CronJob('0 0-23/3 * * *', async () => {
 });
 botTasks.start();
 
-// Webhook
-webhook.listen(3000, () => {
-	console.log('Webhook is listening');
+dbl.webhook.on('ready', hook => {
+	console.log(`Webhook up and running at http://${hook.hostname}:${hook.port}${hook.path}`);
 });
 
-webhook.get('/', (req, res) => {
-	logger.debug(req);
-	// check if verification token is correct
-	if (req.query.token !== webhookToken) {
-		return res.sendStatus(401);
-	}
+dbl.on('error', e => logger.error(`Oops! ${e}`))
 
-	// return challenge
-	return res.end(req.query.challenge);
-});
+dbl.webhook.on('vote', async vote => {
 
-webhook.post('/', (req, res) => {
-	// check if verification token is correct
-	if (req.query.token !== webhookToken) {
-		return res.sendStatus(401);
-	}
+	const userID = vote.user;
+	const user = await client.users.cache.get(userID);
+	let msgUser = await profile.get(userID);
+	if (!msgUser) msgUser = await profile.newUser(userID);
+	logger.info(`${user.tag} has just voted.`);
 
-	// print request body
-	logger.debug(req.body);
+	const embed = new Discord.MessageEmbed()
+		.setTitle('Vote Reward')
+		.setThumbnail(user.displayAvatarURL())
+		.setColor(msgUser.pColour)
+		.setTimestamp()
+		.setFooter('Neia', client.user.displayAvatarURL());
 
-	// return a text response
-	const data = {
-		responses: [
-			{
-				type: 'text',
-				elements: ['Hi', 'Hello']
-			}
-		]
-	};
+	let chest;
+	const luck = Math.floor(Math.random() * 10);
+	if (luck >= 1) chest = 'Rare chest';
+	else chest = 'Epic chest';
+	chest = await profile.getItem(chest);
 
-	res.json(data);
-});
+	if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
+		.setImage(`attachment://${chest.picture}`);
+
+	const income = await profile.calculateIncome(userID);
+	profile.addMoney(userID, income.daily);
+	profile.addItem(userID, chest, 1);
+	profile.setVote(userID);
+
+	return user.send(embed.setDescription(`Thank you for voting!\n\nYou got a ${chest.emoji}${chest.name} from your vote 🎁 and ${profile.formatNumber(income.daily)}💰 from your collectables.\nCome back in 12 hours for more!\n\nYour current balance is ${profile.formatNumber(await profile.getBalance(userID))}💰`));
+})
