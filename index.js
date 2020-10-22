@@ -1,18 +1,21 @@
 const Discord = require('discord.js');
 const winston = require('winston');
-const { Users, Guilds, profile, guildProfile } = require('./dbObjects');
-const clientCommands = require('./commands');
 const moment = require('moment');
 const cron = require('cron');
-const client = new Discord.Client();
-const cooldowns = new Discord.Collection();
+const express = require('express');
+const bodyParser = require('body-parser');
+const webhook = express().use(bodyParser.json());
+const clientCommands = require('./commands');
+const { Users, Guilds, profile, guildProfile } = require('./dbObjects');
 require('dotenv').config();
 const token = process.env.TEST_TOKEN;
-const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const webhookToken = process.env.WEBHOOK_TOKEN;
+const client = new Discord.Client();
+const cooldowns = new Discord.Collection();
 const active = new Map();
 client.commands = new Discord.Collection();
+const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 moment().format();
-
 
 const logger = winston.createLogger({
 	format: winston.format.combine(
@@ -45,6 +48,7 @@ const logger = winston.createLogger({
 Object.keys(clientCommands).map(key => {
 	client.commands.set(clientCommands[key].name, clientCommands[key]);
 });
+
 
 client.login(token);
 client.on('ready', async () => {
@@ -167,3 +171,41 @@ const botTasks = new cron.CronJob('0 0-23/3 * * *', async () => {
 	logger.info('Finished regular tasks!');
 });
 botTasks.start();
+
+// Webhook
+webhook.listen(3000, () => {
+	console.log('Webhook is listening');
+});
+
+webhook.get('/', (req, res) => {
+	logger.debug(req);
+	// check if verification token is correct
+	if (req.query.token !== webhookToken) {
+		return res.sendStatus(401);
+	}
+
+	// return challenge
+	return res.end(req.query.challenge);
+});
+
+webhook.post('/', (req, res) => {
+	// check if verification token is correct
+	if (req.query.token !== webhookToken) {
+		return res.sendStatus(401);
+	}
+
+	// print request body
+	logger.debug(req.body);
+
+	// return a text response
+	const data = {
+		responses: [
+			{
+				type: 'text',
+				elements: ['Hi', 'Hello']
+			}
+		]
+	};
+
+	res.json(data);
+});
