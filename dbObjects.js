@@ -52,7 +52,7 @@ Reflect.defineProperty(profile, 'removeItem', {
 		if (userItem.amount >= removeAmount) {
 			const user = profile.get(id);
 			user.networth -= item.value * removeAmount;
-			if (item.ctg == 'equipment' || userItem.amount - removeAmount == 0) {
+			if (item.ctg == 'equipment' && userItem.amount - removeAmount == 0) {
 				const equipment = JSON.parse(user.equipment);
 				if (equipment[item.slot] == item.name) equipment[item.slot] = null;
 				user.equipment = JSON.stringify(equipment);

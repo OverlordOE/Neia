@@ -1,18 +1,19 @@
 const Discord = require('discord.js');
 const winston = require('winston');
-const { Users, Guilds, profile, guildProfile } = require('./dbObjects');
-const clientCommands = require('./commands');
 const moment = require('moment');
 const cron = require('cron');
-const client = new Discord.Client();
-const cooldowns = new Discord.Collection();
+const DBL = require('dblapi.js');
+const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: process.env.WEBHOOK_TOKEN });
+const clientCommands = require('./commands');
+const { Users, Guilds, profile, guildProfile } = require('./dbObjects');
 require('dotenv').config();
 const token = process.env.TEST_TOKEN;
-const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const client = new Discord.Client();
+const cooldowns = new Discord.Collection();
 const active = new Map();
 client.commands = new Discord.Collection();
+const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 moment().format();
-
 
 const logger = winston.createLogger({
 	format: winston.format.combine(
@@ -45,6 +46,7 @@ const logger = winston.createLogger({
 Object.keys(clientCommands).map(key => {
 	client.commands.set(clientCommands[key].name, clientCommands[key]);
 });
+
 
 client.login(token);
 client.on('ready', async () => {
@@ -167,3 +169,40 @@ const botTasks = new cron.CronJob('0 0-23/3 * * *', async () => {
 	logger.info('Finished regular tasks!');
 });
 botTasks.start();
+
+dbl.webhook.on('ready', () => logger.info('DBL Webhook up and running.'));
+dbl.on('error', e => logger.error(`Oops! ${e}`));
+
+dbl.webhook.on('vote', async vote => {
+
+	const userID = vote.user;
+	const user = await client.users.cache.get(userID);
+	let msgUser = await profile.get(userID);
+	if (!msgUser) msgUser = await profile.newUser(userID);
+	logger.info(`${user.tag} has just voted.`);
+
+	const embed = new Discord.MessageEmbed()
+		.setTitle('Vote Reward')
+		.setThumbnail(user.displayAvatarURL())
+		.setColor(msgUser.pColour)
+		.setTimestamp()
+		.setFooter('Neia', client.user.displayAvatarURL());
+
+	let chest;
+	const luck = Math.floor(Math.random() * 10);
+	if (luck >= 1) chest = 'Rare chest';
+	else chest = 'Epic chest';
+	chest = await profile.getItem(chest);
+
+	if (chest.picture) {
+		embed.attachFiles(`assets/items/${chest.picture}`)
+			.setImage(`attachment://${chest.picture}`);
+	}
+
+	const income = await profile.calculateIncome(userID);
+	profile.addMoney(userID, income.daily);
+	profile.addItem(userID, chest, 1);
+	profile.setVote(userID);
+
+	return user.send(embed.setDescription(`Thank you for voting!\n\nYou got a ${chest.emoji}${chest.name} from your vote 🎁 and ${profile.formatNumber(income.daily)}💰 from your collectables.\nCome back in 12 hours for more!\n\nYour current balance is ${profile.formatNumber(await profile.getBalance(userID))}💰`));
+});

@@ -4,7 +4,7 @@ module.exports = {
 	summary: 'Equip an item from your inventory',
 	description: 'Equip an item from your inventory.',
 	category: 'pvp',
-	aliases: ['item'],
+	aliases: ['e'],
 	args: false,
 	usage: '<item>',
 
@@ -29,7 +29,7 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
 
-			if(item) embed.attachFiles(`assets/items/${item.picture}`)
+		if (item) embed.attachFiles(`assets/items/${item.picture}`)
 
 
 		message.channel.send(embed).then(async sentMessage => {

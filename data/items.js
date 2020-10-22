@@ -318,7 +318,7 @@ module.exports = {
 	},
 	'rijkszwaard': {
 		name: 'Rijkszwaard',
-		value: 64900,
+		value: 649000,
 		buyable: false,
 		emoji: '<:rijkszwaard:764108434542428210>',
 		rarity: 'legendary',
