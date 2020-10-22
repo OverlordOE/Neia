@@ -170,11 +170,8 @@ const botTasks = new cron.CronJob('0 0-23/3 * * *', async () => {
 });
 botTasks.start();
 
-dbl.webhook.on('ready', hook => {
-	console.log(`Webhook up and running at http://${hook.hostname}:${hook.port}${hook.path}`);
-});
-
-dbl.on('error', e => logger.error(`Oops! ${e}`))
+dbl.webhook.on('ready', () => logger.info('DBL Webhook up and running.'));
+dbl.on('error', e => logger.error(`Oops! ${e}`));
 
 dbl.webhook.on('vote', async vote => {
 
@@ -197,8 +194,10 @@ dbl.webhook.on('vote', async vote => {
 	else chest = 'Epic chest';
 	chest = await profile.getItem(chest);
 
-	if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
-		.setImage(`attachment://${chest.picture}`);
+	if (chest.picture) {
+		embed.attachFiles(`assets/items/${chest.picture}`)
+			.setImage(`attachment://${chest.picture}`);
+	}
 
 	const income = await profile.calculateIncome(userID);
 	profile.addMoney(userID, income.daily);
@@ -206,4 +205,4 @@ dbl.webhook.on('vote', async vote => {
 	profile.setVote(userID);
 
 	return user.send(embed.setDescription(`Thank you for voting!\n\nYou got a ${chest.emoji}${chest.name} from your vote 🎁 and ${profile.formatNumber(income.daily)}💰 from your collectables.\nCome back in 12 hours for more!\n\nYour current balance is ${profile.formatNumber(await profile.getBalance(userID))}💰`));
-})
+});
