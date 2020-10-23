@@ -32,6 +32,8 @@ module.exports = {
 		loot.add({ name: 'Jet plane', amount: [1, 0] }, 0.3);
 		loot.add({ name: 'Protection', amount: [1, 0] }, 0.5);
 		loot.add({ name: 'Shortbow', amount: [1, 0] }, 0.6);
+		loot.add({ name: 'Training Sword', amount: [1, 1] }, 1);
+		loot.add({ name: 'Training Staff', amount: [1, 0] }, 1);
 		return loot.choose();
 	},
 
@@ -94,6 +96,8 @@ module.exports = {
 		loot.add({ name: 'Sailboat', amount: [1, 0] }, 1);
 		loot.add({ name: 'Museum', amount: [1, 0] }, 0.4);
 		loot.add({ name: 'Motorcycle', amount: [1, 0] }, 0.4);
+		loot.add({ name: 'Ship', amount: [1, 0] }, 1);
+		loot.add({ name: 'Sailboat', amount: [2, 0] }, 1);
 		return loot.choose();
 	},
 
