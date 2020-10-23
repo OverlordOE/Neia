@@ -44,6 +44,7 @@ module.exports = {
 		loot.add({ name: 'Shortbow', amount: [2, 1] }, 1);
 		loot.add({ name: 'Healing Potion', amount: [5, 2] }, 1);
 		loot.add({ name: 'Water', amount: [1, 0] }, 0.7);
+		loot.add({ name: 'Enchanted Waraxe', amount: [1, 0] }, 1);
 		loot.add({ name: 'Sailboat', amount: [5, 3] }, 1);
 		loot.add({ name: 'Training Sword', amount: [4, 1] }, 1);
 		loot.add({ name: 'Training Staff', amount: [4, 1] }, 1);

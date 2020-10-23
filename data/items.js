@@ -335,7 +335,7 @@ module.exports = {
 		picture: 'rijkszwaard.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [167, 44],
+		damage: [187, 54],
 		description: 'The legendary Sword of the State. Handcrafted by the best Dutch blacksmiths',
 	},
 	'shortbow': {
@@ -349,7 +349,7 @@ module.exports = {
 		slot: 'weapon',
 		damage: [54, 9],
 		description: 'A pretty nice shortbow made of surpisingly flexible wood.',
-	},
+	}, 
 	'wooden club': {
 		name: 'Wooden Club',
 		value: 1000,
@@ -361,5 +361,17 @@ module.exports = {
 		slot: 'weapon',
 		damage: [13, 9],
 		description: 'A wooden club with a leather bound handle.',
+	},
+	'enchanted waraxe': {
+		name: 'Enchanted Waraxe',
+		value: 13500,
+		buyable: false,
+		emoji: '<:enchanted_waraxe:769194262641508392>',
+		rarity: 'epic',
+		picture: 'enchanted_waraxe.png',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: [78, 23],
+		description: 'An high quality waraxe that has been enchanted by a mage.',
 	},
 }; 
