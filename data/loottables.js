@@ -8,8 +8,8 @@ module.exports = {
 		loot.add({ name: 'Car', amount: [1, 1] }, 1);
 		loot.add({ name: 'Motorcycle', amount: [1, 1] }, 1);
 		loot.add({ name: 'Profile Colour', amount: [1, 1] }, 1);
-		loot.add({ name: 'Sailboat', amount: [1, 0] }, 0.1);
-		loot.add({ name: 'Motorboat', amount: [1, 0] }, 0.3);
+		loot.add({ name: 'Sailboat', amount: [1, 0] }, 0.2);
+		loot.add({ name: 'Motorboat', amount: [1, 0] }, 0.4);
 		return loot.choose();
 	},
 
