@@ -43,6 +43,16 @@ module.exports = {
 		ctg: 'chest',
 		description: 'Legendary Chest.',
 	},
+	'mystery chest': {
+		name: 'Mystery Chest',
+		value: 5000,
+		buyable: true,
+		emoji: '<:chest_t_02:745278856298102864>',
+		rarity: 'rare',
+		picture: 'mystery_chest_open.png',
+		ctg: 'chest',
+		description: 'A mystery chest that can contain really bad loot or really good loot.',
+	},
 
 	// CONSUMABLES
 	'protection': {
