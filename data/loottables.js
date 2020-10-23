@@ -3,6 +3,7 @@ module.exports = {
 	common() {
 		// cost 700
 		const loot = new LootTable();
+		loot.add({ name: 'Rare Chest', amount: [1, 0] }, 0.1);
 		loot.add({ name: 'Spiky Rock', amount: [1, 0] }, 1);
 		loot.add({ name: 'Scooter', amount: [3, 3] }, 1);
 		loot.add({ name: 'Car', amount: [1, 1] }, 1);
@@ -16,6 +17,7 @@ module.exports = {
 	rare() {
 		// cost 3.5k
 		const loot = new LootTable();
+		loot.add({ name: 'Common Chest', amount: [4, 2] }, 0.5);
 		loot.add({ name: 'Gun', amount: [1, 0] }, 0.3);
 		loot.add({ name: 'Healing Potion', amount: [1, 0] }, 1);
 		loot.add({ name: 'Healing Potion', amount: [2, 0] }, 0.6);
@@ -34,6 +36,7 @@ module.exports = {
 	epic() {
 		// cost 14k
 		const loot = new LootTable();
+		loot.add({ name: 'Rare Chest', amount: [3, 2] }, 0.5);
 		loot.add({ name: 'Shortbow', amount: [2, 1] }, 1);
 		loot.add({ name: 'Healing Potion', amount: [5, 2] }, 1);
 		loot.add({ name: 'Water', amount: [1, 0] }, 0.7);
@@ -61,6 +64,7 @@ module.exports = {
 	legendary() {
 		// cost 130k
 		const loot = new LootTable();
+		loot.add({ name: 'Epic Chest', amount: [9, 2] }, 0.5);
 		loot.add({ name: 'Rijkszwaard', amount: [1, 0] }, 0.15);
 		loot.add({ name: 'Water', amount: [5, 2] }, 1);
 		loot.add({ name: 'Jet Plane', amount: [17, 3] }, 1);
