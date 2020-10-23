@@ -11,12 +11,14 @@ module.exports = {
 		loot.add({ name: 'Profile Colour', amount: [1, 1] }, 1);
 		loot.add({ name: 'Sailboat', amount: [1, 0] }, 0.2);
 		loot.add({ name: 'Motorboat', amount: [1, 0] }, 0.4);
+		loot.add({ name: 'Wooden Club', amount: [1, 0] }, 1);
 		return loot.choose();
 	},
 
 	rare() {
 		// cost 3.5k
 		const loot = new LootTable();
+		loot.add({ name: 'Wooden Club', amount: [3, 1] }, 1);
 		loot.add({ name: 'Common Chest', amount: [4, 2] }, 0.5);
 		loot.add({ name: 'Gun', amount: [1, 0] }, 0.3);
 		loot.add({ name: 'Healing Potion', amount: [1, 0] }, 1);

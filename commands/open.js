@@ -15,7 +15,7 @@ module.exports = {
 			.setTimestamp()
 			.setFooter('Neia', client.user.displayAvatarURL());
 
-		const chestList = ['common', 'rare', 'epic', 'legendary', 'common chest', 'rare chest', 'epic chest', 'legendary chest'];
+		const chestList = ['common', 'rare', 'epic', 'legendary', 'mystery', 'common chest', 'rare chest', 'epic chest', 'legendary chest', 'mystery chest'];
 
 		let temp = '';
 		let amount = 1;
