@@ -5,7 +5,7 @@ module.exports = {
 	// CHESTS
 	'common chest': {
 		name: 'Common Chest',
-		value: 700,
+		value: 600,
 		buyable: true,
 		emoji: '<:chest_t_01:745278856201633832>',
 		rarity: 'common',
