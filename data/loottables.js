@@ -78,4 +78,21 @@ module.exports = {
 		return loot.choose();
 	},
 
+	mystery() {
+		// cost 5k
+		const loot = new LootTable();
+		loot.add({ name: 'Epic Chest', amount: [1, 0] }, 1);
+		loot.add({ name: 'Rare Chest', amount: [1, 0] }, 1);
+		loot.add({ name: 'Protection', amount: [1, 0] }, 1);
+		loot.add({ name: 'Healing Potion', amount: [1, 0] }, 1);
+		loot.add({ name: 'House', amount: [1, 0] }, 1);
+		loot.add({ name: 'Car', amount: [1, 0] }, 1);
+		loot.add({ name: 'Jet Plane', amount: [1, 0] }, 1);
+		loot.add({ name: 'Prop Plane', amount: [1, 0] }, 1);
+		loot.add({ name: 'Sailboat', amount: [1, 0] }, 1);
+		loot.add({ name: 'Museum', amount: [1, 0] }, 0.4);
+		loot.add({ name: 'Motorcycle', amount: [1, 0] }, 0.4);
+		return loot.choose();
+	},
+
 };
