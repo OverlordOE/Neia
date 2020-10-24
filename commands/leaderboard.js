@@ -38,8 +38,7 @@ module.exports = {
 			.setTitle('Neia leaderboard')
 			.setDescription(editDescription(currentList, page, ' Net Worth \n'))
 			.setThumbnail(client.user.displayAvatarURL())
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL());
+			.setFooter('Use the emojis to scroll through the list or switch the list.', client.user.displayAvatarURL());
 
 
 		message.channel.send(embed).then(sentMessage => {

@@ -19,10 +19,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Shop')
 			.setThumbnail(message.author.displayAvatarURL())
-			.setTimestamp()
-			.setFooter('Neia Imporium', client.user.displayAvatarURL());
-
-
+			
 		message.channel.send(embed).then(async sentMessage => {
 
 			for (let i = 0; i < args.length; i++) {
@@ -77,7 +74,10 @@ async function buy(profile, sentMessage, amount, embed, item, msgUser) {
 
 	const balance = msgUser.balance;
 	const cost = amount * item.value;
-	if (cost > balance) return sentMessage.edit(embed.setDescription(`You currently have ${profile.formatNumber(balance)}💰, but __${profile.formatNumber(amount)}__ ${item.emoji}${item.name}(s) costs ${profile.formatNumber(cost)}💰!`));
+	if (cost > balance) return sentMessage.edit(embed.setDescription(`
+	You currently have ${profile.formatNumber(balance)}💰 but __${profile.formatNumber(amount)}__ ${item.emoji}${item.name}(s) costs ${profile.formatNumber(cost)}💰!
+	You need ${profile.formatNumber(cost - balance)}💰 more
+	`));
 
 	profile.addItem(msgUser.user_id, item, amount);
 	profile.addMoney(msgUser.user_id, -cost);

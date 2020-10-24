@@ -44,23 +44,20 @@ module.exports = {
 			.addField('Next Vote', vote, true)
 			.addField('Next Heal', heal, true)
 			.addField('Next Attack', attack, true)
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL());
+			.setFooter('You can use the emojis to switch pages.', client.user.displayAvatarURL());
 		if (prot !== false) moneyEmbed.addField('Protection untill:', prot);
 
 		const invEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s Inventory`)
 			.setThumbnail(avatar)
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL());
+			.setFooter('You can use the emojis to switch pages.', client.user.displayAvatarURL());
 
 		const statEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s Stats`)
 			.setThumbnail(avatar)
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL());
+			.setFooter('You can use the emojis to switch pages.', client.user.displayAvatarURL());
 
 
 		let inventory = '__Inventory:__\n\n';

@@ -14,8 +14,8 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Attacking')
 			.setThumbnail(message.author.displayAvatarURL())
-			.setTimestamp()
-			.setFooter('Neia Imporium', client.user.displayAvatarURL());
+
+			.setFooter('You can only attack people on the same server', client.user.displayAvatarURL());
 
 		message.channel.send(embed.setDescription(embed)).then(async sentMessage => {
 

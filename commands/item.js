@@ -30,8 +30,7 @@ module.exports = {
 				.addField('Buyable', item.buyable, true)
 				.addField('Category', item.ctg, true)
 				.addField('Rarity', item.rarity, true)
-				.setTimestamp()
-				.setFooter('Neia', client.user.displayAvatarURL())
+				.setFooter('Use the command without arguments to see the item list', client.user.displayAvatarURL())
 				.attachFiles(`assets/rarity/${item.rarity}.jpg`)
 				.setThumbnail(`attachment://${item.rarity}.jpg`);
 
@@ -73,9 +72,6 @@ module.exports = {
 				.setThumbnail(client.user.displayAvatarURL())
 				.setDescription(description)
 				.setColor(msgUser.pColour)
-				.setTimestamp()
-				.setFooter('Neia', client.user.displayAvatarURL());
-
 		}
 
 		return message.channel.send(embed);

@@ -17,9 +17,7 @@ module.exports = {
 			.setDescription(avatar)
 			.setImage(avatar)
 			.setColor(msgUser.pColour)
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL());
-
+				
 		message.channel.send(embed);
 	},
 };

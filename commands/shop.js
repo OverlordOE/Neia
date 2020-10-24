@@ -32,8 +32,8 @@ module.exports = {
 			.setThumbnail(client.user.displayAvatarURL())
 			.setDescription(description)
 			.setColor(msgUser.pColour)
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL());
+
+			.setFooter('Use the items command to see the full item list.', client.user.displayAvatarURL());
 
 		return message.channel.send(embed);
 	},

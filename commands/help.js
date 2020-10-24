@@ -18,7 +18,7 @@ module.exports = {
 
 		const help = new Discord.MessageEmbed()
 			.setColor(msgUser.pColour)
-			.setTimestamp();
+			;
 
 		if (!args.length) {
 			help.setTitle('Neia command list');

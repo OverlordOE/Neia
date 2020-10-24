@@ -9,7 +9,7 @@ module.exports = {
 			.setTitle('Neia Stats')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setColor(msgUser.pColour)
-			.setTimestamp()
+
 			.setFooter('Neia', client.user.displayAvatarURL());
 
 		let guildTotal = 0;

@@ -13,7 +13,7 @@ module.exports = {
 		const daily = await profile.getDaily(message.author.id);
 		let chest;
 
-		const luck = Math.floor(Math.random() * 10);
+		const luck = Math.floor(Math.random() * 3);
 		if (luck >= 1) chest = 'Rare chest';
 		else chest = 'Epic chest';
 		chest = await profile.getItem(chest);
@@ -23,8 +23,7 @@ module.exports = {
 			.setTitle('Daily Reward')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setColor(msgUser.pColour)
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL());
+			.setFooter('You can get up to 2 extra dailys per day by voting.', client.user.displayAvatarURL());
 
 
 		if (daily === true) {

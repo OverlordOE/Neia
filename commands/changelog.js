@@ -11,8 +11,7 @@ module.exports = {
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia V2.1: Bug Fixes and balance changes')
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL())
+			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL())
 			.addField('Starting Off', `You guys really fucked the bot economy up, but that was partly my fault too. These changes will hopefully stop the infinite profit on lootboxes.
 			\n`)
 

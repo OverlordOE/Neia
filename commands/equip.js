@@ -26,8 +26,7 @@ module.exports = {
 			.setDescription('What item do you want to equip?')
 			.setThumbnail(client.user.displayAvatarURL())
 			.setColor(msgUser.pColour)
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL());
+			.setFooter('Use the \`attack\` command to kill people.', client.user.displayAvatarURL());
 
 		if (item) embed.attachFiles(`assets/items/${item.picture}`)
 
