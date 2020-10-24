@@ -7,7 +7,6 @@ const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: pro
 const clientCommands = require('./commands');
 const { Users, Guilds, profile, guildProfile } = require('./dbObjects');
 require('dotenv').config();
-const token = process.env.TEST_TOKEN;
 const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
 const active = new Map();
@@ -47,8 +46,8 @@ Object.keys(clientCommands).map(key => {
 	client.commands.set(clientCommands[key].name, clientCommands[key]);
 });
 
-
-client.login(token);
+// Startup Tasks
+client.login(process.env.TEST_TOKEN);
 client.on('ready', async () => {
 	try {
 		const storedUsers = await Users.findAll();
@@ -67,14 +66,14 @@ client.on('ready', async () => {
 });
 
 // Logger
-client.on('warn', m => logger.warn(m));
-client.on('error', m => logger.error(m));
-process.on('warning', m => logger.warn(m));
-process.on('unhandledRejection', m => logger.error(m));
-process.on('TypeError', m => logger.error(m));
-process.on('uncaughtException', m => logger.error(m));
+client.on('warn', e => logger.warn(e));
+client.on('error', e => logger.error(e));
+process.on('warning', e => logger.warn(e));
+process.on('unhandledRejection', e => logger.error(e));
+process.on('TypeError', e => logger.error(e));
+process.on('uncaughtException', e => logger.error(e));
 
-
+// Command handler
 client.on('message', async message => {
 
 	if (message.author.bot || message.channel == 'dm') return;
@@ -157,7 +156,7 @@ client.on('message', async message => {
 	}
 });
 
-//	crontime: 0 0-23/3 * * *
+// Regular tasks executed every 3 hours
 const botTasks = new cron.CronJob('0 0-23/3 * * *', async () => {
 	const lottery = client.commands.get('lottery');
 	lottery.execute(profile, client, logger);
@@ -173,6 +172,7 @@ botTasks.start();
 dbl.webhook.on('ready', () => logger.info('DBL Webhook up and running.'));
 dbl.on('error', e => logger.error(`Oops! ${e}`));
 
+// DBL voting webhook handler
 dbl.webhook.on('vote', async vote => {
 
 	const userID = vote.user;
@@ -185,11 +185,11 @@ dbl.webhook.on('vote', async vote => {
 		.setTitle('Vote Reward')
 		.setThumbnail(user.displayAvatarURL())
 		.setColor(msgUser.pColour)
-		.setTimestamp()
+
 		.setFooter('Neia', client.user.displayAvatarURL());
 
 	let chest;
-	const luck = Math.floor(Math.random() * 10);
+	const luck = Math.floor(Math.random() * 6);
 	if (luck >= 1) chest = 'Rare chest';
 	else chest = 'Epic chest';
 	chest = await profile.getItem(chest);
