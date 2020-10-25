@@ -14,8 +14,9 @@ module.exports = {
 		let chest;
 
 		const luck = Math.floor(Math.random() * 6);
-		if (luck >= 1) chest = 'Common Chest';
-		else chest = 'Rare Chest';
+		if (luck == 0) chest = 'Mystery Chest';
+		else if (luck == 1 || luck == 2) chest = 'Rare chest';
+		else chest = 'Common Chest';
 		chest = await profile.getItem(chest);
 
 		const embed = new Discord.MessageEmbed()

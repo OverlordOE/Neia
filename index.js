@@ -187,9 +187,10 @@ dbl.webhook.on('vote', async vote => {
 		.setFooter('Neia', client.user.displayAvatarURL());
 
 	let chest;
-	const luck = Math.floor(Math.random() * 6);
-	if (luck >= 1) chest = 'Rare chest';
-	else chest = 'Epic chest';
+	const luck = Math.floor(Math.random() * 7);
+	if (luck == 0) chest = 'Epic chest';
+	if (luck == 1) chest = 'Mystery chest';
+	else chest = 'Rare chest';
 	chest = await profile.getItem(chest);
 
 	if (chest.picture) {

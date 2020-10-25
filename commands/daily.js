@@ -13,9 +13,10 @@ module.exports = {
 		const daily = await profile.getDaily(message.author.id);
 		let chest;
 
-		const luck = Math.floor(Math.random() * 3);
-		if (luck >= 1) chest = 'Rare chest';
-		else chest = 'Epic chest';
+		const luck = Math.floor(Math.random() * 5);
+		if (luck == 0) chest = 'Epic chest';
+		if (luck == 1) chest = 'Mystery chest';
+		else chest = 'Rare chest';
 		chest = await profile.getItem(chest);
 
 

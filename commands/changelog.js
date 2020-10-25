@@ -10,25 +10,23 @@ module.exports = {
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neia V2.1: Bug Fixes and balance changes')
+			.setTitle('Neia V2.3: New chest and stealing items')
 			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL())
-			.addField('Starting Off', `You guys really fucked the bot economy up, but that was partly my fault too. These changes will hopefully stop the infinite profit on lootboxes.
+			.addField('Starting Off', `After alot of failure i finally found a way to let people steal a portion of someones inventory without lagging the whole bot.
 			\n`)
 
 
-			.addField('**New Features**', `- Added a new collectable: Castle.
-			- You can now open multiple lootboxes at once by adding the number of lootboxes you want to open.
-			- You can now sell you whole inventory at once by using \`-sell all\`.\n`)
+			.addField('**New Features**', `- Added a new weapon: **Wooden Club**.
+						- Added a new weapon: **Enchanted Waraxe**.
+						- Added a new Lootchest: **Mystery chest**. This chest is high risk high reward, you can get something absolutely terrible or something really good out of it.
+						- If you kill someone you will now also steal a portion of their inventory.\n`)
 
-			.addField('**Major Changes**', `- \`sell\` only refunds 80% again.\n`)
 
-			.addField('**Small Changes and Bug Fixes**', `- Equipment will now be unequipped if you sell them.
-			- Fixed bug of rare and epic lootboxes giving undefined.
-			- Fixed selling exploit when a weapon was equipped(Thanks @garbiel#8845)\n\n\nThis update will also reset everyones profiles again because the economy was fucked`);
+			.addField('**Small Changes and Bug Fixes**', `- Increased chance of getting epic chests from dailies and votes.
+						- Lottery now gains more money when noone wins.
+						- Added training weapons to Rare chest.
+						- Added tips at the bottom of commands`);
 
 		return message.channel.send(embed);
 	},
 };
-
-
-
