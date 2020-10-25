@@ -24,9 +24,8 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setColor(msgUser.pColour)
 			.setThumbnail(avatar)
-			.setTimestamp()
 			.setTitle('Neia\'s Gambling Imporium')
-			.setFooter('Neia', client.user.displayAvatarURL());
+			.setFooter('Use the emojis to choose your game.', client.user.displayAvatarURL());
 
 
 		await message.channel.send(embed)

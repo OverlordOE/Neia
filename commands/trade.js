@@ -16,8 +16,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Trading Center')
 			.setColor(msgUser.pColour)
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL());
+			.setFooter('You can only trade to people on the same server.', client.user.displayAvatarURL());
 
 
 		message.channel.send(embed)

@@ -12,10 +12,10 @@ module.exports = {
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		const lootEmbed = new Discord.MessageEmbed()
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL());
 
-		const chestList = ['common', 'rare', 'epic', 'legendary', 'common chest', 'rare chest', 'epic chest', 'legendary chest'];
+			.setFooter('You can open multiple chests at the same time.', client.user.displayAvatarURL());
+
+		const chestList = ['common', 'rare', 'epic', 'legendary', 'mystery', 'common chest', 'rare chest', 'epic chest', 'legendary chest', 'mystery chest'];
 
 		let temp = '';
 		let amount = 1;

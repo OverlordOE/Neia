@@ -13,17 +13,18 @@ module.exports = {
 		const hourly = await profile.getHourly(message.author.id);
 		let chest;
 
-		const luck = Math.floor(Math.random() * 7);
-		if (luck >= 1) chest = 'Common Chest';
-		else chest = 'Rare Chest';
+		const luck = Math.floor(Math.random() * 6);
+		if (luck == 0) chest = 'Mystery Chest';
+		else if (luck == 1 || luck == 2) chest = 'Rare chest';
+		else chest = 'Common Chest';
 		chest = await profile.getItem(chest);
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Hourly Reward')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setColor(msgUser.pColour)
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL());
+
+			.setFooter('You can see how much income you get on your profile.', client.user.displayAvatarURL());
 
 
 		if (hourly === true) {
@@ -34,7 +35,7 @@ module.exports = {
 			profile.addMoney(message.author.id, income.hourly);
 			profile.addItem(message.author.id, chest, 1);
 			profile.setHourly(message.author.id);
-		
+
 			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your hourly 🎁 and ${profile.formatNumber(income.hourly)}💰 from your collectables.\nCome back in an hour for more!\n\nYour current balance is ${profile.formatNumber(await profile.getBalance(message.author.id))}💰`));
 		}
 		else { message.channel.send(embed.setDescription(`You have already gotten your hourly 🎁\n\nYou can get your next hourly __${hourly}__.`)); }

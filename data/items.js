@@ -5,7 +5,7 @@ module.exports = {
 	// CHESTS
 	'common chest': {
 		name: 'Common Chest',
-		value: 700,
+		value: 600,
 		buyable: true,
 		emoji: '<:chest_t_01:745278856201633832>',
 		rarity: 'common',
@@ -42,6 +42,16 @@ module.exports = {
 		picture: 'legendary_closed.png',
 		ctg: 'chest',
 		description: 'Legendary Chest.',
+	},
+	'mystery chest': {
+		name: 'Mystery Chest',
+		value: 5000,
+		buyable: true,
+		emoji: '<:chest_t_02:745278856298102864>',
+		rarity: 'rare',
+		picture: 'mystery_open.png',
+		ctg: 'chest',
+		description: 'A mystery chest that can contain really bad loot or really good loot.',
 	},
 
 	// CONSUMABLES
@@ -325,7 +335,7 @@ module.exports = {
 		picture: 'rijkszwaard.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [167, 44],
+		damage: [187, 54],
 		description: 'The legendary Sword of the State. Handcrafted by the best Dutch blacksmiths',
 	},
 	'shortbow': {
@@ -339,5 +349,29 @@ module.exports = {
 		slot: 'weapon',
 		damage: [54, 9],
 		description: 'A pretty nice shortbow made of surpisingly flexible wood.',
+	}, 
+	'wooden club': {
+		name: 'Wooden Club',
+		value: 1000,
+		buyable: false,
+		emoji: '<:wooden_club:769192453214568448>',
+		rarity: 'common',
+		picture: 'wooden_club.png',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: [13, 9],
+		description: 'A wooden club with a leather bound handle.',
+	},
+	'enchanted waraxe': {
+		name: 'Enchanted Waraxe',
+		value: 13500,
+		buyable: false,
+		emoji: '<:enchanted_waraxe:769194262641508392>',
+		rarity: 'epic',
+		picture: 'enchanted_waraxe.png',
+		ctg: 'equipment',
+		slot: 'weapon',
+		damage: [78, 23],
+		description: 'An high quality waraxe that has been enchanted by a mage.',
 	},
 }; 

@@ -1,19 +1,16 @@
 {
-  "name": "discord-bot",
+  "name": "neia",
   "version": "1.0.0",
-  "description": "Discord bot for SitePoint",
+  "description": "A fun discord bot with and economy pvp and music playing",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Michiel Mulders",
-  "license": "ISC",
+  "author": "OverlordOE",
   "dependencies": {
+    "@discordjs/collection": "^0.1.6",
     "@discordjs/opus": "^0.1.0",
     "cron": "^1.8.2",
     "dblapi.js": "^2.4.1",
     "discord-youtube-api": "^0.1.0",
-    "discord.js": "^12.4.0",
+    "discord.js": "^12.4.1",
     "dotenv": "^8.2.0",
     "eslint": "^6.8.0",
     "ffmpeg-static": "^4.2.7",
@@ -27,6 +24,6 @@
     "sequelize": "^5.22.3",
     "sqlite3": "^4.2.0",
     "winston": "^3.3.3",
-    "ytdl-core-discord": "^1.2.3"
+    "ytdl-core-discord": "^1.2.4"
   }
 }

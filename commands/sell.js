@@ -24,8 +24,8 @@ module.exports = {
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What do you want to refund? `80% refund`')
 			.setColor(msgUser.pColour)
-			.setTimestamp()
-			.setFooter('Neia', client.user.displayAvatarURL());
+
+			.setFooter('You can type `sell all` to sell your whole inventory.', client.user.displayAvatarURL());
 
 		message.channel.send(embed).then(async sentMessage => {
 

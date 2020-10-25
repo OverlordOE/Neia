@@ -14,8 +14,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Attacking')
 			.setThumbnail(message.author.displayAvatarURL())
-			.setTimestamp()
-			.setFooter('Neia Imporium', client.user.displayAvatarURL());
+			.setFooter('You can only attack people on the same server', client.user.displayAvatarURL());
 
 		message.channel.send(embed.setDescription(embed)).then(async sentMessage => {
 
@@ -38,20 +37,46 @@ module.exports = {
 			if (equipment['weapon']) {
 				const weapon = profile.getItem(equipment['weapon']);
 				damage = Math.round(weapon.damage[0] + (Math.random() * weapon.damage[1]));
-				sentMessage.edit(embed.setDescription(`You have attacked ${targetMention} with your ${weapon.emoji}${weapon.name} for ${damage} damage`));
+				sentMessage.edit(embed.setDescription(`You have attacked ${targetMention} with your ${weapon.emoji}${weapon.name} for **${damage}** damage`));
 			}
-			else sentMessage.edit(embed.setDescription(`You have attacked ${targetMention} with your fists for ${damage} damage`));
+			else { sentMessage.edit(embed.setDescription(`You have attacked ${targetMention} with your fists for **${damage}** damage`)); }
 
 			target.hp -= damage;
 			profile.setAttack(message.author.id);
 
 			if (target.hp <= 0) {
 				const stealAmount = Math.floor(target.balance / (Math.random() + 4));
+				const lootList = {};
+				let lootListValue = 0;
+				let description = `You have killed ${targetMention} and stolen:\n${profile.formatNumber(stealAmount)}💰.`;
+				const networth = target.networth;
+				const inventory = await profile.getInventory(targetMention.id);
+	
+				for (let i = 0; lootListValue <= networth / 5; i++) {
+					const nextIndex = Math.floor(Math.random() * inventory.length);
+
+					const loot = await profile.getItem(inventory[nextIndex].name);
+					if (inventory[nextIndex].amount > 1) inventory[nextIndex].amount--;
+					else inventory.splice(nextIndex, 1);
+					
+					lootListValue += Number(loot.value);
+					if (!lootList[loot.name]) lootList[loot.name] = 1;
+					else lootList[loot.name]++;
+				}
+
+				for (const loot in lootList) {
+					const lootItem = await profile.getItem(loot);
+					description += `\n${profile.formatNumber(lootList[loot])} ${lootItem.emoji}__${lootItem.name}__`;
+					profile.addItem(message.author.id, lootItem, lootList[loot]);
+					profile.removeItem(targetMention.id, lootItem, lootList[loot]);
+				}
+
 				profile.addMoney(targetMention.id, -stealAmount);
 				profile.addMoney(message.author.id, stealAmount);
-				sentMessage.edit(embed.setDescription(`You have killed ${targetMention} and stolen ${profile.formatNumber(stealAmount)}💰.`));
+				sentMessage.edit(embed.setDescription(description));
 				profile.addProtection(targetMention.id, 24);
 				target.hp = 1000;
+				target.save();
 			}
 		});
 	},
