@@ -41,10 +41,8 @@ const logger = winston.createLogger({
 	],
 });
 
-
-Object.keys(clientCommands).map(key => {
-	client.commands.set(clientCommands[key].name, clientCommands[key]);
-});
+// Load in Commands
+Object.keys(clientCommands).map(key => 	client.commands.set(clientCommands[key].name, clientCommands[key]));
 
 // Startup Tasks
 client.login(process.env.TEST_TOKEN);

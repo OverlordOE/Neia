@@ -9,7 +9,6 @@ module.exports = {
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		const target = await profile.getUser(message.mentions.users.first().id);
-		
 		try {
 			target[args[1]] = args[2];
 			target.save();
@@ -17,8 +16,6 @@ module.exports = {
 			message.reply('something went wrong');
 			return logger.error(e.stack);
 		}
-		
 		message.reply('Edit succesfull');
 	},
 };
-

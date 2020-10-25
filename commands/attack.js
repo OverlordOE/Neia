@@ -14,7 +14,6 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Attacking')
 			.setThumbnail(message.author.displayAvatarURL())
-
 			.setFooter('You can only attack people on the same server', client.user.displayAvatarURL());
 
 		message.channel.send(embed.setDescription(embed)).then(async sentMessage => {
@@ -38,17 +37,35 @@ module.exports = {
 			if (equipment['weapon']) {
 				const weapon = profile.getItem(equipment['weapon']);
 				damage = Math.round(weapon.damage[0] + (Math.random() * weapon.damage[1]));
-				sentMessage.edit(embed.setDescription(`You have attacked ${targetMention} with your ${weapon.emoji}${weapon.name} for ${damage} damage`));
+				sentMessage.edit(embed.setDescription(`You have attacked ${targetMention} with your ${weapon.emoji}${weapon.name} for **${damage}** damage`));
 			}
-			else sentMessage.edit(embed.setDescription(`You have attacked ${targetMention} with your fists for ${damage} damage`));
+			else sentMessage.edit(embed.setDescription(`You have attacked ${targetMention} with your fists for **${damage}** damage`));
 
 			target.hp -= damage;
 			profile.setAttack(message.author.id);
 
 			if (target.hp <= 0) {
 				const stealAmount = Math.floor(target.balance / (Math.random() + 4));
+				const stolenGoods = [];
+				let stolenGoodsValue = 0;
 				profile.addMoney(targetMention.id, -stealAmount);
 				profile.addMoney(message.author.id, stealAmount);
+
+				const networth = await profile.calculateIncome(targetMention.id).networth;
+				console.log(networth);
+				const inventory = await profile.getInventory(targetMention.id);
+
+				for (let i = 0; stolenGoodsValue <= networth / 5; i++) {
+					const nextItem = inventory.slice(Math.floor(Math.random() * inventory.length), 1);
+					const item = profile.getItem(nextItem.name);
+					stolenGoods.push(item);
+					stolenGoodsValue += Number(item.value);
+					console.log(stolenGoods);
+					console.log(stolenGoodsValue);
+				}
+
+
+
 				sentMessage.edit(embed.setDescription(`You have killed ${targetMention} and stolen ${profile.formatNumber(stealAmount)}💰.`));
 				profile.addProtection(targetMention.id, 24);
 				target.hp = 1000;
