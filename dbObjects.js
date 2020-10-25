@@ -49,6 +49,7 @@ Reflect.defineProperty(profile, 'removeItem', {
 		});
 
 		const removeAmount = parseInt(amount);
+		
 		if (userItem.amount >= removeAmount) {
 			const user = profile.get(id);
 			user.networth -= item.value * removeAmount;
@@ -58,7 +59,8 @@ Reflect.defineProperty(profile, 'removeItem', {
 				user.equipment = JSON.stringify(equipment);
 			}
 
-			userItem.amount -= removeAmount;
+			if (userItem.amount == removeAmount) userItem.destroy();
+			else userItem.amount -= removeAmount;
 			return userItem.save();
 		}
 

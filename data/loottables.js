@@ -41,11 +41,11 @@ module.exports = {
 		// cost 14k
 		const loot = new LootTable();
 		loot.add({ name: 'Rare Chest', amount: [3, 2] }, 0.5);
-		loot.add({ name: 'Shortbow', amount: [2, 1] }, 1);
+		loot.add({ name: 'Shortbow', amount: [3, 0] }, 1);
 		loot.add({ name: 'Healing Potion', amount: [5, 2] }, 1);
 		loot.add({ name: 'Water', amount: [1, 0] }, 0.7);
 		loot.add({ name: 'Enchanted Waraxe', amount: [1, 0] }, 1);
-		loot.add({ name: 'Sailboat', amount: [5, 3] }, 1);
+		loot.add({ name: 'Sailboat', amount: [5, 4] }, 1);
 		loot.add({ name: 'Training Sword', amount: [4, 1] }, 1);
 		loot.add({ name: 'Training Staff', amount: [4, 1] }, 1);
 		loot.add({ name: 'Gun', amount: [2, 0] }, 1);
