@@ -4,7 +4,6 @@ module.exports = {
 	category: 'debug',
 	args: true,
 	usage: '<money> <target>',
-
 	cooldown: 0,
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {

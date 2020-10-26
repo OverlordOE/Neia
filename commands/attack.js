@@ -51,24 +51,26 @@ module.exports = {
 				let description = `You have killed ${targetMention} and stolen:\n${profile.formatNumber(stealAmount)}💰.`;
 				const networth = target.networth;
 				const inventory = await profile.getInventory(targetMention.id);
-	
-				for (let i = 0; lootListValue <= networth / 5; i++) {
-					const nextIndex = Math.floor(Math.random() * inventory.length);
 
-					const loot = await profile.getItem(inventory[nextIndex].name);
-					if (inventory[nextIndex].amount > 1) inventory[nextIndex].amount--;
-					else inventory.splice(nextIndex, 1);
-					
-					lootListValue += Number(loot.value);
-					if (!lootList[loot.name]) lootList[loot.name] = 1;
-					else lootList[loot.name]++;
-				}
+				if (inventory.length) {
+					for (let i = 0; lootListValue <= networth / 5; i++) {
+						const nextIndex = Math.floor(Math.random() * inventory.length);
 
-				for (const loot in lootList) {
-					const lootItem = await profile.getItem(loot);
-					description += `\n${profile.formatNumber(lootList[loot])} ${lootItem.emoji}__${lootItem.name}__`;
-					profile.addItem(message.author.id, lootItem, lootList[loot]);
-					profile.removeItem(targetMention.id, lootItem, lootList[loot]);
+						const loot = await profile.getItem(inventory[nextIndex].name);
+						if (inventory[nextIndex].amount > 1) inventory[nextIndex].amount--;
+						else inventory.splice(nextIndex, 1);
+
+						lootListValue += Number(loot.value);
+						if (!lootList[loot.name]) lootList[loot.name] = 1;
+						else lootList[loot.name]++;
+					}
+
+					for (const loot in lootList) {
+						const lootItem = await profile.getItem(loot);
+						description += `\n${profile.formatNumber(lootList[loot])} ${lootItem.emoji}__${lootItem.name}__`;
+						profile.addItem(message.author.id, lootItem, lootList[loot]);
+						profile.removeItem(targetMention.id, lootItem, lootList[loot]);
+					}
 				}
 
 				profile.addMoney(targetMention.id, -stealAmount);
