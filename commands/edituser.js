@@ -14,6 +14,7 @@ module.exports = {
 			if (args[1] == 'reset') {
 				const user = await profile.getUser(message.author.id);
 				user.destroy();
+				profile.delete(message.author.id);
 				return message.reply('Reset succesfull');
 			}
 			target[args[1]] = Number(args[2]);
