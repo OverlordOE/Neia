@@ -10,9 +10,16 @@ module.exports = {
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		const target = await profile.getUser(message.mentions.users.first().id);
 		try {
-			target[args[1]] = args[2];
+
+			if (args[1] == 'reset') {
+				const user = await profile.getUser(message.author.id);
+				user.destroy();
+				return message.reply('Reset succesfull');
+			}
+			target[args[1]] = Number(args[2]);
 			target.save();
-		} catch (e) {
+		}
+		catch (e) {
 			message.reply('something went wrong');
 			return logger.error(e.stack);
 		}
