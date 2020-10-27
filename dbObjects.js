@@ -26,7 +26,7 @@ Reflect.defineProperty(profile, 'addItem', {
 			where: { user_id: id, name: item.name },
 		});
 
-		const user = profile.get(id);
+		const user = await profile.getUser(id);
 		user.networth += item.value * parseInt(amount);
 		user.save();
 
@@ -49,9 +49,9 @@ Reflect.defineProperty(profile, 'removeItem', {
 		});
 
 		const removeAmount = parseInt(amount);
-		
+
 		if (userItem.amount >= removeAmount) {
-			const user = profile.get(id);
+			const user = await profile.getUser(id);
 			user.networth -= item.value * removeAmount;
 			if (item.ctg == 'equipment' && userItem.amount - removeAmount == 0) {
 				const equipment = JSON.parse(user.equipment);
@@ -81,8 +81,6 @@ Reflect.defineProperty(profile, 'hasItem', {
 
 Reflect.defineProperty(profile, 'getInventory', {
 	value: async function getInventory(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
 		return UserItems.findAll({
 			where: { user_id: id },
 		});
@@ -93,6 +91,93 @@ Reflect.defineProperty(profile, 'getItem', {
 		const item = itemName.toLowerCase();
 		if (items[item]) return items[item];
 		return false;
+	},
+});
+
+
+// EQUIPMENT AND COMBAT
+
+Reflect.defineProperty(profile, 'getEquipment', {
+	value: async function getEquipment(id) {
+		const user = await profile.getUser(id);
+
+		return JSON.parse(user.equipment);
+	},
+});
+
+Reflect.defineProperty(profile, 'equip', {
+	value: async function equip(id, equipment) {
+		const user = await profile.getUser(id);
+
+		const userEquipment = await UserItems.findOne({
+			where: { user_id: id, name: equipment.name },
+		});
+
+		if (userEquipment) {
+			const equipped = JSON.parse(user.equipment);
+
+			equipped[equipment.slot] = equipment.name;
+			user.equipment = JSON.stringify(equipped);
+			return user.save();
+		}
+		return false;
+	},
+});
+
+Reflect.defineProperty(profile, 'changeHp', {
+	value: async function changeHp(id, amount) {
+		const user = await profile.getUser(id);
+
+		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
+
+		const hp = Number(user.hp);
+		if (hp >= 1000) return false;
+		else if (hp > (1000 - amount)) {
+			amount = 1000 - hp;
+			user.hp = hp + Number(amount);
+		}
+		else user.hp = hp + Number(amount);
+
+		user.save();
+		return amount;
+	},
+});
+Reflect.defineProperty(profile, 'getHp', {
+	value: async function getHp(id) {
+		const user = await profile.getUser(id);
+		return user.hp;
+	},
+});
+
+Reflect.defineProperty(profile, 'attackUser', {
+	/**
+	* Resolves an attack bewteen 2 users
+	* @param {string} attackerId - The id of the Attacking user.
+	* @param {string} defenderId - The id of the Defending user.
+	*/
+	value: async function attackUser(attackerId, defenderId) {
+		let attacker = profile.get(attackerId);
+		let defender = profile.get(defenderId);
+		if (!attacker) attacker = await profile.newUser(attackerId);
+		if (!defender) defender = await profile.newUser(defenderId);
+
+		const attackerGear = JSON.parse(attacker.equipment);
+		const defenderGear = JSON.parse(defender.equipment);
+
+		let weapon = items[attackerGear['weapon'].toLowerCase()];
+		if (!weapon) weapon = {
+			name: 'Fists',
+			damage: [5, 5],
+			emoji: '✊',
+		};
+		const damage = Math.round(weapon.damage[0] + (Math.random() * weapon.damage[1]));
+		profile.changeHp(defenderId, -damage);
+		profile.setAttack(attackerId);
+
+		return {
+			weapon: weapon,
+			damage: damage,
+		};
 	},
 });
 
@@ -131,11 +216,9 @@ Reflect.defineProperty(profile, 'getUser', {
 
 Reflect.defineProperty(profile, 'addMoney', {
 	value: async function addMoney(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
+		const user = await profile.getUser(id);
 
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
-
 		user.balance += Number(amount);
 		if (amount > 0) user.totalEarned += Number(amount);
 
@@ -145,44 +228,14 @@ Reflect.defineProperty(profile, 'addMoney', {
 });
 Reflect.defineProperty(profile, 'getBalance', {
 	value: async function getBalance(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
+		const user = await profile.getUser(id);
+
 		return Math.floor(user.balance);
-	},
-});
-
-Reflect.defineProperty(profile, 'getEquipment', {
-	value: async function getEquipment(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return JSON.parse(user.equipment);
-	},
-});
-
-Reflect.defineProperty(profile, 'equip', {
-	value: async function equip(id, equipment) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		const userEquipment = await UserItems.findOne({
-			where: { user_id: id, name: equipment.name },
-		});
-
-		if (userEquipment) {
-			const equipped = JSON.parse(user.equipment);
-
-			equipped[equipment.slot] = equipment.name;
-			user.equipment = JSON.stringify(equipped);
-			return user.save();
-		}
-		return false;
 	},
 });
 
 Reflect.defineProperty(profile, 'calculateIncome', {
 	value: async function calculateIncome(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
 		const uItems = await profile.getInventory(id);
 		let networth = 0;
 		let income = 0;
@@ -205,38 +258,10 @@ Reflect.defineProperty(profile, 'calculateIncome', {
 	},
 });
 
-Reflect.defineProperty(profile, 'addHp', {
-	value: async function addHp(id, amount) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
-
-		const hp = Number(user.hp);
-		if (hp >= 1000) return false;
-		else if (hp > (1000 - amount)) {
-			amount = 1000 - hp;
-			user.hp = hp + Number(amount);
-		}
-		else user.hp = hp + Number(amount);
-
-		user.save();
-		return amount;
-	},
-});
-Reflect.defineProperty(profile, 'getHp', {
-	value: async function getHp(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user.hp;
-	},
-});
-
 Reflect.defineProperty(profile, 'getDaily', {
 	value: async function getDaily(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
+		const user = await profile.getUser(id);
 		const now = moment();
-
 		const dCheck = moment(user.lastDaily).add(1, 'd');
 		if (moment(dCheck).isBefore(now)) return true;
 		else return dCheck.format('MMM Do HH:mm');
@@ -244,9 +269,7 @@ Reflect.defineProperty(profile, 'getDaily', {
 });
 Reflect.defineProperty(profile, 'setDaily', {
 	value: async function setDaily(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
+		const user = await profile.getUser(id);
 		user.lastDaily = moment().toString();
 		return user.save();
 	},
@@ -254,10 +277,8 @@ Reflect.defineProperty(profile, 'setDaily', {
 
 Reflect.defineProperty(profile, 'getHourly', {
 	value: async function getHourly(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
+		const user = await profile.getUser(id);
 		const now = moment();
-
 		const hCheck = moment(user.lastHourly).add(1, 'h');
 		if (moment(hCheck).isBefore(now)) return true;
 		else return hCheck.format('MMM Do HH:mm');
@@ -265,9 +286,7 @@ Reflect.defineProperty(profile, 'getHourly', {
 });
 Reflect.defineProperty(profile, 'setHourly', {
 	value: async function setHourly(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
+		const user = await profile.getUser(id);
 		user.lastHourly = moment().toString();
 		return user.save();
 	},
@@ -275,10 +294,8 @@ Reflect.defineProperty(profile, 'setHourly', {
 
 Reflect.defineProperty(profile, 'getWeekly', {
 	value: async function getWeekly(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
+		const user = await profile.getUser(id);
 		const now = moment();
-
 		const wCheck = moment(user.lastWeekly).add(1, 'w');
 		if (moment(wCheck).isBefore(now)) return true;
 		else return wCheck.format('MMM Do HH:mm');
@@ -286,9 +303,7 @@ Reflect.defineProperty(profile, 'getWeekly', {
 });
 Reflect.defineProperty(profile, 'setWeekly', {
 	value: async function setWeekly(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
+		const user = await profile.getUser(id);
 		user.lastWeekly = moment().toString();
 		return user.save();
 	},
@@ -296,19 +311,15 @@ Reflect.defineProperty(profile, 'setWeekly', {
 
 Reflect.defineProperty(profile, 'setVote', {
 	value: async function setVote(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
+		const user = await profile.getUser(id);
 		user.lastVote = moment().toString();
 		return user.save();
 	},
 });
 Reflect.defineProperty(profile, 'getVote', {
 	value: async function getVote(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
+		const user = await profile.getUser(id);
 		const now = moment();
-
 		const vCheck = moment(user.lastVote).add(12, 'h');
 		if (moment(vCheck).isBefore(now)) return true;
 		else return vCheck.format('MMM Do HH:mm');
@@ -318,19 +329,15 @@ Reflect.defineProperty(profile, 'getVote', {
 
 Reflect.defineProperty(profile, 'setHeal', {
 	value: async function setHeal(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
+		const user = await profile.getUser(id);
 		user.lastHeal = moment().toString();
 		return user.save();
 	},
 });
 Reflect.defineProperty(profile, 'getHeal', {
 	value: async function getHeal(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
+		const user = await profile.getUser(id);
 		const now = moment();
-
 		const healCheck = moment(user.lastHeal).add(2, 'h');
 		if (moment(healCheck).isBefore(now)) return true;
 		else return healCheck.format('MMM Do HH:mm');
@@ -340,19 +347,15 @@ Reflect.defineProperty(profile, 'getHeal', {
 
 Reflect.defineProperty(profile, 'setAttack', {
 	value: async function setAttack(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
+		const user = await profile.getUser(id);
 		user.lastAttack = moment().toString();
 		return user.save();
 	},
 });
 Reflect.defineProperty(profile, 'getAttack', {
 	value: async function getAttack(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
+		const user = await profile.getUser(id);
 		const now = moment();
-
 		const attackCheck = moment(user.lastAttack).add(1, 'h');
 		if (moment(attackCheck).isBefore(now)) return true;
 		else return attackCheck.format('MMM Do HH:mm');
@@ -362,9 +365,7 @@ Reflect.defineProperty(profile, 'getAttack', {
 
 Reflect.defineProperty(profile, 'getProtection', {
 	value: async function getProtection(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
+		const user = await profile.getUser(id);
 		const now = moment();
 		const protection = moment(user.protection);
 		if (protection.isAfter(now)) return protection.format('MMM Do HH:mm');
@@ -378,9 +379,7 @@ Reflect.defineProperty(profile, 'addProtection', {
 	* @param {number} hours - Total amount of hours to add to the protection.
 	*/
 	value: async function addProtection(id, hours) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
+		const user = await profile.getUser(id);
 		let protection;
 		const oldProtection = await profile.getProtection(id);
 		if (oldProtection) protection = moment(oldProtection, 'MMM Do HH:mm').add(hours, 'h');
@@ -393,9 +392,7 @@ Reflect.defineProperty(profile, 'addProtection', {
 });
 Reflect.defineProperty(profile, 'resetProtection', {
 	value: async function resetProtection(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-
+		const user = await profile.getUser(id);
 		user.protection = moment().toString();
 		return user.save();
 	},
@@ -404,18 +401,15 @@ Reflect.defineProperty(profile, 'resetProtection', {
 
 Reflect.defineProperty(profile, 'getPColour', {
 	value: async function getPColour(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
-		return user ? user.pColour : '#fcfcfc';
+		const user = await profile.getUser(id);
+		return user.pColour || '#fcfcfc';
 	},
 
 });
 Reflect.defineProperty(profile, 'setPColour', {
 	value: async function setPColour(id, colour) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
+		const user = await profile.getUser(id);
 		if (!colour.startsWith('#')) throw Error('not a valid colour!');
-
 		user.pColour = colour;
 		return user.save();
 	},
