@@ -164,16 +164,20 @@ Reflect.defineProperty(profile, 'attackUser', {
 		const attackerGear = JSON.parse(attacker.equipment);
 		const defenderGear = JSON.parse(defender.equipment);
 
+
 		let weapon = items[attackerGear['weapon'].toLowerCase()];
 		if (!weapon) weapon = {
 			name: 'Fists',
 			damage: [5, 5],
 			emoji: '✊',
 		};
-		const damage = Math.round(weapon.damage[0] + (Math.random() * weapon.damage[1]));
+		const offhand = items[defenderGear['offhand'].toLowerCase()];
+
+		let damage = Math.round(weapon.damage[0] + (Math.random() * weapon.damage[1]));
+		damage *= (offhand.armor - damage) / offhand.armor;
+
 		profile.changeHp(defenderId, -damage);
 		profile.setAttack(attackerId);
-
 		return {
 			weapon: weapon,
 			damage: damage,
