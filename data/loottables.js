@@ -53,11 +53,9 @@ epic.add({ name: 'House', amount: [1, 0] }, 100);
 epic.add({ name: 'House', amount: [2, 0] }, 40);
 epic.add({ name: 'Protection', amount: [2, 0] }, 100);
 epic.add({ name: 'Museum', amount: [1, 0] }, 20);
-epic.add({ name: 'Star', amount: [1, 0] }, 0.1);
-epic.add({ name: 'Rijkszwaard', amount: [1, 0] }, 7);
-epic.add({ name: 'Castle', amount: [1, 0] }, 5);
-epic.add({ name: 'Office', amount: [1, 0] }, 10);
-epic.add({ name: 'Stadium', amount: [1, 0] }, 2);
+epic.add({ name: 'Star', amount: [1, 0] },10);
+epic.add({ name: 'Rijkszwaard', amount: [1, 0] }, 1);
+epic.add({ name: 'Office', amount: [1, 0] }, 1);
 
 
 // cost 130k

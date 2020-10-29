@@ -171,10 +171,10 @@ Reflect.defineProperty(profile, 'attackUser', {
 			damage: [5, 5],
 			emoji: '✊',
 		};
-		const offhand = items[defenderGear['offhand'].toLowerCase()];
+		// const offhand = items[defenderGear['offhand'].toLowerCase()];
 
 		let damage = Math.round(weapon.damage[0] + (Math.random() * weapon.damage[1]));
-		damage *= (offhand.armor - damage) / offhand.armor;
+		// damage *= (offhand.armor - damage) / offhand.armor;
 
 		profile.changeHp(defenderId, -damage);
 		profile.setAttack(attackerId);
