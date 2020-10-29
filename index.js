@@ -42,7 +42,7 @@ const logger = winston.createLogger({
 });
 
 // Load in Commands
-Object.keys(clientCommands).map(key => 	client.commands.set(clientCommands[key].name, clientCommands[key]));
+Object.keys(clientCommands).map(key => client.commands.set(clientCommands[key].name, clientCommands[key]));
 
 // Startup Tasks
 client.login(process.env.TEST_TOKEN);
@@ -80,8 +80,7 @@ client.on('message', async message => {
 	if (!guild) guild = await guildProfile.newGuild(message.guild.id);
 	const prefix = await guildProfile.getPrefix(message.guild.id);
 	const id = message.author.id;
-	let user = await profile.get(id);
-	if (!user) user = await profile.newUser(id);
+	const user = await profile.getUser(id);
 
 
 	// split message for further use

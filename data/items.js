@@ -108,7 +108,7 @@ module.exports = {
 			const nextHeal = await profile.getHeal(msgUser.user_id);
 			if (nextHeal === true) {
 
-				const heal = await profile.addHp(msgUser.user_id, 50);
+				const heal = await profile.changeHp(msgUser.user_id, 50);
 
 				if (heal) {
 					profile.setHeal(msgUser.user_id);
@@ -116,7 +116,7 @@ module.exports = {
 				}
 				else return { succes: false, message: 'You are already at max health' };
 			}
-			else return { succes: false, message: `Your healing is on cooldown, next heal at ${nextHeal}` }; 
+			else return { succes: false, message: `Your healing is on cooldown, next heal at ${nextHeal}` };
 		},
 	},
 
@@ -349,7 +349,7 @@ module.exports = {
 		slot: 'weapon',
 		damage: [54, 9],
 		description: 'A pretty nice shortbow made of surpisingly flexible wood.',
-	}, 
+	},
 	'wooden club': {
 		name: 'Wooden Club',
 		value: 1000,

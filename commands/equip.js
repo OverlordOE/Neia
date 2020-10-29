@@ -25,9 +25,9 @@ module.exports = {
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What item do you want to equip?')
 			.setColor(msgUser.pColour)
-			.setFooter('Use the \`attack\` command to kill people.', client.user.displayAvatarURL());
+			.setFooter('Use the `attack` command to kill people.', client.user.displayAvatarURL());
 
-		if (item) embed.attachFiles(`assets/items/${item.picture}`)
+		if (item) embed.attachFiles(`assets/items/${item.picture}`);
 
 
 		message.channel.send(embed).then(async sentMessage => {
