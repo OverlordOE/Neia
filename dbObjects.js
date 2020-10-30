@@ -164,9 +164,9 @@ Reflect.defineProperty(profile, 'attackUser', {
 		const attackerGear = JSON.parse(attacker.equipment);
 		const defenderGear = JSON.parse(defender.equipment);
 
-
-		let weapon = items[attackerGear['weapon'].toLowerCase()];
-		if (!weapon) weapon = {
+		let weapon
+		if (attackerGear['weapon']) weapon = items[attackerGear['weapon'].toLowerCase()];
+		else weapon = {
 			name: 'Fists',
 			damage: [5, 5],
 			emoji: '✊',
