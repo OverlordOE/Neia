@@ -1,3 +1,4 @@
+/* eslint-disable no-multiple-empty-lines */
 /* eslint-disable space-before-function-paren */
 module.exports = {
 
@@ -356,7 +357,7 @@ module.exports = {
 		picture: 'training_sword.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [30, 10],
+		damage: [40, 20],
 		description: 'Your basic training sword.',
 	},
 
@@ -369,7 +370,7 @@ module.exports = {
 		picture: 'training_staff.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [35, 7],
+		damage: [45, 17],
 		description: 'Your basic training staff.',
 	},
 	'gun': {
@@ -381,7 +382,7 @@ module.exports = {
 		picture: 'gun.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [60, 13],
+		damage: [84, 23],
 		description: 'What are you gonna do with a gun, shoot people?',
 	},
 	'water': {
@@ -393,7 +394,7 @@ module.exports = {
 		picture: 'water.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [100, 20],
+		damage: [140, 40],
 		description: 'WATER! DO YOU WANT TO POISON ME!?',
 	},
 	'spiky rock': {
@@ -405,7 +406,7 @@ module.exports = {
 		picture: 'spiky_rock.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [8, 4],
+		damage: [18, 4],
 		description: 'Its stoning time.',
 	},
 	'rijkszwaard': {
@@ -417,7 +418,7 @@ module.exports = {
 		picture: 'rijkszwaard.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [187, 54],
+		damage: [237, 54],
 		description: 'The legendary Sword of the State. Handcrafted by the best Dutch blacksmiths',
 	},
 	'shortbow': {
@@ -429,7 +430,7 @@ module.exports = {
 		picture: 'shortbow.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [54, 9],
+		damage: [84, 19],
 		description: 'A pretty nice shortbow made of surpisingly flexible wood.',
 	},
 	'wooden club': {
@@ -441,7 +442,7 @@ module.exports = {
 		picture: 'wooden_club.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [13, 9],
+		damage: [39, 9],
 		description: 'A wooden club with a leather bound handle.',
 	},
 	'enchanted waraxe': {
@@ -453,7 +454,7 @@ module.exports = {
 		picture: 'enchanted_waraxe.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [78, 23],
+		damage: [98, 33],
 		description: 'An high quality waraxe that has been enchanted by a mage.',
 	},
 
@@ -500,7 +501,19 @@ module.exports = {
 		picture: 'bronze_buckler.png',
 		ctg: 'equipment',
 		slot: 'offhand',
-		armor: [30, 8],
+		armor: [31, 8],
+		description: 'A beautifully crafted bronze buckler made by artisan elves.',
+	},
+	'Steinturm': {
+		name: 'Steinturm',
+		value: 783020,
+		buyable: false,
+		emoji: '<:bronze_buckler:774975150999339018>',
+		rarity: 'rare',
+		picture: 'bronze_buckler.png',
+		ctg: 'equipment',
+		slot: 'offhand',
+		armor: [80, 28],
 		description: 'A beautifully crafted bronze buckler made by artisan elves.',
 	},
 
