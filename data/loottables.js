@@ -29,6 +29,7 @@ rare.add({ name: 'Ship', amount: [1, 0] }, 100);
 rare.add({ name: 'Jet plane', amount: [1, 0] }, 30);
 rare.add({ name: 'Protection', amount: [1, 0] }, 50);
 rare.add({ name: 'Shortbow', amount: [1, 0] }, 60);
+rare.add({ name: 'Training Shield', amount: [1, 1] }, 70);
 rare.add({ name: 'Training Sword', amount: [1, 1] }, 100);
 rare.add({ name: 'Training Staff', amount: [1, 0] }, 100);
 

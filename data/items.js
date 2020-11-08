@@ -54,6 +54,37 @@ module.exports = {
 		description: 'A mystery chest that can contain really bad loot or really good loot.',
 	},
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// CONSUMABLES
 	'protection': {
 		name: 'Protection',
@@ -119,6 +150,33 @@ module.exports = {
 			else return { succes: false, message: `Your healing is on cooldown, next heal at ${nextHeal}` };
 		},
 	},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	// COLLECTABLES
@@ -264,6 +322,30 @@ module.exports = {
 	},
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// WEAPONS
 	'training sword': {
 		name: 'Training Sword',
@@ -374,4 +456,54 @@ module.exports = {
 		damage: [78, 23],
 		description: 'An high quality waraxe that has been enchanted by a mage.',
 	},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// OFFHANDS
+	'training shield': {
+		name: 'Training Shield',
+		value: 2000,
+		buyable: true,
+		emoji: '<:training_shield:774970651689615361>',
+		rarity: 'uncommon',
+		picture: 'training_shield.png',
+		ctg: 'equipment',
+		slot: 'offhand',
+		armor: [10, 3],
+		description: 'A basic shield given to trainee soldiers.',
+	},
+	'bronze buckler': {
+		name: 'Bronze Buckler',
+		value: 6173,
+		buyable: false,
+		emoji: '<:bronze_buckler:774975150999339018>',
+		rarity: 'rare',
+		picture: 'bronze_buckler.png',
+		ctg: 'equipment',
+		slot: 'offhand',
+		armor: [30, 8],
+		description: 'A beautifully crafted bronze buckler made by artisan elves.',
+	},
+
+
+
 }; 
