@@ -33,4 +33,5 @@ module.exports = {
 	Delete: require('./delete'),
 	Backup: require('./backup'),
 	Test: require('./test'),
+	Update: require('./update'),
 };
