@@ -13,4 +13,4 @@ Neija is a fun bot that has all kinds of random features but is primarily focuse
 To report any bugs or to suggest features you can contact OverlordOE#0717 on discord or join [The support server](https://discord.gg/hFGxVDT) 
 
 
-[Invite link for the bot](https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=bot&permissions=70765633)
+[Invite link for the bot](https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=bot&permissions=1178070081)

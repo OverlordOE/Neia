@@ -103,7 +103,7 @@ module.exports = {
 
 					if (!winner) {
 						misc.lastLottery = lottery + ticketAmount * 10;
-						sentMessage.edit(embed.setDescription(`Current lottery: ${profile.formatNumber(lottery)}💰\n${players}\n\nLottery has ended and the winning number is __&&${winNumber + 1}&&__\n\nNoone won the lottery of ${profile.formatNumber(lottery)}💰!`));
+						sentMessage.edit(embed.setDescription(`Current lottery: ${profile.formatNumber(lottery)}💰\n${players}\n\nLottery has ended and the winning number is __**${winNumber + 1}**__\n\nNoone won the lottery of ${profile.formatNumber(lottery)}💰!`));
 					}
 					writeData = JSON.stringify(misc);
 					fs.writeFileSync('data/miscData.json', writeData);
