@@ -95,6 +95,27 @@ Reflect.defineProperty(profile, 'getItem', {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // EQUIPMENT AND COMBAT
 
 Reflect.defineProperty(profile, 'getEquipment', {
@@ -193,7 +214,28 @@ Reflect.defineProperty(profile, 'attackUser', {
 });
 
 
-// USERS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Misc
 Reflect.defineProperty(profile, 'newUser', {
 	value: async function newUser(id) {
 		const now = moment();
@@ -427,6 +469,39 @@ Reflect.defineProperty(profile, 'setPColour', {
 });
 
 
+Reflect.defineProperty(profile, 'formatNumber', {
+	value: function formatNumber(number) {
+		const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
+		const tier = Math.log10(number) / 3 | 0;
+
+		if (tier == 0) return `**${Math.floor(number)}**`;
+
+		const suffix = SI_SYMBOL[tier];
+		const scale = Math.pow(10, tier * 3);
+
+		const scaled = number / scale;
+		return `**${scaled.toFixed(2) + suffix}**`;
+	},
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // GUILDS
 Reflect.defineProperty(guildProfile, 'newGuild', {
 	value: async function newGuild(id) {
@@ -453,23 +528,6 @@ Reflect.defineProperty(guildProfile, 'setPrefix', {
 
 		guild.prefix = newPrefix;
 		return guild.save();
-	},
-});
-
-
-// MISC
-Reflect.defineProperty(profile, 'formatNumber', {
-	value: function formatNumber(number) {
-		const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
-		const tier = Math.log10(number) / 3 | 0;
-
-		if (tier == 0) return `**${Math.floor(number)}**`;
-
-		const suffix = SI_SYMBOL[tier];
-		const scale = Math.pow(10, tier * 3);
-
-		const scaled = number / scale;
-		return `**${scaled.toFixed(2) + suffix}**`;
 	},
 });
 
