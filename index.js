@@ -64,12 +64,12 @@ client.on('ready', async () => {
 });
 
 // Logger
-client.on('warn', e => logger.warn(e));
-client.on('error', e => logger.error(e));
-process.on('warning', e => logger.warn(e));
-process.on('unhandledRejection', e => logger.error(e));
-process.on('TypeError', e => logger.error(e));
-process.on('uncaughtException', e => logger.error(e));
+client.on('warn', e => console.log(e));
+client.on('error', e =>  console.log(e));
+process.on('warning', e =>  console.log(e));
+process.on('unhandledRejection', e =>  console.log(e));
+process.on('TypeError', e =>  console.log(e));
+process.on('uncaughtException', e =>  console.log(e));
 
 // Command handler
 client.on('message', async message => {
