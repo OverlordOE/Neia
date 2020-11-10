@@ -10,22 +10,20 @@ module.exports = {
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neia V2.3: New chest and stealing items')
+			.setTitle('Neia V2.4: Shields and music fix')
 			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL())
-			.addField('Starting Off', `After alot of failure i finally found a way to let people steal a portion of someones inventory without lagging the whole bot.
+			.addField('Starting Off', `After some prep work i finally got shields to work again, for now they just protect you from some damage but more stats coming soone. I also fixed the music player and added some QoL features too it.
 			\n`)
 
 
-			.addField('**New Features**', `- Added a new weapon: **Wooden Club**.
-						- Added a new weapon: **Enchanted Waraxe**.
-						- Added a new Lootchest: **Mystery chest**. This chest is high risk high reward, you can get something absolutely terrible or something really good out of it.
-						- If you kill someone you will now also steal a portion of their inventory.\n`)
+			.addField('**New Features**', `- You can finally get shields for your offhand slot. Shields protect you from damage by reducing it by their armor stat.
+- Added 4 shields to buy/loot.
+- The music player now shows the thumbnail of the video found
+- The music player will now send a temporary message while it is searching youtube for videos.\n`)
 
 
-			.addField('**Small Changes and Bug Fixes**', `- Increased chance of getting epic chests from dailies and votes.
-						- Lottery now gains more money when noone wins.
-						- Added training weapons to Rare chest.
-						- Added tips at the bottom of commands`);
+			.addField('**Small Changes and Bug Fixes**', `- The music player is finally working again.
+- \`equip\` no longer shows bot pfp.`);
 
 		return message.channel.send(embed);
 	},
