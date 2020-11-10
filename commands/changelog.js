@@ -23,7 +23,10 @@ module.exports = {
 
 
 			.addField('**Small Changes and Bug Fixes**', `- The music player is finally working again.
-- \`equip\` no longer shows bot pfp.`);
+- \`equip\` no longer shows bot pfp.
+- Fixed bug where unarmed attacks dont work.
+- Changed invite link.
+-Removed castle and stadium from epic chest.`);
 
 		return message.channel.send(embed);
 	},
