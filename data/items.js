@@ -1,3 +1,4 @@
+/* eslint-disable no-multiple-empty-lines */
 /* eslint-disable space-before-function-paren */
 module.exports = {
 
@@ -54,6 +55,37 @@ module.exports = {
 		description: 'A mystery chest that can contain really bad loot or really good loot.',
 	},
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// CONSUMABLES
 	'protection': {
 		name: 'Protection',
@@ -119,6 +151,33 @@ module.exports = {
 			else return { succes: false, message: `Your healing is on cooldown, next heal at ${nextHeal}` };
 		},
 	},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	// COLLECTABLES
@@ -264,6 +323,30 @@ module.exports = {
 	},
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// WEAPONS
 	'training sword': {
 		name: 'Training Sword',
@@ -274,7 +357,7 @@ module.exports = {
 		picture: 'training_sword.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [30, 10],
+		damage: [40, 20],
 		description: 'Your basic training sword.',
 	},
 
@@ -287,7 +370,7 @@ module.exports = {
 		picture: 'training_staff.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [35, 7],
+		damage: [45, 17],
 		description: 'Your basic training staff.',
 	},
 	'gun': {
@@ -299,7 +382,7 @@ module.exports = {
 		picture: 'gun.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [60, 13],
+		damage: [84, 23],
 		description: 'What are you gonna do with a gun, shoot people?',
 	},
 	'water': {
@@ -311,7 +394,7 @@ module.exports = {
 		picture: 'water.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [100, 20],
+		damage: [140, 40],
 		description: 'WATER! DO YOU WANT TO POISON ME!?',
 	},
 	'spiky rock': {
@@ -323,7 +406,7 @@ module.exports = {
 		picture: 'spiky_rock.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [8, 4],
+		damage: [18, 4],
 		description: 'Its stoning time.',
 	},
 	'rijkszwaard': {
@@ -335,7 +418,7 @@ module.exports = {
 		picture: 'rijkszwaard.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [187, 54],
+		damage: [237, 54],
 		description: 'The legendary Sword of the State. Handcrafted by the best Dutch blacksmiths',
 	},
 	'shortbow': {
@@ -347,7 +430,7 @@ module.exports = {
 		picture: 'shortbow.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [54, 9],
+		damage: [84, 19],
 		description: 'A pretty nice shortbow made of surpisingly flexible wood.',
 	},
 	'wooden club': {
@@ -359,7 +442,7 @@ module.exports = {
 		picture: 'wooden_club.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [13, 9],
+		damage: [39, 9],
 		description: 'A wooden club with a leather bound handle.',
 	},
 	'enchanted waraxe': {
@@ -371,7 +454,81 @@ module.exports = {
 		picture: 'enchanted_waraxe.png',
 		ctg: 'equipment',
 		slot: 'weapon',
-		damage: [78, 23],
+		damage: [98, 33],
 		description: 'An high quality waraxe that has been enchanted by a mage.',
 	},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// OFFHANDS
+	'training shield': {
+		name: 'Training Shield',
+		value: 2000,
+		buyable: true,
+		emoji: '<:training_shield:774970651689615361>',
+		rarity: 'uncommon',
+		picture: 'training_shield.png',
+		ctg: 'equipment',
+		slot: 'offhand',
+		armor: [10, 3],
+		description: 'A basic shield given to trainee soldiers.',
+	},
+	'bronze buckler': {
+		name: 'Bronze Buckler',
+		value: 6173,
+		buyable: false,
+		emoji: '<:bronze_buckler:774975150999339018>',
+		rarity: 'rare',
+		picture: 'bronze_buckler.png',
+		ctg: 'equipment',
+		slot: 'offhand',
+		armor: [31, 8],
+		description: 'A beautifully crafted bronze buckler made by artisan elves.',
+	},
+	'steinturm': {
+		name: 'Steinturm',
+		value: 783020,
+		buyable: false,
+		emoji: '<:steinturm:774979910351585290>',
+		rarity: 'legendary',
+		picture: 'steinturm.png',
+		ctg: 'equipment',
+		slot: 'offhand',
+		armor: [80, 28],
+		description: 'An ancient magical stone shield that doesnt seem to take any damage.',
+	},
+	'obsidian shield': {
+		name: 'Obsidian Shield',
+		value: 19485,
+		buyable: false,
+		emoji: '<:obsidian_shield:774979910040682516>',
+		rarity: 'epic',
+		picture: 'obsidian_shield.png',
+		ctg: 'equipment',
+		slot: 'offhand',
+		armor: [53, 19],
+		description: 'A solid obsidian shield that was forged in the deepest layers of earth.',
+	},
+
+
+
 }; 

@@ -45,6 +45,7 @@ module.exports = {
 
 			if (item.ctg == 'equipment') {
 				if (item.slot == 'weapon') embed.addField('Damage', `${item.damage[0]} - ${item.damage[1] + item.damage[0]}`);
+				if (item.slot == 'offhand') embed.addField('Armor', `${item.armor[0]} - ${item.armor[1] + item.armor[0]}`);
 			}
 		}
 		else {

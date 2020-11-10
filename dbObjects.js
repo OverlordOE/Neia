@@ -95,6 +95,27 @@ Reflect.defineProperty(profile, 'getItem', {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // EQUIPMENT AND COMBAT
 
 Reflect.defineProperty(profile, 'getEquipment', {
@@ -164,17 +185,26 @@ Reflect.defineProperty(profile, 'attackUser', {
 		const attackerGear = JSON.parse(attacker.equipment);
 		const defenderGear = JSON.parse(defender.equipment);
 
-		let weapon
+
+		let weapon;
 		if (attackerGear['weapon']) weapon = items[attackerGear['weapon'].toLowerCase()];
 		else weapon = {
 			name: 'Fists',
 			damage: [5, 5],
 			emoji: '✊',
 		};
-		// const offhand = items[defenderGear['offhand'].toLowerCase()];
+
+    let offhand;
+		if (defenderGear['offhand']) offhand = items[defenderGear['offhand'].toLowerCase()];
+		else offhand = {
+			armor: [1, 1],
+		};
 
 		let damage = Math.round(weapon.damage[0] + (Math.random() * weapon.damage[1]));
-		// damage *= (offhand.armor - damage) / offhand.armor;
+		damage -= Math.round(offhand.armor[0] + (Math.random() * offhand.armor[1]));
+
+		if (damage < 0) damage = 0;
+
 
 		profile.changeHp(defenderId, -damage);
 		profile.setAttack(attackerId);
@@ -186,7 +216,28 @@ Reflect.defineProperty(profile, 'attackUser', {
 });
 
 
-// USERS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Misc
 Reflect.defineProperty(profile, 'newUser', {
 	value: async function newUser(id) {
 		const now = moment();
@@ -420,6 +471,39 @@ Reflect.defineProperty(profile, 'setPColour', {
 });
 
 
+Reflect.defineProperty(profile, 'formatNumber', {
+	value: function formatNumber(number) {
+		const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
+		const tier = Math.log10(number) / 3 | 0;
+
+		if (tier == 0) return `**${Math.floor(number)}**`;
+
+		const suffix = SI_SYMBOL[tier];
+		const scale = Math.pow(10, tier * 3);
+
+		const scaled = number / scale;
+		return `**${scaled.toFixed(2) + suffix}**`;
+	},
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // GUILDS
 Reflect.defineProperty(guildProfile, 'newGuild', {
 	value: async function newGuild(id) {
@@ -446,23 +530,6 @@ Reflect.defineProperty(guildProfile, 'setPrefix', {
 
 		guild.prefix = newPrefix;
 		return guild.save();
-	},
-});
-
-
-// MISC
-Reflect.defineProperty(profile, 'formatNumber', {
-	value: function formatNumber(number) {
-		const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
-		const tier = Math.log10(number) / 3 | 0;
-
-		if (tier == 0) return `**${Math.floor(number)}**`;
-
-		const suffix = SI_SYMBOL[tier];
-		const scale = Math.pow(10, tier * 3);
-
-		const scaled = number / scale;
-		return `**${scaled.toFixed(2) + suffix}**`;
 	},
 });
 

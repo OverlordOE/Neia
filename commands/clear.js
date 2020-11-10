@@ -15,6 +15,7 @@ module.exports = {
 			const guildIDData = options.active.get(message.guild.id);
 			guildIDData.queue = [];
 			guildIDData.dispatcher.emit('finish');
+			message.reply('cleared the queue.');
 		}
 		catch (error) {
 			message.reply('there is no queue to clear.');

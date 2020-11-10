@@ -1,6 +1,5 @@
-const ytdl = require('ytdl-core-discord');
-const YouTube = require('discord-youtube-api');
-const ytAPI = process.env.YT_API;
+const ytdl = require('discord-ytdl-core');
+const { getInfo } = require('ytdl-getinfo');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -21,9 +20,7 @@ module.exports = {
 			.setThumbnail(message.author.displayAvatarURL())
 			.setColor(msgUser.pColour);
 
-		const youtube = new YouTube(ytAPI);
 		const search = args.join(' ');
-		let video;
 		const data = options.active.get(message.guild.id) || {};
 
 		try {
@@ -44,24 +41,27 @@ module.exports = {
 		if (data.queue.length >= 4) return message.channel.send(embed.setdescription('you have reached the maximum queue size for free users.\nIf you want to upgrade your queue size contact OverlordOE#0717.'));
 		data.guildID = message.guild.id;
 
-		try {
-			if (await ytdl.validateURL(search)) video = await youtube.getVideo(search);
-			else video = await youtube.searchVideos(search);
-
+		const tempMessage = await message.channel.send('Finding youtube video...');
+		const info = await getInfo(search);
+		const video = info.items[0];
+		if (video) {
 			data.queue.push({
 				songTitle: video.title,
 				requester: message.author,
-				url: video.url,
+				url: video.webpage_url,
 				announceChannel: message.channel.id,
-				duration: video.length,
+				duration: video.duration,
+				thumbnail: video.thumbnail,
 			});
-
-		} catch (error) {
-			if (data.queue.length < 1) data.dispatcher.emit('finish');
+			embed.setThumbnail(video.thumbnail);
+		}
+		else {
 			logger.warn(`Could not find youtube video with search terms ${search}`);
-			return message.channel.send(embed.setdescription(`Neia could not find any video connected to the search terms of \`${search}\``));
+			tempMessage.delete();
+			return message.channel.send(embed.setDescription(`Neia could not find any video connected to the search terms of \`${search}\``));
 		}
 
+		tempMessage.delete();
 		if (!data.dispatcher) Play(client, options, data, logger, msgUser, message);
 		else message.channel.send(embed.setDescription(`Added **${video.title}** to the queue.\n\nRequested by ${message.author}`));
 
@@ -74,14 +74,15 @@ async function Play(client, options, data, logger, msgUser, message) {
 
 	const channel = client.channels.cache.get(data.queue[0].announceChannel);
 	const embed = new Discord.MessageEmbed()
-		.setThumbnail(data.queue[0].requester.displayAvatarURL())
-		.setColor(msgUser.pColour);
+		.setColor(msgUser.pColour)
+		.setThumbnail(data.queue[0].thumbnail);
 
 	channel.send(embed.setDescription(`Now playing **${data.queue[0].songTitle}**\nRequested by ${data.queue[0].requester}`));
 
 	data.dispatcher = data.connection.play(await ytdl(data.queue[0].url, {
 		filter: 'audioonly',
 		highWaterMark: 1 << 25,
+		opusEncoded: true,
 	}), { type: 'opus' });
 	data.dispatcher.guildID = data.guildID;
 
