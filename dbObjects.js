@@ -185,6 +185,7 @@ Reflect.defineProperty(profile, 'attackUser', {
 		const attackerGear = JSON.parse(attacker.equipment);
 		const defenderGear = JSON.parse(defender.equipment);
 
+
 		let weapon;
 		if (attackerGear['weapon']) weapon = items[attackerGear['weapon'].toLowerCase()];
 		else weapon = {
@@ -193,7 +194,7 @@ Reflect.defineProperty(profile, 'attackUser', {
 			emoji: '✊',
 		};
 
-		let offhand;
+    let offhand;
 		if (defenderGear['offhand']) offhand = items[defenderGear['offhand'].toLowerCase()];
 		else offhand = {
 			armor: [1, 1],
@@ -203,6 +204,7 @@ Reflect.defineProperty(profile, 'attackUser', {
 		damage -= Math.round(offhand.armor[0] + (Math.random() * offhand.armor[1]));
 
 		if (damage < 0) damage = 0;
+
 
 		profile.changeHp(defenderId, -damage);
 		profile.setAttack(attackerId);
