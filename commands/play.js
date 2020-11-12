@@ -1,5 +1,5 @@
 const ytdl = require('discord-ytdl-core');
-const { getInfo } = require('ytdl-getinfo');
+const YouTube = require("youtube-sr");
 const Discord = require('discord.js');
 
 module.exports = {
@@ -42,18 +42,18 @@ module.exports = {
 		data.guildID = message.guild.id;
 
 		const tempMessage = await message.channel.send('Finding youtube video...');
-		const info = await getInfo(search);
-		const video = info.items[0];
+		const info = await YouTube.search(search, { limit: 1 });
+		const video = info[0];
 		if (video) {
 			data.queue.push({
 				songTitle: video.title,
 				requester: message.author,
-				url: video.webpage_url,
+				url: video.url,
 				announceChannel: message.channel.id,
-				duration: video.duration,
-				thumbnail: video.thumbnail,
+				duration: video.durationFormatted,
+				thumbnail: video.thumbnail.url,
 			});
-			embed.setThumbnail(video.thumbnail);
+			embed.setThumbnail(video.thumbnail.url);
 		}
 		else {
 			logger.warn(`Could not find youtube video with search terms ${search}`);
