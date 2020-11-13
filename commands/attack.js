@@ -22,19 +22,19 @@ module.exports = {
 			const targetMention = message.mentions.users.first();
 			if (!targetMention) return sentMessage.edit(embed.setDescription('Mention the user you want to attack.'));
 
-			const lastAttack = await profile.getAttack(msgUser);
+			const lastAttack = profile.getAttack(msgUser);
 			if (lastAttack !== true) return sentMessage.edit(embed.setDescription(`Your attack is on cooldown. Your next attack is available at ${lastAttack}`));
 
 			const target = await profile.getUser(targetMention.id);
 			// if (target.networth < 30000) return sentMessage.edit(embed.setDescription(`${targetMention} user needs to have a networth of atleast 30k to be attacked.`));
 			// if (msgUser.networth < 30000) return sentMessage.edit(embed.setDescription('You need to have a networth of atleast 30k to attack someone.'));
 
-			const protection = await profile.getProtection(target);
+			const protection = profile.getProtection(target);
 			if (protection !== false) return sentMessage.edit(embed.setDescription(`*${targetMention}* has protection against attacks, you cannot attack them untill ${protection}.`));
 
 
 			// Attack resolution
-			const attackResult = await profile.attackUser(msgUser, target);
+			const attackResult = profile.attackUser(msgUser, target);
 			sentMessage.edit(embed.setDescription(`You have attacked ${targetMention} with your ${attackResult.weapon.emoji}${attackResult.weapon.name} for **${attackResult.damage}** damage`));
 
 
@@ -51,7 +51,7 @@ module.exports = {
 					for (let i = 0; lootListValue <= networth / 5; i++) {
 						const nextIndex = Math.floor(Math.random() * inventory.length);
 
-						const loot = await profile.getItem(inventory[nextIndex].name);
+						const loot = profile.getItem(inventory[nextIndex].name);
 						if (inventory[nextIndex].amount > 1) inventory[nextIndex].amount--;
 						else inventory.splice(nextIndex, 1);
 
@@ -61,7 +61,7 @@ module.exports = {
 					}
 
 					for (const loot in lootList) {
-						const lootItem = await profile.getItem(loot);
+						const lootItem = profile.getItem(loot);
 						description += `\n${profile.formatNumber(lootList[loot])} ${lootItem.emoji}__${lootItem.name}__`;
 						profile.addItem(msgUser, lootItem, lootList[loot]);
 						profile.removeItem(target, lootItem, lootList[loot]);

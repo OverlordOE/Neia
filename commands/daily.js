@@ -9,15 +9,15 @@ module.exports = {
 	cooldown: 5,
 	usage: '',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
-		const daily = await profile.getDaily(msgUser);
+	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+		const daily = profile.getDaily(msgUser);
 		let chest;
 
 		const luck = Math.floor(Math.random() * 5);
 		if (luck == 0) chest = 'Epic chest';
 		if (luck == 1) chest = 'Mystery chest';
 		else chest = 'Rare chest';
-		chest = await profile.getItem(chest);
+		chest = profile.getItem(chest);
 
 
 		const embed = new Discord.MessageEmbed()
@@ -31,7 +31,7 @@ module.exports = {
 			if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
 				.setImage(`attachment://${chest.picture}`);
 
-			const income = await profile.calculateIncome(msgUser);
+			const income = profile.calculateIncome(msgUser);
 			profile.addMoney(msgUser, income.daily);
 			profile.addItem(msgUser, chest, 1);
 			profile.setDaily(msgUser);

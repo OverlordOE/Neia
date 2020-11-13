@@ -8,7 +8,7 @@ module.exports = {
 	usage: '',
 	cooldown: 5,
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
 		if (!message.member.voice.channel)return message.reply('you are not in a voice channel.');
 		
 		try {

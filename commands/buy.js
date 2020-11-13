@@ -9,7 +9,7 @@ module.exports = {
 	cooldown: 5,
 	args: false,
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 		const filter = m => m.author.id === message.author.id;
 		let amount = 0;
@@ -18,9 +18,9 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Shop')
-			.setThumbnail(message.author.displayAvatarURL())
+			.setThumbnail(message.author.displayAvatarURL());
 			
-		message.channel.send(embed).then(async sentMessage => {
+		message.channel.send(embed).then(sentMessage => {
 
 			for (let i = 0; i < args.length; i++) {
 				if (!(isNaN(args[i]))) amount = parseInt(args[i]);
@@ -29,7 +29,7 @@ module.exports = {
 				else temp += `${args[i]}`;
 			}
 
-			item = await profile.getItem(temp);
+			item = profile.getItem(temp);
 			if (item.buyable) buy(profile, sentMessage, amount, embed, item, msgUser);
 			else if (item) sentMessage.edit(embed.setDescription('You can\'t buy this item?'));
 
@@ -37,8 +37,8 @@ module.exports = {
 				sentMessage.edit(embed.setDescription('What item do you want to buy?'));
 				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
-					.then(async collected => {
-						item = await profile.getItem(collected.first().content);
+					.then(collected => {
+						item = profile.getItem(collected.first().content);
 
 						if (item && !item.buyable) return sentMessage.edit(embed.setDescription('You can\'t buy this item?'));
 						else if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not a valid item.`));
@@ -47,7 +47,7 @@ module.exports = {
 						sentMessage.edit(embed.setDescription(`How many __${item.name}(s)__ do you want to buy?`)).then(() => {
 							message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
-								.then(async collected => {
+								.then(collected => {
 									amount = parseInt(collected.first().content);
 									collected.first().delete();
 									buy(profile, sentMessage, amount, embed, item, msgUser);
@@ -67,7 +67,7 @@ module.exports = {
 	},
 };
 
-async function buy(profile, sentMessage, amount, embed, item, msgUser) {
+function buy(profile, sentMessage, amount, embed, item, msgUser) {
 
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 	else if (amount < 1) amount = 1;

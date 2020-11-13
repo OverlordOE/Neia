@@ -31,7 +31,7 @@ module.exports = {
 
 			if (amount > 1) {
 
-				const item = await profile.getItem(`${chest} chest`);
+				const item = profile.getItem(`${chest} chest`);
 				if (!await profile.hasItem(msgUser, item, amount)) return message.reply(`You don't have ${amount} __${item.name}(s)__!`);
 				lootEmbed.setTitle(`${amount} ${chest} chests`);
 
@@ -46,7 +46,7 @@ module.exports = {
 				}
 
 				for (const loot in lootlist) {
-					const lootItem = await profile.getItem(loot);
+					const lootItem = profile.getItem(loot);
 					description += `\n**${profile.formatNumber(lootlist[loot])}** ${lootItem.emoji}__${lootItem.name}__`;
 					profile.addItem(msgUser, lootItem, lootlist[loot]);
 				}
@@ -59,11 +59,11 @@ module.exports = {
 				profile.removeItem(msgUser, item, amount);
 			}
 			else {
-				const item = await profile.getItem(`${chest} chest`);
+				const item = profile.getItem(`${chest} chest`);
 				if (!await profile.hasItem(msgUser, item, amount)) return message.reply(`You don't have ${amount} __${item.name}(s)__!`);
 
 				const loot = loottable[chest]();
-				const lootItem = await profile.getItem(loot.name);
+				const lootItem = profile.getItem(loot.name);
 				const itemAmount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 

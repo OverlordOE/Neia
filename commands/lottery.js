@@ -34,7 +34,7 @@ module.exports = {
 			return ['💰', '🔔'].includes(reaction.emoji.name) && !user.bot;
 		};
 
-		await channel.send(embed)
+		channel.send(embed)
 			.then(sentMessage => {
 				sentMessage.react('💰');
 				sentMessage.react('🔔');

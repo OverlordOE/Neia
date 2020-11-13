@@ -55,37 +55,37 @@ module.exports = {
 		description: 'A mystery chest that can contain really bad loot or really good loot.',
 	},
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// CONSUMABLES
 	'protection': {
 		name: 'Protection',
@@ -96,12 +96,12 @@ module.exports = {
 		picture: null,
 		ctg: 'consumable',
 		description: 'You can use this to gain 8 hours of protection against attacks. If you use any of the money commands your protection will be reset\nThis item stacks.',
-		use: async function (profile, amount, embed, item, msgUser) {
-			const protection = await profile.addProtection(msgUser.user_id, amount * 8);
+		use: function (profile, amount, embed, item, msgUser) {
+			const protection = profile.addProtection(msgUser.user_id, amount * 8);
 			return { succes: true, message: `You have activated your protection.\nIt will last untill __${protection}__` };
 		},
 	},
-	
+
 	'healing potion': {
 		name: 'Healing Potion',
 		value: 2600,
@@ -111,17 +111,14 @@ module.exports = {
 		picture: 'hp.png',
 		ctg: 'consumable',
 		description: 'Restores 50 HP',
-		use: async function (profile, amount, embed, item, msgUser) {
-			const nextHeal = await profile.getHeal(msgUser.user_id);
+		use: function (profile, amount, embed, item, msgUser) {
+			const nextHeal = profile.getHeal(msgUser.user_id);
 			if (nextHeal === true) {
-
-				const heal = await profile.changeHp(msgUser.user_id, 50);
-
-				if (heal) {
-					profile.setHeal(msgUser.user_id);
-					return { succes: true, message: `You healed **${heal}**<:health:730849477765890130>.\nCurrent <:health:730849477765890130> is **${await profile.getHp(msgUser.user_id)}/${1000}<:health:730849477765890130>**.` };
-				}
-				else return { succes: false, message: 'You are already at max health' };
+				const curHP = profile.changeHp(msgUser.user_id, 50);
+				let heal = 50;
+				if (msgUser.hp > 950) heal = 1000 - msgUser.hp;
+				profile.setHeal(msgUser.user_id);
+				return { succes: true, message: `You healed **${heal}**<:health:730849477765890130>.\nCurrent <:health:730849477765890130> is **${curHP}/${1000}<:health:730849477765890130>**.` };
 			}
 			else return { succes: false, message: `Your healing is on cooldown, next heal at ${nextHeal}` };
 		},

@@ -26,6 +26,8 @@ Reflect.defineProperty(profile, 'newUser', {
 			balance: 0,
 			totalEarned: 0,
 			networth: 0,
+			level: 1,
+			exp: 0,
 			hp: 1000,
 			equipment: JSON.stringify({ weapon: null, offhand: null }),
 			lastDaily: now.subtract(2, 'days').toString(),
@@ -68,7 +70,7 @@ Reflect.defineProperty(profile, 'newUser', {
 // EQUIPMENT AND COMBAT
 
 Reflect.defineProperty(profile, 'getEquipment', {
-	value: async function getEquipment(user) {
+	value: function getEquipment(user) {
 		return JSON.parse(user.equipment);
 	},
 });
@@ -92,7 +94,7 @@ Reflect.defineProperty(profile, 'equip', {
 });
 
 Reflect.defineProperty(profile, 'changeHp', {
-	value: async function changeHp(user, amount) {
+	value:  function changeHp(user, amount) {
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 
 		const hp = Number(user.hp);
@@ -104,14 +106,10 @@ Reflect.defineProperty(profile, 'changeHp', {
 		else user.hp = hp + Number(amount);
 
 		user.save();
-		return amount;
-	},
-});
-Reflect.defineProperty(profile, 'getHp', {
-	value: async function getHp(user) {
 		return user.hp;
 	},
 });
+
 
 Reflect.defineProperty(profile, 'attackUser', {
 	/**
@@ -119,7 +117,7 @@ Reflect.defineProperty(profile, 'attackUser', {
 	* @param {string} attacker - The id of the Attacking user.
 	* @param {string} defender - The id of the Defending user.
 	*/
-	value: async function attackUser(attacker, defender) {
+	value:  function attackUser(attacker, defender) {
 		const attackerGear = JSON.parse(attacker.equipment);
 		const defenderGear = JSON.parse(defender.equipment);
 
@@ -301,7 +299,7 @@ Reflect.defineProperty(profile, 'addMoney', {
 
 
 Reflect.defineProperty(profile, 'calculateIncome', {
-	value: async function calculateIncome(user) {
+	value:  function calculateIncome(user) {
 		const uItems = await profile.getInventory(user);
 		let networth = 0;
 		let income = 0;
@@ -325,7 +323,7 @@ Reflect.defineProperty(profile, 'calculateIncome', {
 });
 
 Reflect.defineProperty(profile, 'getDaily', {
-	value: async function getDaily(user) {
+	value:  function getDaily(user) {
 		const now = moment();
 		const dCheck = moment(user.lastDaily).add(1, 'd');
 		if (moment(dCheck).isBefore(now)) return true;
@@ -333,14 +331,14 @@ Reflect.defineProperty(profile, 'getDaily', {
 	},
 });
 Reflect.defineProperty(profile, 'setDaily', {
-	value: async function setDaily(user) {
+	value:  function setDaily(user) {
 		user.lastDaily = moment().toString();
 		return user.save();
 	},
 });
 
 Reflect.defineProperty(profile, 'getHourly', {
-	value: async function getHourly(user) {
+	value:  function getHourly(user) {
 		const now = moment();
 		const hCheck = moment(user.lastHourly).add(1, 'h');
 		if (moment(hCheck).isBefore(now)) return true;
@@ -348,7 +346,7 @@ Reflect.defineProperty(profile, 'getHourly', {
 	},
 });
 Reflect.defineProperty(profile, 'setHourly', {
-	value: async function setHourly(user) {
+	value:  function setHourly(user) {
 		user.lastHourly = moment().toString();
 		return user.save();
 	},
@@ -356,13 +354,13 @@ Reflect.defineProperty(profile, 'setHourly', {
 
 
 Reflect.defineProperty(profile, 'setVote', {
-	value: async function setVote(user) {
+	value:  function setVote(user) {
 		user.lastVote = moment().toString();
 		return user.save();
 	},
 });
 Reflect.defineProperty(profile, 'getVote', {
-	value: async function getVote(user) {
+	value:  function getVote(user) {
 		const now = moment();
 		const vCheck = moment(user.lastVote).add(12, 'h');
 		if (moment(vCheck).isBefore(now)) return true;
@@ -372,13 +370,13 @@ Reflect.defineProperty(profile, 'getVote', {
 
 
 Reflect.defineProperty(profile, 'setHeal', {
-	value: async function setHeal(user) {
+	value:  function setHeal(user) {
 		user.lastHeal = moment().toString();
 		return user.save();
 	},
 });
 Reflect.defineProperty(profile, 'getHeal', {
-	value: async function getHeal(user) {
+	value:  function getHeal(user) {
 		const now = moment();
 		const healCheck = moment(user.lastHeal).add(2, 'h');
 		if (moment(healCheck).isBefore(now)) return true;
@@ -388,13 +386,13 @@ Reflect.defineProperty(profile, 'getHeal', {
 
 
 Reflect.defineProperty(profile, 'setAttack', {
-	value: async function setAttack(user) {
+	value:  function setAttack(user) {
 		user.lastAttack = moment().toString();
 		return user.save();
 	},
 });
 Reflect.defineProperty(profile, 'getAttack', {
-	value: async function getAttack(user) {
+	value:  function getAttack(user) {
 		const now = moment();
 		const attackCheck = moment(user.lastAttack).add(1, 'h');
 		if (moment(attackCheck).isBefore(now)) return true;
@@ -404,7 +402,7 @@ Reflect.defineProperty(profile, 'getAttack', {
 
 
 Reflect.defineProperty(profile, 'getProtection', {
-	value: async function getProtection(user) {
+	value:  function getProtection(user) {
 		const now = moment();
 		const protection = moment(user.protection);
 		if (protection.isAfter(now)) return protection.format('MMM Do HH:mm');
@@ -417,9 +415,9 @@ Reflect.defineProperty(profile, 'addProtection', {
 	* @param {string} user - The user that will receive the protection.
 	* @param {number} hours - Total amount of hours to add to the protection.
 	*/
-	value: async function addProtection(user, hours) {
+	value:  function addProtection(user, hours) {
 		let protection;
-		const oldProtection = await profile.getProtection(user);
+		const oldProtection = profile.getProtection(user);
 		if (oldProtection) protection = moment(oldProtection, 'MMM Do HH:mm').add(hours, 'h');
 		else protection = moment().add(hours, 'h');
 
@@ -429,7 +427,7 @@ Reflect.defineProperty(profile, 'addProtection', {
 	},
 });
 Reflect.defineProperty(profile, 'resetProtection', {
-	value: async function resetProtection(user) {
+	value:  function resetProtection(user) {
 		user.protection = moment().toString();
 		return user.save();
 	},

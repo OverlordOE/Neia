@@ -16,7 +16,7 @@ module.exports = {
 			return message.channel.send(`Added ${profile.formatNumber(amount)} to every available user`);
 		}
 		else if (args[0] == 'item') {
-			const item = await profile.getItem(args[1]);
+			const item = profile.getItem(args[1]);
 			profile.addItem(targetUser, item, args[2]);
 			return message.channel.send(`Added ${args[2]} __${args[1]}__ to ${target}`);
 		}

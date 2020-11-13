@@ -9,7 +9,7 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 		let consumable = '__**Consumables:**__\n';
 		let collectables = '__**Collectables:**__\n';

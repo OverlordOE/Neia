@@ -9,7 +9,7 @@ module.exports = {
 	args: false,
 	usage: '<item>',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		let temp = '';
 		let embed;
 
@@ -20,7 +20,7 @@ module.exports = {
 
 
 		if (temp) {
-			const item = await profile.getItem(temp);
+			const item = profile.getItem(temp);
 			if (!item) return message.reply(`${item} is not a valid item`);
 
 			embed = new Discord.MessageEmbed()

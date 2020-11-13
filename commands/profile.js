@@ -21,12 +21,12 @@ module.exports = {
 		const items = await profile.getInventory(userProfile);
 		const pColour = userProfile.pColour;
 
-		const prot = await profile.getProtection(userProfile);
-		let daily = await profile.getDaily(userProfile);
-		let hourly = await profile.getHourly(userProfile);
-		let vote = await profile.getVote(userProfile);
-		let heal = await profile.getHeal(userProfile);
-		let attack = await profile.getAttack(userProfile);
+		const prot = profile.getProtection(userProfile);
+		let daily = profile.getDaily(userProfile);
+		let hourly = profile.getHourly(userProfile);
+		let vote = profile.getVote(userProfile);
+		let heal = profile.getHeal(userProfile);
+		let attack = profile.getAttack(userProfile);
 
 		if (daily === true) daily = 'now';
 		if (hourly === true) hourly = 'now';
@@ -68,7 +68,7 @@ module.exports = {
 				inventory += `${item.emoji}${item.name}: ${profile.formatNumber(i.amount)}\n`;
 			});
 
-			const income = await profile.calculateIncome(userProfile);
+			const income = profile.calculateIncome(userProfile);
 			invEmbed.addField('Max passive income', `${profile.formatNumber(income.income)}💰`);
 			invEmbed.addField('Networth', `${profile.formatNumber(income.networth)}💰`, true);
 
@@ -77,7 +77,7 @@ module.exports = {
 		else invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`);
 
 
-		const equipment = await profile.getEquipment(userProfile);
+		const equipment = profile.getEquipment(userProfile);
 		let statDescription = `HP: ${userProfile.hp}/1000 <:health:730849477765890130>\n`;
 		for (const slot in equipment) {
 			if (equipment[slot]) {

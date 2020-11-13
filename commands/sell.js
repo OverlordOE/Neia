@@ -12,7 +12,7 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 		const filter = m => m.author.id === msgUser;
 		let amount = 1;
@@ -70,7 +70,7 @@ module.exports = {
 				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 					.then(async collected => {
-						const item = await profile.getItem(collected.first().content);
+						const item = profile.getItem(collected.first().content);
 						if (!item) return sentMessage.edit(embed.setDescription(`\`${collected.first().content}\` is not a valid item.`));
 						collected.first().delete();
 
@@ -100,7 +100,7 @@ module.exports = {
 };
 
 
-async function sell(profile, sentMessage, amount, embed, item, msgUser) {
+function sell(profile, sentMessage, amount, embed, item, msgUser) {
 
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 	else if (amount < 1) amount = 1;
@@ -112,7 +112,7 @@ async function sell(profile, sentMessage, amount, embed, item, msgUser) {
 		return sentMessage.edit(embed.setDescription(`You do not have ${amount} ${item.emoji}__${item.name}(s)__! Selling cancelled.`));
 	}
 
-	const balance = await profile.addMoney(msgUser, refundAmount);
+	const balance = profile.addMoney(msgUser, refundAmount);
 
 	sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${profile.formatNumber(refundAmount)}💰 back.\nYour balance is ${profile.formatNumber(balance)}💰!`));
 }

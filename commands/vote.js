@@ -9,8 +9,8 @@ module.exports = {
 	cooldown: 5,
 	usage: '',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
-		const vote = await profile.getVote(msgUser);
+	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+		const vote = profile.getVote(msgUser);
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Vote for Neia!')
 			.setThumbnail(message.author.displayAvatarURL())

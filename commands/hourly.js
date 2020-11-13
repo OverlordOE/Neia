@@ -9,15 +9,15 @@ module.exports = {
 	cooldown: 5,
 	category: 'economy',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
-		const hourly = await profile.getHourly(msgUser);
+	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+		const hourly = profile.getHourly(msgUser);
 		let chest;
 
 		const luck = Math.floor(Math.random() * 6);
 		if (luck == 0) chest = 'Mystery Chest';
 		else if (luck == 1 || luck == 2) chest = 'Rare chest';
 		else chest = 'Common Chest';
-		chest = await profile.getItem(chest);
+		chest = profile.getItem(chest);
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Hourly Reward')
@@ -31,7 +31,7 @@ module.exports = {
 			if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
 				.setImage(`attachment://${chest.picture}`);
 
-			const income = await profile.calculateIncome(msgUser);
+			const income = profile.calculateIncome(msgUser);
 			const balance = profile.addMoney(msgUser, income.hourly);
 			profile.addItem(msgUser, chest, 1);
 			profile.setHourly(msgUser);

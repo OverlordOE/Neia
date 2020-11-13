@@ -120,7 +120,7 @@ async function oneInFive(msgUser, oldBalance, profile, logger, gambleAmount, sen
 
 
 			if (reaction.emoji.name === emojiCharacters[answer]) {
-				const balance = await profile.addMoney(msgUser, winAmount);
+				const balance = profile.addMoney(msgUser, winAmount);
 				embed.setColor('#00fc43');
 				sentMessage.edit(embed.setDescription(`Correct! You have successfully won ${profile.formatNumber(winAmount)}💰.\nYour current balance is ${profile.formatNumber(balance)}💰`));
 			}
@@ -199,22 +199,22 @@ async function blackjack(msgUser, oldBalance, profile, logger, gambleAmount, sen
 				if (playerHandValue > 21) sentMessage.edit(embed.setDescription(`__You busted__\n\nYour balance is ${profile.formatNumber(oldBalance)}💰`).setColor('#fc0303'));
 
 				else if (botHandValue > 21) {
-					const balance = await profile.addMoney(msgUser, winAmount);
+					const balance = profile.addMoney(msgUser, winAmount);
 					sentMessage.edit(embed.setDescription(`__The bot busted__. You Win!\n\nYou won ${winAmount}💰 and your balance is ${profile.formatNumber(balance)}💰`).setColor('#00fc43'));
 				}
 
 				else if (cardsDrawn >= 5) {
-					const balance = await profile.addMoney(msgUser, winAmount);
+					const balance = profile.addMoney(msgUser, winAmount);
 					return sentMessage.edit(embed.setDescription(`You have drawn 5 cards without busting.\n__You win__\n\nYou won ${winAmount}💰 and your balance is ${profile.formatNumber(balance)}💰`).setColor('#00fc43'));
 				}
 
 				else if (botHandValue == playerHandValue) {
-					const balance = await profile.addMoney(msgUser, gambleAmount);
+					const balance = profile.addMoney(msgUser, gambleAmount);
 					sentMessage.edit(embed.setDescription(`__Its a draw__\n\nYour balance is ${profile.formatNumber(balance)}💰`));
 				}
 
 				else if (playerHandValue > botHandValue) {
-					const balance = await profile.addMoney(msgUser, winAmount);
+					const balance = profile.addMoney(msgUser, winAmount);
 					sentMessage.edit(embed.setDescription(`__You win__\n\nYou won ${winAmount}💰 and your balance is ${profile.formatNumber(balance)}💰`).setColor('#00fc43'));
 				}
 
@@ -312,7 +312,7 @@ async function RPS(msgUser, oldBalance, profile, logger, gambleAmount, sentMessa
 				case '✊':
 
 					if (answer == 1) {
-						const balance = await profile.addMoney(msgUser, gambleAmount);
+						const balance = profile.addMoney(msgUser, gambleAmount);
 						sentMessage.edit(embed.setDescription(`The bot chooses ✊. __It's a tie!__\nYour balance is ${profile.formatNumber(balance)}💰`));
 					}
 					else if (answer == 2) {
@@ -320,7 +320,7 @@ async function RPS(msgUser, oldBalance, profile, logger, gambleAmount, sentMessa
 						sentMessage.edit(embed.setDescription(`The bot chooses 🧻. __You lose!__\nYour balance is ${profile.formatNumber(oldBalance)}💰`));
 					}
 					else if (answer == 3) {
-						const balance = await profile.addMoney(msgUser, winAmount);
+						const balance = profile.addMoney(msgUser, winAmount);
 						embed.setColor('#00fc43');
 						sentMessage.edit(embed.setDescription(`The bot chooses ✂️. __You Win!__\nYou won ${winAmount}💰 and your balance is ${profile.formatNumber(balance)}💰`));
 					}
@@ -329,12 +329,12 @@ async function RPS(msgUser, oldBalance, profile, logger, gambleAmount, sentMessa
 				case '🧻':
 
 					if (answer == 1) {
-						const balance = await profile.addMoney(msgUser, winAmount);
+						const balance = profile.addMoney(msgUser, winAmount);
 						embed.setColor('#00fc43');
 						sentMessage.edit(embed.setDescription(`The bot chooses ✊. __You Win!__\nYou won ${winAmount}💰 and your balance is ${profile.formatNumber(balance)}💰`));
 					}
 					else if (answer == 2) {
-						const balance = await profile.addMoney(msgUser, gambleAmount);
+						const balance = profile.addMoney(msgUser, gambleAmount);
 						sentMessage.edit(embed.setDescription(`The bot chooses 🧻. __It's a tie!__\nYour balance is ${profile.formatNumber(balance)}💰`));
 					}
 					else if (answer == 3) {
@@ -349,12 +349,12 @@ async function RPS(msgUser, oldBalance, profile, logger, gambleAmount, sentMessa
 						sentMessage.edit(embed.setDescription(`The bot chooses ✊. __You lose!__\nYour balance is ${profile.formatNumber(oldBalance)}💰`));
 					}
 					else if (answer == 2) {
-						const balance = await profile.addMoney(msgUser, winAmount);
+						const balance = profile.addMoney(msgUser, winAmount);
 						embed.setColor('#00fc43');
 						sentMessage.edit(embed.setDescription(`The bot chooses 🧻. __You Win!__\nYou won ${winAmount}💰 and your balance is ${profile.formatNumber(balance)}💰`));
 					}
 					else if (answer == 3) {
-						const balance = await profile.addMoney(msgUser, gambleAmount);
+						const balance = profile.addMoney(msgUser, gambleAmount);
 						sentMessage.edit(embed.setDescription(`The bot chooses ✂️. __It's a tie!__\nYour balance is ${profile.formatNumber(balance)}💰`));
 					}
 					break;

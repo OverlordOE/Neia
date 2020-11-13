@@ -10,7 +10,7 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
 		const filter = m => m.author.id === msgUser;
 		const embed = new Discord.MessageEmbed()
@@ -39,7 +39,7 @@ module.exports = {
 					else {temp += `${args[i]}`;}
 				}
 
-				const item = await profile.getItem(temp);
+				const item = profile.getItem(temp);
 				if (target && item) {itemTrade(profile, target, amount, item, sentMessage, embed, msgUser);}
 				else if (target && amount > 1) {moneyTrade(profile, target, amount, sentMessage, embed, msgUser);}
 				else {
@@ -63,14 +63,14 @@ module.exports = {
 								.then(() => {
 									message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
-										.then(async collected => {
+										.then(collected => {
 											const goods = collected.first().content.toLowerCase();
 											collected.first().delete();
 
 											// item trade
 											if (isNaN(goods)) {
 
-												const item = await profile.getItem(goods);
+												const item = profile.getItem(goods);
 												if (!item) return sentMessage.edit(embed.setDescription(`${item} doesn't exist.`));
 
 												// item trade

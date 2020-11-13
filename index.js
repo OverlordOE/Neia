@@ -35,7 +35,6 @@ const logger = winston.createLogger({
 		new winston.transports.File({
 			filename: './logs/error.log',
 			level: 'warn',
-			format: winston.format.json(),
 		}),
 		new winston.transports.File({ filename: './logs/log.log' }),
 	],
@@ -98,7 +97,7 @@ client.on('message', async message => {
 	if (!command) return;
 	if (command.category == 'debug' && (id != 137920111754346496 && id != 139030319784263681)) return message.channel.send('You are not the owner of this bot!');
 	if (command.category == 'admin' && !message.member.hasPermission('ADMINISTRATOR') && id != 137920111754346496 && id != 139030319784263681) return message.channel.send('You need Admin privileges to use this command!');
-	if (command.category == 'pvp') await profile.resetProtection(user);
+	if (command.category == 'pvp') profile.resetProtection(user);
 
 
 	// if the command is used wrongly correct the user
@@ -154,7 +153,7 @@ client.on('message', async message => {
 });
 
 // Regular tasks executed every 3 hours
-const botTasks = new cron.CronJob('0 0-23/3 * * *', async () => {
+const botTasks = new cron.CronJob('0 0-23/3 * * *', () => {
 	const lottery = client.commands.get('lottery');
 	lottery.execute(profile, client, logger);
 
@@ -188,14 +187,14 @@ dbl.webhook.on('vote', async vote => {
 	if (luck == 0) chest = 'Epic chest';
 	if (luck == 1) chest = 'Mystery chest';
 	else chest = 'Rare chest';
-	chest = await profile.getItem(chest);
+	chest = profile.getItem(chest);
 
 	if (chest.picture) {
 		embed.attachFiles(`assets/items/${chest.picture}`)
 			.setImage(`attachment://${chest.picture}`);
 	}
 
-	const income = await profile.calculateIncome(user);
+	const income = profile.calculateIncome(user);
 	const balance = profile.addMoney(user, income.daily);
 	profile.addItem(user, chest, 1);
 	profile.setVote(user);
