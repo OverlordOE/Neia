@@ -9,7 +9,7 @@ module.exports = {
 	usage: '',
 
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger, options) {
 		const guildIDData = options.active.get(message.guild.id);
 		if (!guildIDData) return message.reply('no music queued at the moment.');
 

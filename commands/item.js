@@ -9,7 +9,7 @@ module.exports = {
 	args: false,
 	usage: '<item>',
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		let temp = '';
 		let embed;
 

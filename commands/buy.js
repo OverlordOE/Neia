@@ -6,10 +6,10 @@ module.exports = {
 	category: 'economy',
 	aliases: ['get'],
 	usage: '<item> <amount>',
-	cooldown: 5,
+
 	args: false,
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger) {
 
 		const filter = m => m.author.id === message.author.id;
 		let amount = 0;
@@ -19,7 +19,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Shop')
 			.setThumbnail(message.author.displayAvatarURL());
-			
+
 		message.channel.send(embed).then(sentMessage => {
 
 			for (let i = 0; i < args.length; i++) {

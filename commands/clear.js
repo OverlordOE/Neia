@@ -6,11 +6,11 @@ module.exports = {
 	aliases: ['stop'],
 	args: false,
 	usage: '',
-	cooldown: 5,
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
-		if (!message.member.voice.channel)return message.reply('you are not in a voice channel.');
-		
+
+	execute(message, args, msgUser, profile, guildProfile, client, logger, options) {
+		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');
+
 		try {
 			const guildIDData = options.active.get(message.guild.id);
 			guildIDData.queue = [];

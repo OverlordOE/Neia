@@ -8,7 +8,7 @@ module.exports = {
 	args: false,
 	usage: '<item>',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		const filter = m => m.author.id === message.author.id;
 		let temp = '';
 		let item;
@@ -24,7 +24,7 @@ module.exports = {
 			if (temp.length > 2) temp += ` ${args[i]}`;
 			else temp += `${args[i]}`;
 		}
-		
+
 		item = profile.getItem(temp);
 		if (item) embed.attachFiles(`assets/items/${item.picture}`);
 

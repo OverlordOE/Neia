@@ -10,7 +10,7 @@ module.exports = {
 	usage: '<user>',
 
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		const filter = (reaction, user) => {
 			return ['💰', '📦', '⚔️'].includes(reaction.emoji.name) && user.id === message.author.id;
 		};

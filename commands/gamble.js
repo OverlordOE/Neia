@@ -12,7 +12,7 @@ module.exports = {
 	args: true,
 	usage: '<gamble amount>',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		const avatar = message.author.displayAvatarURL();
 		let gambleAmount = 0;
 		let gambleType = '';

@@ -8,7 +8,7 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger, options) {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia V2.4: Shields and music fix')
 			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL())

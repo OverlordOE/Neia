@@ -6,10 +6,10 @@ module.exports = {
 	category: 'economy',
 	aliases: ['day', 'd'],
 	args: false,
-	cooldown: 5,
+
 	usage: '',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		const daily = profile.getDaily(msgUser);
 		let chest;
 

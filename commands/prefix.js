@@ -6,9 +6,7 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	cooldown: 3,
-
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		const id = message.guild.id;
 
 		if (args[0]) {

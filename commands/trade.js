@@ -10,7 +10,7 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger) {
 
 		const filter = m => m.author.id === msgUser;
 		const embed = new Discord.MessageEmbed()
@@ -35,13 +35,13 @@ module.exports = {
 						embed.setThumbnail(target.displayAvatarURL());
 					}
 
-					else if (temp.length > 2) {temp += ` ${args[i]}`;}
-					else {temp += `${args[i]}`;}
+					else if (temp.length > 2) { temp += ` ${args[i]}`; }
+					else { temp += `${args[i]}`; }
 				}
 
 				const item = profile.getItem(temp);
-				if (target && item) {itemTrade(profile, target, amount, item, sentMessage, embed, msgUser);}
-				else if (target && amount > 1) {moneyTrade(profile, target, amount, sentMessage, embed, msgUser);}
+				if (target && item) { itemTrade(profile, target, amount, item, sentMessage, embed, msgUser); }
+				else if (target && amount > 1) { moneyTrade(profile, target, amount, sentMessage, embed, msgUser); }
 				else {
 					sentMessage.edit(embed.setDescription('Who do you want to trade with? __mention the user__\n'));
 					message.channel.awaitMessages(filter, { max: 1, time: 60000 })
@@ -56,7 +56,7 @@ module.exports = {
 								target = client.users.cache.get(mention);
 								embed.setThumbnail(target.displayAvatarURL());
 							}
-							else {return sentMessage.edit(embed.setDescription(`${mention} is not a valid response`));}
+							else { return sentMessage.edit(embed.setDescription(`${mention} is not a valid response`)); }
 
 
 							sentMessage.edit(embed.setDescription(`Trading with *${target}*\n\nWhat do you want to send (answer with a number to send money)?`))
@@ -90,7 +90,7 @@ module.exports = {
 														});
 												});
 											}
-											else {moneyTrade(profile, target, amount, sentMessage, embed, msgUser);}
+											else { moneyTrade(profile, target, amount, sentMessage, embed, msgUser); }
 										})
 										.catch(e => {
 											logger.error(e.stack);

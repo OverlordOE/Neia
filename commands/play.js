@@ -12,7 +12,7 @@ module.exports = {
 	usage: '<search criteria>',
 
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, options) {
 
 		if (!message.member.voice.channel) return message.channel.send(embed.setdescription('you are not in a voice channel.'));
 

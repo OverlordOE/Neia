@@ -6,10 +6,10 @@ module.exports = {
 	aliases: ['h', 'hour'],
 	args: false,
 	usage: '',
-	cooldown: 5,
+
 	category: 'economy',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		const hourly = profile.getHourly(msgUser);
 		let chest;
 

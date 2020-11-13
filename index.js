@@ -112,7 +112,7 @@ client.on('message', async message => {
 	if (id != 137920111754346496) {
 		if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
 		const timestamps = cooldowns.get(command.name);
-		const cooldownAmount = (command.cooldown || 1.5) * 1000;
+		const cooldownAmount = 1500;
 		const now = Date.now();
 
 		if (timestamps.has(id)) {

@@ -6,10 +6,10 @@ module.exports = {
 	category: 'economy',
 	aliases: ['v'],
 	args: false,
-	cooldown: 5,
+
 	usage: '',
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		const vote = profile.getVote(msgUser);
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Vote for Neia!')

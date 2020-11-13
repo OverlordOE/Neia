@@ -8,7 +8,7 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Stats')

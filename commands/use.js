@@ -8,7 +8,7 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		const filter = m => m.author.id === msgUser;
 
 		let amount = 1;

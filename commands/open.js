@@ -7,10 +7,10 @@ module.exports = {
 	category: 'economy',
 	aliases: ['o', 'chest'],
 	usage: '<chest>',
-	cooldown: 0.5,
+
 	args: true,
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		const lootEmbed = new Discord.MessageEmbed()
 
 			.setFooter('You can open multiple chests at the same time.', client.user.displayAvatarURL());

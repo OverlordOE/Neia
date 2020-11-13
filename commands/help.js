@@ -7,7 +7,7 @@ module.exports = {
 	usage: '<command name>',
 	args: false,
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		const { commands } = message.client;
 		let adminCommands = '';
 		let musicCommands = '';
@@ -77,11 +77,6 @@ module.exports = {
 			if (command.description) help.addField('**Description:**', command.description);
 			if (command.usage) help.addField('**Usage:**', `${command.name} ${command.usage}`);
 			if (command.aliases) help.addField('**Aliases:**', command.aliases.join(', '));
-			if (command.cooldown) {
-				if (command.cooldown > 60) help.addField('**Cooldown:**', `${command.cooldown / 60} minutes`);
-				else help.addField('**Cooldown:**', `${command.cooldown} seconds`);
-			}
-
 		}
 
 		message.channel.send(help);

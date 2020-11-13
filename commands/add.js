@@ -4,9 +4,9 @@ module.exports = {
 	category: 'debug',
 	args: true,
 	usage: '<money> <target>',
-	cooldown: 0,
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+
+	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		const amount = args.find(arg => !/<@!?\d+>/g.test(arg));
 		const target = message.mentions.users.first() || message.author;
 		const targetUser = await profile.getUser(target.id);

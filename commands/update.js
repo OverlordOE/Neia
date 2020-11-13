@@ -7,7 +7,7 @@ module.exports = {
 	usage: '',
 
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		try {
 			profile.map(async (u) => {
 				const user = await profile.getUser(u.user_id);

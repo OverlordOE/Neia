@@ -5,9 +5,9 @@ module.exports = {
 	args: true,
 	aliases: ['eu', 'edit'],
 	usage: '<user> <field> <value>',
-	cooldown: 0,
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+
+	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
 		const target = await profile.getUser(message.mentions.users.first().id);
 		try {
 
