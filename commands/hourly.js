@@ -9,7 +9,7 @@ module.exports = {
 	cooldown: 5,
 	category: 'economy',
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 		const hourly = profile.getHourly(msgUser);
 		let chest;
 
@@ -31,7 +31,7 @@ module.exports = {
 			if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
 				.setImage(`attachment://${chest.picture}`);
 
-			const income = profile.calculateIncome(msgUser);
+			const income = await profile.calculateIncome(msgUser);
 			const balance = profile.addMoney(msgUser, income.hourly);
 			profile.addItem(msgUser, chest, 1);
 			profile.setHourly(msgUser);

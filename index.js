@@ -194,7 +194,7 @@ dbl.webhook.on('vote', async vote => {
 			.setImage(`attachment://${chest.picture}`);
 	}
 
-	const income = profile.calculateIncome(user);
+	const income = await profile.calculateIncome(user);
 	const balance = profile.addMoney(user, income.daily);
 	profile.addItem(user, chest, 1);
 	profile.setVote(user);

@@ -1,3 +1,4 @@
+/* eslint-disable no-multiple-empty-lines */
 const Sequelize = require('sequelize');
 const moment = require('moment');
 const Discord = require('discord.js');
@@ -299,7 +300,7 @@ Reflect.defineProperty(profile, 'addMoney', {
 
 
 Reflect.defineProperty(profile, 'calculateIncome', {
-	value:  function calculateIncome(user) {
+	value:  async function calculateIncome(user) {
 		const uItems = await profile.getInventory(user);
 		let networth = 0;
 		let income = 0;

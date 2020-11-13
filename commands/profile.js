@@ -68,7 +68,7 @@ module.exports = {
 				inventory += `${item.emoji}${item.name}: ${profile.formatNumber(i.amount)}\n`;
 			});
 
-			const income = profile.calculateIncome(userProfile);
+			const income = await profile.calculateIncome(userProfile);
 			invEmbed.addField('Max passive income', `${profile.formatNumber(income.income)}💰`);
 			invEmbed.addField('Networth', `${profile.formatNumber(income.networth)}💰`, true);
 
