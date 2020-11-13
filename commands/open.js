@@ -32,7 +32,7 @@ module.exports = {
 			if (amount > 1) {
 
 				const item = await profile.getItem(`${chest} chest`);
-				if (!await profile.hasItem(message.author.id, item, amount)) return message.reply(`You don't have ${amount} __${item.name}(s)__!`);
+				if (!await profile.hasItem(msgUser, item, amount)) return message.reply(`You don't have ${amount} __${item.name}(s)__!`);
 				lootEmbed.setTitle(`${amount} ${chest} chests`);
 
 				let description = `${message.author} has discovered:\n`;
@@ -48,7 +48,7 @@ module.exports = {
 				for (const loot in lootlist) {
 					const lootItem = await profile.getItem(loot);
 					description += `\n**${profile.formatNumber(lootlist[loot])}** ${lootItem.emoji}__${lootItem.name}__`;
-					profile.addItem(message.author.id, lootItem, lootlist[loot]);
+					profile.addItem(msgUser, lootItem, lootlist[loot]);
 				}
 
 				lootEmbed.setDescription(description)
@@ -56,11 +56,11 @@ module.exports = {
 					.setThumbnail(`attachment://${chest}_open.png`);
 
 				message.channel.send(lootEmbed);
-				profile.removeItem(message.author.id, item, amount);
+				profile.removeItem(msgUser, item, amount);
 			}
 			else {
 				const item = await profile.getItem(`${chest} chest`);
-				if (!await profile.hasItem(message.author.id, item, amount)) return message.reply(`You don't have ${amount} __${item.name}(s)__!`);
+				if (!await profile.hasItem(msgUser, item, amount)) return message.reply(`You don't have ${amount} __${item.name}(s)__!`);
 
 				const loot = loottable[chest]();
 				const lootItem = await profile.getItem(loot.name);
@@ -82,8 +82,8 @@ module.exports = {
 					.setImage(`attachment://${lootItem.picture}`);
 
 				message.channel.send(lootEmbed);
-				profile.addItem(message.author.id, lootItem, itemAmount);
-				profile.removeItem(message.author.id, item, 1);
+				profile.addItem(msgUser, lootItem, itemAmount);
+				profile.removeItem(msgUser, item, 1);
 
 			}
 		}

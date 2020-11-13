@@ -30,8 +30,8 @@ module.exports = {
 
 		message.channel.send(embed).then(async sentMessage => {
 			if (item) {
-				if (await profile.hasItem(message.author.id, item, 1)) {
-					if (await profile.equip(msgUser.user_id, item)) sentMessage.edit(embed.setDescription(`Successfully equipped __${item.emoji}${item.name}__ to slot **${item.slot}**.`).setImage(`attachment://${item.picture}`));
+				if (await profile.hasItem(msgUser, item, 1)) {
+					if (await profile.equip(msgUser, item)) sentMessage.edit(embed.setDescription(`Successfully equipped __${item.emoji}${item.name}__ to slot **${item.slot}**.`).setImage(`attachment://${item.picture}`));
 					else sentMessage.edit(embed.setDescription(`Something went wrong with equipping ${item.emoji}${item.name}.`));
 				}
 				else return sentMessage.edit(embed.setDescription(`You don't have a __${item.name}__!`));
@@ -44,8 +44,8 @@ module.exports = {
 						collected.first().delete();
 
 						if (item) {
-							if (await profile.hasItem(message.author.id, item, 1)) {
-								if (await profile.equip(msgUser.user_id, item)) sentMessage.edit(embed.setDescription(`Successfully equipped __${item.emoji}${item.name}__ to slot **${item.slot}**.`).setImage(`attachment://${item.picture}`));
+							if (await profile.hasItem(msgUser, item, 1)) {
+								if (await profile.equip(msgUser, item)) sentMessage.edit(embed.setDescription(`Successfully equipped __${item.emoji}${item.name}__ to slot **${item.slot}**.`).setImage(`attachment://${item.picture}`));
 								else sentMessage.edit(embed.setDescription(`Something went wrong with equipping ${item.emoji}${item.name}.`));
 							}
 							else return sentMessage.edit(embed.setDescription(`You don't have a __${item.emoji}${item.name}__!`));

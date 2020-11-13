@@ -14,7 +14,7 @@ module.exports = {
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
 
-		const filter = m => m.author.id === message.author.id;
+		const filter = m => m.author.id === msgUser;
 		let amount = 1;
 		let temp = '';
 		let item;
@@ -44,25 +44,26 @@ module.exports = {
 						collected.first().delete();
 						if (collected.first().content.toLowerCase() == 'yes') {
 
-							const inventory = await profile.getInventory(message.author.id);
+							const inventory = await profile.getInventory(msgUser);
 							let totalReceived = 0;
+							let balance;
 
 							inventory.map(i => {
 								const item = itemInfo[i.name.toLowerCase()];
 								const refundAmount = sellPercentage * item.value * i.amount;
-								profile.removeItem(message.author.id, item, i.amount);
-								profile.addMoney(message.author.id, refundAmount);
+								profile.removeItem(msgUser, item, i.amount);
+								balance = profile.addMoney(msgUser, refundAmount);
 								totalReceived += refundAmount;
 							});
 							logger.debug(totalReceived);
-							sentMessage.edit(embed.setDescription(`You sold your whole inventory for ${profile.formatNumber(totalReceived)}💰\n\nCurrent balance is ${profile.formatNumber(await profile.getBalance(message.author.id))}💰`));
+							sentMessage.edit(embed.setDescription(`You sold your whole inventory for ${profile.formatNumber(totalReceived)}💰\n\nCurrent balance is ${profile.formatNumber(balance)}💰`));
 						}
 						else return sentMessage.edit(embed.setDescription('Cancelled selling inventory'));
 					});
 			}
 
 			else if (item) {
-				if (await profile.hasItem(message.author.id, item, amount)) sell(profile, sentMessage, amount, embed, item, message);
+				if (await profile.hasItem(msgUser, item, amount)) sell(profile, sentMessage, amount, embed, item, msgUser);
 				else return sentMessage.edit(embed.setDescription(`You don't have enough ${item.emoji}__${item.name}(s)__!`));
 			}
 			else {
@@ -80,7 +81,7 @@ module.exports = {
 									const amount = parseInt(collected.first().content);
 									if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number!`));
 
-									if (await profile.hasItem(message.author.id, item, amount)) sell(profile, sentMessage, amount, embed, item, message);
+									if (await profile.hasItem(msgUser, item, amount)) sell(profile, sentMessage, amount, embed, item, msgUser);
 									else return sentMessage.edit(embed.setDescription(`You don't have enough ${item.emoji}__${item.name}(s)__!`));
 								})
 								.catch(e => {
@@ -99,19 +100,19 @@ module.exports = {
 };
 
 
-async function sell(profile, sentMessage, amount, embed, item, message) {
+async function sell(profile, sentMessage, amount, embed, item, msgUser) {
 
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 	else if (amount < 1) amount = 1;
 
 	const refundAmount = sellPercentage * item.value * amount;
 	try {
-		profile.removeItem(message.author.id, item, amount);
+		profile.removeItem(msgUser, item, amount);
 	} catch (error) {
 		return sentMessage.edit(embed.setDescription(`You do not have ${amount} ${item.emoji}__${item.name}(s)__! Selling cancelled.`));
 	}
 
-	const balance = await profile.addMoney(message.author.id, refundAmount);
+	const balance = await profile.addMoney(msgUser, refundAmount);
 
 	sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${profile.formatNumber(refundAmount)}💰 back.\nYour balance is ${profile.formatNumber(balance)}💰!`));
 }

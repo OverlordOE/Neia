@@ -56,8 +56,8 @@ module.exports = {
 							}
 						}
 						if (!duplicate) {
-
-							const bCheck = await profile.getBalance(user.id);
+							const msgUser = await profile.getUser(user.id);
+							const bCheck = msgUser.balance;
 							if (bCheck >= buyin) {
 								const ticketNumber = tickets.splice(Math.floor(Math.random() * tickets.length), 1);
 								const ticket = {
@@ -66,7 +66,7 @@ module.exports = {
 									notify: false,
 								};
 								participants.push(ticket);
-								profile.addMoney(user.id, -buyin);
+								profile.addMoney(msgUser, -buyin);
 								players += `\n${parseInt(ticketNumber) + 1}: ${user}`;
 								lottery = misc.lastLottery + (participants.length * buyin);
 								sentMessage.edit(embed.setDescription(`${description}\n
@@ -81,13 +81,13 @@ module.exports = {
 				});
 
 
-				collector.on('end', () => {
+				collector.on('end', async () => {
 
 					const winNumber = Math.floor(Math.random() * ticketAmount);
 					const winner = participants.find(ticket => ticket.ticketNumber == winNumber);
 
 					if (winner) {
-						profile.addMoney(winner.user.id, lottery);
+						profile.addMoney(await profile.getUser(winner.user.id), lottery);
 						channel.send(`Congrats ${winner.user} on winning the jackpot of ${profile.formatNumber(lottery)}💰!!!`);
 						sentMessage.edit(embed.setDescription(`Current lottery: ${profile.formatNumber(lottery)}💰\n${players}\n\nLottery has ended and the winning number is __${winNumber + 1}__\n*${winner.user}* has won the lottery of ${profile.formatNumber(lottery)}💰`));
 						misc.lastLottery = ticketAmount * 10;

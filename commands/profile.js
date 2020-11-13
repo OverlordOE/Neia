@@ -11,22 +11,22 @@ module.exports = {
 
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
-		const target = message.mentions.users.first() || message.author;
-		const items = await profile.getInventory(target.id);
 		const filter = (reaction, user) => {
 			return ['💰', '📦', '⚔️'].includes(reaction.emoji.name) && user.id === message.author.id;
 		};
 
+		const target = message.mentions.users.first() || message.author;
 		const avatar = target.displayAvatarURL();
-		const userProfile = await profile.getUser(target.id);
+		const userProfile = await profile.getUser(message.author.id);
+		const items = await profile.getInventory(userProfile);
 		const pColour = userProfile.pColour;
 
-		const prot = await profile.getProtection(target.id);
-		let daily = await profile.getDaily(target.id);
-		let hourly = await profile.getHourly(target.id);
-		let vote = await profile.getVote(target.id);
-		let heal = await profile.getHeal(target.id);
-		let attack = await profile.getAttack(target.id);
+		const prot = await profile.getProtection(userProfile);
+		let daily = await profile.getDaily(userProfile);
+		let hourly = await profile.getHourly(userProfile);
+		let vote = await profile.getVote(userProfile);
+		let heal = await profile.getHeal(userProfile);
+		let attack = await profile.getAttack(userProfile);
 
 		if (daily === true) daily = 'now';
 		if (hourly === true) hourly = 'now';
@@ -68,7 +68,7 @@ module.exports = {
 				inventory += `${item.emoji}${item.name}: ${profile.formatNumber(i.amount)}\n`;
 			});
 
-			const income = await profile.calculateIncome(target.id);
+			const income = await profile.calculateIncome(userProfile);
 			invEmbed.addField('Max passive income', `${profile.formatNumber(income.income)}💰`);
 			invEmbed.addField('Networth', `${profile.formatNumber(income.networth)}💰`, true);
 
@@ -77,7 +77,7 @@ module.exports = {
 		else invEmbed.addField('Inventory:', `*${target.tag}* has nothing!`);
 
 
-		const equipment = await profile.getEquipment(target.id);
+		const equipment = await profile.getEquipment(userProfile);
 		let statDescription = `HP: ${userProfile.hp}/1000 <:health:730849477765890130>\n`;
 		for (const slot in equipment) {
 			if (equipment[slot]) {

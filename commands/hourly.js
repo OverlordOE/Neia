@@ -10,7 +10,7 @@ module.exports = {
 	category: 'economy',
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
-		const hourly = await profile.getHourly(message.author.id);
+		const hourly = await profile.getHourly(msgUser);
 		let chest;
 
 		const luck = Math.floor(Math.random() * 6);
@@ -31,12 +31,12 @@ module.exports = {
 			if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
 				.setImage(`attachment://${chest.picture}`);
 
-			const income = await profile.calculateIncome(message.author.id);
-			profile.addMoney(message.author.id, income.hourly);
-			profile.addItem(message.author.id, chest, 1);
-			profile.setHourly(message.author.id);
+			const income = await profile.calculateIncome(msgUser);
+			const balance = profile.addMoney(msgUser, income.hourly);
+			profile.addItem(msgUser, chest, 1);
+			profile.setHourly(msgUser);
 
-			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your hourly 🎁 and ${profile.formatNumber(income.hourly)}💰 from your collectables.\nCome back in an hour for more!\n\nYour current balance is ${profile.formatNumber(await profile.getBalance(message.author.id))}💰`));
+			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your hourly 🎁 and ${profile.formatNumber(income.hourly)}💰 from your collectables.\nCome back in an hour for more!\n\nYour current balance is ${profile.formatNumber(balance)}💰`));
 		}
 		else { message.channel.send(embed.setDescription(`You have already gotten your hourly 🎁\n\nYou can get your next hourly __${hourly}__.`)); }
 

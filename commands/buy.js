@@ -72,15 +72,15 @@ async function buy(profile, sentMessage, amount, embed, item, msgUser) {
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 	else if (amount < 1) amount = 1;
 
-	const balance = msgUser.balance;
+	let balance = msgUser.balance;
 	const cost = amount * item.value;
 	if (cost > balance) return sentMessage.edit(embed.setDescription(`
 	You currently have ${profile.formatNumber(balance)}💰 but __${profile.formatNumber(amount)}__ ${item.emoji}${item.name}(s) costs ${profile.formatNumber(cost)}💰!
 	You need ${profile.formatNumber(cost - balance)}💰 more
 	`));
 
-	profile.addItem(msgUser.user_id, item, amount);
-	profile.addMoney(msgUser.user_id, -cost);
+	profile.addItem(msgUser, item, amount);
+	balance = profile.addMoney(msgUser, -cost);
 
-	sentMessage.edit(embed.setDescription(`You've bought: __${profile.formatNumber(amount)}__ ${item.emoji}__${item.name}(s)__.\n\nCurrent balance is ${profile.formatNumber(await profile.getBalance(msgUser.user_id))}💰.`));
+	sentMessage.edit(embed.setDescription(`You've bought: __${profile.formatNumber(amount)}__ ${item.emoji}__${item.name}(s)__.\n\nCurrent balance is ${profile.formatNumber(balance)}💰.`));
 }

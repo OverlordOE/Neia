@@ -18,15 +18,170 @@ const Guilds = sequelize.import('models/Guilds');
 const UserItems = sequelize.import('models/UserItems');
 const items = require('./data/items');
 
+Reflect.defineProperty(profile, 'newUser', {
+	value: async function newUser(id) {
+		const now = moment();
+		const user = await Users.create({
+			user_id: id,
+			balance: 0,
+			totalEarned: 0,
+			networth: 0,
+			hp: 1000,
+			equipment: JSON.stringify({ weapon: null, offhand: null }),
+			lastDaily: now.subtract(2, 'days').toString(),
+			lastHourly: now.subtract(1, 'days').toString(),
+			lastVote: now.subtract(1, 'days').toString(),
+			lastHeal: now.subtract(1, 'days').toString(),
+			lastAttack: now.subtract(1, 'days').toString(),
+			protection: now.toString(),
+			pColour: '#fcfcfc',
+			firstCommand: true,
+		});
+		profile.set(id, user);
+		return user;
+	},
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// EQUIPMENT AND COMBAT
+
+Reflect.defineProperty(profile, 'getEquipment', {
+	value: async function getEquipment(user) {
+		return JSON.parse(user.equipment);
+	},
+});
+
+Reflect.defineProperty(profile, 'equip', {
+	value: async function equip(user, equipment) {
+
+		const userEquipment = await UserItems.findOne({
+			where: { user_id: user.user_id, name: equipment.name },
+		});
+
+		if (userEquipment) {
+			const equipped = JSON.parse(user.equipment);
+
+			equipped[equipment.slot] = equipment.name;
+			user.equipment = JSON.stringify(equipped);
+			return user.save();
+		}
+		return false;
+	},
+});
+
+Reflect.defineProperty(profile, 'changeHp', {
+	value: async function changeHp(user, amount) {
+		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
+
+		const hp = Number(user.hp);
+		if (hp >= 1000) return false;
+		else if (hp > (1000 - amount)) {
+			amount = 1000 - hp;
+			user.hp = hp + Number(amount);
+		}
+		else user.hp = hp + Number(amount);
+
+		user.save();
+		return amount;
+	},
+});
+Reflect.defineProperty(profile, 'getHp', {
+	value: async function getHp(user) {
+		return user.hp;
+	},
+});
+
+Reflect.defineProperty(profile, 'attackUser', {
+	/**
+	* Resolves an attack bewteen 2 users
+	* @param {string} attacker - The id of the Attacking user.
+	* @param {string} defender - The id of the Defending user.
+	*/
+	value: async function attackUser(attacker, defender) {
+		const attackerGear = JSON.parse(attacker.equipment);
+		const defenderGear = JSON.parse(defender.equipment);
+
+
+		let weapon;
+		if (attackerGear['weapon']) weapon = items[attackerGear['weapon'].toLowerCase()];
+		else weapon = {
+			name: 'Fists',
+			damage: [5, 5],
+			emoji: '✊',
+		};
+
+    let offhand;
+		if (defenderGear['offhand']) offhand = items[defenderGear['offhand'].toLowerCase()];
+		else offhand = {
+			armor: [1, 1],
+		};
+
+		let damage = Math.round(weapon.damage[0] + (Math.random() * weapon.damage[1]));
+		damage -= Math.round(offhand.armor[0] + (Math.random() * offhand.armor[1]));
+
+		if (damage < 0) damage = 0;
+
+
+		profile.changeHp(defender, -damage);
+		profile.setAttack(attacker);
+		return {
+			weapon: weapon,
+			damage: damage,
+		};
+	},
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ITEMS
 Reflect.defineProperty(profile, 'addItem', {
-	value: async function addItem(id, item, amount) {
+	value: async function addItem(user, item, amount) {
 		const userItem = await UserItems.findOne({
-			where: { user_id: id, name: item.name },
+			where: { user_id: user.user_id, name: item.name },
 		});
 
-		const user = await profile.getUser(id);
 		user.networth += item.value * parseInt(amount);
 		user.save();
 
@@ -36,22 +191,21 @@ Reflect.defineProperty(profile, 'addItem', {
 		}
 
 		return UserItems.create({
-			user_id: id,
+			user_id: user.user_id,
 			name: item.name,
 			amount: parseInt(amount),
 		});
 	},
 });
 Reflect.defineProperty(profile, 'removeItem', {
-	value: async function removeItem(id, item, amount) {
+	value: async function removeItem(user, item, amount) {
 		const userItem = await UserItems.findOne({
-			where: { user_id: id, name: item.name },
+			where: { user_id: user.user_id, name: item.name },
 		});
 
 		const removeAmount = parseInt(amount);
 
 		if (userItem.amount >= removeAmount) {
-			const user = await profile.getUser(id);
 			user.networth -= item.value * removeAmount;
 			if (item.ctg == 'equipment' && userItem.amount - removeAmount == 0) {
 				const equipment = JSON.parse(user.equipment);
@@ -69,9 +223,9 @@ Reflect.defineProperty(profile, 'removeItem', {
 });
 
 Reflect.defineProperty(profile, 'hasItem', {
-	value: async function hasItem(id, item, amount) {
+	value: async function hasItem(user, item, amount) {
 		const userItem = await UserItems.findOne({
-			where: { user_id: id, name: item.name },
+			where: { user_id: user.user_id, name: item.name },
 		});
 		const check = parseInt(amount);
 		if (userItem.amount >= check && check > 0) return true;
@@ -80,9 +234,9 @@ Reflect.defineProperty(profile, 'hasItem', {
 });
 
 Reflect.defineProperty(profile, 'getInventory', {
-	value: async function getInventory(id) {
+	value: async function getInventory(user) {
 		return UserItems.findAll({
-			where: { user_id: id },
+			where: { user_id: user.user_id },
 		});
 	},
 });
@@ -116,118 +270,6 @@ Reflect.defineProperty(profile, 'getItem', {
 
 
 
-// EQUIPMENT AND COMBAT
-
-Reflect.defineProperty(profile, 'getEquipment', {
-	value: async function getEquipment(id) {
-		const user = await profile.getUser(id);
-
-		return JSON.parse(user.equipment);
-	},
-});
-
-Reflect.defineProperty(profile, 'equip', {
-	value: async function equip(id, equipment) {
-		const user = await profile.getUser(id);
-
-		const userEquipment = await UserItems.findOne({
-			where: { user_id: id, name: equipment.name },
-		});
-
-		if (userEquipment) {
-			const equipped = JSON.parse(user.equipment);
-
-			equipped[equipment.slot] = equipment.name;
-			user.equipment = JSON.stringify(equipped);
-			return user.save();
-		}
-		return false;
-	},
-});
-
-Reflect.defineProperty(profile, 'changeHp', {
-	value: async function changeHp(id, amount) {
-		const user = await profile.getUser(id);
-
-		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
-
-		const hp = Number(user.hp);
-		if (hp >= 1000) return false;
-		else if (hp > (1000 - amount)) {
-			amount = 1000 - hp;
-			user.hp = hp + Number(amount);
-		}
-		else user.hp = hp + Number(amount);
-
-		user.save();
-		return amount;
-	},
-});
-Reflect.defineProperty(profile, 'getHp', {
-	value: async function getHp(id) {
-		const user = await profile.getUser(id);
-		return user.hp;
-	},
-});
-
-Reflect.defineProperty(profile, 'attackUser', {
-	/**
-	* Resolves an attack bewteen 2 users
-	* @param {string} attackerId - The id of the Attacking user.
-	* @param {string} defenderId - The id of the Defending user.
-	*/
-	value: async function attackUser(attackerId, defenderId) {
-		let attacker = profile.get(attackerId);
-		let defender = profile.get(defenderId);
-		if (!attacker) attacker = await profile.newUser(attackerId);
-		if (!defender) defender = await profile.newUser(defenderId);
-
-		const attackerGear = JSON.parse(attacker.equipment);
-		const defenderGear = JSON.parse(defender.equipment);
-
-
-		let weapon;
-		if (attackerGear['weapon']) weapon = items[attackerGear['weapon'].toLowerCase()];
-		else weapon = {
-			name: 'Fists',
-			damage: [5, 5],
-			emoji: '✊',
-		};
-
-    let offhand;
-		if (defenderGear['offhand']) offhand = items[defenderGear['offhand'].toLowerCase()];
-		else offhand = {
-			armor: [1, 1],
-		};
-
-		let damage = Math.round(weapon.damage[0] + (Math.random() * weapon.damage[1]));
-		damage -= Math.round(offhand.armor[0] + (Math.random() * offhand.armor[1]));
-
-		if (damage < 0) damage = 0;
-
-
-		profile.changeHp(defenderId, -damage);
-		profile.setAttack(attackerId);
-		return {
-			weapon: weapon,
-			damage: damage,
-		};
-	},
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -238,29 +280,6 @@ Reflect.defineProperty(profile, 'attackUser', {
 
 
 // Misc
-Reflect.defineProperty(profile, 'newUser', {
-	value: async function newUser(id) {
-		const now = moment();
-		const user = await Users.create({
-			user_id: id,
-			balance: 0,
-			totalEarned: 0,
-			networth: 0,
-			hp: 1000,
-			equipment: JSON.stringify({ weapon: null, offhand: null }),
-			lastDaily: now.subtract(2, 'days').toString(),
-			lastHourly: now.subtract(1, 'days').toString(),
-			lastVote: now.subtract(1, 'days').toString(),
-			lastHeal: now.subtract(1, 'days').toString(),
-			lastAttack: now.subtract(1, 'days').toString(),
-			protection: now.toString(),
-			pColour: '#fcfcfc',
-			firstCommand: true,
-		});
-		profile.set(id, user);
-		return user;
-	},
-});
 Reflect.defineProperty(profile, 'getUser', {
 	value: async function getUser(id) {
 		let user = profile.get(id);
@@ -270,9 +289,7 @@ Reflect.defineProperty(profile, 'getUser', {
 });
 
 Reflect.defineProperty(profile, 'addMoney', {
-	value: async function addMoney(id, amount) {
-		const user = await profile.getUser(id);
-
+	value: function addMoney(user, amount) {
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 		user.balance += Number(amount);
 		if (amount > 0) user.totalEarned += Number(amount);
@@ -281,17 +298,11 @@ Reflect.defineProperty(profile, 'addMoney', {
 		return Math.floor(user.balance);
 	},
 });
-Reflect.defineProperty(profile, 'getBalance', {
-	value: async function getBalance(id) {
-		const user = await profile.getUser(id);
 
-		return Math.floor(user.balance);
-	},
-});
 
 Reflect.defineProperty(profile, 'calculateIncome', {
-	value: async function calculateIncome(id) {
-		const uItems = await profile.getInventory(id);
+	value: async function calculateIncome(user) {
+		const uItems = await profile.getInventory(user);
 		let networth = 0;
 		let income = 0;
 		let daily = 0;
@@ -314,8 +325,7 @@ Reflect.defineProperty(profile, 'calculateIncome', {
 });
 
 Reflect.defineProperty(profile, 'getDaily', {
-	value: async function getDaily(id) {
-		const user = await profile.getUser(id);
+	value: async function getDaily(user) {
 		const now = moment();
 		const dCheck = moment(user.lastDaily).add(1, 'd');
 		if (moment(dCheck).isBefore(now)) return true;
@@ -323,16 +333,14 @@ Reflect.defineProperty(profile, 'getDaily', {
 	},
 });
 Reflect.defineProperty(profile, 'setDaily', {
-	value: async function setDaily(id) {
-		const user = await profile.getUser(id);
+	value: async function setDaily(user) {
 		user.lastDaily = moment().toString();
 		return user.save();
 	},
 });
 
 Reflect.defineProperty(profile, 'getHourly', {
-	value: async function getHourly(id) {
-		const user = await profile.getUser(id);
+	value: async function getHourly(user) {
 		const now = moment();
 		const hCheck = moment(user.lastHourly).add(1, 'h');
 		if (moment(hCheck).isBefore(now)) return true;
@@ -340,40 +348,21 @@ Reflect.defineProperty(profile, 'getHourly', {
 	},
 });
 Reflect.defineProperty(profile, 'setHourly', {
-	value: async function setHourly(id) {
-		const user = await profile.getUser(id);
+	value: async function setHourly(user) {
 		user.lastHourly = moment().toString();
 		return user.save();
 	},
 });
 
-Reflect.defineProperty(profile, 'getWeekly', {
-	value: async function getWeekly(id) {
-		const user = await profile.getUser(id);
-		const now = moment();
-		const wCheck = moment(user.lastWeekly).add(1, 'w');
-		if (moment(wCheck).isBefore(now)) return true;
-		else return wCheck.format('MMM Do HH:mm');
-	},
-});
-Reflect.defineProperty(profile, 'setWeekly', {
-	value: async function setWeekly(id) {
-		const user = await profile.getUser(id);
-		user.lastWeekly = moment().toString();
-		return user.save();
-	},
-});
 
 Reflect.defineProperty(profile, 'setVote', {
-	value: async function setVote(id) {
-		const user = await profile.getUser(id);
+	value: async function setVote(user) {
 		user.lastVote = moment().toString();
 		return user.save();
 	},
 });
 Reflect.defineProperty(profile, 'getVote', {
-	value: async function getVote(id) {
-		const user = await profile.getUser(id);
+	value: async function getVote(user) {
 		const now = moment();
 		const vCheck = moment(user.lastVote).add(12, 'h');
 		if (moment(vCheck).isBefore(now)) return true;
@@ -383,15 +372,13 @@ Reflect.defineProperty(profile, 'getVote', {
 
 
 Reflect.defineProperty(profile, 'setHeal', {
-	value: async function setHeal(id) {
-		const user = await profile.getUser(id);
+	value: async function setHeal(user) {
 		user.lastHeal = moment().toString();
 		return user.save();
 	},
 });
 Reflect.defineProperty(profile, 'getHeal', {
-	value: async function getHeal(id) {
-		const user = await profile.getUser(id);
+	value: async function getHeal(user) {
 		const now = moment();
 		const healCheck = moment(user.lastHeal).add(2, 'h');
 		if (moment(healCheck).isBefore(now)) return true;
@@ -401,15 +388,13 @@ Reflect.defineProperty(profile, 'getHeal', {
 
 
 Reflect.defineProperty(profile, 'setAttack', {
-	value: async function setAttack(id) {
-		const user = await profile.getUser(id);
+	value: async function setAttack(user) {
 		user.lastAttack = moment().toString();
 		return user.save();
 	},
 });
 Reflect.defineProperty(profile, 'getAttack', {
-	value: async function getAttack(id) {
-		const user = await profile.getUser(id);
+	value: async function getAttack(user) {
 		const now = moment();
 		const attackCheck = moment(user.lastAttack).add(1, 'h');
 		if (moment(attackCheck).isBefore(now)) return true;
@@ -419,8 +404,7 @@ Reflect.defineProperty(profile, 'getAttack', {
 
 
 Reflect.defineProperty(profile, 'getProtection', {
-	value: async function getProtection(id) {
-		const user = await profile.getUser(id);
+	value: async function getProtection(user) {
 		const now = moment();
 		const protection = moment(user.protection);
 		if (protection.isAfter(now)) return protection.format('MMM Do HH:mm');
@@ -430,13 +414,12 @@ Reflect.defineProperty(profile, 'getProtection', {
 Reflect.defineProperty(profile, 'addProtection', {
 	/**
 	* Add protection to target user
-	* @param {string} id - The id of the user.
+	* @param {string} user - The user that will receive the protection.
 	* @param {number} hours - Total amount of hours to add to the protection.
 	*/
-	value: async function addProtection(id, hours) {
-		const user = await profile.getUser(id);
+	value: async function addProtection(user, hours) {
 		let protection;
-		const oldProtection = await profile.getProtection(id);
+		const oldProtection = await profile.getProtection(user);
 		if (oldProtection) protection = moment(oldProtection, 'MMM Do HH:mm').add(hours, 'h');
 		else protection = moment().add(hours, 'h');
 
@@ -446,26 +429,8 @@ Reflect.defineProperty(profile, 'addProtection', {
 	},
 });
 Reflect.defineProperty(profile, 'resetProtection', {
-	value: async function resetProtection(id) {
-		const user = await profile.getUser(id);
+	value: async function resetProtection(user) {
 		user.protection = moment().toString();
-		return user.save();
-	},
-});
-
-
-Reflect.defineProperty(profile, 'getPColour', {
-	value: async function getPColour(id) {
-		const user = await profile.getUser(id);
-		return user.pColour || '#fcfcfc';
-	},
-
-});
-Reflect.defineProperty(profile, 'setPColour', {
-	value: async function setPColour(id, colour) {
-		const user = await profile.getUser(id);
-		if (!colour.startsWith('#')) throw Error('not a valid colour!');
-		user.pColour = colour;
 		return user.save();
 	},
 });

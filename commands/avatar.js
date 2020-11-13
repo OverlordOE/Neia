@@ -16,7 +16,7 @@ module.exports = {
 			.setTitle(`${target.tag}'s Avatar`)
 			.setDescription(avatar)
 			.setImage(avatar)
-			.setColor(msgUser.pColour)
+			.setColor(msgUser.pColour);
 				
 		message.channel.send(embed);
 	},

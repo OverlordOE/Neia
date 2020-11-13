@@ -98,7 +98,7 @@ client.on('message', async message => {
 	if (!command) return;
 	if (command.category == 'debug' && (id != 137920111754346496 && id != 139030319784263681)) return message.channel.send('You are not the owner of this bot!');
 	if (command.category == 'admin' && !message.member.hasPermission('ADMINISTRATOR') && id != 137920111754346496 && id != 139030319784263681) return message.channel.send('You need Admin privileges to use this command!');
-	if (command.category == 'pvp') await profile.resetProtection(id);
+	if (command.category == 'pvp') await profile.resetProtection(user);
 
 
 	// if the command is used wrongly correct the user
@@ -173,16 +173,14 @@ dbl.on('error', e => logger.error(`Oops! ${e}`));
 dbl.webhook.on('vote', async vote => {
 
 	const userID = vote.user;
-	const user = await client.users.cache.get(userID);
-	let msgUser = await profile.get(userID);
-	if (!msgUser) msgUser = await profile.newUser(userID);
-	logger.info(`${user.tag} has just voted.`);
+	const discordUser = await client.users.cache.get(userID);
+	const user = await profile.getUser(userID);
+	logger.info(`${discordUser.tag} has just voted.`);
 
 	const embed = new Discord.MessageEmbed()
 		.setTitle('Vote Reward')
-		.setThumbnail(user.displayAvatarURL())
-		.setColor(msgUser.pColour)
-
+		.setThumbnail(discordUser.displayAvatarURL())
+		.setColor(user.pColour)
 		.setFooter('Neia', client.user.displayAvatarURL());
 
 	let chest;
@@ -197,10 +195,10 @@ dbl.webhook.on('vote', async vote => {
 			.setImage(`attachment://${chest.picture}`);
 	}
 
-	const income = await profile.calculateIncome(userID);
-	profile.addMoney(userID, income.daily);
-	profile.addItem(userID, chest, 1);
-	profile.setVote(userID);
+	const income = await profile.calculateIncome(user);
+	const balance = profile.addMoney(user, income.daily);
+	profile.addItem(user, chest, 1);
+	profile.setVote(user);
 
-	return user.send(embed.setDescription(`Thank you for voting!\n\nYou got a ${chest.emoji}${chest.name} from your vote 🎁 and ${profile.formatNumber(income.daily)}💰 from your collectables.\nCome back in 12 hours for more!\n\nYour current balance is ${profile.formatNumber(await profile.getBalance(userID))}💰`));
+	return discordUser.send(embed.setDescription(`Thank you for voting!\n\nYou got a ${chest.emoji}${chest.name} from your vote 🎁 and ${profile.formatNumber(income.daily)}💰 from your collectables.\nCome back in 12 hours for more!\n\nYour current balance is ${profile.formatNumber(balance)}💰`));
 });

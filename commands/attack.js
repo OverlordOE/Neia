@@ -22,19 +22,19 @@ module.exports = {
 			const targetMention = message.mentions.users.first();
 			if (!targetMention) return sentMessage.edit(embed.setDescription('Mention the user you want to attack.'));
 
-			const lastAttack = await profile.getAttack(message.author.id);
+			const lastAttack = await profile.getAttack(msgUser);
 			if (lastAttack !== true) return sentMessage.edit(embed.setDescription(`Your attack is on cooldown. Your next attack is available at ${lastAttack}`));
 
 			const target = await profile.getUser(targetMention.id);
 			// if (target.networth < 30000) return sentMessage.edit(embed.setDescription(`${targetMention} user needs to have a networth of atleast 30k to be attacked.`));
 			// if (msgUser.networth < 30000) return sentMessage.edit(embed.setDescription('You need to have a networth of atleast 30k to attack someone.'));
 
-			const protection = await profile.getProtection(targetMention.id);
+			const protection = await profile.getProtection(target);
 			if (protection !== false) return sentMessage.edit(embed.setDescription(`*${targetMention}* has protection against attacks, you cannot attack them untill ${protection}.`));
 
 
 			// Attack resolution
-			const attackResult = await profile.attackUser(message.author.id, targetMention.id);
+			const attackResult = await profile.attackUser(msgUser, target);
 			sentMessage.edit(embed.setDescription(`You have attacked ${targetMention} with your ${attackResult.weapon.emoji}${attackResult.weapon.name} for **${attackResult.damage}** damage`));
 
 
@@ -45,7 +45,7 @@ module.exports = {
 				let lootListValue = 0;
 				let description = `You have killed ${targetMention} and stolen:\n${profile.formatNumber(stealAmount)}💰.`;
 				const networth = target.networth;
-				const inventory = await profile.getInventory(targetMention.id);
+				const inventory = await profile.getInventory(target);
 
 				if (inventory.length) {
 					for (let i = 0; lootListValue <= networth / 5; i++) {
@@ -63,15 +63,15 @@ module.exports = {
 					for (const loot in lootList) {
 						const lootItem = await profile.getItem(loot);
 						description += `\n${profile.formatNumber(lootList[loot])} ${lootItem.emoji}__${lootItem.name}__`;
-						profile.addItem(message.author.id, lootItem, lootList[loot]);
-						profile.removeItem(targetMention.id, lootItem, lootList[loot]);
+						profile.addItem(msgUser, lootItem, lootList[loot]);
+						profile.removeItem(target, lootItem, lootList[loot]);
 					}
 				}
 
-				profile.addMoney(targetMention.id, -stealAmount);
-				profile.addMoney(message.author.id, stealAmount);
+				profile.addMoney(target, -stealAmount);
+				profile.addMoney(msgUser, stealAmount);
 				sentMessage.edit(embed.setDescription(description));
-				profile.addProtection(targetMention.id, 24);
+				profile.addProtection(target, 24);
 				target.hp = 1000;
 				target.save();
 			}
