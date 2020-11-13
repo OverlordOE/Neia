@@ -96,37 +96,12 @@ module.exports = {
 		picture: null,
 		ctg: 'consumable',
 		description: 'You can use this to gain 8 hours of protection against attacks. If you use any of the money commands your protection will be reset\nThis item stacks.',
-		use: async function (profile, sentMessage, amount, embed, item, msgUser) {
+		use: async function (profile, amount, embed, item, msgUser) {
 			const protection = await profile.addProtection(msgUser.user_id, amount * 8);
 			return { succes: true, message: `You have activated your protection.\nIt will last untill __${protection}__` };
 		},
 	},
-	'profile colour': {
-		name: 'Profile Colour',
-		value: 400,
-		buyable: true,
-		emoji: '🌈',
-		rarity: 'uncommon',
-		picture: null,
-		ctg: 'consumable',
-		description: 'Use this to alter the white border on the left of all your commands.',
-		use: function (profile, sentMessage, amount, embed, item, msgUser) {
-			const filter = m => m.author.id === msgUser.user_id;
-			sentMessage.edit(embed.setDescription('Specify the colour you want for your profile in the format **#0099ff**\n[hex colour picker](https://www.color-hex.com/)')).then(() => {
-				sentMessage.channel.awaitMessages(filter, { max: 1, time: 60000 })
-					.then(collected => {
-						const colour = collected.first().content;
-						try {
-							profile.setPColour(msgUser.user_id, colour);
-						}
-						catch { return sentMessage.edit(embed.setDescription('Thats not a valid Hex code')); }
-						profile.removeItem(msgUser.user_id, item, amount);
-						return sentMessage.edit(embed.setDescription(`Profile colour succesfully changed to colour **${colour}**`));
-					});
-			});
-		},
-	},
-
+	
 	'healing potion': {
 		name: 'Healing Potion',
 		value: 2600,
@@ -136,7 +111,7 @@ module.exports = {
 		picture: 'hp.png',
 		ctg: 'consumable',
 		description: 'Restores 50 HP',
-		use: async function (profile, sentMessage, amount, embed, item, msgUser) {
+		use: async function (profile, amount, embed, item, msgUser) {
 			const nextHeal = await profile.getHeal(msgUser.user_id);
 			if (nextHeal === true) {
 

@@ -7,7 +7,6 @@ common.add({ name: 'Spiky Rock', amount: [1, 0] }, 100);
 common.add({ name: 'Scooter', amount: [3, 3] }, 100);
 common.add({ name: 'Car', amount: [1, 1] }, 100);
 common.add({ name: 'Motorcycle', amount: [1, 1] }, 100);
-common.add({ name: 'Profile Colour', amount: [1, 1] }, 100);
 common.add({ name: 'Sailboat', amount: [1, 0] }, 20);
 common.add({ name: 'Motorboat', amount: [1, 0] }, 40);
 common.add({ name: 'Wooden Club', amount: [1, 0] }, 100);
