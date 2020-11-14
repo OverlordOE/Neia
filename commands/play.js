@@ -18,7 +18,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setThumbnail(message.author.displayAvatarURL())
-			.setColor(msgUser.pColour);
+			.setColor(profile.getColour(msgUser));
 
 		const search = args.join(' ');
 		const data = options.active.get(message.guild.id) || {};
@@ -74,7 +74,7 @@ async function Play(client, options, data, logger, msgUser, message) {
 
 	const channel = client.channels.cache.get(data.queue[0].announceChannel);
 	const embed = new Discord.MessageEmbed()
-		.setColor(msgUser.pColour)
+		.setColor(profile.getColour(msgUser))
 		.setThumbnail(data.queue[0].thumbnail);
 
 	channel.send(embed.setDescription(`Now playing **${data.queue[0].songTitle}**\nRequested by ${data.queue[0].requester}`));

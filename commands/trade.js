@@ -15,7 +15,7 @@ module.exports = {
 		const filter = m => m.author.id === msgUser;
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Trading Center')
-			.setColor(msgUser.pColour)
+			.setColor(profile.getColour(msgUser))
 			.setFooter('You can only trade to people on the same server.', client.user.displayAvatarURL());
 
 

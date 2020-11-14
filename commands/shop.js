@@ -31,7 +31,7 @@ module.exports = {
 			.setTitle('Neia Shop')
 			.setThumbnail(client.user.displayAvatarURL())
 			.setDescription(description)
-			.setColor(msgUser.pColour)
+			.setColor(profile.getColour(msgUser))
 
 			.setFooter('Use the items command to see the full item list.', client.user.displayAvatarURL());
 

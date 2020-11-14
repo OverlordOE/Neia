@@ -22,7 +22,7 @@ module.exports = {
 		};
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(msgUser.pColour)
+			.setColor(profile.getColour(msgUser))
 			.setThumbnail(avatar)
 			.setTitle('Neia\'s Gambling Imporium')
 			.setFooter('Use the emojis to choose your game.', client.user.displayAvatarURL());

@@ -72,7 +72,7 @@ module.exports = {
 				.setTitle('Neia Shop')
 				.setThumbnail(client.user.displayAvatarURL())
 				.setDescription(description)
-				.setColor(msgUser.pColour)
+				.setColor(profile.getColour(msgUser))
 		}
 
 		return message.channel.send(embed);

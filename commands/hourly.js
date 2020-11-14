@@ -22,7 +22,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Hourly Reward')
 			.setThumbnail(message.author.displayAvatarURL())
-			.setColor(msgUser.pColour)
+			.setColor(profile.getColour(msgUser))
 
 			.setFooter('You can see how much income you get on your profile.', client.user.displayAvatarURL());
 

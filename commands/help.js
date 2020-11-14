@@ -17,7 +17,7 @@ module.exports = {
 		let infoCommands = '';
 
 		const help = new Discord.MessageEmbed()
-			.setColor(msgUser.pColour)
+			.setColor(profile.getColour(msgUser))
 			;
 
 		if (!args.length) {

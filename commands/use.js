@@ -21,7 +21,7 @@ module.exports = {
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What item do you want to use?')
 			.setThumbnail(client.user.displayAvatarURL())
-			.setColor(msgUser.pColour)
+			.setColor(profile.getColour(msgUser))
 			.setFooter('Neia', client.user.displayAvatarURL());
 
 

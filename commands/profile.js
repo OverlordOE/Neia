@@ -19,7 +19,7 @@ module.exports = {
 		const avatar = target.displayAvatarURL();
 		const userProfile = await profile.getUser(message.author.id);
 		const items = await profile.getInventory(userProfile);
-		const pColour = userProfile.pColour;
+		const pColour = profile.getColour(userProfile);
 
 		const prot = profile.getProtection(userProfile);
 		let daily = profile.getDaily(userProfile);

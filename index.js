@@ -179,7 +179,7 @@ dbl.webhook.on('vote', async vote => {
 	const embed = new Discord.MessageEmbed()
 		.setTitle('Vote Reward')
 		.setThumbnail(discordUser.displayAvatarURL())
-		.setColor(user.pColour)
+		.setColor(profile.getColour(user))
 		.setFooter('Neia', client.user.displayAvatarURL());
 
 	let chest;

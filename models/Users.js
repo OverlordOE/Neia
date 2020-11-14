@@ -69,11 +69,6 @@ module.exports = (sequelize, DataTypes) => {
 
 
 		// MISC
-		pColour: {
-			type: DataTypes.STRING,
-			defaultValue: '#fcfcfc',
-			allowNull: false,
-		},
 		firstCommand:  {
 		type: DataTypes.BOOLEAN,
 		defaultValue: true,

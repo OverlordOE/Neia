@@ -23,7 +23,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Daily Reward')
 			.setThumbnail(message.author.displayAvatarURL())
-			.setColor(msgUser.pColour)
+			.setColor(profile.getColour(msgUser))
 			.setFooter('You can get up to 2 extra dailys per day by voting.', client.user.displayAvatarURL());
 
 

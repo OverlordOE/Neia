@@ -23,7 +23,7 @@ module.exports = {
 			.setTitle('Neia Refunds')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What do you want to refund? `80% refund`')
-			.setColor(msgUser.pColour)
+			.setColor(profile.getColour(msgUser))
 
 			.setFooter('You can type `sell all` to sell your whole inventory.', client.user.displayAvatarURL());
 

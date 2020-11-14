@@ -17,7 +17,7 @@ module.exports = {
 			.setTitle('Neia Equipping')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What item do you want to equip?')
-			.setColor(msgUser.pColour)
+			.setColor(profile.getColour(msgUser))
 			.setFooter('Use the `attack` command to kill people.', client.user.displayAvatarURL());
 
 		for (let i = 0; i < args.length; i++) {

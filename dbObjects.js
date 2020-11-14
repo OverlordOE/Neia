@@ -37,7 +37,6 @@ Reflect.defineProperty(profile, 'newUser', {
 			lastHeal: now.subtract(1, 'days').toString(),
 			lastAttack: now.subtract(1, 'days').toString(),
 			protection: now.toString(),
-			pColour: '#fcfcfc',
 			firstCommand: true,
 		});
 		profile.set(id, user);
@@ -95,7 +94,7 @@ Reflect.defineProperty(profile, 'equip', {
 });
 
 Reflect.defineProperty(profile, 'changeHp', {
-	value:  function changeHp(user, amount) {
+	value: function changeHp(user, amount) {
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 
 		const hp = Number(user.hp);
@@ -118,7 +117,7 @@ Reflect.defineProperty(profile, 'attackUser', {
 	* @param {string} attacker - The id of the Attacking user.
 	* @param {string} defender - The id of the Defending user.
 	*/
-	value:  function attackUser(attacker, defender) {
+	value: function attackUser(attacker, defender) {
 		const attackerGear = JSON.parse(attacker.equipment);
 		const defenderGear = JSON.parse(defender.equipment);
 
@@ -131,7 +130,7 @@ Reflect.defineProperty(profile, 'attackUser', {
 			emoji: '✊',
 		};
 
-    let offhand;
+		let offhand;
 		if (defenderGear['offhand']) offhand = items[defenderGear['offhand'].toLowerCase()];
 		else offhand = {
 			armor: [1, 1],
@@ -300,7 +299,7 @@ Reflect.defineProperty(profile, 'addMoney', {
 
 
 Reflect.defineProperty(profile, 'calculateIncome', {
-	value:  async function calculateIncome(user) {
+	value: async function calculateIncome(user) {
 		const uItems = await profile.getInventory(user);
 		let networth = 0;
 		let income = 0;
@@ -324,7 +323,7 @@ Reflect.defineProperty(profile, 'calculateIncome', {
 });
 
 Reflect.defineProperty(profile, 'getDaily', {
-	value:  function getDaily(user) {
+	value: function getDaily(user) {
 		const now = moment();
 		const dCheck = moment(user.lastDaily).add(1, 'd');
 		if (moment(dCheck).isBefore(now)) return true;
@@ -332,14 +331,14 @@ Reflect.defineProperty(profile, 'getDaily', {
 	},
 });
 Reflect.defineProperty(profile, 'setDaily', {
-	value:  function setDaily(user) {
+	value: function setDaily(user) {
 		user.lastDaily = moment().toString();
 		return user.save();
 	},
 });
 
 Reflect.defineProperty(profile, 'getHourly', {
-	value:  function getHourly(user) {
+	value: function getHourly(user) {
 		const now = moment();
 		const hCheck = moment(user.lastHourly).add(1, 'h');
 		if (moment(hCheck).isBefore(now)) return true;
@@ -347,7 +346,7 @@ Reflect.defineProperty(profile, 'getHourly', {
 	},
 });
 Reflect.defineProperty(profile, 'setHourly', {
-	value:  function setHourly(user) {
+	value: function setHourly(user) {
 		user.lastHourly = moment().toString();
 		return user.save();
 	},
@@ -355,13 +354,13 @@ Reflect.defineProperty(profile, 'setHourly', {
 
 
 Reflect.defineProperty(profile, 'setVote', {
-	value:  function setVote(user) {
+	value: function setVote(user) {
 		user.lastVote = moment().toString();
 		return user.save();
 	},
 });
 Reflect.defineProperty(profile, 'getVote', {
-	value:  function getVote(user) {
+	value: function getVote(user) {
 		const now = moment();
 		const vCheck = moment(user.lastVote).add(12, 'h');
 		if (moment(vCheck).isBefore(now)) return true;
@@ -371,13 +370,13 @@ Reflect.defineProperty(profile, 'getVote', {
 
 
 Reflect.defineProperty(profile, 'setHeal', {
-	value:  function setHeal(user) {
+	value: function setHeal(user) {
 		user.lastHeal = moment().toString();
 		return user.save();
 	},
 });
 Reflect.defineProperty(profile, 'getHeal', {
-	value:  function getHeal(user) {
+	value: function getHeal(user) {
 		const now = moment();
 		const healCheck = moment(user.lastHeal).add(2, 'h');
 		if (moment(healCheck).isBefore(now)) return true;
@@ -387,13 +386,13 @@ Reflect.defineProperty(profile, 'getHeal', {
 
 
 Reflect.defineProperty(profile, 'setAttack', {
-	value:  function setAttack(user) {
+	value: function setAttack(user) {
 		user.lastAttack = moment().toString();
 		return user.save();
 	},
 });
 Reflect.defineProperty(profile, 'getAttack', {
-	value:  function getAttack(user) {
+	value: function getAttack(user) {
 		const now = moment();
 		const attackCheck = moment(user.lastAttack).add(1, 'h');
 		if (moment(attackCheck).isBefore(now)) return true;
@@ -403,7 +402,7 @@ Reflect.defineProperty(profile, 'getAttack', {
 
 
 Reflect.defineProperty(profile, 'getProtection', {
-	value:  function getProtection(user) {
+	value: function getProtection(user) {
 		const now = moment();
 		const protection = moment(user.protection);
 		if (protection.isAfter(now)) return protection.format('MMM Do HH:mm');
@@ -416,7 +415,7 @@ Reflect.defineProperty(profile, 'addProtection', {
 	* @param {string} user - The user that will receive the protection.
 	* @param {number} hours - Total amount of hours to add to the protection.
 	*/
-	value:  function addProtection(user, hours) {
+	value: function addProtection(user, hours) {
 		let protection;
 		const oldProtection = profile.getProtection(user);
 		if (oldProtection) protection = moment(oldProtection, 'MMM Do HH:mm').add(hours, 'h');
@@ -428,7 +427,7 @@ Reflect.defineProperty(profile, 'addProtection', {
 	},
 });
 Reflect.defineProperty(profile, 'resetProtection', {
-	value:  function resetProtection(user) {
+	value: function resetProtection(user) {
 		user.protection = moment().toString();
 		return user.save();
 	},
@@ -450,7 +449,15 @@ Reflect.defineProperty(profile, 'formatNumber', {
 	},
 });
 
-
+Reflect.defineProperty(profile, 'getColour', {
+	value: function getColour(user) {
+		if (user.class) {
+			const userClass = JSON.stringify(user.class);
+			return userClass.colour;
+		}
+		return '#fcfcfc';
+	},
+});
 
 
 
