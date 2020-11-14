@@ -22,13 +22,41 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 		},
 
-		// PVP
-		hp: {
+		// CHARACTER
+		curHP: {
 			type: DataTypes.INTEGER,
-			defaultValue: 1000,
+			allowNull: true,
+		},
+		curMP: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+		},
+		level: {
+			type: DataTypes.INTEGER,
+			defaultValue: 1,
 			allowNull: false,
 		},
+		exp: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		class: {
+			type: DataTypes.STRING,
+			defaultValue: null,
+			allowNull: true,
+		},
 		equipment: {
+			type: DataTypes.JSON,
+			defaultValue: null,
+			allowNull: true,
+		},
+		baseStats: {
+			type: DataTypes.JSON,
+			defaultValue: null,
+			allowNull: true,
+		},
+		stats: {
 			type: DataTypes.JSON,
 			defaultValue: null,
 			allowNull: true,
@@ -61,18 +89,18 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: '',
 			allowNull: false,
 		},
+
+
+		// MISC
+		firstCommand: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: true,
+		},
 		protection: {
 			type: DataTypes.STRING,
 			defaultValue: '',
 			allowNull: false,
 		},
-
-
-		// MISC
-		firstCommand:  {
-		type: DataTypes.BOOLEAN,
-		defaultValue: true,
-	},
 	},
 		{
 			timestamps: false,

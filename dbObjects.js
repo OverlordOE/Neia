@@ -18,6 +18,7 @@ const Users = sequelize.import('models/Users');
 const Guilds = sequelize.import('models/Guilds');
 const UserItems = sequelize.import('models/UserItems');
 const items = require('./data/items');
+const classes = require('./data/classes');
 
 Reflect.defineProperty(profile, 'newUser', {
 	value: async function newUser(id) {
@@ -150,6 +151,210 @@ Reflect.defineProperty(profile, 'attackUser', {
 		};
 	},
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// CLASS
+Reflect.defineProperty(profile, 'getClass', {
+	value: function getClass(className) {
+		const userClass = className.toLowerCase();
+		if (classes[userClass]) return classes[userClass];
+		return false;
+	},
+});
+
+
+Reflect.defineProperty(profile, 'resetClass', {
+	value: async function resetClass(user) {
+		user.class = null;
+		user.stats = null;
+		user.baseStats = null;
+		user.equipment = null;
+		// user.skills = null;
+		user.curHP = null;
+		user.curMP = null;
+		user.level = 1;
+		user.exp = 0;
+
+		return user.save();
+	},
+});
+Reflect.defineProperty(profile, 'setClass', {
+	value: async function setClass(user, newClass) {
+
+		user.curHP = newClass.stats.base.hp;
+		user.curMP = newClass.stats.base.mp;
+		user.class = newClass.name;
+		user.baseStats = JSON.stringify(newClass.stats.base);
+		user.equipment = JSON.stringify({
+			'main hand': null,
+			'off hand': null,
+			'head': null,
+			'necklace': null,
+			'shoulders': null,
+			'chest': null,
+			'hands': null,
+			'legs': null,
+			'feet': null,
+			'ring': null,
+			'trinket': null,
+		});
+
+		// user.skills = JSON.stringify(c.startSkills);
+		// for (let i = 0; i < c.startSkills.length; i++) {
+		// 	const skill = profile.getSkill(c.startSkills[i]);
+		// 	await profile.addSkill(id, skill);
+		// 	await profile.setSkill(id, skill, i + 1);
+		// }
+
+		for (let i = 0; i < newClass.startEquipment.length; i++) {
+			const equipment = await profile.getItem(newClass.startEquipment[i]);
+			await profile.addItem(user, equipment, 1);
+			profile.equip(user, equipment);
+		}
+
+		profile.calculateStats(user);
+		return user.save();
+	},
+});
+
+
+// STATS
+Reflect.defineProperty(profile, 'getBaseStats', {
+	value: async function getBaseStats(user) {
+		if (!user.class) return null;
+		return JSON.parse(user.baseStats);
+	},
+});
+Reflect.defineProperty(profile, 'getStats', {
+	value: async function getStats(user) {
+		if (!user.class) return null;
+		return JSON.parse(user.stats);
+	},
+});
+Reflect.defineProperty(profile, 'calculateStats', {
+	value: async function calculateStats(user) {
+		if (!user.class) throw Error('User does not have a class');
+
+		const stats = JSON.parse(user.baseStats);
+		const equipment = await profile.getEquipment(user);
+		for (const slot in equipment) {
+			if (equipment[slot]) {
+				const item = items[equipment[slot]];
+
+				if (item.stats) {
+					for (const itemEffect in item.stats) {
+						if (stats[itemEffect]) stats[itemEffect] += item.stats[itemEffect];
+						else stats[itemEffect] = item.stats[itemEffect];
+					}
+				}
+			}
+		}
+
+		stats.hp += Math.round(stats.con / 4);
+		stats.mp += Math.round(stats.int / 4);
+		user.curHP += Math.round(stats.con / 4);
+		user.curMP += Math.round(stats.int / 4);
+
+		user.stats = JSON.stringify(stats);
+		user.save();
+		return stats;
+	},
+});
+
+Reflect.defineProperty(profile, 'addExp', {
+	value: async function addExp(user, exp, message) {
+		if (!user.class) return message.reply(
+			'You dont have a class yet so you cant gain experience!\nUse the command `class` to get a class`',
+		);
+
+		user.exp += Number(exp);
+		user.save();
+		return profile.levelInfo(user, message);
+	},
+});
+Reflect.defineProperty(profile, 'levelInfo', {
+	value: async function levelInfo(user, message) {
+		const exponent = 1.5;
+		const baseExp = 1000;
+		let expNeeded =
+			(baseExp / 10) *
+			Math.floor((baseExp / 100) * Math.pow(user.level, exponent));
+
+		while (user.exp >= expNeeded && user.level < 60) {
+			const classInfo = profile.getClass(user.class);
+			if (!classInfo) {
+				message.reply(
+					'You dont have a class yet so you cant gain experience!\nUse the command `class` to get a class`',
+				);
+				return {
+					level: user.level,
+					exp: user.exp,
+					expNeeded: expNeeded,
+				};
+			}
+			const statGrowth = classInfo.stats.growth;
+			const stats = JSON.parse(user.baseStats);
+
+			user.level++;
+			user.exp -= expNeeded;
+			expNeeded = (baseExp / 10) *
+				Math.floor((baseExp / 100) * Math.pow(user.level, exponent));
+
+			stats.hp += statGrowth.hp;
+			user.curHP += statGrowth.hp;
+			stats.mp += statGrowth.mp;
+			user.curMP += statGrowth.mp;
+			stats.str += statGrowth.str;
+			stats.dex += statGrowth.dex;
+			stats.con += statGrowth.con;
+			stats.int += statGrowth.int;
+			user.baseStats = JSON.stringify(stats);
+			user.save();
+
+			message.reply(`you have leveled up to level ${user.level}.
+			You gain the following stat increases:
+			**${statGrowth.hp}** HP
+			**${statGrowth.mp}** MP
+			**${statGrowth.str}** STR
+			**${statGrowth.dex}** DEX
+			**${statGrowth.con}** CON
+			**${statGrowth.int}** INT
+			`);
+		}
+
+		return {
+			level: user.level,
+			exp: user.exp,
+			expNeeded: expNeeded,
+		};
+	},
+});
+
+
 
 
 
