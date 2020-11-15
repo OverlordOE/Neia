@@ -14,7 +14,7 @@ module.exports = {
 
 	async execute(message, args, msgUser, profile, guildProfile, client, logger, options) {
 
-		if (!message.member.voice.channel) return message.channel.send(embed.setdescription('you are not in a voice channel.'));
+		if (!message.member.voice.channel) return message.channel.send(embed.setDescription('you are not in a voice channel.'));
 
 		const embed = new Discord.MessageEmbed()
 			.setThumbnail(message.author.displayAvatarURL())
@@ -33,12 +33,12 @@ module.exports = {
 		}
 		catch (error) {
 			logger.warn('Neia couldnt join the voice channel');
-			return message.channel.send(embed.setdescription('Neia probably does not have permission to join the channel or something else went wrong'));
+			return message.channel.send(embed.setDescription('Neia probably does not have permission to join the channel or something else went wrong'));
 		}
 
 
 		if (!data.queue) data.queue = [];
-		if (data.queue.length >= 4) return message.channel.send(embed.setdescription('you have reached the maximum queue size for free users.\nIf you want to upgrade your queue size contact OverlordOE#0717.'));
+		if (data.queue.length >= 4) return message.channel.send(embed.setDescription('you have reached the maximum queue size for free users.\nIf you want to upgrade your queue size contact OverlordOE#0717.'));
 		data.guildID = message.guild.id;
 
 		const tempMessage = await message.channel.send('Finding youtube video...');
