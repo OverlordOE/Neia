@@ -10,6 +10,7 @@ module.exports = {
 	Open: require('./open'),
 	Trade: require('./trade'),
 	Profile: require('./profile'),
+	Class: require('./class'),
 	Vote: require('./vote'),
 	Hourly: require('./hourly'),
 	Daily: require('./daily'),

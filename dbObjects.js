@@ -90,7 +90,7 @@ Reflect.defineProperty(profile, 'equip', {
 			user.equipment = JSON.stringify(equipped);
 			return user.save();
 		}
-		return false;
+		throw Error(`${equipment} is not a valid item`);
 	},
 });
 
@@ -188,7 +188,7 @@ Reflect.defineProperty(profile, 'getClass', {
 
 
 Reflect.defineProperty(profile, 'resetClass', {
-	value: async function resetClass(user) {
+	value: function resetClass(user) {
 		user.class = null;
 		user.stats = null;
 		user.baseStats = null;
@@ -210,17 +210,17 @@ Reflect.defineProperty(profile, 'setClass', {
 		user.class = newClass.name;
 		user.baseStats = JSON.stringify(newClass.stats.base);
 		user.equipment = JSON.stringify({
-			'main hand': null,
-			'off hand': null,
-			'head': null,
-			'necklace': null,
-			'shoulders': null,
-			'chest': null,
-			'hands': null,
-			'legs': null,
-			'feet': null,
-			'ring': null,
-			'trinket': null,
+			'Main hand': null,
+			'Off hand': null,
+			'Head': null,
+			'Necklace': null,
+			'Shoulders': null,
+			'Chest': null,
+			'Hands': null,
+			'Legs': null,
+			'Feet': null,
+			'Ring': null,
+			'Trinket': null,
 		});
 
 		// user.skills = JSON.stringify(c.startSkills);
@@ -231,12 +231,12 @@ Reflect.defineProperty(profile, 'setClass', {
 		// }
 
 		for (let i = 0; i < newClass.startEquipment.length; i++) {
-			const equipment = await profile.getItem(newClass.startEquipment[i]);
+			const equipment = profile.getItem(newClass.startEquipment[i]);
 			await profile.addItem(user, equipment, 1);
 			profile.equip(user, equipment);
 		}
 
-		profile.calculateStats(user);
+		await profile.calculateStats(user);
 		return user.save();
 	},
 });
@@ -244,13 +244,13 @@ Reflect.defineProperty(profile, 'setClass', {
 
 // STATS
 Reflect.defineProperty(profile, 'getBaseStats', {
-	value: async function getBaseStats(user) {
+	value: function getBaseStats(user) {
 		if (!user.class) return null;
 		return JSON.parse(user.baseStats);
 	},
 });
 Reflect.defineProperty(profile, 'getStats', {
-	value: async function getStats(user) {
+	value: function getStats(user) {
 		if (!user.class) return null;
 		return JSON.parse(user.stats);
 	},
@@ -263,8 +263,8 @@ Reflect.defineProperty(profile, 'calculateStats', {
 		const equipment = await profile.getEquipment(user);
 		for (const slot in equipment) {
 			if (equipment[slot]) {
-				const item = items[equipment[slot]];
-
+				const item = profile.getItem(equipment[slot]);
+			
 				if (item.stats) {
 					for (const itemEffect in item.stats) {
 						if (stats[itemEffect]) stats[itemEffect] += item.stats[itemEffect];
@@ -657,7 +657,7 @@ Reflect.defineProperty(profile, 'formatNumber', {
 Reflect.defineProperty(profile, 'getColour', {
 	value: function getColour(user) {
 		if (user.class) {
-			const userClass = JSON.stringify(user.class);
+			const userClass = profile.getClass(user.class);
 			return userClass.colour;
 		}
 		return '#fcfcfc';
