@@ -8,10 +8,10 @@ module.exports = {
 	args: true,
 	usage: '<sides> <amount>',
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger) {
+	execute(message, args, msgUser, character, guildProfile, client, logger) {
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(profile.getColour(msgUser));
+			.setColor(character.getColour(msgUser));
 
 		const sides = args[0];
 		let amount;

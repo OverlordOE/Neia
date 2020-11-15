@@ -9,34 +9,34 @@ module.exports = {
 
 	category: 'economy',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
-		const hourly = profile.getHourly(msgUser);
+	async execute(message, args, msgUser, character, guildProfile, client, logger) {
+		const hourly = character.getHourly(msgUser);
 		let chest;
 
 		const luck = Math.floor(Math.random() * 6);
 		if (luck == 0) chest = 'Mystery Chest';
 		else if (luck == 1 || luck == 2) chest = 'Rare chest';
 		else chest = 'Common Chest';
-		chest = profile.getItem(chest);
+		chest = character.getItem(chest);
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Hourly Reward')
 			.setThumbnail(message.author.displayAvatarURL())
-			.setColor(profile.getColour(msgUser))
+			.setColor(character.getColour(msgUser))
 
-			.setFooter('You can see how much income you get on your profile.', client.user.displayAvatarURL());
+			.setFooter('You can see how much income you get on your character.', client.user.displayAvatarURL());
 
 
 		if (hourly === true) {
 			if (chest.picture) embed.attachFiles(`assets/items/${chest.picture}`)
 				.setImage(`attachment://${chest.picture}`);
 
-			const income = await profile.calculateIncome(msgUser);
-			const balance = profile.addMoney(msgUser, income.hourly);
-			profile.addItem(msgUser, chest, 1);
-			profile.setHourly(msgUser);
+			const income = await character.calculateIncome(msgUser);
+			const balance = character.addMoney(msgUser, income.hourly);
+			character.addItem(msgUser, chest, 1);
+			character.setHourly(msgUser);
 
-			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your hourly 🎁 and ${profile.formatNumber(income.hourly)}💰 from your collectables.\nCome back in an hour for more!\n\nYour current balance is ${profile.formatNumber(balance)}💰`));
+			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your hourly 🎁 and ${character.formatNumber(income.hourly)}💰 from your collectables.\nCome back in an hour for more!\n\nYour current balance is ${character.formatNumber(balance)}💰`));
 		}
 		else { message.channel.send(embed.setDescription(`You have already gotten your hourly 🎁\n\nYou can get your next hourly __${hourly}__.`)); }
 

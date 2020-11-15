@@ -9,7 +9,7 @@ module.exports = {
 	Equip: require('./equip'),
 	Open: require('./open'),
 	Trade: require('./trade'),
-	Profile: require('./profile'),
+	Character: require('./character'),
 	Class: require('./class'),
 	Vote: require('./vote'),
 	Hourly: require('./hourly'),

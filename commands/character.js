@@ -1,41 +1,41 @@
 const Discord = require('discord.js');
 const itemInfo = require('../data/items');
 module.exports = {
-	name: 'profile',
-	summary: 'Shows profile of you or the tagger user',
-	description: 'Shows profile of you or the tagger user.',
+	name: 'character',
+	summary: 'Shows your character or the tagger user\'s character',
+	description: 'Shows your character or the tagger user\'s character.',
 	category: 'info',
-	aliases: ['inv', 'items', 'prof', 'inventory', 'balance', 'money', 'p', 'equipment'],
+	aliases: ['inv', 'items', 'char', 'inventory', 'balance', 'money', 'c', 'equipment'],
 	args: false,
 	usage: '<user>',
 
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
+	async execute(message, args, msgUser, character, guildProfile, client, logger) {
 		const filter = (reaction, user) => {
 			return user.id === message.author.id;
 		};
 
 		const target = message.mentions.users.first() || message.author;
 		const avatar = target.displayAvatarURL();
-		const userProfile = await profile.getUser(message.author.id);
-		const items = await profile.getInventory(userProfile);
-		const pColour = profile.getColour(userProfile);
-		await profile.calculateStats(userProfile);
+		const userProfile = await character.getUser(message.author.id);
+		const items = await character.getInventory(userProfile);
+		const pColour = character.getColour(userProfile);
+		await character.calculateStats(userProfile);
 
-		const prot = profile.getProtection(userProfile);
-		let daily = profile.getDaily(userProfile);
-		let hourly = profile.getHourly(userProfile);
-		let vote = profile.getVote(userProfile);
-		let heal = profile.getHeal(userProfile);
-		let attack = profile.getAttack(userProfile);
+		const prot = character.getProtection(userProfile);
+		let daily = character.getDaily(userProfile);
+		let hourly = character.getHourly(userProfile);
+		let vote = character.getVote(userProfile);
+		let heal = character.getHeal(userProfile);
+		let attack = character.getAttack(userProfile);
 
-		const levelInfo = await profile.levelInfo(userProfile, message);
+		const levelInfo = await character.levelInfo(userProfile, message);
 		let exp = `${levelInfo.exp}/${levelInfo.expNeeded}`;
 		if (levelInfo.level == 60) exp = '__**Max**__';
 
 
 		let userClass = null;
-		if (userProfile.class) userClass = profile.getClass(userProfile.class);
+		if (userProfile.class) userClass = character.getClass(userProfile.class);
 
 		let className;
 		let colour;
@@ -57,7 +57,7 @@ module.exports = {
 			.setColor(pColour)
 			.setTitle(`${target.tag}'s General Stats`)
 			.setThumbnail(avatar)
-			.addField('Balance:', `${profile.formatNumber(userProfile.balance)}💰`)
+			.addField('Balance:', `${character.formatNumber(userProfile.balance)}💰`)
 			.addField('Next hourly:', hourly, true)
 			.addField('Next daily:', daily, true)
 			.addField('Next Vote', vote, true)
@@ -93,12 +93,12 @@ module.exports = {
 			items.map(i => {
 				if (i.amount < 1) return;
 				const item = itemInfo[i.name.toLowerCase()];
-				inventory += `${item.emoji}${item.name}: ${profile.formatNumber(i.amount)}\n`;
+				inventory += `${item.emoji}${item.name}: ${character.formatNumber(i.amount)}\n`;
 			});
 
-			const income = await profile.calculateIncome(userProfile);
-			inventoryEmbed.addField('Max passive income', `${profile.formatNumber(income.income)}💰`);
-			inventoryEmbed.addField('Networth', `${profile.formatNumber(income.networth)}💰`, true);
+			const income = await character.calculateIncome(userProfile);
+			inventoryEmbed.addField('Max passive income', `${character.formatNumber(income.income)}💰`);
+			inventoryEmbed.addField('Networth', `${character.formatNumber(income.networth)}💰`, true);
 
 			inventoryEmbed.setDescription(inventory);
 		}
@@ -106,8 +106,8 @@ module.exports = {
 
 
 		if (userClass) {
-			const stats = profile.getStats(userProfile);
-			const baseStats = profile.getBaseStats(userProfile);
+			const stats = character.getStats(userProfile);
+			const baseStats = character.getBaseStats(userProfile);
 
 			let statDescription = `**Class:** ${className} ${levelInfo.level}\n**exp:** ${exp}\n`;
 			for (const stat in stats) {
@@ -116,11 +116,11 @@ module.exports = {
 			}
 			characterEmbed.setDescription(statDescription);
 
-			const equipment = await profile.getEquipment(userProfile);
+			const equipment = await character.getEquipment(userProfile);
 			let equipmentDescription = '';
 			for (const slot in equipment) {
 				if (equipment[slot]) {
-					const item = profile.getItem(equipment[slot]);
+					const item = character.getItem(equipment[slot]);
 					equipmentDescription += `\n**${slot}**: ${item.emoji}${item.name}`;
 				}
 				else equipmentDescription += `\n**${slot}**: Nothing`;

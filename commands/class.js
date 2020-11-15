@@ -11,7 +11,7 @@ module.exports = {
 	usage: '',
 
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
+	async execute(message, args, msgUser, character, guildProfile, client, logger) {
 
 
 		const embed = new Discord.MessageEmbed()
@@ -52,7 +52,7 @@ module.exports = {
 
 							case '✅':
 								try {
-									profile.setClass(msgUser, curClass);
+									character.setClass(msgUser, curClass);
 								}
 								catch (error) {
 									return sentMessage.edit(embed.setColor(curClass.colour).setDescription('Something went wrong'));
@@ -80,7 +80,7 @@ module.exports = {
 
 					sentMessage.awaitReactions(filter, { max: 1, time: 60000 })
 						.then(() => {
-							profile.resetClass(msgUser);
+							character.resetClass(msgUser);
 							sentMessage.edit(embed.setDescription('Class reset.'));
 							sentMessage.reactions.removeAll();
 						});

@@ -5,7 +5,7 @@ const cron = require('cron');
 const DBL = require('dblapi.js');
 const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: process.env.WEBHOOK_TOKEN });
 const clientCommands = require('./commands');
-const { Users, Guilds, profile, guildProfile } = require('./dbObjects');
+const { Users, Guilds, character, guildProfile } = require('./dbObjects');
 require('dotenv').config();
 const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
@@ -51,7 +51,7 @@ client.login(process.env.TEST_TOKEN);
 client.on('ready', async () => {
 	try {
 		const storedUsers = await Users.findAll();
-		storedUsers.forEach(b => profile.set(b.user_id, b));
+		storedUsers.forEach(b => character.set(b.user_id, b));
 		const storedGuilds = await Guilds.findAll();
 		storedGuilds.forEach(b => guildProfile.set(b.guild_id, b));
 		let memberTotal = 0;
@@ -82,7 +82,7 @@ client.on('message', async message => {
 	if (!guild) guild = await guildProfile.newGuild(message.guild.id);
 	const prefix = await guildProfile.getPrefix(message.guild.id);
 	const id = message.author.id;
-	const user = await profile.getUser(id);
+	const user = await character.getUser(id);
 
 
 	// split message for further use
@@ -100,7 +100,7 @@ client.on('message', async message => {
 	if (!command) return;
 	if (command.category == 'debug' && (id != 137920111754346496 && id != 139030319784263681)) return message.channel.send('You are not the owner of this bot!');
 	else if (command.category == 'admin' && !message.member.hasPermission('ADMINISTRATOR') && id != 137920111754346496 && id != 139030319784263681) return message.channel.send('You need Admin privileges to use this command!');
-	else if (command.category == 'pvp') profile.resetProtection(user);
+	else if (command.category == 'pvp') character.resetProtection(user);
 
 
 	// if the command is used wrongly correct the user
@@ -138,7 +138,7 @@ client.on('message', async message => {
 	const options = { active: active };
 
 	if (user.firstCommand) {
-		client.commands.get('changelog').execute(message, args, user, profile, guildProfile, client, logger, cooldowns, options);
+		client.commands.get('changelog').execute(message, args, user, character, guildProfile, client, logger, cooldowns, options);
 		user.firstCommand = false;
 		logger.info(`New user ${message.author.tag}`);
 		user.save();
@@ -147,7 +147,7 @@ client.on('message', async message => {
 	// execute command
 	logger.log('info', `${message.author.tag} Called command: ${commandName} ${args.join(' ')}, in guild: ${message.guild.name}`);
 	try {
-		command.execute(message, args, user, profile, guildProfile, client, logger, cooldowns, options);
+		command.execute(message, args, user, character, guildProfile, client, logger, cooldowns, options);
 	}
 	catch (e) {
 		logger.error(e.stack);
@@ -158,7 +158,7 @@ client.on('message', async message => {
 // Regular tasks executed every 3 hours
 const botTasks = new cron.CronJob('0 0-23/3 * * *', () => {
 	const lottery = client.commands.get('lottery');
-	lottery.execute(profile, client, logger);
+	lottery.execute(character, client, logger);
 
 	let memberTotal = 0;
 	client.guilds.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
@@ -176,13 +176,13 @@ dbl.webhook.on('vote', async vote => {
 
 	const userID = vote.user;
 	const discordUser = await client.users.cache.get(userID);
-	const user = await profile.getUser(userID);
+	const user = await character.getUser(userID);
 	logger.info(`${discordUser.tag} has just voted.`);
 
 	const embed = new Discord.MessageEmbed()
 		.setTitle('Vote Reward')
 		.setThumbnail(discordUser.displayAvatarURL())
-		.setColor(profile.getColour(user))
+		.setColor(character.getColour(user))
 		.setFooter('Neia', client.user.displayAvatarURL());
 
 	let chest;
@@ -190,17 +190,17 @@ dbl.webhook.on('vote', async vote => {
 	if (luck == 0) chest = 'Epic chest';
 	if (luck == 1) chest = 'Mystery chest';
 	else chest = 'Rare chest';
-	chest = profile.getItem(chest);
+	chest = character.getItem(chest);
 
 	if (chest.picture) {
 		embed.attachFiles(`assets/items/${chest.picture}`)
 			.setImage(`attachment://${chest.picture}`);
 	}
 
-	const income = await profile.calculateIncome(user);
-	const balance = profile.addMoney(user, income.daily);
-	profile.addItem(user, chest, 1);
-	profile.setVote(user);
+	const income = await character.calculateIncome(user);
+	const balance = character.addMoney(user, income.daily);
+	character.addItem(user, chest, 1);
+	character.setVote(user);
 
-	return discordUser.send(embed.setDescription(`Thank you for voting!\n\nYou got a ${chest.emoji}${chest.name} from your vote 🎁 and ${profile.formatNumber(income.daily)}💰 from your collectables.\nCome back in 12 hours for more!\n\nYour current balance is ${profile.formatNumber(balance)}💰`));
+	return discordUser.send(embed.setDescription(`Thank you for voting!\n\nYou got a ${chest.emoji}${chest.name} from your vote 🎁 and ${character.formatNumber(income.daily)}💰 from your collectables.\nCome back in 12 hours for more!\n\nYour current balance is ${character.formatNumber(balance)}💰`));
 });

@@ -6,29 +6,29 @@ module.exports = {
 	usage: '<money> <target>',
 
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
+	async execute(message, args, msgUser, character, guildProfile, client, logger) {
 		const amount = args.find(arg => !/<@!?\d+>/g.test(arg));
 		const target = message.mentions.users.first() || message.author;
-		const targetUser = await profile.getUser(target.id);
+		const targetUser = await character.getUser(target.id);
 
 		if (args[0] == 'all') {
-			profile.map((user) => profile.addMoney(user, args[1]));
-			return message.channel.send(`Added ${profile.formatNumber(amount)} to every available user`);
+			character.map((user) => character.addMoney(user, args[1]));
+			return message.channel.send(`Added ${character.formatNumber(amount)} to every available user`);
 		}
 		else if (args[0] == 'item') {
-			const item = profile.getItem(args[1]);
-			profile.addItem(targetUser, item, args[2]);
+			const item = character.getItem(args[1]);
+			character.addItem(targetUser, item, args[2]);
 			return message.channel.send(`Added ${args[2]} __${args[1]}__ to ${target}`);
 		}
 
 
 		if (!amount || isNaN(amount)) return message.channel.send(`Sorry *${message.author}*, that's an invalid amount.`);
 
-		profile.addMoney(targetUser, amount);
-		const balance = profile.formatNumber(targetUser.balance);
+		character.addMoney(targetUser, amount);
+		const balance = character.formatNumber(targetUser.balance);
 
-		if (amount <= 0) return message.channel.send(`Successfully removed ${profile.formatNumber(amount * -1)}💰 from *${target}*. Their current balance is ${balance}💰`);
-		return message.channel.send(`Successfully added ${profile.formatNumber(amount)}💰 to *${target}*. Their current balance is ${balance}💰`);
+		if (amount <= 0) return message.channel.send(`Successfully removed ${character.formatNumber(amount * -1)}💰 from *${target}*. Their current balance is ${balance}💰`);
+		return message.channel.send(`Successfully added ${character.formatNumber(amount)}💰 to *${target}*. Their current balance is ${balance}💰`);
 
 	},
 };

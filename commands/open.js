@@ -10,7 +10,7 @@ module.exports = {
 
 	args: true,
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger) {
+	async execute(message, args, msgUser, character, guildProfile, client, logger) {
 		const lootEmbed = new Discord.MessageEmbed()
 
 			.setFooter('You can open multiple chests at the same time.', client.user.displayAvatarURL());
@@ -31,8 +31,8 @@ module.exports = {
 
 			if (amount > 1) {
 
-				const item = profile.getItem(`${chest} chest`);
-				if (!await profile.hasItem(msgUser, item, amount)) return message.reply(`You don't have ${amount} __${item.name}(s)__!`);
+				const item = character.getItem(`${chest} chest`);
+				if (!await character.hasItem(msgUser, item, amount)) return message.reply(`You don't have ${amount} __${item.name}(s)__!`);
 				lootEmbed.setTitle(`${amount} ${chest} chests`);
 
 				let description = `${message.author} has discovered:\n`;
@@ -46,9 +46,9 @@ module.exports = {
 				}
 
 				for (const loot in lootlist) {
-					const lootItem = profile.getItem(loot);
-					description += `\n**${profile.formatNumber(lootlist[loot])}** ${lootItem.emoji}__${lootItem.name}__`;
-					profile.addItem(msgUser, lootItem, lootlist[loot]);
+					const lootItem = character.getItem(loot);
+					description += `\n**${character.formatNumber(lootlist[loot])}** ${lootItem.emoji}__${lootItem.name}__`;
+					character.addItem(msgUser, lootItem, lootlist[loot]);
 				}
 
 				lootEmbed.setDescription(description)
@@ -56,14 +56,14 @@ module.exports = {
 					.setThumbnail(`attachment://${chest}_open.png`);
 
 				message.channel.send(lootEmbed);
-				profile.removeItem(msgUser, item, amount);
+				character.removeItem(msgUser, item, amount);
 			}
 			else {
-				const item = profile.getItem(`${chest} chest`);
-				if (!await profile.hasItem(msgUser, item, amount)) return message.reply(`You don't have ${amount} __${item.name}(s)__!`);
+				const item = character.getItem(`${chest} chest`);
+				if (!await character.hasItem(msgUser, item, amount)) return message.reply(`You don't have ${amount} __${item.name}(s)__!`);
 
 				const loot = loottable[chest]();
-				const lootItem = profile.getItem(loot.name);
+				const lootItem = character.getItem(loot.name);
 				const itemAmount = loot.amount[0] + Math.floor(Math.random() * loot.amount[1]);
 
 
@@ -82,8 +82,8 @@ module.exports = {
 					.setImage(`attachment://${lootItem.picture}`);
 
 				message.channel.send(lootEmbed);
-				profile.addItem(msgUser, lootItem, itemAmount);
-				profile.removeItem(msgUser, item, 1);
+				character.addItem(msgUser, lootItem, itemAmount);
+				character.removeItem(msgUser, item, 1);
 
 			}
 		}

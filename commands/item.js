@@ -9,7 +9,7 @@ module.exports = {
 	args: false,
 	usage: '<item>',
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger) {
+	execute(message, args, msgUser, character, guildProfile, client, logger) {
 		let temp = '';
 		let embed;
 
@@ -20,13 +20,13 @@ module.exports = {
 
 
 		if (temp) {
-			const item = profile.getItem(temp);
+			const item = character.getItem(temp);
 			if (!item) return message.reply(`${item} is not a valid item`);
 
 			embed = new Discord.MessageEmbed()
 				.setTitle(`${item.emoji}${item.name}`)
 				.setDescription(item.description)
-				.addField('Value', `${profile.formatNumber(item.value)}💰`, true)
+				.addField('Value', `${character.formatNumber(item.value)}💰`, true)
 				.addField('Buyable', item.buyable, true)
 				.addField('Category', item.ctg, true)
 				.addField('Rarity', item.rarity, true)
@@ -72,7 +72,7 @@ module.exports = {
 				.setTitle('Neia Shop')
 				.setThumbnail(client.user.displayAvatarURL())
 				.setDescription(description)
-				.setColor(profile.getColour(msgUser))
+				.setColor(character.getColour(msgUser))
 		}
 
 		return message.channel.send(embed);

@@ -9,7 +9,7 @@ module.exports = {
 
 	args: false,
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger) {
+	execute(message, args, msgUser, character, guildProfile, client, logger) {
 
 		const filter = m => m.author.id === message.author.id;
 		let amount = 0;
@@ -29,8 +29,8 @@ module.exports = {
 				else temp += `${args[i]}`;
 			}
 
-			item = profile.getItem(temp);
-			if (item.buyable) buy(profile, sentMessage, amount, embed, item, msgUser);
+			item = character.getItem(temp);
+			if (item.buyable) buy(character, sentMessage, amount, embed, item, msgUser);
 			else if (item) sentMessage.edit(embed.setDescription('You can\'t buy this item?'));
 
 			else {
@@ -38,7 +38,7 @@ module.exports = {
 				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 					.then(collected => {
-						item = profile.getItem(collected.first().content);
+						item = character.getItem(collected.first().content);
 
 						if (item && !item.buyable) return sentMessage.edit(embed.setDescription('You can\'t buy this item?'));
 						else if (!item) return sentMessage.edit(embed.setDescription(`${collected.first().content} is not a valid item.`));
@@ -50,7 +50,7 @@ module.exports = {
 								.then(collected => {
 									amount = parseInt(collected.first().content);
 									collected.first().delete();
-									buy(profile, sentMessage, amount, embed, item, msgUser);
+									buy(character, sentMessage, amount, embed, item, msgUser);
 								})
 								.catch(e => {
 									logger.error(e.stack);
@@ -67,7 +67,7 @@ module.exports = {
 	},
 };
 
-function buy(profile, sentMessage, amount, embed, item, msgUser) {
+function buy(character, sentMessage, amount, embed, item, msgUser) {
 
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 	else if (amount < 1) amount = 1;
@@ -75,12 +75,12 @@ function buy(profile, sentMessage, amount, embed, item, msgUser) {
 	let balance = msgUser.balance;
 	const cost = amount * item.value;
 	if (cost > balance) return sentMessage.edit(embed.setDescription(`
-	You currently have ${profile.formatNumber(balance)}💰 but __${profile.formatNumber(amount)}__ ${item.emoji}${item.name}(s) costs ${profile.formatNumber(cost)}💰!
-	You need ${profile.formatNumber(cost - balance)}💰 more
+	You currently have ${character.formatNumber(balance)}💰 but __${character.formatNumber(amount)}__ ${item.emoji}${item.name}(s) costs ${character.formatNumber(cost)}💰!
+	You need ${character.formatNumber(cost - balance)}💰 more
 	`));
 
-	profile.addItem(msgUser, item, amount);
-	balance = profile.addMoney(msgUser, -cost);
+	character.addItem(msgUser, item, amount);
+	balance = character.addMoney(msgUser, -cost);
 
-	sentMessage.edit(embed.setDescription(`You've bought: __${profile.formatNumber(amount)}__ ${item.emoji}__${item.name}(s)__.\n\nCurrent balance is ${profile.formatNumber(balance)}💰.`));
+	sentMessage.edit(embed.setDescription(`You've bought: __${character.formatNumber(amount)}__ ${item.emoji}__${item.name}(s)__.\n\nCurrent balance is ${character.formatNumber(balance)}💰.`));
 }

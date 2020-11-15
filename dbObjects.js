@@ -2,7 +2,7 @@
 const Sequelize = require('sequelize');
 const moment = require('moment');
 const Discord = require('discord.js');
-const profile = new Discord.Collection();
+const character = new Discord.Collection();
 const guildProfile = new Discord.Collection();
 require('dotenv').config();
 const prefix = process.env.PREFIX;
@@ -20,7 +20,7 @@ const UserItems = sequelize.import('models/UserItems');
 const items = require('./data/items');
 const classes = require('./data/classes');
 
-Reflect.defineProperty(profile, 'newUser', {
+Reflect.defineProperty(character, 'newUser', {
 	value: async function newUser(id) {
 		const now = moment();
 		const user = await Users.create({
@@ -40,7 +40,7 @@ Reflect.defineProperty(profile, 'newUser', {
 			protection: now.toString(),
 			firstCommand: true,
 		});
-		profile.set(id, user);
+		character.set(id, user);
 		return user;
 	},
 });
@@ -70,13 +70,13 @@ Reflect.defineProperty(profile, 'newUser', {
 
 // EQUIPMENT AND COMBAT
 
-Reflect.defineProperty(profile, 'getEquipment', {
+Reflect.defineProperty(character, 'getEquipment', {
 	value: function getEquipment(user) {
 		return JSON.parse(user.equipment);
 	},
 });
 
-Reflect.defineProperty(profile, 'equip', {
+Reflect.defineProperty(character, 'equip', {
 	value: async function equip(user, equipment) {
 
 		const userEquipment = await UserItems.findOne({
@@ -94,7 +94,7 @@ Reflect.defineProperty(profile, 'equip', {
 	},
 });
 
-Reflect.defineProperty(profile, 'changeHp', {
+Reflect.defineProperty(character, 'changeHp', {
 	value: function changeHp(user, amount) {
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 
@@ -112,7 +112,7 @@ Reflect.defineProperty(profile, 'changeHp', {
 });
 
 
-Reflect.defineProperty(profile, 'attackUser', {
+Reflect.defineProperty(character, 'attackUser', {
 	/**
 	* Resolves an attack bewteen 2 users
 	* @param {string} attacker - The id of the Attacking user.
@@ -143,8 +143,8 @@ Reflect.defineProperty(profile, 'attackUser', {
 		if (damage < 0) damage = 0;
 
 
-		profile.changeHp(defender, -damage);
-		profile.setAttack(attacker);
+		character.changeHp(defender, -damage);
+		character.setAttack(attacker);
 		return {
 			weapon: weapon,
 			damage: damage,
@@ -178,7 +178,7 @@ Reflect.defineProperty(profile, 'attackUser', {
 
 
 // CLASS
-Reflect.defineProperty(profile, 'getClass', {
+Reflect.defineProperty(character, 'getClass', {
 	value: function getClass(className) {
 		const userClass = className.toLowerCase();
 		if (classes[userClass]) return classes[userClass];
@@ -187,7 +187,7 @@ Reflect.defineProperty(profile, 'getClass', {
 });
 
 
-Reflect.defineProperty(profile, 'resetClass', {
+Reflect.defineProperty(character, 'resetClass', {
 	value: function resetClass(user) {
 		user.class = null;
 		user.stats = null;
@@ -202,7 +202,7 @@ Reflect.defineProperty(profile, 'resetClass', {
 		return user.save();
 	},
 });
-Reflect.defineProperty(profile, 'setClass', {
+Reflect.defineProperty(character, 'setClass', {
 	value: async function setClass(user, newClass) {
 
 		user.curHP = newClass.stats.base.hp;
@@ -225,46 +225,46 @@ Reflect.defineProperty(profile, 'setClass', {
 
 		// user.skills = JSON.stringify(c.startSkills);
 		// for (let i = 0; i < c.startSkills.length; i++) {
-		// 	const skill = profile.getSkill(c.startSkills[i]);
-		// 	await profile.addSkill(id, skill);
-		// 	await profile.setSkill(id, skill, i + 1);
+		// 	const skill = character.getSkill(c.startSkills[i]);
+		// 	await character.addSkill(id, skill);
+		// 	await character.setSkill(id, skill, i + 1);
 		// }
 
 		for (let i = 0; i < newClass.startEquipment.length; i++) {
-			const equipment = profile.getItem(newClass.startEquipment[i]);
-			await profile.addItem(user, equipment, 1);
-			profile.equip(user, equipment);
+			const equipment = character.getItem(newClass.startEquipment[i]);
+			await character.addItem(user, equipment, 1);
+			character.equip(user, equipment);
 		}
 
-		await profile.calculateStats(user);
+		await character.calculateStats(user);
 		return user.save();
 	},
 });
 
 
 // STATS
-Reflect.defineProperty(profile, 'getBaseStats', {
+Reflect.defineProperty(character, 'getBaseStats', {
 	value: function getBaseStats(user) {
 		if (!user.class) return null;
 		return JSON.parse(user.baseStats);
 	},
 });
-Reflect.defineProperty(profile, 'getStats', {
+Reflect.defineProperty(character, 'getStats', {
 	value: function getStats(user) {
 		if (!user.class) return null;
 		return JSON.parse(user.stats);
 	},
 });
-Reflect.defineProperty(profile, 'calculateStats', {
+Reflect.defineProperty(character, 'calculateStats', {
 	value: async function calculateStats(user) {
 		if (!user.class) throw Error('User does not have a class');
 
 		const stats = JSON.parse(user.baseStats);
-		const equipment = await profile.getEquipment(user);
+		const equipment = await character.getEquipment(user);
 		for (const slot in equipment) {
 			if (equipment[slot]) {
-				const item = profile.getItem(equipment[slot]);
-			
+				const item = character.getItem(equipment[slot]);
+
 				if (item.stats) {
 					for (const itemEffect in item.stats) {
 						if (stats[itemEffect]) stats[itemEffect] += item.stats[itemEffect];
@@ -285,7 +285,7 @@ Reflect.defineProperty(profile, 'calculateStats', {
 	},
 });
 
-Reflect.defineProperty(profile, 'addExp', {
+Reflect.defineProperty(character, 'addExp', {
 	value: async function addExp(user, exp, message) {
 		if (!user.class) return message.reply(
 			'You dont have a class yet so you cant gain experience!\nUse the command `class` to get a class`',
@@ -293,10 +293,10 @@ Reflect.defineProperty(profile, 'addExp', {
 
 		user.exp += Number(exp);
 		user.save();
-		return profile.levelInfo(user, message);
+		return character.levelInfo(user, message);
 	},
 });
-Reflect.defineProperty(profile, 'levelInfo', {
+Reflect.defineProperty(character, 'levelInfo', {
 	value: async function levelInfo(user, message) {
 		const exponent = 1.5;
 		const baseExp = 1000;
@@ -305,7 +305,7 @@ Reflect.defineProperty(profile, 'levelInfo', {
 			Math.floor((baseExp / 100) * Math.pow(user.level, exponent));
 
 		while (user.exp >= expNeeded && user.level < 60) {
-			const classInfo = profile.getClass(user.class);
+			const classInfo = character.getClass(user.class);
 			if (!classInfo) {
 				message.reply(
 					'You dont have a class yet so you cant gain experience!\nUse the command `class` to get a class`',
@@ -379,7 +379,7 @@ Reflect.defineProperty(profile, 'levelInfo', {
 
 
 // ITEMS
-Reflect.defineProperty(profile, 'addItem', {
+Reflect.defineProperty(character, 'addItem', {
 	value: async function addItem(user, item, amount) {
 		const userItem = await UserItems.findOne({
 			where: { user_id: user.user_id, name: item.name },
@@ -400,7 +400,7 @@ Reflect.defineProperty(profile, 'addItem', {
 		});
 	},
 });
-Reflect.defineProperty(profile, 'removeItem', {
+Reflect.defineProperty(character, 'removeItem', {
 	value: async function removeItem(user, item, amount) {
 		const userItem = await UserItems.findOne({
 			where: { user_id: user.user_id, name: item.name },
@@ -425,7 +425,7 @@ Reflect.defineProperty(profile, 'removeItem', {
 	},
 });
 
-Reflect.defineProperty(profile, 'hasItem', {
+Reflect.defineProperty(character, 'hasItem', {
 	value: async function hasItem(user, item, amount) {
 		const userItem = await UserItems.findOne({
 			where: { user_id: user.user_id, name: item.name },
@@ -436,14 +436,14 @@ Reflect.defineProperty(profile, 'hasItem', {
 	},
 });
 
-Reflect.defineProperty(profile, 'getInventory', {
+Reflect.defineProperty(character, 'getInventory', {
 	value: async function getInventory(user) {
 		return UserItems.findAll({
 			where: { user_id: user.user_id },
 		});
 	},
 });
-Reflect.defineProperty(profile, 'getItem', {
+Reflect.defineProperty(character, 'getItem', {
 	value: function getItem(itemName) {
 		const item = itemName.toLowerCase();
 		if (items[item]) return items[item];
@@ -483,15 +483,15 @@ Reflect.defineProperty(profile, 'getItem', {
 
 
 // Misc
-Reflect.defineProperty(profile, 'getUser', {
+Reflect.defineProperty(character, 'getUser', {
 	value: async function getUser(id) {
-		let user = profile.get(id);
-		if (!user) user = await profile.newUser(id);
+		let user = character.get(id);
+		if (!user) user = await character.newUser(id);
 		return user;
 	},
 });
 
-Reflect.defineProperty(profile, 'addMoney', {
+Reflect.defineProperty(character, 'addMoney', {
 	value: function addMoney(user, amount) {
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 		user.balance += Number(amount);
@@ -503,9 +503,9 @@ Reflect.defineProperty(profile, 'addMoney', {
 });
 
 
-Reflect.defineProperty(profile, 'calculateIncome', {
+Reflect.defineProperty(character, 'calculateIncome', {
 	value: async function calculateIncome(user) {
-		const uItems = await profile.getInventory(user);
+		const uItems = await character.getInventory(user);
 		let networth = 0;
 		let income = 0;
 		let daily = 0;
@@ -527,7 +527,7 @@ Reflect.defineProperty(profile, 'calculateIncome', {
 	},
 });
 
-Reflect.defineProperty(profile, 'getDaily', {
+Reflect.defineProperty(character, 'getDaily', {
 	value: function getDaily(user) {
 		const now = moment();
 		const dCheck = moment(user.lastDaily).add(1, 'd');
@@ -535,14 +535,14 @@ Reflect.defineProperty(profile, 'getDaily', {
 		else return dCheck.format('MMM Do HH:mm');
 	},
 });
-Reflect.defineProperty(profile, 'setDaily', {
+Reflect.defineProperty(character, 'setDaily', {
 	value: function setDaily(user) {
 		user.lastDaily = moment().toString();
 		return user.save();
 	},
 });
 
-Reflect.defineProperty(profile, 'getHourly', {
+Reflect.defineProperty(character, 'getHourly', {
 	value: function getHourly(user) {
 		const now = moment();
 		const hCheck = moment(user.lastHourly).add(1, 'h');
@@ -550,7 +550,7 @@ Reflect.defineProperty(profile, 'getHourly', {
 		else return hCheck.format('MMM Do HH:mm');
 	},
 });
-Reflect.defineProperty(profile, 'setHourly', {
+Reflect.defineProperty(character, 'setHourly', {
 	value: function setHourly(user) {
 		user.lastHourly = moment().toString();
 		return user.save();
@@ -558,13 +558,13 @@ Reflect.defineProperty(profile, 'setHourly', {
 });
 
 
-Reflect.defineProperty(profile, 'setVote', {
+Reflect.defineProperty(character, 'setVote', {
 	value: function setVote(user) {
 		user.lastVote = moment().toString();
 		return user.save();
 	},
 });
-Reflect.defineProperty(profile, 'getVote', {
+Reflect.defineProperty(character, 'getVote', {
 	value: function getVote(user) {
 		const now = moment();
 		const vCheck = moment(user.lastVote).add(12, 'h');
@@ -574,13 +574,13 @@ Reflect.defineProperty(profile, 'getVote', {
 });
 
 
-Reflect.defineProperty(profile, 'setHeal', {
+Reflect.defineProperty(character, 'setHeal', {
 	value: function setHeal(user) {
 		user.lastHeal = moment().toString();
 		return user.save();
 	},
 });
-Reflect.defineProperty(profile, 'getHeal', {
+Reflect.defineProperty(character, 'getHeal', {
 	value: function getHeal(user) {
 		const now = moment();
 		const healCheck = moment(user.lastHeal).add(2, 'h');
@@ -590,13 +590,13 @@ Reflect.defineProperty(profile, 'getHeal', {
 });
 
 
-Reflect.defineProperty(profile, 'setAttack', {
+Reflect.defineProperty(character, 'setAttack', {
 	value: function setAttack(user) {
 		user.lastAttack = moment().toString();
 		return user.save();
 	},
 });
-Reflect.defineProperty(profile, 'getAttack', {
+Reflect.defineProperty(character, 'getAttack', {
 	value: function getAttack(user) {
 		const now = moment();
 		const attackCheck = moment(user.lastAttack).add(1, 'h');
@@ -606,7 +606,7 @@ Reflect.defineProperty(profile, 'getAttack', {
 });
 
 
-Reflect.defineProperty(profile, 'getProtection', {
+Reflect.defineProperty(character, 'getProtection', {
 	value: function getProtection(user) {
 		const now = moment();
 		const protection = moment(user.protection);
@@ -614,7 +614,7 @@ Reflect.defineProperty(profile, 'getProtection', {
 		else return false;
 	},
 });
-Reflect.defineProperty(profile, 'addProtection', {
+Reflect.defineProperty(character, 'addProtection', {
 	/**
 	* Add protection to target user
 	* @param {string} user - The user that will receive the protection.
@@ -622,7 +622,7 @@ Reflect.defineProperty(profile, 'addProtection', {
 	*/
 	value: function addProtection(user, hours) {
 		let protection;
-		const oldProtection = profile.getProtection(user);
+		const oldProtection = character.getProtection(user);
 		if (oldProtection) protection = moment(oldProtection, 'MMM Do HH:mm').add(hours, 'h');
 		else protection = moment().add(hours, 'h');
 
@@ -631,7 +631,7 @@ Reflect.defineProperty(profile, 'addProtection', {
 		return protection.format('MMM Do HH:mm');
 	},
 });
-Reflect.defineProperty(profile, 'resetProtection', {
+Reflect.defineProperty(character, 'resetProtection', {
 	value: function resetProtection(user) {
 		user.protection = moment().toString();
 		return user.save();
@@ -639,7 +639,7 @@ Reflect.defineProperty(profile, 'resetProtection', {
 });
 
 
-Reflect.defineProperty(profile, 'formatNumber', {
+Reflect.defineProperty(character, 'formatNumber', {
 	value: function formatNumber(number) {
 		const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
 		const tier = Math.log10(number) / 3 | 0;
@@ -654,10 +654,10 @@ Reflect.defineProperty(profile, 'formatNumber', {
 	},
 });
 
-Reflect.defineProperty(profile, 'getColour', {
+Reflect.defineProperty(character, 'getColour', {
 	value: function getColour(user) {
 		if (user.class) {
-			const userClass = profile.getClass(user.class);
+			const userClass = character.getClass(user.class);
 			return userClass.colour;
 		}
 		return '#fcfcfc';
@@ -709,4 +709,4 @@ Reflect.defineProperty(guildProfile, 'setPrefix', {
 	},
 });
 
-module.exports = { Users, Guilds, profile, guildProfile };
+module.exports = { Users, Guilds, character, guildProfile };

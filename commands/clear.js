@@ -8,7 +8,7 @@ module.exports = {
 	usage: '',
 
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger, options) {
+	execute(message, args, msgUser, character, guildProfile, client, logger, options) {
 		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');
 
 		try {

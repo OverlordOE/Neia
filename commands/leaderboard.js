@@ -8,24 +8,24 @@ module.exports = {
 	args: false,
 	usage: '<page>',
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger) {
+	execute(message, args, msgUser, character, guildProfile, client, logger) {
 
 		const filter = (reaction, user) => { return ['◀️', '▶️', '🔀'].includes(reaction.emoji.name) && user.id === message.author.id; };
 
-		const networthList = profile.sort((a, b) => b.networth - a.networth)
+		const networthList = character.sort((a, b) => b.networth - a.networth)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${profile.formatNumber(user.networth)}💰`);
+			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${character.formatNumber(user.networth)}💰`);
 
-		const totalList = profile.sort((a, b) => b.totalEarned - a.totalEarned)
+		const totalList = character.sort((a, b) => b.totalEarned - a.totalEarned)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${profile.formatNumber(user.totalEarned)}💰`);
+			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${character.formatNumber(user.totalEarned)}💰`);
 
-		const balanceList = profile.sort((a, b) => b.balance - a.balance)
+		const balanceList = character.sort((a, b) => b.balance - a.balance)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: ${profile.formatNumber(user.balance)}💰`);
+			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: ${character.formatNumber(user.balance)}💰`);
 
 
 		let currentList = networthList;

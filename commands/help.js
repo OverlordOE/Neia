@@ -7,7 +7,7 @@ module.exports = {
 	usage: '<command name>',
 	args: false,
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger) {
+	execute(message, args, msgUser, character, guildProfile, client, logger) {
 		const { commands } = message.client;
 		let adminCommands = '';
 		let musicCommands = '';
@@ -17,7 +17,7 @@ module.exports = {
 		let infoCommands = '';
 
 		const help = new Discord.MessageEmbed()
-			.setColor(profile.getColour(msgUser))
+			.setColor(character.getColour(msgUser))
 			;
 
 		if (!args.length) {

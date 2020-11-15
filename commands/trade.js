@@ -10,12 +10,12 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger) {
+	execute(message, args, msgUser, character, guildProfile, client, logger) {
 
 		const filter = m => m.author.id === msgUser;
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Trading Center')
-			.setColor(profile.getColour(msgUser))
+			.setColor(character.getColour(msgUser))
 			.setFooter('You can only trade to people on the same server.', client.user.displayAvatarURL());
 
 
@@ -39,9 +39,9 @@ module.exports = {
 					else { temp += `${args[i]}`; }
 				}
 
-				const item = profile.getItem(temp);
-				if (target && item) { itemTrade(profile, target, amount, item, sentMessage, embed, msgUser); }
-				else if (target && amount > 1) { moneyTrade(profile, target, amount, sentMessage, embed, msgUser); }
+				const item = character.getItem(temp);
+				if (target && item) { itemTrade(character, target, amount, item, sentMessage, embed, msgUser); }
+				else if (target && amount > 1) { moneyTrade(character, target, amount, sentMessage, embed, msgUser); }
 				else {
 					sentMessage.edit(embed.setDescription('Who do you want to trade with? __mention the user__\n'));
 					message.channel.awaitMessages(filter, { max: 1, time: 60000 })
@@ -70,7 +70,7 @@ module.exports = {
 											// item trade
 											if (isNaN(goods)) {
 
-												const item = profile.getItem(goods);
+												const item = character.getItem(goods);
 												if (!item) return sentMessage.edit(embed.setDescription(`${item} doesn't exist.`));
 
 												// item trade
@@ -81,7 +81,7 @@ module.exports = {
 															const amount = collected.first().content;
 															collected.first().delete();
 
-															if (await profile.hasItem(msgUser, item, amount)) itemTrade(profile, target, amount, item, sentMessage, embed, msgUser);
+															if (await character.hasItem(msgUser, item, amount)) itemTrade(character, target, amount, item, sentMessage, embed, msgUser);
 															else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
 														})
 														.catch(e => {
@@ -90,7 +90,7 @@ module.exports = {
 														});
 												});
 											}
-											else { moneyTrade(profile, target, amount, sentMessage, embed, msgUser); }
+											else { moneyTrade(character, target, amount, sentMessage, embed, msgUser); }
 										})
 										.catch(e => {
 											logger.error(e.stack);
@@ -107,27 +107,27 @@ module.exports = {
 	},
 };
 
-async function itemTrade(profile, target, amount, item, sentMessage, embed, msgUser) {
+async function itemTrade(character, target, amount, item, sentMessage, embed, msgUser) {
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 	else if (amount < 1) amount = 1;
 
-	profile.addItem(await profile.getUser(target.id), item, amount);
-	profile.removeItem(msgUser, item, amount);
+	character.addItem(await character.getUser(target.id), item, amount);
+	character.removeItem(msgUser, item, amount);
 	sentMessage.edit(embed.setDescription(`Trade with *${target}* succesfull!\n\nTraded ${amount} ${item.emoji}__${item.name}__ to *${target}*.`));
 }
 
-async function moneyTrade(profile, target, amount, sentMessage, embed, msgUser) {
+async function moneyTrade(character, target, amount, sentMessage, embed, msgUser) {
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 	else if (amount < 1) amount = 1;
 
 	let balance = msgUser.balance;
 
 	if (!amount || isNaN(amount)) return sentMessage.edit(embed.setDescription(`${amount} is an invalid amount.`));
-	if (amount > balance) return sentMessage.edit(embed.setDescription(`You only have ${profile.formatNumber(balance)}💰 but need ${profile.formatNumber(amount)}.`));
+	if (amount > balance) return sentMessage.edit(embed.setDescription(`You only have ${character.formatNumber(balance)}💰 but need ${character.formatNumber(amount)}.`));
 	if (amount <= 0) return sentMessage.edit(embed.setDescription('Please enter an amount greater than zero.'));
 
-	profile.addMoney(msgUser, -amount);
-	balance = profile.addMoney(await profile.getUser(target.id), amount);
-	return sentMessage.edit(embed.setDescription(`Trade with *${target}* succesfull!\n\nTransferred ${profile.formatNumber(amount)}💰 to *${target}*.\nYour current balance is ${profile.formatNumber(balance)}💰`));
+	character.addMoney(msgUser, -amount);
+	balance = character.addMoney(await character.getUser(target.id), amount);
+	return sentMessage.edit(embed.setDescription(`Trade with *${target}* succesfull!\n\nTransferred ${character.formatNumber(amount)}💰 to *${target}*.\nYour current balance is ${character.formatNumber(balance)}💰`));
 
 }

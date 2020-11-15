@@ -8,7 +8,7 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger) {
+	execute(message, args, msgUser, character, guildProfile, client, logger) {
 		const filter = m => m.author.id === msgUser;
 
 		let amount = 1;
@@ -21,7 +21,7 @@ module.exports = {
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What item do you want to use?')
 			.setThumbnail(client.user.displayAvatarURL())
-			.setColor(profile.getColour(msgUser))
+			.setColor(character.getColour(msgUser))
 			.setFooter('Neia', client.user.displayAvatarURL());
 
 
@@ -34,16 +34,16 @@ module.exports = {
 				else temp += `${args[i]}`;
 			}
 
-			item = profile.getItem(temp);
+			item = character.getItem(temp);
 			if (item) {
-				if (await profile.hasItem(msgUser, item, amount)) use(profile, sentMessage, amount, embed, item, msgUser);
+				if (await character.hasItem(msgUser, item, amount)) use(character, sentMessage, amount, embed, item, msgUser);
 				else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.emoji}${item.name}(s)__!`));
 			}
 			else {
 
 				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 					.then(async collected => {
-						item = profile.getItem(collected.first().content);
+						item = character.getItem(collected.first().content);
 						collected.first().delete();
 
 						if (item) {
@@ -54,7 +54,7 @@ module.exports = {
 
 										amount = parseInt(collected.first().content);
 										collected.first().delete();
-										if (await profile.hasItem(msgUser, item, amount)) use(profile, sentMessage, amount, embed, item, msgUser);
+										if (await character.hasItem(msgUser, item, amount)) use(character, sentMessage, amount, embed, item, msgUser);
 										else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.name}(s)__!`));
 
 									}).catch(e => {
@@ -75,16 +75,16 @@ module.exports = {
 };
 
 
-async function use(profile, sentMessage, amount, embed, item, msgUser) {
+async function use(character, sentMessage, amount, embed, item, msgUser) {
 
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`**${amount}** is not a number`));
 	else if (amount < 1 || amount > 10000 || !amount) amount = 1;
 
 	if (item.use) {
-		const result = await item.use(profile, amount, embed, item, msgUser);
+		const result = await item.use(character, amount, embed, item, msgUser);
 
 		if (result.succes) {
-			profile.removeItem(msgUser.user_id, item, amount);
+			character.removeItem(msgUser.user_id, item, amount);
 			return sentMessage.edit(embed.setDescription(result.message));
 		}
 		else if (result.message) return sentMessage.edit(embed.setDescription(result.message));

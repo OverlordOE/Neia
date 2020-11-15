@@ -1,5 +1,5 @@
 const ytdl = require('discord-ytdl-core');
-const YouTube = require("youtube-sr");
+const YouTube = require('youtube-sr');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -7,24 +7,24 @@ module.exports = {
 	summary: 'Play a song',
 	description: 'Play a song, supports youtube videos.',
 	category: 'music',
-	aliases: ['song'],
+	aliases: ['song', 'p'],
 	args: true,
 	usage: '<search criteria>',
 
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, options) {
+	async execute(message, args, msgUser, character, guildProfile, client, logger, options) {
 
 		if (!message.member.voice.channel) return message.channel.send(embed.setDescription('you are not in a voice channel.'));
 
 		const embed = new Discord.MessageEmbed()
 			.setThumbnail(message.author.displayAvatarURL())
-			.setColor(profile.getColour(msgUser));
+			.setColor(character.getColour(msgUser));
 
 		const search = args.join(' ');
 		const data = options.active.get(message.guild.id) || {};
 
 		try {
-			if (!data.connection) data.connection = await message.member.voice.channel.join();
+			if (!data.connection) {data.connection = await message.member.voice.channel.join();}
 			else if (data.connection.status == 4) {
 				data.connection = await message.member.voice.channel.join();
 				const guildIDData = options.active.get(message.guild.id);
@@ -38,7 +38,7 @@ module.exports = {
 
 
 		if (!data.queue) data.queue = [];
-		if (data.queue.length >= 4) return message.channel.send(embed.setDescription('you have reached the maximum queue size for free users.\nIf you want to upgrade your queue size contact OverlordOE#0717.'));
+		if (data.queue.length >= 4) return message.channel.send(embed.setDescription('You have reached the maximum queue size for free users.\nIf you want to upgrade your queue size contact OverlordOE#0717.'));
 		data.guildID = message.guild.id;
 
 		const tempMessage = await message.channel.send('Finding youtube video...');
@@ -74,7 +74,7 @@ async function Play(client, options, data, logger, msgUser, message) {
 
 	const channel = client.channels.cache.get(data.queue[0].announceChannel);
 	const embed = new Discord.MessageEmbed()
-		.setColor(profile.getColour(msgUser))
+		.setColor(character.getColour(msgUser))
 		.setThumbnail(data.queue[0].thumbnail);
 
 	channel.send(embed.setDescription(`Now playing **${data.queue[0].songTitle}**\nRequested by ${data.queue[0].requester}`));
@@ -110,7 +110,7 @@ function Finish(client, options, dispatcher, logger, msgUser, message) {
 		options.active.set(dispatcher.guildID, fetchedData);
 		return Play(client, options, fetchedData, logger, msgUser, message);
 	}
-	else fetchedData.queue.shift();
+	else {fetchedData.queue.shift();}
 
 	if (fetchedData.queue.length > 0) {
 		options.active.set(dispatcher.guildID, fetchedData);

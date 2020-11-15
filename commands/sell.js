@@ -12,7 +12,7 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	execute(message, args, msgUser, profile, guildProfile, client, logger) {
+	execute(message, args, msgUser, character, guildProfile, client, logger) {
 
 		const filter = m => m.author.id === msgUser;
 		let amount = 1;
@@ -23,7 +23,7 @@ module.exports = {
 			.setTitle('Neia Refunds')
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What do you want to refund? `80% refund`')
-			.setColor(profile.getColour(msgUser))
+			.setColor(character.getColour(msgUser))
 
 			.setFooter('You can type `sell all` to sell your whole inventory.', client.user.displayAvatarURL());
 
@@ -36,7 +36,7 @@ module.exports = {
 				else temp += `${args[i]}`;
 			}
 
-			item = profile.getItem(temp);
+			item = character.getItem(temp);
 			if (temp == 'all') {
 				sentMessage.edit(embed.setDescription('Are you sure that you want to sell your WHOLE inventory?\n\nReply with yes to continue'));
 				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
@@ -44,33 +44,33 @@ module.exports = {
 						collected.first().delete();
 						if (collected.first().content.toLowerCase() == 'yes') {
 
-							const inventory = await profile.getInventory(msgUser);
+							const inventory = await character.getInventory(msgUser);
 							let totalReceived = 0;
 							let balance;
 
 							inventory.map(i => {
 								const item = itemInfo[i.name.toLowerCase()];
 								const refundAmount = sellPercentage * item.value * i.amount;
-								profile.removeItem(msgUser, item, i.amount);
-								balance = profile.addMoney(msgUser, refundAmount);
+								character.removeItem(msgUser, item, i.amount);
+								balance = character.addMoney(msgUser, refundAmount);
 								totalReceived += refundAmount;
 							});
 							logger.debug(totalReceived);
-							sentMessage.edit(embed.setDescription(`You sold your whole inventory for ${profile.formatNumber(totalReceived)}💰\n\nCurrent balance is ${profile.formatNumber(balance)}💰`));
+							sentMessage.edit(embed.setDescription(`You sold your whole inventory for ${character.formatNumber(totalReceived)}💰\n\nCurrent balance is ${character.formatNumber(balance)}💰`));
 						}
 						else return sentMessage.edit(embed.setDescription('Cancelled selling inventory'));
 					});
 			}
 
 			else if (item) {
-				if (await profile.hasItem(msgUser, item, amount)) sell(profile, sentMessage, amount, embed, item, msgUser);
+				if (await character.hasItem(msgUser, item, amount)) sell(character, sentMessage, amount, embed, item, msgUser);
 				else return sentMessage.edit(embed.setDescription(`You don't have enough ${item.emoji}__${item.name}(s)__!`));
 			}
 			else {
 				message.channel.awaitMessages(filter, { max: 1, time: 60000 })
 
 					.then(async collected => {
-						const item = profile.getItem(collected.first().content);
+						const item = character.getItem(collected.first().content);
 						if (!item) return sentMessage.edit(embed.setDescription(`\`${collected.first().content}\` is not a valid item.`));
 						collected.first().delete();
 
@@ -81,7 +81,7 @@ module.exports = {
 									const amount = parseInt(collected.first().content);
 									if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number!`));
 
-									if (await profile.hasItem(msgUser, item, amount)) sell(profile, sentMessage, amount, embed, item, msgUser);
+									if (await character.hasItem(msgUser, item, amount)) sell(character, sentMessage, amount, embed, item, msgUser);
 									else return sentMessage.edit(embed.setDescription(`You don't have enough ${item.emoji}__${item.name}(s)__!`));
 								})
 								.catch(e => {
@@ -100,19 +100,19 @@ module.exports = {
 };
 
 
-function sell(profile, sentMessage, amount, embed, item, msgUser) {
+function sell(character, sentMessage, amount, embed, item, msgUser) {
 
 	if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 	else if (amount < 1) amount = 1;
 
 	const refundAmount = sellPercentage * item.value * amount;
 	try {
-		profile.removeItem(msgUser, item, amount);
+		character.removeItem(msgUser, item, amount);
 	} catch (error) {
 		return sentMessage.edit(embed.setDescription(`You do not have ${amount} ${item.emoji}__${item.name}(s)__! Selling cancelled.`));
 	}
 
-	const balance = profile.addMoney(msgUser, refundAmount);
+	const balance = character.addMoney(msgUser, refundAmount);
 
-	sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${profile.formatNumber(refundAmount)}💰 back.\nYour balance is ${profile.formatNumber(balance)}💰!`));
+	sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${character.formatNumber(refundAmount)}💰 back.\nYour balance is ${character.formatNumber(balance)}💰!`));
 }
