@@ -152,8 +152,7 @@ Reflect.defineProperty(profile, 'changeHp', {
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 
 		const hp = Number(user.hp);
-		if (hp >= 1000) return false;
-		else if (hp > (1000 - amount)) {
+		if (hp > (1000 - amount)) {
 			amount = 1000 - hp;
 			user.hp = hp + Number(amount);
 		}
