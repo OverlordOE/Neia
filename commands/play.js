@@ -24,7 +24,15 @@ module.exports = {
 		const data = options.active.get(message.guild.id) || {};
 
 		try {
-			if (!data.connection) {data.connection = await message.member.voice.channel.join();}
+			if (!data.connection) {
+				const permissions = message.member.voice.channel.permissionsFor(message.guild.member(client.user));
+				if (!permissions.any('CONNECT')) {
+					logger.warn('Neia couldnt join the voice channel');
+					return message.reply('Neia does not have permission to join the voice channel!');
+				}
+
+				data.connection = await message.member.voice.channel.join();
+			}
 			else if (data.connection.status == 4) {
 				data.connection = await message.member.voice.channel.join();
 				const guildIDData = options.active.get(message.guild.id);
@@ -33,7 +41,7 @@ module.exports = {
 		}
 		catch (error) {
 			logger.warn('Neia couldnt join the voice channel');
-			return message.channel.send(embed.setDescription('Neia probably does not have permission to join the channel or something else went wrong'));
+			return message.reply('Something went wrong when joining the voice channel');
 		}
 
 
@@ -74,7 +82,6 @@ async function Play(client, options, data, logger, msgUser, message) {
 
 	const channel = client.channels.cache.get(data.queue[0].announceChannel);
 	const embed = new Discord.MessageEmbed()
-		.setColor(character.getColour(msgUser))
 		.setThumbnail(data.queue[0].thumbnail);
 
 	channel.send(embed.setDescription(`Now playing **${data.queue[0].songTitle}**\nRequested by ${data.queue[0].requester}`));
@@ -110,7 +117,7 @@ function Finish(client, options, dispatcher, logger, msgUser, message) {
 		options.active.set(dispatcher.guildID, fetchedData);
 		return Play(client, options, fetchedData, logger, msgUser, message);
 	}
-	else {fetchedData.queue.shift();}
+	else { fetchedData.queue.shift(); }
 
 	if (fetchedData.queue.length > 0) {
 		options.active.set(dispatcher.guildID, fetchedData);

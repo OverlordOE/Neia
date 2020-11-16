@@ -138,7 +138,7 @@ client.on('message', async message => {
 	const options = { active: active };
 
 	if (user.firstCommand) {
-		client.commands.get('changelog').execute(message, args, user, character, guildProfile, client, logger, cooldowns, options);
+		client.commands.get('changelog').execute(message, args, user, character, guildProfile, client, logger, options);
 		user.firstCommand = false;
 		logger.info(`New user ${message.author.tag}`);
 		user.save();
@@ -147,7 +147,7 @@ client.on('message', async message => {
 	// execute command
 	logger.log('info', `${message.author.tag} Called command: ${commandName} ${args.join(' ')}, in guild: ${message.guild.name}`);
 	try {
-		command.execute(message, args, user, character, guildProfile, client, logger, cooldowns, options);
+		command.execute(message, args, user, character, guildProfile, client, logger, options);
 	}
 	catch (e) {
 		logger.error(e.stack);

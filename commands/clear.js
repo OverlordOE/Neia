@@ -11,15 +11,12 @@ module.exports = {
 	execute(message, args, msgUser, character, guildProfile, client, logger, options) {
 		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');
 
-		try {
-			const guildIDData = options.active.get(message.guild.id);
+		const guildIDData = options.active.get(message.guild.id);
+		if (guildIDData) {
 			guildIDData.queue = [];
 			guildIDData.dispatcher.emit('finish');
 			message.reply('cleared the queue.');
 		}
-		catch (error) {
-			message.reply('there is no queue to clear.');
-			return logger.error(error.stack);
-		}
+		else message.reply('there is no queue to clear.');
 	},
 };
