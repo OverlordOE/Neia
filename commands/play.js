@@ -55,12 +55,18 @@ module.exports = {
 		if (ytdl.validateURL(search)) {
 			const info = await ytdl.getBasicInfo(search);
 			video = info.videoDetails;
+			let duration = 0;
+		
+			const minutes = Math.floor(video.lengthSeconds / 60);
+			const seconds = video.lengthSeconds - (minutes * 60);
+			if (seconds < 10) duration = `${minutes}:0${seconds}`;
+			else duration = `${minutes}:${seconds}`;
 			data.queue.push({
 				songTitle: video.title,
 				requester: message.author,
 				url: video.video_url,
 				announceChannel: message.channel.id,
-				duration: `${Math.floor(video.lengthSeconds / 60)}:${video.lengthSeconds - (Math.floor(video.lengthSeconds / 60) * 60)}`,
+				duration: duration,
 				thumbnail: video.thumbnail.thumbnails[0].url,
 			});
 			embed.setThumbnail(video.thumbnail.thumbnails[0].url);
@@ -138,7 +144,7 @@ function Finish(client, dispatcher, logger, msgUser, message) {
 
 	else {
 		client.music.active.delete(dispatcher.guildID);
-		const voiceChannel = client.guild.cache.get(dispatcher.guildID).me.voice.channel;
+		const voiceChannel = client.guilds.cache.get(dispatcher.guildID).me.voice.channel;
 		if (voiceChannel) voiceChannel.leave();
 	}
 }

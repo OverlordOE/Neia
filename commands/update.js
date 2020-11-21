@@ -6,7 +6,6 @@ module.exports = {
 	args: false,
 	usage: '',
 
-
 	async execute(message, args, msgUser, client, logger) {
 		try {
 			client.characterCommands.map(async (u) => {
