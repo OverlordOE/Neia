@@ -12,7 +12,7 @@ module.exports = {
 	usage: '<search criteria>',
 
 
-	async execute(message, args, msgUser, character, guildProfile, client, logger, options) {
+	async execute(message, args, msgUser, character, guildProfile, client, logger) {
 
 		if (!message.member.voice.channel) return message.channel.send(embed.setDescription('you are not in a voice channel.'));
 
@@ -21,7 +21,7 @@ module.exports = {
 			.setColor(character.getColour(msgUser));
 
 		const search = args.join(' ');
-		const data = options.active.get(message.guild.id) || {};
+		const data = client.music.active.get(message.guild.id) || {};
 
 		try {
 			if (!data.connection) {
@@ -35,7 +35,7 @@ module.exports = {
 			}
 			else if (data.connection.status == 4) {
 				data.connection = await message.member.voice.channel.join();
-				const guildIDData = options.active.get(message.guild.id);
+				const guildIDData = client.music.active.get(message.guild.id);
 				guildIDData.dispatcher.emit('finish');
 			}
 		}
@@ -50,35 +50,51 @@ module.exports = {
 		data.guildID = message.guild.id;
 
 		const tempMessage = await message.channel.send('Finding youtube video...');
-		const info = await YouTube.search(search, { limit: 1 });
-		const video = info[0];
-		if (video) {
+		let video;
+
+		if (ytdl.validateURL(search)) {
+			const info = await ytdl.getBasicInfo(search);
+			video = info.videoDetails;
 			data.queue.push({
 				songTitle: video.title,
 				requester: message.author,
-				url: video.url,
+				url: video.video_url,
 				announceChannel: message.channel.id,
-				duration: video.durationFormatted,
-				thumbnail: video.thumbnail.url,
+				duration: `${Math.floor(video.lengthSeconds / 60)}:${video.lengthSeconds - (Math.floor(video.lengthSeconds / 60) * 60)}`,
+				thumbnail: video.thumbnail.thumbnails[0].url,
 			});
-			embed.setThumbnail(video.thumbnail.url);
+			embed.setThumbnail(video.thumbnail.thumbnails[0].url);
 		}
 		else {
-			logger.warn(`Could not find youtube video with search terms ${search}`);
-			tempMessage.delete();
-			return message.channel.send(embed.setDescription(`Neia could not find any video connected to the search terms of \`${search}\``));
+			video = await YouTube.searchOne(search);
+			if (video) {
+				data.queue.push({
+					songTitle: video.title,
+					requester: message.author,
+					url: video.url,
+					announceChannel: message.channel.id,
+					duration: video.durationFormatted,
+					thumbnail: video.thumbnail.url,
+				});
+				embed.setThumbnail(video.thumbnail.url);
+			}
+			else {
+				logger.warn(`Could not find youtube video with search terms "${search}"`);
+				tempMessage.delete();
+				return message.channel.send(embed.setDescription(`Neia could not find any video connected to the search terms of \`${search}\``));
+			}
 		}
 
 		tempMessage.delete();
-		if (!data.dispatcher) Play(client, options, data, logger, msgUser, message);
+		if (!data.dispatcher) Play(client, data, logger, msgUser, message);
 		else message.channel.send(embed.setDescription(`Added **${video.title}** to the queue.\n\nRequested by ${message.author}`));
 
-		options.active.set(message.guild.id, data);
+		client.music.active.set(message.guild.id, data);
 	},
 };
 
 
-async function Play(client, options, data, logger, msgUser, message) {
+async function Play(client, data, logger, msgUser, message) {
 
 	const channel = client.channels.cache.get(data.queue[0].announceChannel);
 	const embed = new Discord.MessageEmbed()
@@ -86,7 +102,7 @@ async function Play(client, options, data, logger, msgUser, message) {
 
 	channel.send(embed.setDescription(`Now playing **${data.queue[0].songTitle}**\nRequested by ${data.queue[0].requester}`));
 
-	data.dispatcher = data.connection.play(await ytdl(data.queue[0].url, {
+	data.dispatcher = data.connection.play(ytdl(data.queue[0].url, {
 		filter: 'audioonly',
 		highWaterMark: 1 << 25,
 		opusEncoded: true,
@@ -94,7 +110,7 @@ async function Play(client, options, data, logger, msgUser, message) {
 	data.dispatcher.guildID = data.guildID;
 
 
-	data.dispatcher.on('finish', () => Finish(client, options, data.dispatcher, logger, msgUser, message));
+	data.dispatcher.on('finish', () => Finish(client, data.dispatcher, logger, msgUser, message));
 	data.dispatcher.on('error', e => {
 		channel.send(embed.setDescription(`error:  ${e.info}`));
 		logger.error(e.stack);
@@ -110,22 +126,18 @@ async function Play(client, options, data, logger, msgUser, message) {
 }
 
 
-function Finish(client, options, dispatcher, logger, msgUser, message) {
+function Finish(client, dispatcher, logger, msgUser, message) {
 
-	const fetchedData = options.active.get(dispatcher.guildID);
-	if (fetchedData.loop) {
-		options.active.set(dispatcher.guildID, fetchedData);
-		return Play(client, options, fetchedData, logger, msgUser, message);
-	}
-	else { fetchedData.queue.shift(); }
+	const fetchedData = client.music.active.get(dispatcher.guildID);
+	fetchedData.queue.shift();
 
 	if (fetchedData.queue.length > 0) {
-		options.active.set(dispatcher.guildID, fetchedData);
-		Play(client, options, fetchedData, logger, msgUser, message);
+		client.music.active.set(dispatcher.guildID, fetchedData);
+		Play(client, client.music, fetchedData, logger, msgUser, message);
 	}
 
 	else {
-		options.active.delete(dispatcher.guildID);
+		client.music.active.delete(dispatcher.guildID);
 		const voiceChannel = client.guilds.cache.get(dispatcher.guildID).me.voice.channel;
 		if (voiceChannel) voiceChannel.leave();
 	}
