@@ -46,7 +46,7 @@ module.exports = {
 
 
 		if (!data.queue) data.queue = [];
-		if (data.queue.length >= 4) return message.channel.send(embed.setDescription('You have reached the maximum queue size for free users.\nIf you want to upgrade your queue size contact OverlordOE#0717.'));
+		if (data.queue.length >= 5) return message.channel.send(embed.setDescription('You have reached the maximum queue size for free users.\nIf you want to upgrade your queue size contact OverlordOE#0717.'));
 		data.guildID = message.guild.id;
 
 		const tempMessage = await message.channel.send('Finding youtube video...');
