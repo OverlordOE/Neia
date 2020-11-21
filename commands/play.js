@@ -133,7 +133,7 @@ function Finish(client, dispatcher, logger, msgUser, message) {
 
 	if (fetchedData.queue.length > 0) {
 		client.music.active.set(dispatcher.guildID, fetchedData);
-		Play(client, client.music, fetchedData, logger, msgUser, message);
+		Play(client, fetchedData, logger, msgUser, message);
 	}
 
 	else {

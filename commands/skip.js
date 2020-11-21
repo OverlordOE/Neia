@@ -7,11 +7,11 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	execute(message, args, msgUser, character, guildProfile, client, logger, options) {
+	execute(message, args, msgUser, character, guildProfile, client, logger) {
 		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');
-		if (!options.active.get(message.guild.id)) return message.reply('there are no songs to skip.');
+		if (!client.music.active.get(message.guild.id)) return message.reply('there are no songs to skip.');
 
-		return options.active.get(message.guild.id).dispatcher.emit('finish');
+		return client.music.active.get(message.guild.id).dispatcher.emit('finish');
 
 	},
 };

@@ -5,7 +5,6 @@ const Discord = require('discord.js');
 const character = new Discord.Collection();
 const guildProfile = new Discord.Collection();
 require('dotenv').config();
-const prefix = process.env.PREFIX;
 
 const sequelize = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
@@ -685,7 +684,7 @@ Reflect.defineProperty(guildProfile, 'newGuild', {
 	value: async function newGuild(id) {
 		const guild = await Guilds.create({
 			guild_id: id,
-			prefix: prefix,
+			prefix: process.env.PREFIX,
 		});
 		guildProfile.set(id, guild);
 		return guild;

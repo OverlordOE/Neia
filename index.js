@@ -135,10 +135,10 @@ client.on('message', async message => {
 		setTimeout(() => timestamps.delete(id), cooldownAmount);
 	}
 
-	const options = { active: active };
+	client.music = { active: active };
 
 	if (user.firstCommand) {
-		client.commands.get('changelog').execute(message, args, user, character, guildProfile, client, logger, options);
+		client.commands.get('changelog').execute(message, args, user, character, guildProfile, client, logger);
 		user.firstCommand = false;
 		logger.info(`New user ${message.author.tag}`);
 		user.save();
@@ -147,7 +147,7 @@ client.on('message', async message => {
 	// execute command
 	logger.log('info', `${message.author.tag} Called command: ${commandName} ${args.join(' ')}, in guild: ${message.guild.name}`);
 	try {
-		command.execute(message, args, user, character, guildProfile, client, logger, options);
+		command.execute(message, args, user, character, guildProfile, client, logger);
 	}
 	catch (e) {
 		logger.error(e.stack);

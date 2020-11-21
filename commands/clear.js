@@ -8,10 +8,10 @@ module.exports = {
 	usage: '',
 
 
-	execute(message, args, msgUser, character, guildProfile, client, logger, options) {
+	execute(message, args, msgUser, character, guildProfile, client, logger) {
 		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');
 
-		const guildIDData = options.active.get(message.guild.id);
+		const guildIDData = client.music.active.get(message.guild.id);
 		if (guildIDData) {
 			guildIDData.queue = [];
 			guildIDData.dispatcher.emit('finish');
