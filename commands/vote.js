@@ -9,12 +9,12 @@ module.exports = {
 
 	usage: '',
 
-	execute(message, args, msgUser, character, guildProfile, client, logger) {
-		const vote = character.getVote(msgUser);
+	execute(message, args, msgUser, client, logger) {
+		const vote = client.characterCommands.getVote(msgUser);
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Vote for Neia!')
 			.setThumbnail(message.author.displayAvatarURL())
-			.setColor(character.getColour(msgUser))
+			.setColor(client.characterCommands.getColour(msgUser))
 
 			.setFooter('You dont have to use this command to vote.', client.user.displayAvatarURL());
 

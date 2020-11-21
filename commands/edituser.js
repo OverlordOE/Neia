@@ -7,14 +7,14 @@ module.exports = {
 	usage: '<user> <field> <value>',
 
 
-	async execute(message, args, msgUser, character, guildProfile, client, logger) {
-		const target = await character.getUser(message.mentions.users.first().id);
+	async execute(message, args, msgUser, client, logger) {
+		const target = await client.characterCommands.getUser(message.mentions.users.first().id);
 		try {
 
 			if (args[1] == 'reset') {
-				const user = await character.getUser(target.id);
+				const user = await client.characterCommands.getUser(target.id);
 				user.destroy();
-				character.delete(target.id);
+				client.characterCommands.delete(target.id);
 				return message.reply('Reset succesfull');
 			}
 			target[args[1]] = Number(args[2]);

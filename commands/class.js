@@ -4,14 +4,14 @@ const classes = require('../data/classes');
 module.exports = {
 	name: 'class',
 	summary: 'Choose your class',
-	description: 'Choose your class that you will use. You can reset your character by using this command again.',
+	description: 'Choose your class that you will use. You can reset your client.characterCommands by using this command again.',
 	category: 'pvp',
 	aliases: ['classes'],
 	args: false,
 	usage: '',
 
 
-	async execute(message, args, msgUser, character, guildProfile, client, logger) {
+	async execute(message, args, msgUser, client, logger) {
 
 
 		const embed = new Discord.MessageEmbed()
@@ -52,7 +52,7 @@ module.exports = {
 
 							case '✅':
 								try {
-									character.setClass(msgUser, curClass);
+									client.characterCommands.setClass(msgUser, curClass);
 								}
 								catch (error) {
 									return sentMessage.edit(embed.setColor(curClass.colour).setDescription('Something went wrong'));
@@ -80,7 +80,7 @@ module.exports = {
 
 					sentMessage.awaitReactions(filter, { max: 1, time: 60000 })
 						.then(() => {
-							character.resetClass(msgUser);
+							client.characterCommands.resetClass(msgUser);
 							sentMessage.edit(embed.setDescription('Class reset.'));
 							sentMessage.reactions.removeAll();
 						});

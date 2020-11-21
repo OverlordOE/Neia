@@ -96,8 +96,8 @@ module.exports = {
 		picture: null,
 		ctg: 'consumable',
 		description: 'You can use this to gain 8 hours of protection against attacks. If you use any of the money commands your protection will be reset\nThis item stacks.',
-		use: function (character, amount, embed, item, msgUser) {
-			const protection = character.addProtection(msgUser.user_id, amount * 8);
+		use: function (client, amount, embed, item, msgUser) {
+			const protection = client.characterCommands.addProtection(msgUser.user_id, amount * 8);
 			return { succes: true, message: `You have activated your protection.\nIt will last untill __${protection}__` };
 		},
 	},
@@ -111,13 +111,13 @@ module.exports = {
 		picture: 'hp.png',
 		ctg: 'consumable',
 		description: 'Restores 50 HP',
-		use: function (character, amount, embed, item, msgUser) {
-			const nextHeal = character.getHeal(msgUser.user_id);
+		use: function (client, amount, embed, item, msgUser) {
+			const nextHeal = client.characterCommands.getHeal(msgUser.user_id);
 			if (nextHeal === true) {
-				const curHP = character.changeHp(msgUser.user_id, 50);
+				const curHP = client.characterCommands.changeHp(msgUser.user_id, 50);
 				let heal = 50;
 				if (msgUser.hp > 950) heal = 1000 - msgUser.hp;
-				character.setHeal(msgUser.user_id);
+				client.characterCommands.setHeal(msgUser.user_id);
 				return { succes: true, message: `You healed **${heal}**<:health:730849477765890130>.\nCurrent <:health:730849477765890130> is **${curHP}/${1000}<:health:730849477765890130>**.` };
 			}
 			else return { succes: false, message: `Your healing is on cooldown, next heal at ${nextHeal}` };

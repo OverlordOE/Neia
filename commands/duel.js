@@ -9,7 +9,7 @@ module.exports = {
 	category: 'pvp',
 	aliases: ['fight'],
 
-	async execute(message, args, msgUser, character, guildProfile, client, logger) {
+	async execute(message, args, msgUser, client, logger) {
 
 
 	},

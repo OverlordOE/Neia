@@ -8,7 +8,7 @@ module.exports = {
 	category: 'pvp',
 	aliases: ['hunt'],
 
-	async execute(message, args, msgUser, character, guildProfile, client, logger) {
+	async execute(message, args, msgUser, client, logger) {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Attacking')
@@ -21,19 +21,19 @@ module.exports = {
 			const targetMention = message.mentions.users.first();
 			if (!targetMention) return sentMessage.edit(embed.setDescription('Mention the user you want to attack.'));
 
-			const lastAttack = character.getAttack(msgUser);
+			const lastAttack = client.characterCommands.getAttack(msgUser);
 			if (lastAttack !== true) return sentMessage.edit(embed.setDescription(`Your attack is on cooldown. Your next attack is available at ${lastAttack}`));
 
-			const target = await character.getUser(targetMention.id);
+			const target = await client.characterCommands.getUser(targetMention.id);
 			// if (target.networth < 30000) return sentMessage.edit(embed.setDescription(`${targetMention} user needs to have a networth of atleast 30k to be attacked.`));
 			// if (msgUser.networth < 30000) return sentMessage.edit(embed.setDescription('You need to have a networth of atleast 30k to attack someone.'));
 
-			const protection = character.getProtection(target);
+			const protection = client.characterCommands.getProtection(target);
 			if (protection !== false) return sentMessage.edit(embed.setDescription(`*${targetMention}* has protection against attacks, you cannot attack them untill ${protection}.`));
 
 
 			// Attack resolution
-			const attackResult = character.attackUser(msgUser, target);
+			const attackResult = client.characterCommands.attackUser(msgUser, target);
 			sentMessage.edit(embed.setDescription(`You have attacked ${targetMention} with your ${attackResult.weapon.emoji}${attackResult.weapon.name} for **${attackResult.damage}** damage`));
 
 
@@ -42,15 +42,15 @@ module.exports = {
 				const stealAmount = Math.floor(target.balance / (Math.random() + 4));
 				const lootList = {};
 				let lootListValue = 0;
-				let description = `You have killed ${targetMention} and stolen:\n${character.formatNumber(stealAmount)}💰.`;
+				let description = `You have killed ${targetMention} and stolen:\n${client.util.formatNumber(stealAmount)}💰.`;
 				const networth = target.networth;
-				const inventory = await character.getInventory(target);
+				const inventory = await client.characterCommands.getInventory(target);
 
 				if (inventory.length) {
 					for (let i = 0; lootListValue <= networth / 5; i++) {
 						const nextIndex = Math.floor(Math.random() * inventory.length);
 
-						const loot = character.getItem(inventory[nextIndex].name);
+						const loot = client.characterCommands.getItem(inventory[nextIndex].name);
 						if (inventory[nextIndex].amount > 1) inventory[nextIndex].amount--;
 						else inventory.splice(nextIndex, 1);
 
@@ -60,17 +60,17 @@ module.exports = {
 					}
 
 					for (const loot in lootList) {
-						const lootItem = character.getItem(loot);
-						description += `\n${character.formatNumber(lootList[loot])} ${lootItem.emoji}__${lootItem.name}__`;
-						character.addItem(msgUser, lootItem, lootList[loot]);
-						character.removeItem(target, lootItem, lootList[loot]);
+						const lootItem = client.characterCommands.getItem(loot);
+						description += `\n${client.util.formatNumber(lootList[loot])} ${lootItem.emoji}__${lootItem.name}__`;
+						client.characterCommands.addItem(msgUser, lootItem, lootList[loot]);
+						client.characterCommands.removeItem(target, lootItem, lootList[loot]);
 					}
 				}
 
-				character.addMoney(target, -stealAmount);
-				character.addMoney(msgUser, stealAmount);
+				client.characterCommands.addMoney(target, -stealAmount);
+				client.characterCommands.addMoney(msgUser, stealAmount);
 				sentMessage.edit(embed.setDescription(description));
-				character.addProtection(target, 24);
+				client.characterCommands.addProtection(target, 24);
 				target.hp = 1000;
 				target.save();
 			}

@@ -5,7 +5,9 @@ const cron = require('cron');
 const DBL = require('dblapi.js');
 const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: process.env.WEBHOOK_TOKEN });
 const clientCommands = require('./commands');
-const { Users, Guilds, character, guildProfile } = require('./dbObjects');
+const { Users, characterCommands } = require('./util/characterCommands');
+const { guildCommands, Guilds } = require('./util/guildCommands');
+const { util } = require('./util/util');
 require('dotenv').config();
 const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
@@ -51,12 +53,16 @@ client.login(process.env.TEST_TOKEN);
 client.on('ready', async () => {
 	try {
 		const storedUsers = await Users.findAll();
-		storedUsers.forEach(b => character.set(b.user_id, b));
+		storedUsers.forEach(b => characterCommands.set(b.user_id, b));
 		const storedGuilds = await Guilds.findAll();
-		storedGuilds.forEach(b => guildProfile.set(b.guild_id, b));
+		storedGuilds.forEach(b => guildCommands.set(b.guild_id, b));
 		let memberTotal = 0;
-		client.guilds.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
+		client.guilds.cache.forEach(g => { if (!isNaN(memberTotal) && g.id != 264445053596991498) memberTotal += Number(g.memberCount); });
 		client.user.setActivity(`with ${memberTotal} users.`);
+
+		client.characterCommands = characterCommands;
+		client.guildCommands = guildCommands;
+		client.util = util;
 
 		logger.info(`Logged in as ${client.user.tag}!`);
 	}
@@ -78,11 +84,11 @@ client.on('message', async message => {
 
 	if (message.author.bot || message.channel == 'dm') return;
 
-	let guild = guildProfile.get(message.guild.id);
-	if (!guild) guild = await guildProfile.newGuild(message.guild.id);
-	const prefix = await guildProfile.getPrefix(message.guild.id);
+	let guild = guildCommands.get(message.guild.id);
+	if (!guild) guild = await guildCommands.newGuild(message.guild.id);
+	const prefix = await guildCommands.getPrefix(message.guild.id);
 	const id = message.author.id;
-	const user = await character.getUser(id);
+	const user = await characterCommands.getUser(id);
 
 
 	// split message for further use
@@ -100,7 +106,7 @@ client.on('message', async message => {
 	if (!command) return;
 	if (command.category == 'debug' && (id != 137920111754346496 && id != 139030319784263681)) return message.channel.send('You are not the owner of this bot!');
 	else if (command.category == 'admin' && !message.member.hasPermission('ADMINISTRATOR') && id != 137920111754346496 && id != 139030319784263681) return message.channel.send('You need Admin privileges to use this command!');
-	else if (command.category == 'pvp') character.resetProtection(user);
+	else if (command.category == 'pvp') characterCommands.resetProtection(user);
 
 
 	// if the command is used wrongly correct the user
@@ -138,7 +144,7 @@ client.on('message', async message => {
 	client.music = { active: active };
 
 	if (user.firstCommand) {
-		client.commands.get('changelog').execute(message, args, user, character, guildProfile, client, logger);
+		client.commands.get('changelog').execute(message, args, user, client, logger);
 		user.firstCommand = false;
 		logger.info(`New user ${message.author.tag}`);
 		user.save();
@@ -147,7 +153,7 @@ client.on('message', async message => {
 	// execute command
 	logger.log('info', `${message.author.tag} Called command: ${commandName} ${args.join(' ')}, in guild: ${message.guild.name}`);
 	try {
-		command.execute(message, args, user, character, guildProfile, client, logger);
+		command.execute(message, args, user, client, logger);
 	}
 	catch (e) {
 		logger.error(e.stack);
@@ -155,13 +161,19 @@ client.on('message', async message => {
 	}
 });
 
+
+
+
+
+
+
 // Regular tasks executed every 3 hours
 const botTasks = new cron.CronJob('0 0-23/3 * * *', () => {
 	const lottery = client.commands.get('lottery');
-	lottery.execute(character, client, logger);
+	lottery.execute(client, logger);
 
 	let memberTotal = 0;
-	client.guilds.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
+	client.guildCommands.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
 	client.user.setActivity(`with ${memberTotal} users.`);
 
 	logger.info('Finished regular tasks!');
@@ -176,13 +188,13 @@ dbl.webhook.on('vote', async vote => {
 
 	const userID = vote.user;
 	const discordUser = await client.users.cache.get(userID);
-	const user = await character.getUser(userID);
+	const user = await characterCommands.getUser(userID);
 	logger.info(`${discordUser.tag} has just voted.`);
 
 	const embed = new Discord.MessageEmbed()
 		.setTitle('Vote Reward')
 		.setThumbnail(discordUser.displayAvatarURL())
-		.setColor(character.getColour(user))
+		.setColor(characterCommands.getColour(user))
 		.setFooter('Neia', client.user.displayAvatarURL());
 
 	let chest;
@@ -190,17 +202,17 @@ dbl.webhook.on('vote', async vote => {
 	if (luck == 0) chest = 'Epic chest';
 	if (luck == 1) chest = 'Mystery chest';
 	else chest = 'Rare chest';
-	chest = character.getItem(chest);
+	chest = characterCommands.getItem(chest);
 
 	if (chest.picture) {
 		embed.attachFiles(`assets/items/${chest.picture}`)
 			.setImage(`attachment://${chest.picture}`);
 	}
 
-	const income = await character.calculateIncome(user);
-	const balance = character.addMoney(user, income.daily);
-	character.addItem(user, chest, 1);
-	character.setVote(user);
+	const income = await characterCommands.calculateIncome(user);
+	const balance = characterCommands.addMoney(user, income.daily);
+	characterCommands.addItem(user, chest, 1);
+	characterCommands.setVote(user);
 
-	return discordUser.send(embed.setDescription(`Thank you for voting!\n\nYou got a ${chest.emoji}${chest.name} from your vote 🎁 and ${character.formatNumber(income.daily)}💰 from your collectables.\nCome back in 12 hours for more!\n\nYour current balance is ${character.formatNumber(balance)}💰`));
+	return discordUser.send(embed.setDescription(`Thank you for voting!\n\nYou got a ${chest.emoji}${chest.name} from your vote 🎁 and ${util.formatNumber(income.daily)}💰 from your collectables.\nCome back in 12 hours for more!\n\nYour current balance is ${util.formatNumber(balance)}💰`));
 });

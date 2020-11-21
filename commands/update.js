@@ -7,10 +7,10 @@ module.exports = {
 	usage: '',
 
 
-	async execute(message, args, msgUser, character, guildProfile, client, logger) {
+	async execute(message, args, msgUser, client, logger) {
 		try {
-			character.map(async (u) => {
-				const user = await character.getUser(u.user_id);
+			client.characterCommands.map(async (u) => {
+				const user = await client.characterCommands.getUser(u.user_id);
 				user.firstCommand = true;
 				user.save();
 			});

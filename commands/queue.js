@@ -9,13 +9,13 @@ module.exports = {
 	usage: '',
 
 
-	execute(message, args, msgUser, character, guildProfile, client, logger) {
+	execute(message, args, msgUser, client, logger) {
 		const guildIDData = client.music.active.get(message.guild.id);
 		if (!guildIDData) return message.reply('no client.music queued at the moment.');
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Queue')
-			.setColor(character.getColour(msgUser));
+			.setColor(client.characterCommands.getColour(msgUser));
 
 		const queue = guildIDData.queue;
 

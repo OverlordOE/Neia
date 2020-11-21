@@ -12,13 +12,13 @@ module.exports = {
 	usage: '<search criteria>',
 
 
-	async execute(message, args, msgUser, character, guildProfile, client, logger) {
+	async execute(message, args, msgUser, client, logger) {
 
 		if (!message.member.voice.channel) return message.channel.send(embed.setDescription('you are not in a voice channel.'));
 
 		const embed = new Discord.MessageEmbed()
 			.setThumbnail(message.author.displayAvatarURL())
-			.setColor(character.getColour(msgUser));
+			.setColor(client.characterCommands.getColour(msgUser));
 
 		const search = args.join(' ');
 		const data = client.music.active.get(message.guild.id) || {};
@@ -138,7 +138,7 @@ function Finish(client, dispatcher, logger, msgUser, message) {
 
 	else {
 		client.music.active.delete(dispatcher.guildID);
-		const voiceChannel = client.guilds.cache.get(dispatcher.guildID).me.voice.channel;
+		const voiceChannel = client.guild.cache.get(dispatcher.guildID).me.voice.channel;
 		if (voiceChannel) voiceChannel.leave();
 	}
 }

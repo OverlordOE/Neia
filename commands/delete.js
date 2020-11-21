@@ -6,7 +6,7 @@ module.exports = {
 	aliases: ['remove'],
 	args: false,
 	usage: '<message amount>',
-	execute(message, args, msgUser, character, guildProfile, client, logger) {
+	execute(message, args, msgUser, client, logger) {
 
 		const amount = args[0];
 		if (isNaN(amount)) return message.channel.send(`**${amount}** is not a valid number`);
