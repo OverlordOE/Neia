@@ -13,12 +13,11 @@ module.exports = {
 
 
 	async execute(message, args, msgUser, client, logger) {
-
-		if (!message.member.voice.channel) return message.channel.send(embed.setDescription('you are not in a voice channel.'));
-
 		const embed = new Discord.MessageEmbed()
 			.setThumbnail(message.author.displayAvatarURL())
 			.setColor(client.characterCommands.getColour(msgUser));
+
+		if (!message.member.voice.channel) return message.channel.send(embed.setDescription('you are not in a voice channel.'));
 
 		const search = args.join(' ');
 		const data = client.music.active.get(message.guild.id) || {};
