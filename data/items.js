@@ -155,7 +155,7 @@ module.exports = {
 	// COLLECTABLES
 	'star': {
 		name: 'Star',
-		value: 100000,
+		value: 33000,
 		buyable: true,
 		emoji: '⭐',
 		rarity: 'legendary',
@@ -165,7 +165,7 @@ module.exports = {
 	},
 	'museum': {
 		name: 'Museum',
-		value: 50000,
+		value: 24000,
 		buyable: true,
 		emoji: '🏛️',
 		rarity: 'epic',
@@ -175,7 +175,7 @@ module.exports = {
 	},
 	'house': {
 		name: 'House',
-		value: 10000,
+		value: 15000,
 		buyable: true,
 		emoji: '🏡',
 		rarity: 'epic',
@@ -255,7 +255,7 @@ module.exports = {
 	},
 	'office': {
 		name: 'Office',
-		value: 500000,
+		value: 47500,
 		buyable: true,
 		emoji: '🏢',
 		rarity: 'legendary',
@@ -265,7 +265,7 @@ module.exports = {
 	},
 	'stadium': {
 		name: 'Stadium',
-		value: 1000000,
+		value: 81500,
 		buyable: true,
 		emoji: '🏟️',
 		rarity: 'legendary',
@@ -275,7 +275,7 @@ module.exports = {
 	},
 	'castle': {
 		name: 'Castle',
-		value: 750000,
+		value: 65000,
 		buyable: true,
 		emoji: '🏰',
 		rarity: 'legendary',
@@ -366,7 +366,7 @@ module.exports = {
 		picture: 'water.png',
 		ctg: 'equipment',
 		slot: 'Main hand',
-		damage: [140, 40],
+		damage: [130, 30],
 		description: 'WATER! DO YOU WANT TO POISON ME!?',
 	},
 	'spiky rock': {
@@ -383,7 +383,7 @@ module.exports = {
 	},
 	'rijkszwaard': {
 		name: 'Rijkszwaard',
-		value: 649000,
+		value: 44900,
 		buyable: false,
 		emoji: '<:rijkszwaard:764108434542428210>',
 		rarity: 'legendary',
@@ -482,7 +482,7 @@ module.exports = {
 	},
 	'steinturm': {
 		name: 'Steinturm',
-		value: 783020,
+		value: 58320,
 		buyable: false,
 		emoji: '<:steinturm:774979910351585290>',
 		rarity: 'legendary',
