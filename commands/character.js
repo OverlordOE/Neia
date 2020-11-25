@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
 const itemInfo = require('../data/items');
 module.exports = {
-	name: 'client.characterCommands',
-	summary: 'Shows your client.characterCommands or the tagger user\'s client.characterCommands',
-	description: 'Shows your client.characterCommands or the tagger user\'s client.characterCommands.',
+	name: 'character',
+	summary: 'Shows your character or the tagger user\'s character',
+	description: 'Shows your character or the tagger user\'s character.',
 	category: 'info',
 	aliases: ['inv', 'items', 'char', 'inventory', 'balance', 'money', 'c', 'equipment'],
 	args: false,
@@ -111,7 +111,11 @@ module.exports = {
 
 			let statDescription = `**Class:** ${className} ${levelInfo.level}\n**exp:** ${exp}\n`;
 			for (const stat in stats) {
-				if (baseStats[stat]) statDescription += `\n**${stat.toUpperCase()}**: ${stats[stat]} (${stats[stat] - baseStats[stat]})`;
+				if (baseStats[stat]) {
+					if (stat == 'hp') statDescription += `\n**${stat.toUpperCase()}**: ${stats[stat]} (${stats[stat] - baseStats[stat]})<:health:730849477765890130>`;
+					else if (stat == 'mp') statDescription += `\n**${stat.toUpperCase()}**: ${stats[stat]} (${stats[stat] - baseStats[stat]})<:mana:730849477640061029>`;
+					else statDescription += `\n**${stat.toUpperCase()}**: ${stats[stat]} (${stats[stat] - baseStats[stat]})`;
+				}
 				else statDescription += `\n**${stat.toUpperCase()}**: ${stats[stat]}`;
 			}
 			characterEmbed.setDescription(statDescription);
@@ -142,7 +146,7 @@ module.exports = {
 
 				collector.on('collect', (reaction) => {
 					reaction.users.remove(message.author.id);
-					if (reaction.emoji.name == 'client.characterCommands') sentMessage.edit(characterEmbed);
+					if (reaction.emoji.name == 'character') sentMessage.edit(characterEmbed);
 					else if (reaction.emoji.name == '🛡️') sentMessage.edit(equipmentEmbed);
 					else if (reaction.emoji.name == '💰') sentMessage.edit(moneyEmbed);
 					else if (reaction.emoji.name == '📦') sentMessage.edit(inventoryEmbed);
