@@ -180,14 +180,17 @@ const botTasks = new cron.CronJob('0 0-23/3 * * *', () => {
 });
 botTasks.start();
 
+
+
+
+// DBL voting webhook handler
 dbl.webhook.on('ready', () => logger.info('DBL Webhook up and running.'));
 dbl.on('error', e => logger.error(`Oops! ${e}`));
 
-// DBL voting webhook handler
 dbl.webhook.on('vote', async vote => {
 
 	const userID = vote.user;
-	const discordUser = await client.users.cache.get(userID);
+	const discordUser = client.users.cache.get(userID);
 	const user = await characterCommands.getUser(userID);
 	logger.info(`${discordUser.tag} has just voted.`);
 

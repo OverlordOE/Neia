@@ -5,12 +5,11 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'play',
 	summary: 'Play a song',
-	description: 'Play a song, supports youtube videos.',
+	description: 'Play a song\nYou can search for songs by inputting a query or you can use a youtube link to get your song',
 	category: 'music',
-	aliases: ['song', 'p'],
+	aliases: ['song', 'p', 'music'],
 	args: true,
-	usage: '<search criteria>',
-
+	usage: '<search query or link>',
 
 	async execute(message, args, msgUser, client, logger) {
 		const embed = new Discord.MessageEmbed()

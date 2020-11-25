@@ -55,28 +55,30 @@ epic.add({ name: 'Jet Plane', amount: [2, 0] }, 100);
 epic.add({ name: 'Prop Plane', amount: [3, 3] }, 100);
 rare.add({ name: 'Bronze Buckler', amount: [2, 0] }, 100);
 epic.add({ name: 'House', amount: [1, 0] }, 100);
-epic.add({ name: 'House', amount: [2, 0] }, 40);
 epic.add({ name: 'Protection', amount: [2, 0] }, 100);
+epic.add({ name: 'Star', amount: [1, 0] }, 40);
 epic.add({ name: 'Museum', amount: [1, 0] }, 25);
 epic.add({ name: 'Star', amount: [1, 0] }, 15);
 epic.add({ name: 'Rijkszwaard', amount: [1, 0] }, 5);
 epic.add({ name: 'Office', amount: [1, 0] }, 3);
 
 
-// cost 130k
+// cost 50k
 const legendary = new LootTable();
-legendary.add({ name: 'Rijkszwaard', amount: [1, 0] }, 15);
-legendary.add({ name: 'Steinturm', amount: [1, 0] }, 15);
-legendary.add({ name: 'Star', amount: [1, 0] }, 100);
+legendary.add({ name: 'Rijkszwaard', amount: [1, 0] }, 100);
+legendary.add({ name: 'Steinturm', amount: [1, 0] }, 100);
+legendary.add({ name: 'Star', amount: [1, 0] }, 40);
 legendary.add({ name: 'Star', amount: [2, 0] }, 70);
-legendary.add({ name: 'Office', amount: [1, 0] }, 30);
-legendary.add({ name: 'Castle', amount: [1, 0] }, 20);
-legendary.add({ name: 'Stadium', amount: [1, 0] }, 10);
-legendary.add({ name: 'Epic Chest', amount: [9, 2] }, 50);
-legendary.add({ name: 'Water', amount: [5, 2] }, 100);
-legendary.add({ name: 'Jet Plane', amount: [17, 3] }, 100);
-legendary.add({ name: 'House', amount: [11, 4] }, 100);
-legendary.add({ name: 'Museum', amount: [2, 1] }, 100);
+legendary.add({ name: 'Office', amount: [1, 0] }, 100);
+legendary.add({ name: 'Castle', amount: [1, 0] }, 90);
+legendary.add({ name: 'Stadium', amount: [1, 0] }, 30);
+legendary.add({ name: 'Epic Chest', amount: [3, 1] }, 50);
+legendary.add({ name: 'Water', amount: [2, 1] }, 100);
+legendary.add({ name: 'Jet Plane', amount: [5, 1] }, 100);
+legendary.add({ name: 'House', amount: [3, 0] }, 100);
+legendary.add({ name: 'House', amount: [3, 1] }, 50);
+legendary.add({ name: 'Museum', amount: [2, 0] }, 100);
+legendary.add({ name: 'Museum', amount: [2, 1] }, 20);
 
 
 // cost 5k
@@ -94,6 +96,7 @@ mystery.add({ name: 'Museum', amount: [1, 0] }, 40);
 mystery.add({ name: 'Motorcycle', amount: [1, 0] }, 40);
 mystery.add({ name: 'Ship', amount: [1, 0] }, 100);
 mystery.add({ name: 'Sailboat', amount: [2, 0] }, 100);
+mystery.add({ name: 'Motorboat', amount: [1, 0] }, 100);
 
 module.exports = {
 	common() {

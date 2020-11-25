@@ -14,7 +14,7 @@ module.exports = {
 
 	execute(message, args, msgUser, client, logger) {
 
-		const filter = m => m.author.id === msgUser;
+		const filter = m => m.author.id === msgUser.user_id;
 		let amount = 1;
 		let temp = '';
 		let item;
