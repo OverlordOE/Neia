@@ -36,7 +36,7 @@ module.exports = {
 	},
 	'legendary chest': {
 		name: 'Legendary Chest',
-		value: 130000,
+		value: 50000,
 		buyable: true,
 		emoji: '<:chest_t_04:745278855987593226>',
 		rarity: 'legendary',
