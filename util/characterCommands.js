@@ -228,7 +228,7 @@ Reflect.defineProperty(characterCommands, 'setClass', {
 
 		for (let i = 0; i < newClass.startEquipment.length; i++) {
 			const equipment = characterCommands.getItem(newClass.startEquipment[i]);
-			await characterCommands.addItem(user, equipment, 1);
+			await characterCommands.addItem(user, equipment);
 			characterCommands.equip(user, equipment);
 		}
 
@@ -253,7 +253,7 @@ Reflect.defineProperty(characterCommands, 'getStats', {
 });
 Reflect.defineProperty(characterCommands, 'calculateStats', {
 	value: async function calculateStats(user) {
-		if (!user.class) throw Error('User does not have a class');
+		if (!user.class) return false;
 
 		const stats = JSON.parse(user.baseStats);
 		const equipment = await characterCommands.getEquipment(user);
@@ -270,8 +270,8 @@ Reflect.defineProperty(characterCommands, 'calculateStats', {
 			}
 		}
 
-		stats.hp += Math.round(stats.con / 4);
-		stats.mp += Math.round(stats.int / 4);
+		stats.maxHP += Math.round(stats.con / 4);
+		stats.maxMP += Math.round(stats.int / 4);
 		user.curHP += Math.round(stats.con / 4);
 		user.curMP += Math.round(stats.int / 4);
 
@@ -284,8 +284,7 @@ Reflect.defineProperty(characterCommands, 'calculateStats', {
 Reflect.defineProperty(characterCommands, 'addExp', {
 	value: async function addExp(user, exp, message) {
 		if (!user.class) return message.reply(
-			'You dont have a class yet so you cant gain experience!\nUse the command `class` to get a class`',
-		);
+			'You dont have a class yet so you cant gain experience!\nUse the command `class` to get a class`');
 
 		user.exp += Number(exp);
 		user.save();

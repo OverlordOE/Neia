@@ -84,7 +84,7 @@ async function use(client, sentMessage, amount, embed, item, msgUser) {
 		const result = await item.use(client, amount, embed, item, msgUser);
 
 		if (result.succes) {
-			client.characterCommands.removeItem(msgUser.user_id, item, amount);
+			client.characterCommands.removeItem(msgUser, item, amount);
 			return sentMessage.edit(embed.setDescription(result.message));
 		}
 		else if (result.message) return sentMessage.edit(embed.setDescription(result.message));

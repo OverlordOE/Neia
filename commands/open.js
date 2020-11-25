@@ -83,7 +83,7 @@ module.exports = {
 
 				message.channel.send(lootEmbed);
 				client.characterCommands.addItem(msgUser, lootItem, itemAmount);
-				client.characterCommands.removeItem(msgUser, item, 1);
+				client.characterCommands.removeItem(msgUser, item);
 
 			}
 		}

@@ -33,7 +33,7 @@ module.exports = {
 
 			const income = await client.characterCommands.calculateIncome(msgUser);
 			client.characterCommands.addMoney(msgUser, income.daily);
-			client.characterCommands.addItem(msgUser, chest, 1);
+			client.characterCommands.addItem(msgUser, chest);
 			client.characterCommands.setDaily(msgUser);
 
 			const balance = client.util.formatNumber(msgUser.balance);

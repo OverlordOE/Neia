@@ -33,7 +33,7 @@ module.exports = {
 
 			const income = await client.characterCommands.calculateIncome(msgUser);
 			const balance = client.characterCommands.addMoney(msgUser, income.hourly);
-			client.characterCommands.addItem(msgUser, chest, 1);
+			client.characterCommands.addItem(msgUser, chest);
 			client.characterCommands.setHourly(msgUser);
 
 			message.channel.send(embed.setDescription(`You got a ${chest.emoji}${chest.name} from your hourly 🎁 and ${client.util.formatNumber(income.hourly)}💰 from your collectables.\nCome back in an hour for more!\n\nYour current balance is ${client.util.formatNumber(balance)}💰`));

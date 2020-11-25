@@ -95,8 +95,8 @@ function setClass(curClass, sentMessage, embed) {
 					${curClass.description}
 
 					Base stats:
-					__Health__: **${curClass.stats.base.hp}**
-					__Mana__: **${curClass.stats.base.mp}**
+					__Health__: **${curClass.stats.base.maxHP}**
+					__Mana__: **${curClass.stats.base.maxMP}**
 					__Strength__: **${curClass.stats.base.str}**
 					__Dexterity__: **${curClass.stats.base.dex}**
 					__Constitution__: **${curClass.stats.base.con}**

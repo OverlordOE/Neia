@@ -30,7 +30,7 @@ module.exports = {
 
 		message.channel.send(embed).then(async sentMessage => {
 			if (item) {
-				if (await client.characterCommands.hasItem(msgUser, item, 1)) {
+				if (await client.characterCommands.hasItem(msgUser, item)) {
 					if (client.characterCommands.equip(msgUser, item)) sentMessage.edit(embed.setDescription(`Successfully equipped __${item.emoji}${item.name}__ to slot **${item.slot}**.`).setImage(`attachment://${item.picture}`));
 					else sentMessage.edit(embed.setDescription(`Something went wrong with equipping ${item.emoji}${item.name}.`));
 				}
@@ -44,7 +44,7 @@ module.exports = {
 						collected.first().delete();
 
 						if (item) {
-							if (await client.characterCommands.hasItem(msgUser, item, 1)) {
+							if (await client.characterCommands.hasItem(msgUser, item)) {
 								if (client.characterCommands.equip(msgUser, item)) sentMessage.edit(embed.setDescription(`Successfully equipped __${item.emoji}${item.name}__ to slot **${item.slot}**.`).setImage(`attachment://${item.picture}`));
 								else sentMessage.edit(embed.setDescription(`Something went wrong with equipping ${item.emoji}${item.name}.`));
 							}

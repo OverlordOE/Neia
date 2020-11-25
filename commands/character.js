@@ -112,8 +112,8 @@ module.exports = {
 			let statDescription = `**Class:** ${className} ${levelInfo.level}\n**exp:** ${exp}\n`;
 			for (const stat in stats) {
 				if (baseStats[stat]) {
-					if (stat == 'hp') statDescription += `\n**${stat.toUpperCase()}**: ${stats[stat]} (${stats[stat] - baseStats[stat]})<:health:730849477765890130>`;
-					else if (stat == 'mp') statDescription += `\n**${stat.toUpperCase()}**: ${stats[stat]} (${stats[stat] - baseStats[stat]})<:mana:730849477640061029>`;
+					if (stat == 'maxHP') statDescription += `\n**Max HP**: ${stats[stat]} (${stats[stat] - baseStats[stat]})<:health:730849477765890130>`;
+					else if (stat == 'maxMP') statDescription += `\n**Max MP**: ${stats[stat]} (${stats[stat] - baseStats[stat]})<:mana:730849477640061029>`;
 					else statDescription += `\n**${stat.toUpperCase()}**: ${stats[stat]} (${stats[stat] - baseStats[stat]})`;
 				}
 				else statDescription += `\n**${stat.toUpperCase()}**: ${stats[stat]}`;

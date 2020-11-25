@@ -214,7 +214,7 @@ dbl.webhook.on('vote', async vote => {
 
 	const income = await characterCommands.calculateIncome(user);
 	const balance = characterCommands.addMoney(user, income.daily);
-	characterCommands.addItem(user, chest, 1);
+	characterCommands.addItem(user, chest);
 	characterCommands.setVote(user);
 
 	return discordUser.send(embed.setDescription(`Thank you for voting!\n\nYou got a ${chest.emoji}${chest.name} from your vote 🎁 and ${util.formatNumber(income.daily)}💰 from your collectables.\nCome back in 12 hours for more!\n\nYour current balance is ${util.formatNumber(balance)}💰`));
