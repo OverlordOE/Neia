@@ -23,14 +23,6 @@ module.exports = (sequelize, DataTypes) => {
 		},
 
 		// CHARACTER
-		curHP: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-		},
-		curMP: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-		},
 		level: {
 			type: DataTypes.INTEGER,
 			defaultValue: 1,
@@ -79,27 +71,12 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: '',
 			allowNull: false,
 		},
-		lastHeal: {
-			type: DataTypes.STRING,
-			defaultValue: '',
-			allowNull: false,
-		},
-		lastAttack: {
-			type: DataTypes.STRING,
-			defaultValue: '',
-			allowNull: false,
-		},
 
 
 		// MISC
 		firstCommand: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: true,
-		},
-		protection: {
-			type: DataTypes.STRING,
-			defaultValue: '',
-			allowNull: false,
 		},
 	},
 		{

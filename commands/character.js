@@ -3,7 +3,7 @@ const itemInfo = require('../data/items');
 module.exports = {
 	name: 'character',
 	summary: 'Shows your character or the tagger user\'s character',
-	description: 'Shows your character or the tagger user\'s character.',
+	description: 'Shows your character or the tagger user\'s character.\nYou can click on the reaction emojis to switch tabs to different pages.',
 	category: 'info',
 	aliases: ['inv', 'items', 'char', 'inventory', 'balance', 'money', 'c', 'equipment'],
 	args: false,
@@ -22,12 +22,9 @@ module.exports = {
 		const pColour = client.characterCommands.getColour(userProfile);
 		await client.characterCommands.calculateStats(userProfile);
 
-		const prot = client.characterCommands.getProtection(userProfile);
 		let daily = client.characterCommands.getDaily(userProfile);
 		let hourly = client.characterCommands.getHourly(userProfile);
 		let vote = client.characterCommands.getVote(userProfile);
-		let heal = client.characterCommands.getHeal(userProfile);
-		let attack = client.characterCommands.getAttack(userProfile);
 
 		const levelInfo = await client.characterCommands.levelInfo(userProfile, message);
 		let exp = `${levelInfo.exp}/${levelInfo.expNeeded}`;
@@ -50,8 +47,6 @@ module.exports = {
 		if (daily === true) daily = 'now';
 		if (hourly === true) hourly = 'now';
 		if (vote === true) vote = 'now';
-		if (heal === true) heal = 'now';
-		if (attack === true) attack = 'now';
 
 		const moneyEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)
@@ -61,10 +56,7 @@ module.exports = {
 			.addField('Next hourly:', hourly, true)
 			.addField('Next daily:', daily, true)
 			.addField('Next Vote', vote, true)
-			.addField('Next Heal', heal, true)
-			.addField('Next Attack', attack, true)
 			.setFooter('You can use the emojis to switch pages.', client.user.displayAvatarURL());
-		if (prot !== false) moneyEmbed.addField('Protection untill:', prot);
 
 		const inventoryEmbed = new Discord.MessageEmbed()
 			.setColor(pColour)

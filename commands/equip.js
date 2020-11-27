@@ -18,7 +18,7 @@ module.exports = {
 			.setThumbnail(message.author.displayAvatarURL())
 			.setDescription('What item do you want to equip?')
 			.setColor(client.characterCommands.getColour(msgUser))
-			.setFooter('Use the `attack` command to kill people.', client.user.displayAvatarURL());
+			.setFooter('Use the `duel` command to duel people.', client.user.displayAvatarURL());
 
 		for (let i = 0; i < args.length; i++) {
 			if (temp.length > 2) temp += ` ${args[i]}`;

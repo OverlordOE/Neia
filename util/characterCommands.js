@@ -26,14 +26,10 @@ Reflect.defineProperty(characterCommands, 'newUser', {
 			networth: 0,
 			level: 1,
 			exp: 0,
-			hp: 1000,
 			equipment: JSON.stringify({ weapon: null, offhand: null }),
 			lastDaily: now.subtract(2, 'days').toString(),
 			lastHourly: now.subtract(1, 'days').toString(),
 			lastVote: now.subtract(1, 'days').toString(),
-			lastHeal: now.subtract(1, 'days').toString(),
-			lastAttack: now.subtract(1, 'days').toString(),
-			protection: now.toString(),
 			firstCommand: true,
 		});
 		characterCommands.set(id, user);
@@ -190,8 +186,6 @@ Reflect.defineProperty(characterCommands, 'resetClass', {
 		user.baseStats = null;
 		user.equipment = null;
 		// user.skills = null;
-		user.curHP = null;
-		user.curMP = null;
 		user.level = 1;
 		user.exp = 0;
 
@@ -201,8 +195,6 @@ Reflect.defineProperty(characterCommands, 'resetClass', {
 Reflect.defineProperty(characterCommands, 'setClass', {
 	value: async function setClass(user, newClass) {
 
-		user.curHP = newClass.stats.base.hp;
-		user.curMP = newClass.stats.base.mp;
 		user.class = newClass.name;
 		user.baseStats = JSON.stringify(newClass.stats.base);
 		user.equipment = JSON.stringify({
@@ -272,8 +264,6 @@ Reflect.defineProperty(characterCommands, 'calculateStats', {
 
 		stats.maxHP += Math.round(stats.con / 4);
 		stats.maxMP += Math.round(stats.int / 4);
-		user.curHP += Math.round(stats.con / 4);
-		user.curMP += Math.round(stats.int / 4);
 
 		user.stats = JSON.stringify(stats);
 		user.save();
@@ -320,9 +310,7 @@ Reflect.defineProperty(characterCommands, 'levelInfo', {
 				Math.floor((baseExp / 100) * Math.pow(user.level, exponent));
 
 			stats.hp += statGrowth.hp;
-			user.curHP += statGrowth.hp;
 			stats.mp += statGrowth.mp;
-			user.curMP += statGrowth.mp;
 			stats.str += statGrowth.str;
 			stats.dex += statGrowth.dex;
 			stats.con += statGrowth.con;
@@ -522,6 +510,10 @@ Reflect.defineProperty(characterCommands, 'calculateIncome', {
 	},
 });
 
+
+
+
+// COOLDOWNS
 Reflect.defineProperty(characterCommands, 'getDaily', {
 	value: function getDaily(user) {
 		const now = moment();
@@ -565,71 +557,6 @@ Reflect.defineProperty(characterCommands, 'getVote', {
 		const vCheck = moment(user.lastVote).add(12, 'h');
 		if (moment(vCheck).isBefore(now)) return true;
 		else return vCheck.format('MMM Do HH:mm');
-	},
-});
-
-
-Reflect.defineProperty(characterCommands, 'setHeal', {
-	value: function setHeal(user) {
-		user.lastHeal = moment().toString();
-		return user.save();
-	},
-});
-Reflect.defineProperty(characterCommands, 'getHeal', {
-	value: function getHeal(user) {
-		const now = moment();
-		const healCheck = moment(user.lastHeal).add(2, 'h');
-		if (moment(healCheck).isBefore(now)) return true;
-		else return healCheck.format('MMM Do HH:mm');
-	},
-});
-
-
-Reflect.defineProperty(characterCommands, 'setAttack', {
-	value: function setAttack(user) {
-		user.lastAttack = moment().toString();
-		return user.save();
-	},
-});
-Reflect.defineProperty(characterCommands, 'getAttack', {
-	value: function getAttack(user) {
-		const now = moment();
-		const attackCheck = moment(user.lastAttack).add(1, 'h');
-		if (moment(attackCheck).isBefore(now)) return true;
-		else return attackCheck.format('MMM Do HH:mm');
-	},
-});
-
-
-Reflect.defineProperty(characterCommands, 'getProtection', {
-	value: function getProtection(user) {
-		const now = moment();
-		const protection = moment(user.protection);
-		if (protection.isAfter(now)) return protection.format('MMM Do HH:mm');
-		else return false;
-	},
-});
-Reflect.defineProperty(characterCommands, 'addProtection', {
-	/**
-	* Add protection to target user
-	* @param {string} user - The user that will receive the protection.
-	* @param {number} hours - Total amount of hours to add to the protection.
-	*/
-	value: function addProtection(user, hours) {
-		let protection;
-		const oldProtection = characterCommands.getProtection(user);
-		if (oldProtection) protection = moment(oldProtection, 'MMM Do HH:mm').add(hours, 'h');
-		else protection = moment().add(hours, 'h');
-
-		user.protection = moment(protection, 'MMM Do HH:mm').toString();
-		user.save();
-		return protection.format('MMM Do HH:mm');
-	},
-});
-Reflect.defineProperty(characterCommands, 'resetProtection', {
-	value: function resetProtection(user) {
-		user.protection = moment().toString();
-		return user.save();
 	},
 });
 

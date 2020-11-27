@@ -3,6 +3,10 @@ const util = new Discord.Collection();
 
 
 Reflect.defineProperty(util, 'formatNumber', {
+/**
+* Formats the given number to a compressed version with si symbols
+* @param {number} number - The number that needs to be formatted.
+*/
 	value: function formatNumber(number) {
 		const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
 		const tier = Math.log10(number) / 3 | 0;
