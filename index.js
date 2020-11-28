@@ -1,3 +1,4 @@
+/* eslint-disable no-multiple-empty-lines */
 const Discord = require('discord.js');
 const winston = require('winston');
 const moment = require('moment');
@@ -106,7 +107,6 @@ client.on('message', async message => {
 	if (!command) return;
 	if (command.category == 'debug' && (id != 137920111754346496 && id != 139030319784263681)) return message.channel.send('You are not the owner of this bot!');
 	else if (command.category == 'admin' && !message.member.hasPermission('ADMINISTRATOR') && id != 137920111754346496 && id != 139030319784263681) return message.channel.send('You need Admin privileges to use this command!');
-	else if (command.category == 'pvp') characterCommands.resetProtection(user);
 
 
 	// if the command is used wrongly correct the user
@@ -167,6 +167,9 @@ client.on('message', async message => {
 
 
 
+
+
+
 // Regular tasks executed every 3 hours
 const botTasks = new cron.CronJob('0 0-23/3 * * *', () => {
 	const lottery = client.commands.get('lottery');
@@ -179,6 +182,14 @@ const botTasks = new cron.CronJob('0 0-23/3 * * *', () => {
 	logger.info('Finished regular tasks!');
 });
 botTasks.start();
+
+
+
+
+
+
+
+
 
 
 

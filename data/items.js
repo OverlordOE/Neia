@@ -67,7 +67,7 @@ module.exports = {
 
 
 
-	
+
 
 	// COLLECTABLES
 	'star': {
@@ -246,7 +246,9 @@ module.exports = {
 		picture: 'training_sword.png',
 		ctg: 'equipment',
 		slot: 'Main hand',
-		damage: [40, 20],
+		stats: {
+			Damage: 40,
+		},
 		description: 'Your basic training sword.',
 	},
 
@@ -259,7 +261,9 @@ module.exports = {
 		picture: 'training_staff.png',
 		ctg: 'equipment',
 		slot: 'Main hand',
-		damage: [45, 17],
+		stats: {
+			Damage: 45,
+		},
 		description: 'Your basic training staff.',
 	},
 	'gun': {
@@ -271,7 +275,9 @@ module.exports = {
 		picture: 'gun.png',
 		ctg: 'equipment',
 		slot: 'Main hand',
-		damage: [84, 23],
+		stats: {
+			Damage: 84,
+		},
 		description: 'What are you gonna do with a gun, shoot people?',
 	},
 	'water': {
@@ -283,7 +289,9 @@ module.exports = {
 		picture: 'water.png',
 		ctg: 'equipment',
 		slot: 'Main hand',
-		damage: [130, 30],
+		stats: {
+			Damage: 130,
+		},
 		description: 'WATER! DO YOU WANT TO POISON ME!?',
 	},
 	'spiky rock': {
@@ -295,7 +303,9 @@ module.exports = {
 		picture: 'spiky_rock.png',
 		ctg: 'equipment',
 		slot: 'Main hand',
-		damage: [18, 4],
+		stats: {
+			Damage: 18,
+		},
 		description: 'Its stoning time.',
 	},
 	'rijkszwaard': {
@@ -307,7 +317,9 @@ module.exports = {
 		picture: 'rijkszwaard.png',
 		ctg: 'equipment',
 		slot: 'Main hand',
-		damage: [237, 54],
+		stats: {
+			Damage: 237,
+		},
 		description: 'The legendary Sword of the State. Handcrafted by the best Dutch blacksmiths',
 	},
 	'shortbow': {
@@ -319,7 +331,9 @@ module.exports = {
 		picture: 'shortbow.png',
 		ctg: 'equipment',
 		slot: 'Main hand',
-		damage: [84, 19],
+		stats: {
+			Damage: 84,
+		},
 		description: 'A pretty nice shortbow made of surpisingly flexible wood.',
 	},
 	'wooden club': {
@@ -331,7 +345,9 @@ module.exports = {
 		picture: 'wooden_club.png',
 		ctg: 'equipment',
 		slot: 'Main hand',
-		damage: [39, 9],
+		stats: {
+			Damage: 39,
+		},
 		description: 'A wooden club with a leather bound handle.',
 	},
 	'enchanted waraxe': {
@@ -343,7 +359,10 @@ module.exports = {
 		picture: 'enchanted_waraxe.png',
 		ctg: 'equipment',
 		slot: 'Main hand',
-		damage: [98, 33],
+		stats: {
+			Damage: 98,
+			Intelligence: 5,
+		},
 		description: 'An high quality waraxe that has been enchanted by a mage.',
 	},
 
@@ -379,7 +398,7 @@ module.exports = {
 		ctg: 'equipment',
 		slot: 'Off hand',
 		stats: {
-			armor: 12,
+			Armor: 12,
 		},
 		description: 'A basic shield given to trainee soldiers.',
 	},
@@ -393,7 +412,7 @@ module.exports = {
 		ctg: 'equipment',
 		slot: 'Off hand',
 		stats: {
-			armor: 35,
+			Armor: 35,
 		},
 		description: 'A beautifully crafted bronze buckler made by artisan elves.',
 	},
@@ -407,9 +426,11 @@ module.exports = {
 		ctg: 'equipment',
 		slot: 'Off hand',
 		stats: {
-			armor: 101,
+			Armor: 101,
+			Constitution: 10,
+			Strength: 5,
 		},
-		description: 'An ancient magical stone shield that doesnt seem to take any damage.',
+		description: 'An ancient magical stone shield that doesnt seem to take any Damage.',
 	},
 	'obsidian shield': {
 		name: 'Obsidian Shield',
@@ -421,7 +442,7 @@ module.exports = {
 		ctg: 'equipment',
 		slot: 'Off hand',
 		stats: {
-			armor: 64,
+			Armor: 64,
 		},
 		description: 'A solid obsidian shield that was forged in the deepest layers of earth.',
 	},

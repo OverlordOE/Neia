@@ -97,10 +97,10 @@ function setClass(curClass, sentMessage, embed) {
 					Base stats:
 					__Health__: **${curClass.stats.base.maxHP}**
 					__Mana__: **${curClass.stats.base.maxMP}**
-					__Strength__: **${curClass.stats.base.str}**
-					__Dexterity__: **${curClass.stats.base.dex}**
-					__Constitution__: **${curClass.stats.base.con}**
-					__Intelligence__: **${curClass.stats.base.int}**
+					__Strength__: **${curClass.stats.base.Strength}**
+					__Dexterity__: **${curClass.stats.base.Dexterity}**
+					__Constitution__: **${curClass.stats.base.Constitution}**
+					__Intelligence__: **${curClass.stats.base.Intelligence}**
 					\nOnce you have chosen your class press ✅ to confirm your class`)
 	);
 }
