@@ -29,7 +29,6 @@ module.exports = {
 				.addField('Value', `${client.util.formatNumber(item.value)}💰`, true)
 				.addField('Buyable', item.buyable, true)
 				.addField('Category', item.ctg, true)
-				.addField('Rarity', item.rarity, true)
 				.setFooter('Use the command without arguments to see the item list', client.user.displayAvatarURL())
 				.attachFiles(`assets/rarity/${item.rarity}.jpg`)
 				.setThumbnail(`attachment://${item.rarity}.jpg`);
@@ -43,11 +42,11 @@ module.exports = {
 			else if (item.rarity == 'legendary') embed.setColor('#ff8000');
 			else embed.setColor('#eeeeee');
 
-			if (item.ctg == 'equipment') {
-				if (item.slot == 'weapon') embed.addField('Damage', `${item.damage[0]} - ${item.damage[1] + item.damage[0]}`);
-				if (item.slot == 'offhand') embed.addField('Armor', `${item.armor[0]} - ${item.armor[1] + item.armor[0]}`);
-			}
+			if (item.ctg == 'equipment')
+				for (const stat in item.stats)
+					embed.addField(stat, `**${item.stats[stat]}**`, true);
 		}
+
 		else {
 			let consumable = '__Consumables:__\n';
 			let collectables = '__Collectables:__\n';

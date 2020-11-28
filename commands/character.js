@@ -27,8 +27,8 @@ module.exports = {
 		let vote = client.characterCommands.getVote(userProfile);
 
 		const levelInfo = await client.characterCommands.levelInfo(userProfile, message);
-		let exp = `${levelInfo.exp}/${levelInfo.expNeeded}`;
-		if (levelInfo.level == 60) exp = '__**Max**__';
+		let EXP = `${levelInfo.EXP}/${levelInfo.expNeeded}`;
+		if (levelInfo.level == 60) EXP = '__**Max**__';
 
 
 		let userClass = null;
@@ -101,14 +101,14 @@ module.exports = {
 			const stats = client.characterCommands.getStats(userProfile);
 			const baseStats = client.characterCommands.getBaseStats(userProfile);
 
-			let statDescription = `**Class:** ${className} ${levelInfo.level}\n**exp:** ${exp}\n`;
+			let statDescription = `**Class:** ${className} ${levelInfo.level}\n**EXP:** ${EXP}\n`;
 			for (const stat in stats) {
 				if (baseStats[stat]) {
 					if (stat == 'maxHP') statDescription += `\n**Max HP**: ${stats[stat]} (${stats[stat] - baseStats[stat]})<:health:730849477765890130>`;
 					else if (stat == 'maxMP') statDescription += `\n**Max MP**: ${stats[stat]} (${stats[stat] - baseStats[stat]})<:mana:730849477640061029>`;
-					else statDescription += `\n**${stat.toUpperCase()}**: ${stats[stat]} (${stats[stat] - baseStats[stat]})`;
+					else statDescription += `\n**${stat}**: ${stats[stat]} (${stats[stat] - baseStats[stat]})`;
 				}
-				else statDescription += `\n**${stat.toUpperCase()}**: ${stats[stat]}`;
+				else statDescription += `\n**${stat}**: ${stats[stat]}`;
 			}
 			characterEmbed.setDescription(statDescription);
 
