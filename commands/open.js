@@ -58,6 +58,7 @@ module.exports = {
 				message.channel.send(lootEmbed);
 				client.characterCommands.removeItem(msgUser, item, amount);
 			}
+			
 			else {
 				const item = client.characterCommands.getItem(`${chest} chest`);
 				if (!await client.characterCommands.hasItem(msgUser, item, amount)) return message.reply(`You don't have ${amount} __${item.name}(s)__!`);

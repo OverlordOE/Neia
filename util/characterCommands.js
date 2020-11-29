@@ -260,7 +260,7 @@ Reflect.defineProperty(characterCommands, 'calculateStats', {
 
 
 Reflect.defineProperty(characterCommands, 'addExp', {
-	value: async function addExp(user, EXP, message) {
+	value: function addExp(user, EXP, message) {
 		if (!user.class) return message.reply(
 			'You dont have a class yet so you cant gain experience!\nUse the command `class` to get a class`');
 
@@ -270,7 +270,7 @@ Reflect.defineProperty(characterCommands, 'addExp', {
 	},
 });
 Reflect.defineProperty(characterCommands, 'levelInfo', {
-	value: async function levelInfo(user, message) {
+	value: function levelInfo(user, message) {
 		const exponent = 1.5;
 		const baseExp = 1000;
 		let expNeeded =

@@ -48,7 +48,6 @@ module.exports = {
 		}
 
 		else {
-			let consumable = '__Consumables:__\n';
 			let collectables = '__Collectables:__\n';
 			let chests = '__Chests:__\n';
 			let equipment = '__Equipment:__\n';
@@ -59,16 +58,15 @@ module.exports = {
 				return 0;
 			}).map((i) => {
 
-				if (i.ctg == 'consumable') consumable += `${i.emoji}${i.name}\n`;
-				else if (i.ctg == 'collectable') collectables += `${i.emoji}${i.name}\n`;
+				 if (i.ctg == 'collectable') collectables += `${i.emoji}${i.name}\n`;
 				else if (i.ctg == 'chest') chests += `${i.emoji}${i.name}\n`;
 				else if (i.ctg == 'equipment') equipment += `${i.emoji}${i.name}\n`;
 			});
 
-			const description = `${chests}\n${consumable}\n${equipment}\n${collectables}`;
+			const description = `${chests}\n${equipment}\n${collectables}`;
 
 			embed = new Discord.MessageEmbed()
-				.setTitle('Neia Shop')
+				.setTitle('Neia Item List')
 				.setThumbnail(client.user.displayAvatarURL())
 				.setDescription(description)
 				.setColor(client.characterCommands.getColour(msgUser))
