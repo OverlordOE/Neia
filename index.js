@@ -150,7 +150,14 @@ client.on('message', async message => {
 		user.save();
 	}
 
-	// execute command
+	// Chech for manage message permission
+	if (!message.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) {
+		logger.warn(`Neia doesnt have MANAGE_MESSAGES permissions on guild ${guild.name}`);
+		message.reply('Please make sure Neia has the `Manage Messages` permissions, otherwise the commands may not function properly');
+	}
+	
+
+	// Execute command
 	logger.log('info', `${message.author.tag} Called command: ${commandName} ${args.join(' ')}, in guild: ${message.guild.name}`);
 	try {
 		command.execute(message, args, user, client, logger);
