@@ -17,7 +17,7 @@ module.exports = {
 
 		const target = message.mentions.users.first() || message.author;
 		const avatar = target.displayAvatarURL();
-		const userProfile = await client.characterCommands.getUser(message.author.id);
+		const userProfile = await client.characterCommands.getUser(target.id);
 		const items = await client.characterCommands.getInventory(userProfile);
 		const pColour = client.characterCommands.getColour(userProfile);
 		await client.characterCommands.calculateStats(userProfile);
@@ -27,8 +27,7 @@ module.exports = {
 		let vote = client.characterCommands.getVote(userProfile);
 
 		const levelInfo = await client.characterCommands.levelInfo(userProfile, message);
-		let EXP = `${levelInfo.EXP}/${levelInfo.expNeeded}`;
-		if (levelInfo.level == 60) EXP = '__**Max**__';
+		let exp = `${levelInfo.exp}/${levelInfo.expNeeded}`;
 
 
 		let userClass = null;
@@ -98,20 +97,24 @@ module.exports = {
 
 
 		if (userClass) {
+			// Print stats
 			const stats = client.characterCommands.getStats(userProfile);
 			const baseStats = client.characterCommands.getBaseStats(userProfile);
 
-			let statDescription = `**Class:** ${className} ${levelInfo.level}\n**EXP:** ${EXP}\n`;
+			let statDescription = `**Class:** ${className} ${levelInfo.level}\n**Exp:** ${exp}\n`;
 			for (const stat in stats) {
 				if (baseStats[stat]) {
 					if (stat == 'maxHP') statDescription += `\n**Max HP**: ${stats[stat]} (${stats[stat] - baseStats[stat]})<:health:730849477765890130>`;
 					else if (stat == 'maxMP') statDescription += `\n**Max MP**: ${stats[stat]} (${stats[stat] - baseStats[stat]})<:mana:730849477640061029>`;
+
 					else statDescription += `\n**${stat}**: ${stats[stat]} (${stats[stat] - baseStats[stat]})`;
 				}
+				else if (stat == 'Critchance') statDescription += `\n**Crit Chance**: ${Math.fround(stats[stat])}`;
 				else statDescription += `\n**${stat}**: ${stats[stat]}`;
 			}
 			characterEmbed.setDescription(statDescription);
 
+			// Print equipment
 			const equipment = await client.characterCommands.getEquipment(userProfile);
 			let equipmentDescription = '';
 			for (const slot in equipment) {

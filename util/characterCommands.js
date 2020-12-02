@@ -25,7 +25,7 @@ Reflect.defineProperty(characterCommands, 'newUser', {
 			totalEarned: 0,
 			networth: 0,
 			level: 1,
-			EXP: 0,
+			exp: 0,
 			equipment: JSON.stringify({ weapon: null, offhand: null }),
 			lastDaily: now.subtract(2, 'days').toString(),
 			lastHourly: now.subtract(1, 'days').toString(),
@@ -88,54 +88,6 @@ Reflect.defineProperty(characterCommands, 'equip', {
 
 
 
-Reflect.defineProperty(characterCommands, 'attackUser', {
-	/**
-	* Resolves an attack bewteen 2 users
-	* @param {string} attacker - The id of the Attacking user.
-	* @param {string} defender - The id of the Defending user.
-	*/
-	value: function attackUser(attacker, defender) {
-		const attackerGear = JSON.parse(attacker.equipment);
-		const defenderGear = JSON.parse(defender.equipment);
-
-
-		let weapon;
-		if (attackerGear['weapon']) weapon = items[attackerGear['weapon'].toLowerCase()];
-		else weapon = {
-			name: 'Fists',
-			Damage: [5, 5],
-			emoji: '✊',
-		};
-
-		let offhand;
-		if (defenderGear['offhand']) offhand = items[defenderGear['offhand'].toLowerCase()];
-		else offhand = {
-			Armor: [1, 1],
-		};
-
-		let Damage = Math.round(weapon.Damage[0] + (Math.random() * weapon.Damage[1]));
-		Damage -= Math.round(offhand.Armor[0] + (Math.random() * offhand.Armor[1]));
-
-		if (Damage < 0) Damage = 0;
-
-
-		characterCommands.changeHp(defender, -Damage);
-		characterCommands.setAttack(attacker);
-		return {
-			weapon: weapon,
-			Damage: Damage,
-		};
-	},
-});
-
-
-
-
-
-
-
-
-
 
 
 
@@ -171,7 +123,7 @@ Reflect.defineProperty(characterCommands, 'resetClass', {
 		user.equipment = null;
 		// user.skills = null;
 		user.level = 1;
-		user.EXP = 0;
+		user.exp = 0;
 
 		return user.save();
 	},
@@ -247,10 +199,10 @@ Reflect.defineProperty(characterCommands, 'calculateStats', {
 			}
 		}
 
-		stats.maxHP += Math.round(stats.Constitution / 4);
-		stats.maxMP += Math.round(stats.Intelligence / 4);
-		stats.Armor += Math.round(stats.Dexterity / 4);
-		stats.Critchance += (stats.Dexterity / 3000).toFixed(2);
+		stats.maxHP += stats.Constitution * 4;
+		stats.maxMP += stats.Intelligence * 4;
+		stats.Armor += Math.round(stats.Dexterity * 1.5);
+		stats.Critchance += stats.Dexterity / 8;
 
 		user.stats = JSON.stringify(stats);
 		user.save();
@@ -260,15 +212,17 @@ Reflect.defineProperty(characterCommands, 'calculateStats', {
 
 
 Reflect.defineProperty(characterCommands, 'addExp', {
-	value: function addExp(user, EXP, message) {
+	value: function addExp(user, exp, message) {
 		if (!user.class) return message.reply(
 			'You dont have a class yet so you cant gain experience!\nUse the command `class` to get a class`');
 
-		user.EXP += Number(EXP);
+		user.exp += Number(exp);
 		user.save();
 		return characterCommands.levelInfo(user, message);
 	},
 });
+
+
 Reflect.defineProperty(characterCommands, 'levelInfo', {
 	value: function levelInfo(user, message) {
 		const exponent = 1.5;
@@ -277,7 +231,7 @@ Reflect.defineProperty(characterCommands, 'levelInfo', {
 			(baseExp / 10) *
 			Math.floor((baseExp / 100) * Math.pow(user.level, exponent));
 
-		while (user.EXP >= expNeeded && user.level < 60) {
+		while (user.exp >= expNeeded && user.level < 60) {
 			const classInfo = characterCommands.getClass(user.class);
 			if (!classInfo) {
 				message.reply(
@@ -285,7 +239,7 @@ Reflect.defineProperty(characterCommands, 'levelInfo', {
 				);
 				return {
 					level: user.level,
-					EXP: user.EXP,
+					exp: user.exp,
 					expNeeded: expNeeded,
 				};
 			}
@@ -293,7 +247,7 @@ Reflect.defineProperty(characterCommands, 'levelInfo', {
 			const stats = JSON.parse(user.baseStats);
 
 			user.level++;
-			user.EXP -= expNeeded;
+			user.exp -= expNeeded;
 			expNeeded = (baseExp / 10) *
 				Math.floor((baseExp / 100) * Math.pow(user.level, exponent));
 
@@ -319,7 +273,7 @@ Reflect.defineProperty(characterCommands, 'levelInfo', {
 
 		return {
 			level: user.level,
-			EXP: user.EXP,
+			exp: user.exp,
 			expNeeded: expNeeded,
 		};
 	},

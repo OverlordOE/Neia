@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 1,
 			allowNull: false,
 		},
-		EXP: {
+		exp: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
 			allowNull: false,

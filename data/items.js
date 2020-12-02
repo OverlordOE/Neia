@@ -247,7 +247,7 @@ module.exports = {
 		ctg: 'equipment',
 		slot: 'Main hand',
 		stats: {
-			Damage: 40,
+			Damage: 6,
 		},
 		description: 'Your basic training sword.',
 	},
