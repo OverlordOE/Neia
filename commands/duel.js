@@ -15,7 +15,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setColor('#fc0000')
 			.setFooter('You can only attack people on the same server', client.user.displayAvatarURL());
-			
+
 
 		// Get target
 		const targetDiscord = message.mentions.users.first();
@@ -73,6 +73,7 @@ module.exports = {
 
 			const weapon = client.characterCommands.getItem(attacker.equipment['Main hand']);
 			description += `${attacker.user.username} dealt ${client.util.formatNumber(damage)} with their ${weapon.emoji}${weapon.name}\n`;
+			return setEmbed(sentMessage);
 		}
 
 
@@ -80,15 +81,25 @@ module.exports = {
 			setTimeout(function () {
 				description += `\n__**Round ${round}**__\n`;
 
-				playTurn(target, host);
-				if (host.hp <= 0) {
-					endGame();
-					return setEmbed(sentMessage);
+				if (target.stats.Dexterity >= host.stats.Dexterity) {
+					playTurn(target, host);
+					if (host.hp <= 0) {
+						endGame();
+						return setEmbed(sentMessage);
+					}
+					setTimeout(function () { playTurn(host, target); }, 1000);
 				}
-				playTurn(host, target);
+				else {
+					playTurn(host, target);
+					if (target.hp <= 0) {
+						endGame();
+						return setEmbed(sentMessage);
+					}
+					setTimeout(function () { playTurn(target, host); }, 1000);
+				}
 
-				setEmbed(sentMessage);
 				round++;
+
 				if (host.hp > 0 && target.hp > 0) playRound();
 				else {
 					endGame();
