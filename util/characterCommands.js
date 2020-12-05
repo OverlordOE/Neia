@@ -187,6 +187,7 @@ Reflect.defineProperty(characterCommands, 'calculateStats', {
 		stats.Critchance = 0;
 		stats.Armor = 0;
 		stats.Damage = 0;
+		stats.Attackspeed = 0;
 
 		const equipment = await characterCommands.getEquipment(user);
 		for (const slot in equipment) {
@@ -214,7 +215,7 @@ Reflect.defineProperty(characterCommands, 'calculateStats', {
 Reflect.defineProperty(characterCommands, 'addExp', {
 	value: function addExp(user, exp, message) {
 		if (!user.class) return message.reply(
-			'You dont have a class yet so you cant gain experience!\nUse the command `class` to get a class`');
+			'You dont have a class yet so you cant gain experience!\nUse the command `class` to get a class');
 
 		user.exp += Number(exp);
 		user.save();

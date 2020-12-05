@@ -13,10 +13,13 @@ require('dotenv').config();
 const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
 const active = new Map();
+client.music = { active: active };
 client.commands = new Discord.Collection();
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 moment().format();
 
+
+// Logger
 const logger = winston.createLogger({
 	format: winston.format.combine(
 		winston.format.errors({ stack: true }),
@@ -45,9 +48,17 @@ const logger = winston.createLogger({
 		new winston.transports.File({ filename: './logs/log.log' }),
 	],
 });
+client.on('warn', e => logger.warn(e));
+client.on('error', e => logger.error(e));
+process.on('warning', e => logger.warn(e));
+process.on('unhandledRejection', e => logger.error(e));
+process.on('TypeError', e => logger.error(e));
+process.on('uncaughtException', e => logger.error(e));
+
 
 // Load in Commands
 Object.keys(clientCommands).map(key => client.commands.set(clientCommands[key].name, clientCommands[key]));
+
 
 // Startup Tasks
 client.login(process.env.TEST_TOKEN);
@@ -72,13 +83,11 @@ client.on('ready', async () => {
 	}
 });
 
-// Logger
-client.on('warn', e => logger.warn(e));
-client.on('error', e => logger.error(e));
-process.on('warning', e => logger.warn(e));
-process.on('unhandledRejection', e => logger.error(e));
-process.on('TypeError', e => logger.error(e));
-process.on('uncaughtException', e => logger.error(e));
+
+
+
+
+
 
 // Command handler
 client.on('message', async message => {
@@ -141,8 +150,6 @@ client.on('message', async message => {
 		setTimeout(() => timestamps.delete(id), cooldownAmount);
 	}
 
-	client.music = { active: active };
-
 	if (user.firstCommand) {
 		client.commands.get('changelog').execute(message, args, user, client, logger);
 		user.firstCommand = false;
@@ -183,7 +190,7 @@ const botTasks = new cron.CronJob('0 0-23/3 * * *', () => {
 	lottery.execute(client, logger);
 
 	let memberTotal = 0;
-	client.guildCommands.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
+	client.guilds.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
 	client.user.setActivity(`with ${memberTotal} users.`);
 
 	logger.info('Finished regular tasks!');

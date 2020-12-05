@@ -54,7 +54,7 @@ module.exports = {
 			const info = await ytdl.getBasicInfo(search);
 			video = info.videoDetails;
 			let duration = 0;
-		
+
 			const minutes = Math.floor(video.lengthSeconds / 60);
 			const seconds = video.lengthSeconds - (minutes * 60);
 			if (seconds < 10) duration = `${minutes}:0${seconds}`;
