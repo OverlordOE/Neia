@@ -54,37 +54,25 @@ module.exports = {
 
 		function playRound() {
 			setTimeout(function () {
-				description += `\n__**Round ${round}**__\n`;
 
-				if (target.stats.Dexterity >= host.stats.Dexterity) {
-					playTurn(target, host);
-					if (host.hp <= 0) {
-						endGame();
-						return setEmbed(sentMessage);
-					}
-					setTimeout(function () { playTurn(host, target); }, 1000);
+				if (Math.random() * 100 <= target.stats.Attackspeed) resolveAttack(target, host);
+				if (host.hp <= 0) {
+					endGame();
+					return setEmbed(sentMessage);
 				}
-				else {
-					playTurn(host, target);
-					if (target.hp <= 0) {
-						endGame();
-						return setEmbed(sentMessage);
-					}
-					setTimeout(function () { playTurn(target, host); }, 1000);
-				}
+				if (Math.random() * 100 <= host.stats.Attackspeed) resolveAttack(host, target);
 
-				round++;
 
 				if (host.hp >= 1 && target.hp >= 1) playRound();
 				else {
 					endGame();
 					return setEmbed(sentMessage);
 				}
-			}, 2000);
+			}, 50);
 		}
 
 
-		function playTurn(attacker, defender) {
+		function resolveAttack(attacker, defender) {
 			let damage = Math.round(
 				attacker.stats.Damage * (
 					1 + (Math.random() * 0.1)
@@ -93,7 +81,7 @@ module.exports = {
 
 			// Determine critical hit
 			if (Math.random() * 100 <= attacker.stats.Critchance) {
-				description += '**Critical hit!**\n';
+				description += '**Critical hit!** ';
 				damage *= 1.8;
 			}
 
@@ -120,8 +108,8 @@ module.exports = {
 			msg.edit(embed.setDescription(description));
 
 			if (description.length > 1800) {
-				sentMessage = await message.channel.send(embed.setDescription(description));
 				description = '';
+				sentMessage = await message.channel.send(embed.setDescription(description));
 			}
 		}
 

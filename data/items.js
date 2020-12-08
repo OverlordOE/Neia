@@ -50,11 +50,10 @@ module.exports = {
 		buyable: true,
 		emoji: '<:chest_t_02:745278856298102864>',
 		rarity: 'rare',
-		picture: 'mystery_open.png',
+		picture: 'mystery_closed.png',
 		ctg: 'chest',
 		description: 'A mystery chest that can contain really bad loot or really good loot.',
 	},
-
 
 
 
@@ -242,12 +241,13 @@ module.exports = {
 		value: 2500,
 		buyable: true,
 		emoji: '<:training_sword:735471230932615198>',
-		rarity: 'uncommon',
+		rarity: 'common',
 		picture: 'training_sword.png',
 		ctg: 'equipment',
 		slot: 'Main hand',
 		stats: {
 			Damage: 6,
+			Attackspeed: 1,
 		},
 		description: 'Your basic training sword.',
 	},
@@ -263,6 +263,7 @@ module.exports = {
 		slot: 'Main hand',
 		stats: {
 			Damage: 45,
+			Attackspeed: 1.5,
 		},
 		description: 'Your basic training staff.',
 	},
@@ -277,6 +278,7 @@ module.exports = {
 		slot: 'Main hand',
 		stats: {
 			Damage: 84,
+			Attackspeed: 0.8,
 		},
 		description: 'What are you gonna do with a gun, shoot people?',
 	},
@@ -291,6 +293,7 @@ module.exports = {
 		slot: 'Main hand',
 		stats: {
 			Damage: 130,
+			Attackspeed: 0.5,
 		},
 		description: 'WATER! DO YOU WANT TO POISON ME!?',
 	},
@@ -305,6 +308,7 @@ module.exports = {
 		slot: 'Main hand',
 		stats: {
 			Damage: 18,
+			Attackspeed: 1.2,
 		},
 		description: 'Its stoning time.',
 	},
@@ -319,6 +323,7 @@ module.exports = {
 		slot: 'Main hand',
 		stats: {
 			Damage: 237,
+			Attackspeed: 0.8,
 		},
 		description: 'The legendary Sword of the State. Handcrafted by the best Dutch blacksmiths',
 	},
@@ -333,6 +338,7 @@ module.exports = {
 		slot: 'Main hand',
 		stats: {
 			Damage: 84,
+			Attackspeed: 2.5,
 		},
 		description: 'A pretty nice shortbow made of surpisingly flexible wood.',
 	},
@@ -347,6 +353,7 @@ module.exports = {
 		slot: 'Main hand',
 		stats: {
 			Damage: 39,
+			Attackspeed: 0.65,
 		},
 		description: 'A wooden club with a leather bound handle.',
 	},
@@ -362,6 +369,7 @@ module.exports = {
 		stats: {
 			Damage: 98,
 			Intelligence: 5,
+			Attackspeed: 0.9,
 		},
 		description: 'An high quality waraxe that has been enchanted by a mage.',
 	},

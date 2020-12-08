@@ -137,14 +137,14 @@ Reflect.defineProperty(characterCommands, 'setClass', {
 			'Main hand': null,
 			'Off hand': null,
 			'Head': null,
-			'Necklace': null,
-			'Shoulders': null,
 			'Chest': null,
-			'Hands': null,
 			'Legs': null,
-			'Feet': null,
-			'Ring': null,
-			'Trinket': null,
+			// 'Necklace': null,
+			// 'Shoulders': null,
+			// 'Hands': null,
+			// 'Feet': null,
+			// 'Ring': null,
+			// 'Trinket': null,
 		});
 
 		// user.skills = JSON.stringify(c.startSkills);
