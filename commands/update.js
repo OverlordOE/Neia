@@ -6,11 +6,10 @@ module.exports = {
 	args: false,
 	usage: '',
 
-
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	async execute(message, args, msgUser, client, logger) {
 		try {
-			profile.map(async (u) => {
-				const user = await profile.getUser(u.user_id);
+			client.userCommands.map(async (u) => {
+				const user = await client.userCommands.getUser(u.user_id);
 				user.firstCommand = true;
 				user.save();
 			});

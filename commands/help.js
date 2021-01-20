@@ -7,17 +7,14 @@ module.exports = {
 	usage: '<command name>',
 	args: false,
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, client, logger) {
 		const { commands } = message.client;
 		let adminCommands = '';
 		let musicCommands = '';
 		let miscCommands = '';
-		let pvpCommands = '';
-		let economyCommands = '';
-		let infoCommands = '';
 
 		const help = new Discord.MessageEmbed()
-			.setColor(msgUser.pColour)
+			.setColor(client.userCommands.getColour(msgUser))
 			;
 
 		if (!args.length) {
@@ -33,25 +30,13 @@ module.exports = {
 					case 'misc':
 						miscCommands += `**${command.name}** - ${command.summary}\n`;
 						break;
-					case 'pvp':
-						pvpCommands += `**${command.name}** - ${command.summary}\n`;
-						break;
-					case 'economy':
-						economyCommands += `**${command.name}** - ${command.summary}\n`;
-						break;
-					case 'info':
-						infoCommands += `**${command.name}** - ${command.summary}\n`;
-						break;
 					default:
 						break;
 				}
 			});
 
 
-			help.setDescription(`__**Info Commands**__\n${infoCommands}\n
-								__**PvP Commands**__\n${pvpCommands}\n
-								__**Economy Commands**__\n${economyCommands}\n
-								__**Miscellaneous Commands**__\n${miscCommands}\n
+			help.setDescription(`__**Miscellaneous Commands**__\n${miscCommands}\n
 								__**Music Commands**__\n${musicCommands}\n
 								__**Admin Commands**__\n${adminCommands}\n
 								`)
@@ -77,11 +62,6 @@ module.exports = {
 			if (command.description) help.addField('**Description:**', command.description);
 			if (command.usage) help.addField('**Usage:**', `${command.name} ${command.usage}`);
 			if (command.aliases) help.addField('**Aliases:**', command.aliases.join(', '));
-			if (command.cooldown) {
-				if (command.cooldown > 60) help.addField('**Cooldown:**', `${command.cooldown / 60} minutes`);
-				else help.addField('**Cooldown:**', `${command.cooldown} seconds`);
-			}
-
 		}
 
 		message.channel.send(help);

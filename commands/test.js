@@ -3,9 +3,9 @@ module.exports = {
 	name: 'test',
 	aliases: ['t'],
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	async execute(message, args, msgUser, client, logger) {
 
 		const search = args.join(' ');
-		
+
 	},
 };

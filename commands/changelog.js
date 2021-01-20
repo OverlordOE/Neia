@@ -3,30 +3,30 @@ module.exports = {
 	name: 'changelog',
 	summary: 'Shows the latest major update that the bot has received',
 	description: 'Shows the latest major update that the bot has received.',
-	category: 'info',
+	category: 'misc',
 	aliases: ['update'],
 	args: false,
 	usage: '',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
+	execute(message, args, msgUser, client, logger) {
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neia V2.4: Shields and music fix')
+			.setTitle('Neia V3.0: Bot Split and Music Improvements')
 			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL())
-			.addField('Starting Off', `After some prep work i finally got shields to work again, for now they just protect you from some damage but more stats coming soone. I also fixed the music player and added some QoL features too it.
+			.addField('Starting Off', `This update will split Neia into 2 bots. Neia will be an all purpose bot and the game will be transferred too another bot and will be on pause for now. I have also made a lot of improvements to the music player.
 			\n`)
 
 
-			.addField('**New Features**', `- You can finally get shields for your offhand slot. Shields protect you from damage by reducing it by their armor stat.
-- Added 4 shields to buy/loot.
-- The music player now shows the thumbnail of the video found
-- The music player will now send a temporary message while it is searching youtube for videos.\n`)
+			.addField('**New Features**', `- The music player will now give you actual errors when something goes wrong instead of undefined or nothing at all.
+- The queue will now show the thumbnail of the current playing song.\n`)
+
+			.addField('**Major Changes**', `- Transferred the PvP game into another bot so the bot is less cluttered.
+- Removed the looping functionality temporarily.\n`)
 
 
-			.addField('**Small Changes and Bug Fixes**', `- The music player is finally working again.
-- \`equip\` no longer shows bot pfp.
-- Fixed bug where unarmed attacks dont work.
-- Changed invite link.
--Removed castle and stadium from epic chest.`);
+			.addField('**Small Changes and Bug Fixes**', `- Increased music queue size to 5 songs max.
+- The bot will now give you an error message if it is not set up correctly.
+- Fixed queue duration formatting.
+- Small optimisations.`);
 
 		return message.channel.send(embed);
 	},

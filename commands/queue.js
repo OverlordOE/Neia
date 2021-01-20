@@ -9,13 +9,13 @@ module.exports = {
 	usage: '',
 
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
-		const guildIDData = options.active.get(message.guild.id);
-		if (!guildIDData) return message.reply('no music queued at the moment.');
+	execute(message, args, msgUser, client, logger) {
+		const guildIDData = client.music.active.get(message.guild.id);
+		if (!guildIDData) return message.reply('no client.music queued at the moment.');
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Queue')
-			.setColor(msgUser.pColour);
+			.setColor(client.userCommands.getColour(msgUser));
 
 		const queue = guildIDData.queue;
 
@@ -24,6 +24,6 @@ module.exports = {
 			if (i == 0) embed.addField(`Now playing: **${queue[i].songTitle}**`, `Duration: ${queue[i].duration}\nRequested by: ${queue[i].requester}`);
 			else embed.addField(`${i}: **${queue[i].songTitle}**`, `Duration: ${queue[i].duration}\nRequested by: ${queue[i].requester}`);
 		}
-		message.channel.send(embed);
+		message.channel.send(embed.setThumbnail(queue[0].thumbnail));
 	},
 };

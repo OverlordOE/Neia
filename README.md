@@ -1,11 +1,12 @@
 # Neija
-Neija is a fun bot that has all kinds of random features but is primarily focused on the Lootbox/PVP system it has.
+Neija is a fun bot that has all kinds of random features and music playing.
+The bot is still in development and is planned on being an all purpose bot that has admin tools but also random fun stuff.
 
 ## Major Features
-- Get lootboxes and open them for rewards
-- Multiple ways to get and spend your money including killing players and taking their money.
 - Fun gambling minigames.
-- Fully funtional youtube music playing with looping functionality.
+- Fully funtional youtube music playing with looping functionality (more platform support is planned).
+- Mass message deletion for admins (more admin tools are coming soon).
+- A leaderboard is planned tracking all kinds of random stuff people do in the server.
 - Much more to come in the future based on user suggestions!
 
 

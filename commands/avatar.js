@@ -8,7 +8,7 @@ module.exports = {
 	args: false,
 	usage: '<target>',
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, client, logger) {
 		const target = message.mentions.users.first() || message.author;
 		const avatar = target.displayAvatarURL();
 
@@ -16,8 +16,8 @@ module.exports = {
 			.setTitle(`${target.tag}'s Avatar`)
 			.setDescription(avatar)
 			.setImage(avatar)
-			.setColor(msgUser.pColour)
-				
+			.setColor(client.userCommands.getColour(msgUser));
+
 		message.channel.send(embed);
 	},
 };

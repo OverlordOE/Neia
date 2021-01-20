@@ -6,20 +6,17 @@ module.exports = {
 	aliases: ['stop'],
 	args: false,
 	usage: '',
-	cooldown: 5,
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns, options) {
-		if (!message.member.voice.channel)return message.reply('you are not in a voice channel.');
-		
-		try {
-			const guildIDData = options.active.get(message.guild.id);
+
+	execute(message, args, msgUser, client, logger) {
+		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');
+
+		const guildIDData = client.music.active.get(message.guild.id);
+		if (guildIDData) {
 			guildIDData.queue = [];
 			guildIDData.dispatcher.emit('finish');
 			message.reply('cleared the queue.');
 		}
-		catch (error) {
-			message.reply('there is no queue to clear.');
-			return logger.error(error.stack);
-		}
+		else message.reply('there is no queue to clear.');
 	},
 };

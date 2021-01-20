@@ -8,7 +8,7 @@ module.exports = {
 	usage: '',
 	aliases: ['inv', 'bug', 'join', 'support', 'link'],
 
-	async execute(message, args, msgUser, profile, guildProfile, client, logger, cooldowns) {
+	execute(message, args, msgUser, client, logger) {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Invites')
