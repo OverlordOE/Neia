@@ -184,11 +184,8 @@ client.on('message', async message => {
 
 
 
-// Regular tasks executed every 3 hours
-const botTasks = new cron.CronJob('0 0-23/3 * * *', () => {
-	const lottery = client.commands.get('lottery');
-	lottery.execute(client, logger);
-
+// Regular tasks executed every hour
+const botTasks = new cron.CronJob('0 * * * *', () => {
 	let memberTotal = 0;
 	client.guilds.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
 	client.user.setActivity(`with ${memberTotal} users.`);
@@ -213,34 +210,9 @@ dbl.webhook.on('ready', () => logger.info('DBL Webhook up and running.'));
 dbl.on('error', e => logger.error(`Oops! ${e}`));
 
 dbl.webhook.on('vote', async vote => {
-
 	const userID = vote.user;
 	const discordUser = client.users.cache.get(userID);
-	const user = await userCommands.getUser(userID);
 	logger.info(`${discordUser.tag} has just voted.`);
 
-	const embed = new Discord.MessageEmbed()
-		.setTitle('Vote Reward')
-		.setThumbnail(discordUser.displayAvatarURL())
-		.setColor(userCommands.getColour(user))
-		.setFooter('Neia', client.user.displayAvatarURL());
-
-	let chest;
-	const luck = Math.floor(Math.random() * 7);
-	if (luck == 0) chest = 'Epic chest';
-	if (luck == 1) chest = 'Mystery chest';
-	else chest = 'Rare chest';
-	chest = userCommands.getItem(chest);
-
-	if (chest.picture) {
-		embed.attachFiles(`assets/items/${chest.picture}`)
-			.setImage(`attachment://${chest.picture}`);
-	}
-
-	const income = await userCommands.calculateIncome(user);
-	const balance = userCommands.addMoney(user, income.daily);
-	userCommands.addItem(user, chest);
-	userCommands.setVote(user);
-
-	return discordUser.send(embed.setDescription(`Thank you for voting!\n\nYou got a ${chest.emoji}${chest.name} from your vote 🎁 and ${util.formatNumber(income.daily)}💰 from your collectables.\nCome back in 12 hours for more!\n\nYour current balance is ${util.formatNumber(balance)}💰`));
+	return discordUser.send('Thank you for voting!\n You can vote again in 12 hours.');
 });
