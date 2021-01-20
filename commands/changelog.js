@@ -3,7 +3,7 @@ module.exports = {
 	name: 'changelog',
 	summary: 'Shows the latest major update that the bot has received',
 	description: 'Shows the latest major update that the bot has received.',
-	category: 'info',
+	category: 'misc',
 	aliases: ['update'],
 	args: false,
 	usage: '',

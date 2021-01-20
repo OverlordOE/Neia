@@ -9,11 +9,11 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 
 const moment = require('moment');
 const Discord = require('discord.js');
-const characterCommands = new Discord.Collection();
+const userCommands = new Discord.Collection();
 const Users = sequelize.import('../models/Users');
 
 
-Reflect.defineProperty(characterCommands, 'newUser', {
+Reflect.defineProperty(userCommands, 'newUser', {
 	value: async function newUser(id) {
 		const now = moment();
 		const user = await Users.create({
@@ -21,29 +21,29 @@ Reflect.defineProperty(characterCommands, 'newUser', {
 			lastVote: now.subtract(1, 'days').toString(),
 			firstCommand: true,
 		});
-		characterCommands.set(id, user);
+		userCommands.set(id, user);
 		return user;
 	},
 });
 
 
 // Misc
-Reflect.defineProperty(characterCommands, 'getUser', {
+Reflect.defineProperty(userCommands, 'getUser', {
 	value: async function getUser(id) {
-		let user = characterCommands.get(id);
-		if (!user) user = await characterCommands.newUser(id);
+		let user = userCommands.get(id);
+		if (!user) user = await userCommands.newUser(id);
 		return user;
 	},
 });
 
 
-Reflect.defineProperty(characterCommands, 'setVote', {
+Reflect.defineProperty(userCommands, 'setVote', {
 	value: function setVote(user) {
 		user.lastVote = moment().toString();
 		return user.save();
 	},
 });
-Reflect.defineProperty(characterCommands, 'getVote', {
+Reflect.defineProperty(userCommands, 'getVote', {
 	value: function getVote(user) {
 		const now = moment();
 		const vCheck = moment(user.lastVote).add(12, 'h');
@@ -53,10 +53,10 @@ Reflect.defineProperty(characterCommands, 'getVote', {
 });
 
 
-Reflect.defineProperty(characterCommands, 'getColour', {
+Reflect.defineProperty(userCommands, 'getColour', {
 	value: function getColour(user) {
 		return '#fcfcfc';
 	},
 });
 
-module.exports = { Users, characterCommands };
+module.exports = { Users, userCommands };
