@@ -6,7 +6,7 @@ const cron = require('cron');
 const DBL = require('dblapi.js');
 const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: process.env.WEBHOOK_TOKEN });
 const clientCommands = require('./commands');
-const { Users, characterCommands } = require('./util/characterCommands');
+const { Users, userCommands } = require('./util/userCommands');
 const { guildCommands, Guilds } = require('./util/guildCommands');
 const { util } = require('./util/util');
 require('dotenv').config();
@@ -65,14 +65,14 @@ client.login(process.env.TEST_TOKEN);
 client.on('ready', async () => {
 	try {
 		const storedUsers = await Users.findAll();
-		storedUsers.forEach(b => characterCommands.set(b.user_id, b));
+		storedUsers.forEach(b => userCommands.set(b.user_id, b));
 		const storedGuilds = await Guilds.findAll();
 		storedGuilds.forEach(b => guildCommands.set(b.guild_id, b));
 		let memberTotal = 0;
 		client.guilds.cache.forEach(g => { if (!isNaN(memberTotal) && g.id != 264445053596991498) memberTotal += Number(g.memberCount); });
 		client.user.setActivity(`with ${memberTotal} users.`);
 
-		client.characterCommands = characterCommands;
+		client.userCommands = userCommands;
 		client.guildCommands = guildCommands;
 		client.util = util;
 
@@ -98,7 +98,7 @@ client.on('message', async message => {
 	if (!guild) guild = await guildCommands.newGuild(message.guild.id);
 	const prefix = await guildCommands.getPrefix(message.guild.id);
 	const id = message.author.id;
-	const user = await characterCommands.getUser(id);
+	const user = await userCommands.getUser(id);
 
 
 	// split message for further use
@@ -162,7 +162,7 @@ client.on('message', async message => {
 		logger.warn(`Neia doesnt have MANAGE_MESSAGES permissions on guild ${guild.name}`);
 		message.reply('Please make sure Neia has the `Manage Messages` permissions, otherwise the commands may not function properly');
 	}
-	
+
 
 	// Execute command
 	logger.log('info', `${message.author.tag} Called command: ${commandName} ${args.join(' ')}, in guild: ${message.guild.name}`);
@@ -216,13 +216,13 @@ dbl.webhook.on('vote', async vote => {
 
 	const userID = vote.user;
 	const discordUser = client.users.cache.get(userID);
-	const user = await characterCommands.getUser(userID);
+	const user = await userCommands.getUser(userID);
 	logger.info(`${discordUser.tag} has just voted.`);
 
 	const embed = new Discord.MessageEmbed()
 		.setTitle('Vote Reward')
 		.setThumbnail(discordUser.displayAvatarURL())
-		.setColor(characterCommands.getColour(user))
+		.setColor(userCommands.getColour(user))
 		.setFooter('Neia', client.user.displayAvatarURL());
 
 	let chest;
@@ -230,17 +230,17 @@ dbl.webhook.on('vote', async vote => {
 	if (luck == 0) chest = 'Epic chest';
 	if (luck == 1) chest = 'Mystery chest';
 	else chest = 'Rare chest';
-	chest = characterCommands.getItem(chest);
+	chest = userCommands.getItem(chest);
 
 	if (chest.picture) {
 		embed.attachFiles(`assets/items/${chest.picture}`)
 			.setImage(`attachment://${chest.picture}`);
 	}
 
-	const income = await characterCommands.calculateIncome(user);
-	const balance = characterCommands.addMoney(user, income.daily);
-	characterCommands.addItem(user, chest);
-	characterCommands.setVote(user);
+	const income = await userCommands.calculateIncome(user);
+	const balance = userCommands.addMoney(user, income.daily);
+	userCommands.addItem(user, chest);
+	userCommands.setVote(user);
 
 	return discordUser.send(embed.setDescription(`Thank you for voting!\n\nYou got a ${chest.emoji}${chest.name} from your vote 🎁 and ${util.formatNumber(income.daily)}💰 from your collectables.\nCome back in 12 hours for more!\n\nYour current balance is ${util.formatNumber(balance)}💰`));
 });

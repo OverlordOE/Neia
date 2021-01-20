@@ -22,7 +22,7 @@ module.exports = {
 		};
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(client.characterCommands.getColour(msgUser))
+			.setColor(client.userCommands.getColour(msgUser))
 			.setThumbnail(avatar)
 			.setTitle('Neia\'s Gambling Imporium')
 			.setFooter('Use the emojis to choose your game.', client.user.displayAvatarURL());
@@ -42,7 +42,7 @@ module.exports = {
 				if (gambleAmount > msgUser.balance) return sentMessage.edit(embed.setDescription(`Sorry *${message.author}*, you only have ${client.util.formatNumber(msgUser.balance)}💰.`));
 				if (gambleAmount <= 0) return sentMessage.edit(embed.setDescription(`Please enter an amount greater than zero, *${message.author}*.`));
 
-				const oldBalance = client.characterCommands.addMoney(msgUser, -gambleAmount);
+				const oldBalance = client.userCommands.addMoney(msgUser, -gambleAmount);
 
 				if (gambleType == 'rock' || gambleType == 'rps' || gambleType == 'rock paper scissors' || gambleType == 'r') RPS(message, client, logger, gambleAmount, sentMessage, embed);
 				else if (gambleType == 'number' || gambleType == 'numbers') oneInFive(message, client, logger, gambleAmount, sentMessage, embed);
@@ -120,7 +120,7 @@ async function oneInFive(msgUser, oldBalance, client, logger, gambleAmount, sent
 
 
 			if (reaction.emoji.name === emojiCharacters[answer]) {
-				const balance = client.characterCommands.addMoney(msgUser, winAmount);
+				const balance = client.userCommands.addMoney(msgUser, winAmount);
 				embed.setColor('#00fc43');
 				sentMessage.edit(embed.setDescription(`Correct! You have successfully won ${client.util.formatNumber(winAmount)}💰.\nYour current balance is ${client.util.formatNumber(balance)}💰`));
 			}
@@ -199,22 +199,22 @@ async function blackjack(msgUser, oldBalance, client, logger, gambleAmount, sent
 				if (playerHandValue > 21) sentMessage.edit(embed.setDescription(`__You busted__\n\nYour balance is ${client.util.formatNumber(oldBalance)}💰`).setColor('#fc0303'));
 
 				else if (botHandValue > 21) {
-					const balance = client.characterCommands.addMoney(msgUser, winAmount);
+					const balance = client.userCommands.addMoney(msgUser, winAmount);
 					sentMessage.edit(embed.setDescription(`__The bot busted__. You Win!\n\nYou won ${winAmount}💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 				}
 
 				else if (cardsDrawn >= 5) {
-					const balance = client.characterCommands.addMoney(msgUser, winAmount);
+					const balance = client.userCommands.addMoney(msgUser, winAmount);
 					return sentMessage.edit(embed.setDescription(`You have drawn 5 cards without busting.\n__You win__\n\nYou won ${winAmount}💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 				}
 
 				else if (botHandValue == playerHandValue) {
-					const balance = client.characterCommands.addMoney(msgUser, gambleAmount);
+					const balance = client.userCommands.addMoney(msgUser, gambleAmount);
 					sentMessage.edit(embed.setDescription(`__Its a draw__\n\nYour balance is ${client.util.formatNumber(balance)}💰`));
 				}
 
 				else if (playerHandValue > botHandValue) {
-					const balance = client.characterCommands.addMoney(msgUser, winAmount);
+					const balance = client.userCommands.addMoney(msgUser, winAmount);
 					sentMessage.edit(embed.setDescription(`__You win__\n\nYou won ${winAmount}💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 				}
 
@@ -312,7 +312,7 @@ async function RPS(msgUser, oldBalance, client, logger, gambleAmount, sentMessag
 				case '✊':
 
 					if (answer == 1) {
-						const balance = client.characterCommands.addMoney(msgUser, gambleAmount);
+						const balance = client.userCommands.addMoney(msgUser, gambleAmount);
 						sentMessage.edit(embed.setDescription(`The bot chooses ✊. __It's a tie!__\nYour balance is ${client.util.formatNumber(balance)}💰`));
 					}
 					else if (answer == 2) {
@@ -320,7 +320,7 @@ async function RPS(msgUser, oldBalance, client, logger, gambleAmount, sentMessag
 						sentMessage.edit(embed.setDescription(`The bot chooses 🧻. __You lose!__\nYour balance is ${client.util.formatNumber(oldBalance)}💰`));
 					}
 					else if (answer == 3) {
-						const balance = client.characterCommands.addMoney(msgUser, winAmount);
+						const balance = client.userCommands.addMoney(msgUser, winAmount);
 						embed.setColor('#00fc43');
 						sentMessage.edit(embed.setDescription(`The bot chooses ✂️. __You Win!__\nYou won ${winAmount}💰 and your balance is ${client.util.formatNumber(balance)}💰`));
 					}
@@ -329,12 +329,12 @@ async function RPS(msgUser, oldBalance, client, logger, gambleAmount, sentMessag
 				case '🧻':
 
 					if (answer == 1) {
-						const balance = client.characterCommands.addMoney(msgUser, winAmount);
+						const balance = client.userCommands.addMoney(msgUser, winAmount);
 						embed.setColor('#00fc43');
 						sentMessage.edit(embed.setDescription(`The bot chooses ✊. __You Win!__\nYou won ${winAmount}💰 and your balance is ${client.util.formatNumber(balance)}💰`));
 					}
 					else if (answer == 2) {
-						const balance = client.characterCommands.addMoney(msgUser, gambleAmount);
+						const balance = client.userCommands.addMoney(msgUser, gambleAmount);
 						sentMessage.edit(embed.setDescription(`The bot chooses 🧻. __It's a tie!__\nYour balance is ${client.util.formatNumber(balance)}💰`));
 					}
 					else if (answer == 3) {
@@ -349,12 +349,12 @@ async function RPS(msgUser, oldBalance, client, logger, gambleAmount, sentMessag
 						sentMessage.edit(embed.setDescription(`The bot chooses ✊. __You lose!__\nYour balance is ${client.util.formatNumber(oldBalance)}💰`));
 					}
 					else if (answer == 2) {
-						const balance = client.characterCommands.addMoney(msgUser, winAmount);
+						const balance = client.userCommands.addMoney(msgUser, winAmount);
 						embed.setColor('#00fc43');
 						sentMessage.edit(embed.setDescription(`The bot chooses 🧻. __You Win!__\nYou won ${winAmount}💰 and your balance is ${client.util.formatNumber(balance)}💰`));
 					}
 					else if (answer == 3) {
-						const balance = client.characterCommands.addMoney(msgUser, gambleAmount);
+						const balance = client.userCommands.addMoney(msgUser, gambleAmount);
 						sentMessage.edit(embed.setDescription(`The bot chooses ✂️. __It's a tie!__\nYour balance is ${client.util.formatNumber(balance)}💰`));
 					}
 					break;

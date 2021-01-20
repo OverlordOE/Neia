@@ -15,7 +15,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Queue')
-			.setColor(client.characterCommands.getColour(msgUser));
+			.setColor(client.userCommands.getColour(msgUser));
 
 		const queue = guildIDData.queue;
 

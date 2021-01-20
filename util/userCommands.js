@@ -18,14 +18,6 @@ Reflect.defineProperty(characterCommands, 'newUser', {
 		const now = moment();
 		const user = await Users.create({
 			user_id: id,
-			balance: 0,
-			totalEarned: 0,
-			networth: 0,
-			level: 1,
-			exp: 0,
-			equipment: JSON.stringify({ weapon: null, offhand: null }),
-			lastDaily: now.subtract(2, 'days').toString(),
-			lastHourly: now.subtract(1, 'days').toString(),
 			lastVote: now.subtract(1, 'days').toString(),
 			firstCommand: true,
 		});
@@ -63,10 +55,6 @@ Reflect.defineProperty(characterCommands, 'getVote', {
 
 Reflect.defineProperty(characterCommands, 'getColour', {
 	value: function getColour(user) {
-		if (user.class) {
-			const userClass = characterCommands.getClass(user.class);
-			return userClass.colour;
-		}
 		return '#fcfcfc';
 	},
 });

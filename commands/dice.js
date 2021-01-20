@@ -11,7 +11,7 @@ module.exports = {
 	execute(message, args, msgUser, client, logger) {
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(client.characterCommands.getColour(msgUser));
+			.setColor(client.userCommands.getColour(msgUser));
 
 		const sides = args[0];
 		let amount;
