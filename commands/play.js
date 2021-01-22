@@ -12,6 +12,8 @@ module.exports = {
 	usage: '<search query or link>',
 
 	async execute(message, args, msgUser, client, logger) {
+		const cookie = "VISITOR_INFO1_LIVE=Uq_3Z5fqSbw; CONSENT=YES+NL.nl+20150809-08-0; PREF=f6=400&cvdm=grid&tz=Europe.Amsterdam&al=nl&f4=4000000&f5=30; __Secure-3PSID=4QefZVi5AobXAIAGnrfJyIF8ERzRkkf57JMZOsrmJKi140uppNbOdY9akSJecozb0XiSwQ.; __Secure-3PAPISID=aHbQu15SE8c0m8-t/ANemjuGFQo1a--Bzn; __Secure-3PSIDCC=AJi4QfGWI3ZKshfSQVis-7X2JYEmY_2lTOlc1ys-TRTtUb392XJ56FmizGRXTNeVYMRDv80v0RjH; LOGIN_INFO=AFmmF2swRQIhALWX7nT2GjN6k1fFYACwgnJ5CXP_sGwSe3asRq_ecTmiAiBHdD_azdvFTCkngaxt41vxYohZ9yGeggs6aiFNSSq_qA:QUQ3MjNmd2xsTzQ5dmcxdjc4SWExS3I3M0MxbFpvRmdmcGtZQzlfYlBNVFFzQnlCYTRYWExxeTZPakpLT2oyZHFnU2JBaTRBNmU1V3JVblpUZ2YzZ0dOX0JONjlYd2l0cTFCbkVWR1QzLXRsQkZRcXJDX2k5V0FVUkhfM2thQUw0VlFWVmVLVkpuNVIwall5RzF2bTBOY1VTaFI3U0Ixd3I2ckMtdk5ieEVoZUNRNTRkaXd2Z0VScXA5SVZaNzVhWHJ2OXYxaEdqQXRoNnMzSG13SnRVY1pDZWJNTFV0Z2JUMFFkemxrMzF1d1R2bzAzdms1NWx0ZFVxRUdPQmE3RlU3Wld3M2tqcGpOSA==; wide=1; YSC=--1m74C2ZYQ",
+		const youtubeID = 'QUFFLUhqa3JlLTlLTkY4MVRYLUVqLTdrRFVfRDBsOGp1QXw\u003d'
 		const embed = new Discord.MessageEmbed()
 			.setThumbnail(message.author.displayAvatarURL())
 			.setColor(client.userCommands.getColour(msgUser));
@@ -51,7 +53,14 @@ module.exports = {
 		let video;
 
 		if (ytdl.validateURL(search)) {
-			const info = await ytdl.getBasicInfo(search);
+			const info = await ytdl.getBasicInfo(search, {
+				requestOptions: {
+					headers: {
+						Cookie: cookie,
+						'x-youtube-identity-token': youtubeID
+					}
+				}
+			});
 			video = info.videoDetails;
 			let duration = 0;
 
@@ -107,6 +116,12 @@ async function Play(client, data, logger, msgUser, message) {
 	channel.send(embed.setDescription(`Now playing **${data.queue[0].songTitle}**\nRequested by ${data.queue[0].requester}`));
 
 	data.dispatcher = data.connection.play(ytdl(data.queue[0].url, {
+		requestOptions: {
+			headers: {
+				Cookie: cookie,
+				'x-youtube-identity-token': youtubeID
+			}
+		},
 		filter: 'audioonly',
 		highWaterMark: 1 << 25,
 		opusEncoded: true,
