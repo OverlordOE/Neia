@@ -4,6 +4,7 @@ const winston = require('winston');
 const moment = require('moment');
 const cron = require('cron');
 const DBL = require('dblapi.js');
+const fs = require('fs');
 const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: process.env.WEBHOOK_TOKEN });
 const clientCommands = require('./commands');
 const { Users, userCommands } = require('./util/userCommands');
@@ -14,7 +15,6 @@ const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
 const active = new Map();
 client.music = { active: active };
-client.commands = new Discord.Collection();
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 moment().format();
 
@@ -57,7 +57,13 @@ process.on('uncaughtException', e => logger.error(e));
 
 
 // Load in Commands
-Object.keys(clientCommands).map(key => client.commands.set(clientCommands[key].name, clientCommands[key]));
+client.commands = new Discord.Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.name, command);
+}
+
 
 
 // Startup Tasks

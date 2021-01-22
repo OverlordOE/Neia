@@ -18,7 +18,7 @@ module.exports = {
 		if (args[1]) amount = args[1];
 		else amount = 1;
 
-		if (amount > 100 || isNaN(amount) || amount < 0) { return message.reply('maximum die amount is 100.'); }
+		if (amount > 100 || isNaN(amount) || amount < 0) return message.reply('maximum die amount is 100.');
 
 		let total = 0;
 		let result = '';
