@@ -75,9 +75,9 @@ module.exports = {
 				url: video.video_url,
 				announceChannel: message.channel.id,
 				duration: duration,
-				thumbnail: video.thumbnail.thumbnails[0].url,
+				thumbnail: video.thumbnails[0].url,
 			});
-			embed.setThumbnail(video.thumbnail.thumbnails[0].url);
+			embed.setThumbnail(video.thumbnails[0].url);
 		}
 		else {
 			video = await YouTube.searchOne(search);
