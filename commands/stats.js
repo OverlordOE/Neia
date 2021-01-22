@@ -12,9 +12,9 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Stats')
-			.setThumbnail(message.author.displayAvatarURL())
+			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
 			.setColor(client.userCommands.getColour(msgUser))
-			.setFooter('Neia', client.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL({ dynamic: true }));
 
 		let guildTotal = 0;
 		let memberTotal = 0;

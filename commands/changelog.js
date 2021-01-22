@@ -11,7 +11,7 @@ module.exports = {
 	execute(message, args, msgUser, client, logger) {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia V3.0: Bot Split and Music Improvements')
-			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL())
+			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL({ dynamic: true }))
 			.addField('Starting Off', `This update will split Neia into 2 bots. Neia will be an all purpose bot and the game will be transferred too another bot and will be on pause for now. I have also made a lot of improvements to the music player.
 			\n`)
 

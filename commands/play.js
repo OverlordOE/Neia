@@ -16,7 +16,7 @@ module.exports = {
 	async execute(message, args, msgUser, client, logger) {
 
 		const embed = new Discord.MessageEmbed()
-			.setThumbnail(message.author.displayAvatarURL())
+			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
 			.setColor(client.userCommands.getColour(msgUser));
 
 		if (!message.member.voice.channel) return message.channel.send(embed.setDescription('you are not in a voice channel.'));

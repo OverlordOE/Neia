@@ -10,7 +10,7 @@ module.exports = {
 
 	execute(message, args, msgUser, client, logger) {
 		const target = message.mentions.users.first() || message.author;
-		const avatar = target.displayAvatarURL();
+		const avatar = target.displayAvatarURL({ dynamic: true });
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`${target.tag}'s Avatar`)

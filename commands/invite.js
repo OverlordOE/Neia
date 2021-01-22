@@ -12,7 +12,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Invites')
-			.setThumbnail(client.user.displayAvatarURL())
+			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
 			.setDescription(`
 							[Click here to invite me to your server](https://discord.com/oauth2/authorize?client_id=684458276129079320&scope=bot&permissions=1178070081)\n
 							[Click here to join the support server](https://discord.gg/hFGxVDT)\n

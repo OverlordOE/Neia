@@ -10,7 +10,7 @@ module.exports = {
 	usage: '<minigame>',
 
 	async execute(message, args, msgUser, client, logger) {
-		const avatar = message.author.displayAvatarURL();
+		const avatar = message.author.displayAvatarURL({ dynamic: true });
 		let gambleType = '';
 
 		const filter = (reaction, user) => {
@@ -21,7 +21,7 @@ module.exports = {
 			.setColor(client.userCommands.getColour(msgUser))
 			.setThumbnail(avatar)
 			.setTitle('Neia\'s Gambling Imporium')
-			.setFooter('Use the emojis to choose your game.', client.user.displayAvatarURL());
+			.setFooter('Use the emojis to choose your game.', client.user.displayAvatarURL({ dynamic: true }));
 
 
 		await message.channel.send(embed)
