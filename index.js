@@ -92,7 +92,7 @@ client.on('ready', async () => {
 // Command handler
 client.on('message', async message => {
 
-	if (message.author.bot || message.channel == 'dm') return;
+	if (message.author.bot || message.channel.type == 'dm') return;
 
 	let guild = guildCommands.get(message.guild.id);
 	if (!guild) guild = await guildCommands.newGuild(message.guild.id);
