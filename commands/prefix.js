@@ -5,6 +5,7 @@ module.exports = {
 	category: 'admin',
 	args: false,
 	usage: '',
+	permissions: 'MANAGE_GUILD',
 
 	async execute(message, args, msgUser, client, logger) {
 		const id = message.guild.id;

@@ -6,10 +6,9 @@ module.exports = {
 	aliases: [],
 	args: true,
 	usage: '<user> (reason)',
+	permissions: 'KICK_MEMBERS',
 
 	execute(message, args, msgUser, client, logger) {
-		if (!message.guild.member(message.author).hasPermission('KICK_MEMBERS')) return message.reply('you don\'t have the correct permissions to kick anyone!');
-
 		const kickTarget = message.mentions.users.first();
 		if (!kickTarget) return message.reply('you need to tag the user you want to kick!');
 

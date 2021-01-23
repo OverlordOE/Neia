@@ -120,7 +120,8 @@ client.on('message', async message => {
 
 	if (!command) return;
 	if (command.category == 'debug' && (id != 137920111754346496)) return message.channel.send('You are not the owner of this bot!');
-	
+	if (command.permissions) if (!message.guild.member(message.author).hasPermission(command.permissions)) return message.reply(`you need the ${command.permissions} permission to use this command!`);
+
 
 	// if the command is used wrongly correct the user
 	if (command.args && !args.length) {
@@ -134,7 +135,7 @@ client.on('message', async message => {
 	if (id != 137920111754346496) {
 		if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
 		const timestamps = cooldowns.get(command.name);
-		const cooldownAmount = 1500;
+		const cooldownAmount = command.cooldown || 1500 ;
 		const now = Date.now();
 
 		if (timestamps.has(id)) {
