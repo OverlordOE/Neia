@@ -214,9 +214,13 @@ async function blackjack(msgUser, logger, sentMessage, embed) {
 		const number = Math.floor((Math.random() * 13));
 
 		let weight = parseInt(values[number]);
-		if (values[number] == 'J' || values[number] == 'Q' || values[number] == 'K') { weight = 10; }
-		if (values[number] == 'A') { weight = 11; }
-		const card = { value: values[number], suit: suits[suit], weight: weight };
+		if (values[number] == 'J' || values[number] == 'Q' || values[number] == 'K') weight = 10;
+		if (values[number] == 'A') weight = 11;
+		const card = {
+			value: values[number],
+			suit: suits[suit],
+			weight: weight,
+		};
 
 		if (player == 'client') {
 			if (card.value == 'A') {
