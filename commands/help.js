@@ -61,7 +61,7 @@ module.exports = {
 
 			if (command.description) help.addField('**Description:**', command.description);
 			if (command.usage) help.addField('**Usage:**', `${command.name} ${command.usage}`);
-			if (command.aliases) help.addField('**Aliases:**', command.aliases.join(', '));
+			if (command.aliases && command.aliases != '') help.addField('**Aliases:**', command.aliases.join(', '));
 		}
 
 		message.channel.send(help);
