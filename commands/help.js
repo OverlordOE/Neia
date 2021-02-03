@@ -58,10 +58,10 @@ module.exports = {
 			help.setTitle(command.name);
 
 			if (command.description) help.addField('**Description:**', command.description);
-			if (command.aliases && command.aliases != '') help.addField('**Aliases:**', `\`${command.aliases.join('`, `')}\``);
-			if (command.usage) help.addField('**Usage:**', `${command.name} ${command.usage}`);
-			if (command.example && command.example != '') help.addField('**Aliases:**', `\`${command.name} ${command.example}\``);
-			if (command.permissions && command.permissions != '') help.addField('**Permissions Needed:**', `**${command.permissions}**`);
+			if (command.permissions && command.permissions != '') help.addField('Permissions Needed:', `**${command.permissions}**`);
+			if (command.aliases && command.aliases != '') help.addField('**Aliases:**', command.aliases.join(', '));
+			if (command.usage) help.addField('**Usage:**', `**${command.name} ${command.usage}**`);
+			if (command.example && command.example != '') help.addField('**Example:**', `\`${command.name} ${command.example}\``);
 		}
 
 		message.channel.send(help);

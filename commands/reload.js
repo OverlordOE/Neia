@@ -15,7 +15,7 @@ module.exports = {
 
 		try {
 			const newCommand = require(`./${command.name}.js`);
-			message.client.commands.set(newCommand.name, newCommand);
+			message.client.commands.set(newCommand.name.toLowerCase(), newCommand);
 		}
 		catch (e) {
 			logger.error(e.stack);
