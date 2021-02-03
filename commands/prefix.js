@@ -1,11 +1,12 @@
 module.exports = {
-	name: 'prefix',
+	name: 'Prefix',
 	summary: 'Change the prefix of the bot for this server',
 	description: 'Change the prefix of the bot for this server.',
 	category: 'admin',
 	args: false,
 	usage: '',
 	permissions: 'MANAGE_GUILD',
+	example: '$',
 
 	async execute(message, args, msgUser, client, logger) {
 		const id = message.guild.id;

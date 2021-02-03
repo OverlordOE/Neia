@@ -1,11 +1,12 @@
 module.exports = {
-	name: 'kick',
+	name: 'Kick',
 	summary: 'Kick the mentioned user',
 	description: 'Kick the mentioned user, you can add a reason after the mention.',
 	category: 'admin',
 	aliases: [''],
 	args: true,
 	usage: '<user> (reason)',
+	example: '@OverlordOE couldn\'t stop spamming conk emotes',
 	permissions: 'KICK_MEMBERS',
 
 	execute(message, args, msgUser, client, logger) {

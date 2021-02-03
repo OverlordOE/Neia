@@ -1,12 +1,13 @@
 const Discord = require('discord.js');
 module.exports = {
-	name: 'dice',
+	name: 'Dice',
 	summary: 'Roll up to 100 of any sided die',
 	description: 'Rolls dice and shows the total.\nThe first argument is the amount of sides you want the dice to have, the second argument is how many times to roll it(up to 100).',
 	category: 'misc',
 	aliases: ['roll'],
 	args: true,
 	usage: '<sides> <amount>',
+	example: '6 2',
 
 	execute(message, args, msgUser, client, logger) {
 

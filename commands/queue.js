@@ -1,12 +1,13 @@
 const Discord = require('discord.js');
 module.exports = {
-	name: 'queue',
+	name: 'Queue',
 	description: 'Shows the song queue',
 	summary: 'Shows the song queue.',
 	category: 'music',
 	aliases: ['list'],
 	args: false,
 	usage: '',
+	example: '',
 
 
 	execute(message, args, msgUser, client, logger) {

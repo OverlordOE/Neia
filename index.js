@@ -60,7 +60,7 @@ client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
+	client.commands.set(command.name.toLowerCase(), command);
 }
 
 
@@ -146,6 +146,7 @@ client.on('message', async message => {
 				const hourLeft = timeLeft / 3600;
 				const minLeft = (hourLeft - Math.floor(hourLeft)) * 60;
 				const secLeft = Math.floor((minLeft - Math.floor(minLeft)) * 60);
+			
 				if (hourLeft >= 1) return message.reply(`Please wait **${Math.floor(hourLeft)} hours**, **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
 				else if (minLeft >= 1) return message.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
 				else return message.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`);

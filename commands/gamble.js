@@ -1,13 +1,14 @@
 const emojiCharacters = require('../data/emojiCharacters');
 const Discord = require('discord.js');
 module.exports = {
-	name: 'gamble',
+	name: 'Gamble',
 	summary: 'Gives you a list of minigames to play',
 	description: 'Play 1 of 3 minigames Rock, paper, scissors; Number guessing or Blackjack.',
 	category: 'misc',
 	aliases: ['guess'],
 	args: false,
 	usage: '<minigame>',
+	example: 'blackjack',
 
 	async execute(message, args, msgUser, client, logger) {
 		const avatar = message.author.displayAvatarURL({ dynamic: true });

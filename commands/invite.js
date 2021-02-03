@@ -1,12 +1,13 @@
 const Discord = require('discord.js');
 module.exports = {
-	name: 'invite',
+	name: 'Invite',
 	summary: 'Sends a bunch of helpfull links',
 	description: 'Sends links to invite the client to your own server, to join the support server and to request a feature or report a bug.',
 	category: 'misc',
 	args: false,
 	usage: '',
 	aliases: ['inv', 'bug', 'join', 'support', 'link'],
+	example: '',
 
 	execute(message, args, msgUser, client, logger) {
 

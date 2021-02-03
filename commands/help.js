@@ -1,10 +1,11 @@
 const Discord = require('discord.js');
 module.exports = {
-	name: 'help',
+	name: 'Help',
 	description: 'List all the commands or get info about a specific command.',
 	category: 'help',
 	aliases: ['commands'],
 	usage: '<command name>',
+	example: 'avatar',
 	args: false,
 
 	execute(message, args, msgUser, client, logger) {
@@ -30,11 +31,8 @@ module.exports = {
 					case 'misc':
 						miscCommands += `**${command.name}** - ${command.summary}\n`;
 						break;
-					default:
-						break;
 				}
 			});
-
 
 			help.setDescription(`__**Miscellaneous Commands**__\n${miscCommands}\n
 								__**Music Commands**__\n${musicCommands}\n
@@ -47,21 +45,23 @@ module.exports = {
 							 For more info contact: OverlordOE#0717
 			`);
 		}
+
 		else if (args[0] == 'viggo' || args[0] == 'virgil') message.reply('Vliegosaurus');
+
 		else {
 			const name = args[0].toLowerCase();
 			const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
-			if (!command) {
-				return message.reply('that\'s not a valid command!');
-			}
+			if (!command) return message.reply('that\'s not a valid command!');
 
-			if (command.owner) { return message.channel.send('This command is for debug purposes'); }
+			if (command.category == 'debug') return message.channel.send('This command is for debug purposes');
 			help.setTitle(command.name);
 
 			if (command.description) help.addField('**Description:**', command.description);
+			if (command.aliases && command.aliases != '') help.addField('**Aliases:**', `\`${command.aliases.join('`, `')}\``);
 			if (command.usage) help.addField('**Usage:**', `${command.name} ${command.usage}`);
-			if (command.aliases && command.aliases != '') help.addField('**Aliases:**', command.aliases.join(', '));
+			if (command.example && command.example != '') help.addField('**Aliases:**', `\`${command.name} ${command.example}\``);
+			if (command.permissions && command.permissions != '') help.addField('**Permissions Needed:**', `**${command.permissions}**`);
 		}
 
 		message.channel.send(help);

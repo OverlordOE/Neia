@@ -1,5 +1,5 @@
 module.exports = {
-	name: 'update',
+	name: 'Update',
 	description: '',
 	category: 'debug',
 	aliases: [],

@@ -1,7 +1,5 @@
 module.exports = {
-	name: 'reload',
-	description: '"Admin debug tool" Reloads a command.',
-	usage: '<command>',
+	name: 'Reload',
 	aliases: ['r', 're'],
 	category: 'debug',
 	args: true,

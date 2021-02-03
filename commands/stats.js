@@ -1,12 +1,13 @@
 const Discord = require('discord.js');
 module.exports = {
-	name: 'stats',
+	name: 'Stats',
 	summary: 'Shows how much servers and users use Neia',
 	description: 'Shows how much servers and users use Neia.',
 	category: 'misc',
 	aliases: ['stat', 'server', 'members'],
 	args: false,
 	usage: '',
+	example: '',
 
 	async execute(message, args, msgUser, client, logger) {
 

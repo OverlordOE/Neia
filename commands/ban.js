@@ -1,11 +1,12 @@
 module.exports = {
-	name: 'ban',
+	name: 'Ban',
 	summary: 'Bans the mentioned user',
 	description: 'Bans the mentioned user, you can add a reason after the mention.',
 	category: 'admin',
 	aliases: [''],
 	args: true,
 	usage: '<user> (reason)',
+	example: '@OverlordOE tried to take over the server',
 	permissions: 'BAN_MEMBERS',
 
 	execute(message, args, msgUser, client, logger) {

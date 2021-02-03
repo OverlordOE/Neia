@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 module.exports = {
-	name: 'changelog',
+	name: 'Changelog',
 	summary: 'Shows the latest major update that the bot has received',
 	description: 'Shows the latest major update that the bot has received.',
 	category: 'misc',

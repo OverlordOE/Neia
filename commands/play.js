@@ -5,13 +5,14 @@ const cookie = 'VISITOR_INFO1_LIVE=Uq_3Z5fqSbw; CONSENT=YES+NL.nl+20150809-08-0;
 const youtubeID = 'QUFFLUhqa3JlLTlLTkY4MVRYLUVqLTdrRFVfRDBsOGp1QXw\u003d';
 
 module.exports = {
-	name: 'play',
+	name: 'Play',
 	summary: 'Play a song',
 	description: 'Play a song\nYou can search for songs by inputting a query or you can use a youtube link to get your song',
 	category: 'music',
 	aliases: ['song', 'p', 'music'],
 	args: true,
 	usage: '<search query or link>',
+	example: 'darude sandstorm',
 
 	async execute(message, args, msgUser, client, logger) {
 
