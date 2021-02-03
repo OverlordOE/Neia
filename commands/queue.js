@@ -20,7 +20,7 @@ module.exports = {
 		const queue = data.queue;
 
 		for (let i = 0; i < queue.length; i++) {
-			if (data.paused) embed.addField('PAUSED','Use the `resume` command to unpause');
+			if (data.paused) embed.addField('PAUSED', 'Use the `resume` command to unpause');
 			if (i == 0) embed.addField(`Now playing: **${queue[i].songTitle}**`, `Duration: ${queue[i].duration}\nRequested by: ${queue[i].requester}`);
 			else embed.addField(`${i}: **${queue[i].songTitle}**`, `Duration: ${queue[i].duration}\nRequested by: ${queue[i].requester}`);
 		}
