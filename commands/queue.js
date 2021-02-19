@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'Queue',
 	description: 'Shows the song queue',
-	summary: 'Shows the song queue.',
+	summary: 'Shows the song queue and information about the songs in the queue.',
 	category: 'music',
 	aliases: ['list'],
 	args: false,
