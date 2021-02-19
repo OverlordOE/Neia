@@ -84,7 +84,7 @@ module.exports = {
 			embed.setThumbnail(video.thumbnail);
 		}
 		else {
-			video = await YouTube.searchOne(search, { type: 'video' });
+			video = await YouTube.searchOne(search);
 			if (video) {
 				const videoData = {
 					title: video.title,
@@ -106,7 +106,6 @@ module.exports = {
 			}
 		}
 
-		console.log(video);
 		tempMessage.delete();
 		if (!data.dispatcher) Play(client, data, logger, msgUser, message);
 		else message.channel.send(embed.setDescription(`**${video.title}**\nBy **${video.channel}**\n Has been added to the queue.\n\nRequested by ${message.author}`));
