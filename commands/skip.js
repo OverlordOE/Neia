@@ -1,11 +1,12 @@
 module.exports = {
-	name: 'skip',
-	summary: 'Skip a song',
-	description: 'Skip a song.',
+	name: 'Skip',
+	summary: 'Skip the current song',
+	description: 'Skip the current song.',
 	category: 'music',
 	aliases: ['next'],
 	args: false,
 	usage: '',
+	example: '',
 
 	execute(message, args, msgUser, client, logger) {
 		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');

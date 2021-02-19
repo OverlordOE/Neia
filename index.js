@@ -4,18 +4,17 @@ const winston = require('winston');
 const moment = require('moment');
 const cron = require('cron');
 const DBL = require('dblapi.js');
-const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: process.env.WEBHOOK_TOKEN });
-const clientCommands = require('./commands');
+const fs = require('fs');
 const { Users, userCommands } = require('./util/userCommands');
 const { guildCommands, Guilds } = require('./util/guildCommands');
 const { util } = require('./util/util');
-require('dotenv').config();
+const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: process.env.WEBHOOK_TOKEN });
 const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
 const active = new Map();
 client.music = { active: active };
-client.commands = new Discord.Collection();
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+require('dotenv').config();
 moment().format();
 
 
@@ -57,7 +56,13 @@ process.on('uncaughtException', e => logger.error(e));
 
 
 // Load in Commands
-Object.keys(clientCommands).map(key => client.commands.set(clientCommands[key].name, clientCommands[key]));
+client.commands = new Discord.Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.name.toLowerCase(), command);
+}
+
 
 
 // Startup Tasks
@@ -114,8 +119,8 @@ client.on('message', async message => {
 		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 	if (!command) return;
-	if (command.category == 'debug' && (id != 137920111754346496 && id != 139030319784263681)) return message.channel.send('You are not the owner of this bot!');
-	else if (command.category == 'admin' && !message.member.hasPermission('ADMINISTRATOR') && id != 137920111754346496 && id != 139030319784263681) return message.channel.send('You need Admin privileges to use this command!');
+	if (command.category == 'debug' && (id != 137920111754346496)) return message.channel.send('You are not the owner of this bot!');
+	if (command.permissions) if (!message.guild.member(message.author).hasPermission(command.permissions)) return message.reply(`you need the ${command.permissions} permission to use this command!`);
 
 
 	// if the command is used wrongly correct the user
@@ -130,7 +135,7 @@ client.on('message', async message => {
 	if (id != 137920111754346496) {
 		if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
 		const timestamps = cooldowns.get(command.name);
-		const cooldownAmount = 1500;
+		const cooldownAmount = command.cooldown || 1500 ;
 		const now = Date.now();
 
 		if (timestamps.has(id)) {
@@ -141,6 +146,7 @@ client.on('message', async message => {
 				const hourLeft = timeLeft / 3600;
 				const minLeft = (hourLeft - Math.floor(hourLeft)) * 60;
 				const secLeft = Math.floor((minLeft - Math.floor(minLeft)) * 60);
+			
 				if (hourLeft >= 1) return message.reply(`Please wait **${Math.floor(hourLeft)} hours**, **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
 				else if (minLeft >= 1) return message.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
 				else return message.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`);

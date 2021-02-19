@@ -1,7 +1,5 @@
 module.exports = {
-	name: 'reload',
-	description: '"Admin debug tool" Reloads a command.',
-	usage: '<command>',
+	name: 'Reload',
 	aliases: ['r', 're'],
 	category: 'debug',
 	args: true,
@@ -17,7 +15,7 @@ module.exports = {
 
 		try {
 			const newCommand = require(`./${command.name}.js`);
-			message.client.commands.set(newCommand.name, newCommand);
+			message.client.commands.set(newCommand.name.toLowerCase(), newCommand);
 		}
 		catch (e) {
 			logger.error(e.stack);

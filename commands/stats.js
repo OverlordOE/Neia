@@ -1,20 +1,21 @@
 const Discord = require('discord.js');
 module.exports = {
-	name: 'stats',
+	name: 'Stats',
 	summary: 'Shows how much servers and users use Neia',
 	description: 'Shows how much servers and users use Neia.',
 	category: 'misc',
 	aliases: ['stat', 'server', 'members'],
 	args: false,
 	usage: '',
+	example: '',
 
 	async execute(message, args, msgUser, client, logger) {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Stats')
-			.setThumbnail(message.author.displayAvatarURL())
+			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
 			.setColor(client.userCommands.getColour(msgUser))
-			.setFooter('Neia', client.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL({ dynamic: true }));
 
 		let guildTotal = 0;
 		let memberTotal = 0;

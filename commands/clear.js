@@ -1,11 +1,12 @@
 module.exports = {
-	name: 'clear',
+	name: 'Clear',
 	summary: 'Clears the song queue',
 	description: 'Clears the song queue and makes the bot leave the voice channel.',
 	category: 'music',
 	aliases: ['stop'],
 	args: false,
 	usage: '',
+	example: '',
 
 
 	execute(message, args, msgUser, client, logger) {

@@ -1,16 +1,17 @@
 const emojiCharacters = require('../data/emojiCharacters');
 const Discord = require('discord.js');
 module.exports = {
-	name: 'gamble',
+	name: 'Gamble',
 	summary: 'Gives you a list of minigames to play',
 	description: 'Play 1 of 3 minigames Rock, paper, scissors; Number guessing or Blackjack.',
 	category: 'misc',
 	aliases: ['guess'],
 	args: false,
 	usage: '<minigame>',
+	example: 'blackjack',
 
 	async execute(message, args, msgUser, client, logger) {
-		const avatar = message.author.displayAvatarURL();
+		const avatar = message.author.displayAvatarURL({ dynamic: true });
 		let gambleType = '';
 
 		const filter = (reaction, user) => {
@@ -21,7 +22,7 @@ module.exports = {
 			.setColor(client.userCommands.getColour(msgUser))
 			.setThumbnail(avatar)
 			.setTitle('Neia\'s Gambling Imporium')
-			.setFooter('Use the emojis to choose your game.', client.user.displayAvatarURL());
+			.setFooter('Use the emojis to choose your game.', client.user.displayAvatarURL({ dynamic: true }));
 
 
 		await message.channel.send(embed)
@@ -214,9 +215,13 @@ async function blackjack(msgUser, logger, sentMessage, embed) {
 		const number = Math.floor((Math.random() * 13));
 
 		let weight = parseInt(values[number]);
-		if (values[number] == 'J' || values[number] == 'Q' || values[number] == 'K') { weight = 10; }
-		if (values[number] == 'A') { weight = 11; }
-		const card = { value: values[number], suit: suits[suit], weight: weight };
+		if (values[number] == 'J' || values[number] == 'Q' || values[number] == 'K') weight = 10;
+		if (values[number] == 'A') weight = 11;
+		const card = {
+			value: values[number],
+			suit: suits[suit],
+			weight: weight,
+		};
 
 		if (player == 'client') {
 			if (card.value == 'A') {

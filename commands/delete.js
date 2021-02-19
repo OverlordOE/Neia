@@ -1,11 +1,14 @@
 module.exports = {
-	name: 'delete',
+	name: 'Delete',
 	summary: 'Delete messages in bulk',
 	description: 'Delete up too 100 messages in bulk.',
 	category: 'admin',
 	aliases: ['remove'],
-	args: false,
+	args: true,
 	usage: '<message amount>',
+	example: '12',
+	permissions: 'MANAGE_MESSAGES',
+
 	execute(message, args, msgUser, client, logger) {
 
 		const amount = args[0];
