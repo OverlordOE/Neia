@@ -18,7 +18,8 @@ module.exports = {
 			.addField('**New Features**', `
 			- New command: \`kick\`, this command can be used to kick someone and add a reason for the kick.
 - New command: \`pause\`, this command can be used to ban someone and add a reason for the ban.
-- New command: \`pause\`, this command pauses the currently playing music on the bot. Use it again to unpause.\n`)
+- New command: \`pause\`, this command pauses the currently playing music on the bot. Use it again to unpause.
+- The \`play\` and \`queue\` command now show what channel the song is from.\n`)
 
 			.addField('**Major Changes**', `- Added an examples tab in the \`help\` command for all commands that need additional input to be used.
 - Added a permissions tab in the \`help\` command for all commands that need additional permissions to be used.\n`)
