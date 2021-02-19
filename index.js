@@ -5,16 +5,16 @@ const moment = require('moment');
 const cron = require('cron');
 const DBL = require('dblapi.js');
 const fs = require('fs');
-const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: process.env.WEBHOOK_TOKEN });
 const { Users, userCommands } = require('./util/userCommands');
 const { guildCommands, Guilds } = require('./util/guildCommands');
 const { util } = require('./util/util');
-require('dotenv').config();
+const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: process.env.WEBHOOK_TOKEN });
 const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
 const active = new Map();
 client.music = { active: active };
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+require('dotenv').config();
 moment().format();
 
 

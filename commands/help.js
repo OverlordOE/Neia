@@ -9,7 +9,7 @@ module.exports = {
 	args: false,
 
 	execute(message, args, msgUser, client, logger) {
-		const { commands } = message.client;
+		const commands = client.commands;
 		let adminCommands = '';
 		let musicCommands = '';
 		let miscCommands = '';

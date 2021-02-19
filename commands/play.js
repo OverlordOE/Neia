@@ -18,7 +18,6 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-			.setColor(client.userCommands.getColour(msgUser));
 
 		if (!message.member.voice.channel) return message.channel.send(embed.setDescription('you are not in a voice channel.'));
 
@@ -70,28 +69,35 @@ module.exports = {
 			const seconds = video.lengthSeconds - (minutes * 60);
 			if (seconds < 10) duration = `${minutes}:0${seconds}`;
 			else duration = `${minutes}:${seconds}`;
-			data.queue.push({
-				songTitle: video.title,
+			
+			const videoData = {
+				title: video.title,
+				channel: video.author,
 				requester: message.author,
 				url: video.video_url,
 				announceChannel: message.channel.id,
 				duration: duration,
 				thumbnail: video.thumbnails[0].url,
-			});
-			embed.setThumbnail(video.thumbnails[0].url);
+			};
+			video = videoData;
+			data.queue.push(videoData);
+			embed.setThumbnail(video.thumbnail);
 		}
 		else {
-			video = await YouTube.searchOne(search);
+			video = await YouTube.searchOne(search, { type: 'video' });
 			if (video) {
-				data.queue.push({
-					songTitle: video.title,
+				const videoData = {
+					title: video.title,
+					channel: video.channel.name,
 					requester: message.author,
 					url: video.url,
 					announceChannel: message.channel.id,
 					duration: video.durationFormatted,
 					thumbnail: video.thumbnail.url,
-				});
-				embed.setThumbnail(video.thumbnail.url);
+				};
+				video = videoData;
+				data.queue.push(videoData);
+				embed.setThumbnail(video.thumbnail);
 			}
 			else {
 				logger.warn(`Could not find youtube video with search terms "${search}"`);
@@ -100,9 +106,10 @@ module.exports = {
 			}
 		}
 
+		console.log(video);
 		tempMessage.delete();
 		if (!data.dispatcher) Play(client, data, logger, msgUser, message);
-		else message.channel.send(embed.setDescription(`Added **${video.title}** to the queue.\n\nRequested by ${message.author}`));
+		else message.channel.send(embed.setDescription(`**${video.title}**\nBy **${video.channel}**\n Has been added to the queue.\n\nRequested by ${message.author}`));
 
 		client.music.active.set(message.guild.id, data);
 	},
@@ -115,7 +122,7 @@ async function Play(client, data, logger, msgUser, message) {
 	const embed = new Discord.MessageEmbed()
 		.setThumbnail(data.queue[0].thumbnail);
 
-	channel.send(embed.setDescription(`Now playing **${data.queue[0].songTitle}**\nRequested by ${data.queue[0].requester}`));
+	channel.send(embed.setDescription(`Now playing **${data.queue[0].title}**\nBy **${data.queue[0].channel}**\n\nRequested by ${data.queue[0].requester}`));
 
 	data.dispatcher = data.connection.play(ytdl(data.queue[0].url, {
 		requestOptions: {

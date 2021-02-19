@@ -14,7 +14,6 @@ sequelize.import('models/Guilds');
 
 
 // Execute node dbInit.js --force or node dbInit.js -f to force update the tables (this resets the db but removes unused tables).
-// Execute node dbInit.js --sync or node dbInit.js -s to force update the tables (this doesnt reset the db but keeps unused tables).
 
 // Create tags
 sequelize
