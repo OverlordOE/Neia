@@ -12,21 +12,20 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia V3.0: Bot Split and Music Improvements')
 			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL({ dynamic: true }))
-			.addField('Starting Off', `This update will split Neia into 2 bots. Neia will be an all purpose bot and the game will be transferred too another bot and will be on pause for now. I have also made a lot of improvements to the music player.
-			\n`)
+			.addField('Starting Off', 'This update are mostly quality of live changes and the kick and ban commands.\n')
 
 
-			.addField('**New Features**', `- The music player will now give you actual errors when something goes wrong instead of undefined or nothing at all.
-- The queue will now show the thumbnail of the current playing song.\n`)
+			.addField('**New Features**', `
+			- New command: \`kick\`, this command can be used to kick someone and add a reason for the kick.
+- New command: \`pause\`, this command can be used to ban someone and add a reason for the ban.
+- New command: \`pause\`, this command pauses the currently playing music on the bot. Use it again to unpause.\n`)
 
-			.addField('**Major Changes**', `- Transferred the PvP game into another bot so the bot is less cluttered.
-- Removed the looping functionality temporarily.\n`)
+			.addField('**Major Changes**', `- Added an examples tab in the \`help\` command for all commands that need additional input to be used.
+- Added a permissions tab in the \`help\` command for all commands that need additional permissions to be used.\n`)
 
 
-			.addField('**Small Changes and Bug Fixes**', `- Increased music queue size to 5 songs max.
-- The bot will now give you an error message if it is not set up correctly.
-- Fixed queue duration formatting.
-- Small optimisations.`);
+			.addField('**Small Changes and Bug Fixes**', `- Capitalized all commands.
+- Added support for GIF avatars in the \`avatar\` command`);
 
 		return message.channel.send(embed);
 	},
