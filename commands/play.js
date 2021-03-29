@@ -92,7 +92,7 @@ module.exports = {
 
 				videoData = {
 					title: searchData.title,
-					channel: searchData.author,
+					channel: searchData.author.name,
 					requester: message.author,
 					url: searchData.video_url,
 					announceChannel: message.channel.id,
@@ -172,7 +172,7 @@ module.exports = {
 
 		function Finish() {
 
-			
+
 			data.queue.shift();
 
 			if (data.queue.length > 0) {
