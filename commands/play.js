@@ -37,7 +37,7 @@ module.exports = {
 			}
 			else if (data.connection.status == 4 && data.queue) {
 				data.dispatcher = null;
-				data.queue.shift();
+				data.queue = [];
 			}
 
 			data.connection = await message.member.voice.channel.join();
