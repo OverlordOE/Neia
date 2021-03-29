@@ -66,7 +66,7 @@ for (const file of commandFiles) {
 
 
 // Startup Tasks
-client.login(process.env.TEST_TOKEN);
+client.login(process.env.TOKEN);
 client.on('ready', async () => {
 	try {
 		const storedUsers = await Users.findAll();

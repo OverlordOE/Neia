@@ -17,7 +17,7 @@ module.exports = {
 	async execute(message, args, msgUser, client, logger) {
 
 		const embed = new Discord.MessageEmbed()
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
+			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }));
 
 		if (!message.member.voice.channel) return message.channel.send(embed.setDescription('you are not in a voice channel.'));
 
@@ -26,19 +26,20 @@ module.exports = {
 
 		try {
 			if (!data.connection) {
+				
 				const permissions = message.member.voice.channel.permissionsFor(message.guild.member(client.user));
 				if (!permissions.any('CONNECT')) {
 					logger.warn('Neia couldnt join the voice channel');
 					return message.reply('Neia does not have permission to join the voice channel!');
 				}
-
-				data.connection = await message.member.voice.channel.join();
+				
 			}
-			else if (data.connection.status == 4) {
-				data.connection = await message.member.voice.channel.join();
-				const guildIDData = client.music.active.get(message.guild.id);
-				guildIDData.dispatcher.emit('finish');
+			else if (data.connection.status == 4 && data.queue) {
+				data.dispatcher = null;
+				data.queue.shift();
 			}
+			
+			data.connection = await message.member.voice.channel.join();
 		}
 		catch (error) {
 			logger.warn('Neia couldnt join the voice channel');
@@ -141,19 +142,17 @@ async function Play(client, data, logger, msgUser, message) {
 
 
 	data.dispatcher.on('finish', () => Finish(client, data.dispatcher, logger, msgUser, message));
-	data.dispatcher.on('error', e => {
+	data.dispatcher.on('debug', e => {
 		channel.send(embed.setDescription(`error:  ${e.info}`));
-		logger.error(e.stack);
+		logger.error(e);
 	});
-	data.dispatcher.on('failed', e => {
-		channel.send(embed.setDescription('error:  failed to join voice channel'));
-		logger.log('error', `failed to join voice channel for reason: ${e.info}`);
-	});
+	
 	data.dispatcher.on('disconnect', e => {
-		data.dispatcher = null;
-		data.queue = null;
-		logger.log('info', `left voice channel for reason: ${e.info}`);
+		data.queue = [];
+		data.dispatcher.emit('finish');
+		logger.log('info', `Bot got forcefully disconnected by: ${e.info}}`);
 	});
+	
 }
 
 
