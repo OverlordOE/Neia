@@ -6,7 +6,7 @@ module.exports = {
 	args: false,
 	usage: '',
 
-	async execute(message, args, msgUser, client, logger) {
+	async execute(message, args, msgUser, msgGuild, client, logger) {
 		try {
 			client.userCommands.map(async (u) => {
 				const user = await client.userCommands.getUser(u.user_id);

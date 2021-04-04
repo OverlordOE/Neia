@@ -8,7 +8,7 @@ module.exports = {
 	example: 'avatar',
 	args: false,
 
-	execute(message, args, msgUser, client, logger) {
+	execute(message, args, msgUser, msgGuild, client, logger) {
 		const commands = client.commands;
 		let adminCommands = '';
 		let musicCommands = '';

@@ -9,7 +9,7 @@ module.exports = {
 	usage: '<sides> <amount>',
 	example: '6 2',
 
-	execute(message, args, msgUser, client, logger) {
+	execute(message, args, msgUser, msgGuild, client, logger) {
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(client.userCommands.getColour(msgUser));

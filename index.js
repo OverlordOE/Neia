@@ -99,12 +99,12 @@ client.on('message', async message => {
 
 	if (message.author.bot || message.channel.type == 'dm') return;
 
-	let guild = guildCommands.get(message.guild.id);
-	if (!guild) guild = await guildCommands.newGuild(message.guild.id);
-	const prefix = await guildCommands.getPrefix(message.guild.id);
+	const guild = await guildCommands.getGuild(message.guild.id);
+	const prefix = await guildCommands.getPrefix(guild);
 	const id = message.author.id;
 	const user = await userCommands.getUser(id);
 
+	if (Number.isInteger(Number(message.content))) numberGame(message, guild);
 
 	// split message for further use
 	const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`);
@@ -135,7 +135,7 @@ client.on('message', async message => {
 	if (id != 137920111754346496) {
 		if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
 		const timestamps = cooldowns.get(command.name);
-		const cooldownAmount = command.cooldown || 1500 ;
+		const cooldownAmount = command.cooldown || 1500;
 		const now = Date.now();
 
 		if (timestamps.has(id)) {
@@ -146,7 +146,7 @@ client.on('message', async message => {
 				const hourLeft = timeLeft / 3600;
 				const minLeft = (hourLeft - Math.floor(hourLeft)) * 60;
 				const secLeft = Math.floor((minLeft - Math.floor(minLeft)) * 60);
-			
+
 				if (hourLeft >= 1) return message.reply(`Please wait **${Math.floor(hourLeft)} hours**, **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
 				else if (minLeft >= 1) return message.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
 				else return message.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`);
@@ -157,7 +157,7 @@ client.on('message', async message => {
 	}
 
 	if (user.firstCommand) {
-		client.commands.get('changelog').execute(message, args, user, client, logger);
+		client.commands.get('changelog').execute(message, args, user, guild, client, logger);
 		user.firstCommand = false;
 		logger.info(`New user ${message.author.tag}`);
 		user.save();
@@ -173,7 +173,7 @@ client.on('message', async message => {
 	// Execute command
 	logger.log('info', `${message.author.tag} Called command: ${commandName} ${args.join(' ')}, in guild: ${message.guild.name}`);
 	try {
-		command.execute(message, args, user, client, logger);
+		command.execute(message, args, user, guild, client, logger);
 	}
 	catch (e) {
 		logger.error(e.stack);
@@ -181,8 +181,36 @@ client.on('message', async message => {
 	}
 });
 
+function numberGame(message, guild) {
+	const numberGameInfo = client.guildCommands.getNumberGame(guild);
 
+	if (!numberGameInfo || message.channel.id !== numberGameInfo.channelId) return;
+	const number = Number(message.content);
 
+	if (numberGameInfo.number == 0 && number != 1) return;
+
+	if (numberGameInfo.lastUserId == message.author.id) {
+		message.channel.send(`**You can't count twice in a row.**\n${message.author} has ruined the streak at **${numberGameInfo.number}**!\nStarting again from **1**.`);
+		numberGameInfo.number = 0;
+		numberGameInfo.lastUserId = null;
+		message.react('❌');
+
+	}
+	else if (number == numberGameInfo.number + 1) {
+		message.react('✅');
+		numberGameInfo.number++;
+		numberGameInfo.lastUserId = message.author.id;
+	}
+	else {
+		message.channel.send(`**Wrong number.**\n${message.author} has ruined the streak at **${numberGameInfo.number}**!\nStarting again from **1**.`);
+		numberGameInfo.number = 0;
+		numberGameInfo.lastUserId = null;
+		message.react('❌');
+	}
+
+	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);
+
+}
 
 
 

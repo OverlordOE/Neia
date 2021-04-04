@@ -9,7 +9,7 @@ module.exports = {
 	example: '@OverlordOE couldn\'t stop spamming conk emotes',
 	permissions: 'KICK_MEMBERS',
 
-	execute(message, args, msgUser, client, logger) {
+	execute(message, args, msgUser, msgGuild, client, logger) {
 		const kickTarget = message.mentions.users.first();
 		if (!kickTarget) return message.reply('you need to tag the user you want to kick!');
 

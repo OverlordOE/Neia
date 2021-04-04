@@ -9,7 +9,7 @@ module.exports = {
 	example: '12',
 	permissions: 'MANAGE_MESSAGES',
 
-	execute(message, args, msgUser, client, logger) {
+	execute(message, args, msgUser, msgGuild, client, logger) {
 
 		const amount = args[0];
 		if (isNaN(amount)) return message.channel.send(`**${amount}** is not a valid number`);
