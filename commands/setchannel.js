@@ -11,6 +11,9 @@ module.exports = {
 
 	async execute(message, args, msgUser, msgGuild, client, logger) {
 		client.guildCommands.setNumberChannel(msgGuild, message.channel.id);
-		return message.channel.send('This channel has been set for the numbergame');
+		return message.channel.send(`This channel has been set for the numbergame
+		Rules:
+		- The same person can't count twice in a row.
+		- Every number needs to be 1 higher then the last.`);
 	},
 };

@@ -12,7 +12,7 @@ const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: pro
 const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
 const active = new Map();
-const emojiCharacters = require('../data/emojiCharacters');
+const emojiCharacters = require('./data/emojiCharacters.js');
 client.music = { active: active };
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 require('dotenv').config();
@@ -188,16 +188,17 @@ function numberGame(message, guild) {
 	if (!numberGameInfo || message.channel.id !== numberGameInfo.channelId) return;
 	const number = Number(message.content);
 
-	if (numberGameInfo.number == 0 && number != 1) return;
+	if (numberGameInfo.currentNumber == 0 && number != 1) return;
 
 	if (numberGameInfo.lastUserId == message.author.id) {
-		message.channel.send(`**You can't count twice in a row.**\n${message.author} has ruined the streak at **${numberGameInfo.number}**!\nStarting again from **1**.`);
-		numberGameInfo.number = 0;
+		message.channel.send(`**You can't count twice in a row.**\n${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!\nStarting again from **1**.`);
+		numberGameInfo.currentNumber = 0;
 		numberGameInfo.lastUserId = null;
+		numberGameInfo.streaksRuined++;
 		message.react('❌');
 
 	}
-	else if (number == numberGameInfo.number + 1) {
+	else if (number == numberGameInfo.currentNumber + 1) {
 		
 		switch (number) {
 			case 42:
@@ -246,18 +247,20 @@ function numberGame(message, guild) {
 				break;
 		}
 			
-		numberGameInfo.number++;
+		if (number > numberGameInfo.highestStreak) numberGameInfo.highestStreak = number;
+		numberGameInfo.currentNumber++;
+		numberGameInfo.totalCounted++;
 		numberGameInfo.lastUserId = message.author.id;
 	}
 	else {
-		message.channel.send(`**Wrong number.**\n${message.author} has ruined the streak at **${numberGameInfo.number}**!\nStarting again from **1**.`);
-		numberGameInfo.number = 0;
+		message.channel.send(`**Wrong number.**\n${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!\nStarting again from **1**.`);
+		numberGameInfo.currentNumber = 0;
 		numberGameInfo.lastUserId = null;
+		numberGameInfo.streaksRuined++;
 		message.react('❌');
 	}
 
 	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);
-
 }
 
 
