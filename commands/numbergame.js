@@ -25,6 +25,7 @@ module.exports = {
 			.addField('Highest Streak', numberGameInfo.highestStreak, true)
 			.addField('Streaks Ruined', numberGameInfo.streaksRuined, true)
 			;
+
 		if (numberGameInfo.lastUserId) {
 			const lastCounter = await message.guild.members.fetch(numberGameInfo.lastUserId);
 			embed.addField('Last Counter', lastCounter, true);
