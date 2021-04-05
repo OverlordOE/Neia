@@ -9,7 +9,7 @@ module.exports = {
 	usage: '<target>',
 	example: '@OverlordOE',
 
-	execute(message, args, msgUser, client, logger) {
+	execute(message, args, msgUser, msgGuild, client, logger) {
 		const target = message.mentions.users.first() || message.author;
 		const avatar = target.displayAvatarURL({ dynamic: true });
 

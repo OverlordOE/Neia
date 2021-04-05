@@ -10,7 +10,7 @@ module.exports = {
 	usage: '<minigame>',
 	example: 'blackjack',
 
-	async execute(message, args, msgUser, client, logger) {
+	async execute(message, args, msgUser, msgGuild, client, logger) {
 		const avatar = message.author.displayAvatarURL({ dynamic: true });
 		let gambleType = '';
 
@@ -88,14 +88,10 @@ async function oneInFive(msgUser, logger, sentMessage, embed) {
 
 	await sentMessage.edit(embed.setDescription('Guess the number between 1 and 5.').setTitle('Numbers'))
 		.then(() => {
-			sentMessage.react(emojiCharacters[1]);
-			sentMessage.react(emojiCharacters[2]);
-			sentMessage.react(emojiCharacters[3]);
-			sentMessage.react(emojiCharacters[4]);
-			sentMessage.react(emojiCharacters[5]);
+			for (let i = 1; i < 6; i++) sentMessage.react(emojiCharacters[i]);
 		})
-		.catch(error => {
-			logger.log('error', `One of the emojis failed to react because of:\n${error.info}`);
+		.catch(e => {
+			logger.log('error', `One of the emojis failed to react because of:\n${e.info}`);
 		});
 
 
@@ -160,7 +156,7 @@ async function blackjack(msgUser, logger, sentMessage, embed) {
 						getCard('player');
 						if (botHandValue < 17) getCard('client');
 						setEmbed();
-						if (playerHandValue >= 21 || botHandValue > 21 || (botHandValue > 16 && playerHandValue > botHandValue) || (botHandValue == 21 && playerHandValue == 21) || cardsDrawn >= 5) {
+						if (playerHandValue >= 21 || botHandValue > 21 || (botHandValue >= 17 && playerHandValue > botHandValue) || cardsDrawn >= 5) {
 							collector.stop();
 							return;
 						}

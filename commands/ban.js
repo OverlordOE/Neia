@@ -9,7 +9,7 @@ module.exports = {
 	example: '@OverlordOE tried to take over the server',
 	permissions: 'BAN_MEMBERS',
 
-	execute(message, args, msgUser, client, logger) {
+	execute(message, args, msgUser, msgGuild, client, logger) {
 		const banTarget = message.mentions.users.first();
 		if (!banTarget) return message.reply('you need to tag the user you want to ban!');
 
@@ -27,7 +27,7 @@ module.exports = {
 		if (!banReason2) banReason1 += 'No reason given';
 		else banReason1 += banReason2;
 
-		banTargetGuildUser.ban({ reason: banReason1	});
+		banTargetGuildUser.ban({ reason: banReason1 });
 
 		return message.channel.send(`${banTarget.username} was ${banReason1}`);
 	},

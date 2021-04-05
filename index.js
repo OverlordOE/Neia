@@ -12,6 +12,7 @@ const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: pro
 const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
 const active = new Map();
+const emojiCharacters = require('./data/emojiCharacters.js');
 client.music = { active: active };
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 require('dotenv').config();
@@ -66,7 +67,7 @@ for (const file of commandFiles) {
 
 
 // Startup Tasks
-client.login(process.env.TEST_TOKEN);
+client.login(process.env.TOKEN);
 client.on('ready', async () => {
 	try {
 		const storedUsers = await Users.findAll();
@@ -99,12 +100,12 @@ client.on('message', async message => {
 
 	if (message.author.bot || message.channel.type == 'dm') return;
 
-	let guild = guildCommands.get(message.guild.id);
-	if (!guild) guild = await guildCommands.newGuild(message.guild.id);
-	const prefix = await guildCommands.getPrefix(message.guild.id);
+	const guild = await guildCommands.getGuild(message.guild.id);
+	const prefix = await guildCommands.getPrefix(guild);
 	const id = message.author.id;
 	const user = await userCommands.getUser(id);
 
+	if (Number.isInteger(Number(message.content))) numberGame(message, guild);
 
 	// split message for further use
 	const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`);
@@ -135,7 +136,7 @@ client.on('message', async message => {
 	if (id != 137920111754346496) {
 		if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
 		const timestamps = cooldowns.get(command.name);
-		const cooldownAmount = command.cooldown || 1500 ;
+		const cooldownAmount = command.cooldown || 1500;
 		const now = Date.now();
 
 		if (timestamps.has(id)) {
@@ -146,7 +147,7 @@ client.on('message', async message => {
 				const hourLeft = timeLeft / 3600;
 				const minLeft = (hourLeft - Math.floor(hourLeft)) * 60;
 				const secLeft = Math.floor((minLeft - Math.floor(minLeft)) * 60);
-			
+
 				if (hourLeft >= 1) return message.reply(`Please wait **${Math.floor(hourLeft)} hours**, **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
 				else if (minLeft >= 1) return message.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
 				else return message.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`);
@@ -157,7 +158,7 @@ client.on('message', async message => {
 	}
 
 	if (user.firstCommand) {
-		client.commands.get('changelog').execute(message, args, user, client, logger);
+		client.commands.get('changelog').execute(message, args, user, guild, client, logger);
 		user.firstCommand = false;
 		logger.info(`New user ${message.author.tag}`);
 		user.save();
@@ -173,7 +174,7 @@ client.on('message', async message => {
 	// Execute command
 	logger.log('info', `${message.author.tag} Called command: ${commandName} ${args.join(' ')}, in guild: ${message.guild.name}`);
 	try {
-		command.execute(message, args, user, client, logger);
+		command.execute(message, args, user, guild, client, logger);
 	}
 	catch (e) {
 		logger.error(e.stack);
@@ -181,8 +182,86 @@ client.on('message', async message => {
 	}
 });
 
+function numberGame(message, guild) {
+	const numberGameInfo = client.guildCommands.getNumberGame(guild);
 
+	if (!numberGameInfo || message.channel.id !== numberGameInfo.channelId) return;
+	const number = Number(message.content);
 
+	if (numberGameInfo.currentNumber == 0 && number != 1) return;
+
+	if (numberGameInfo.lastUserId == message.author.id) {
+		message.channel.send(`**You can't count twice in a row.**\n${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!\nStarting again from **1**.`);
+		numberGameInfo.currentNumber = 0;
+		numberGameInfo.lastUserId = null;
+		numberGameInfo.streaksRuined++;
+		message.react('❌');
+
+	}
+	else if (number == numberGameInfo.currentNumber + 1) {
+		
+		switch (number) {
+			case 42:
+				message.react(emojiCharacters[0]);
+				break;
+			case 69:
+				message.react('🍆');
+				break;
+			case 100:
+				message.react('💯');
+				break;
+			case 111:
+				message.react(emojiCharacters[1]);
+				break;
+			case 222:
+				message.react(emojiCharacters[2]);
+				break;
+			case 333:
+				message.react(emojiCharacters[3]);
+				break;
+			case 444:
+				message.react(emojiCharacters[4]);
+				break;
+			case 555:
+				message.react(emojiCharacters[5]);
+				break;
+			case 666:
+				message.react('✡️');
+				break;
+			case 777:
+				message.react('🍀');
+				break;
+			case 888:
+				message.react(emojiCharacters[8]);
+				break;
+			case 999:
+				message.react(emojiCharacters[9]);
+				break;
+			case 1000:
+				message.react(emojiCharacters[1]);
+				message.react('🇰');
+				break;
+
+			default:
+				message.react('✅');
+				break;
+		}
+			
+		if (number > numberGameInfo.highestStreak) numberGameInfo.highestStreak = number;
+		numberGameInfo.currentNumber++;
+		numberGameInfo.totalCounted++;
+		numberGameInfo.lastUserId = message.author.id;
+	}
+	else {
+		message.channel.send(`**Wrong number.**\n${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!\nStarting again from **1**.`);
+		numberGameInfo.currentNumber = 0;
+		numberGameInfo.lastUserId = null;
+		numberGameInfo.streaksRuined++;
+		message.react('❌');
+	}
+
+	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);
+}
 
 
 

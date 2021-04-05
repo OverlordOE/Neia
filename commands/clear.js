@@ -9,7 +9,7 @@ module.exports = {
 	example: '',
 
 
-	execute(message, args, msgUser, client, logger) {
+	execute(message, args, msgUser, msgGuild, client, logger) {
 		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');
 
 		const guildIDData = client.music.active.get(message.guild.id);

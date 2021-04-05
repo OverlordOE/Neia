@@ -9,7 +9,7 @@ module.exports = {
 	aliases: ['inv', 'bug', 'join', 'support', 'link'],
 	example: '',
 
-	execute(message, args, msgUser, client, logger) {
+	execute(message, args, msgUser, msgGuild, client, logger) {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Invites')
