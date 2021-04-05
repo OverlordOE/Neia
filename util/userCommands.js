@@ -10,7 +10,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 const moment = require('moment');
 const Discord = require('discord.js');
 const userCommands = new Discord.Collection();
-const Users = sequelize.import('../models/Users');
+const Users = require('../models/Users')(sequelize, Sequelize);
 
 
 Reflect.defineProperty(userCommands, 'newUser', {

@@ -9,7 +9,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 	logging: false,
 	storage: 'database.sqlite',
 });
-const Guilds = sequelize.import('../models/Guilds');
+const Guilds = require('../models/Guilds')(sequelize, Sequelize);
 
 
 // GUILDS
