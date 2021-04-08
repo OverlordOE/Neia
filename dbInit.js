@@ -9,8 +9,8 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 // Import tables
-sequelize.import('models/Users');
-sequelize.import('models/Guilds');
+require('./models/Users')(sequelize, Sequelize);
+require('./models/Guilds')(sequelize, Sequelize);
 
 
 // Execute node dbInit.js --force or node dbInit.js -f to force update the tables (this resets the db but removes unused tables).
