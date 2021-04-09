@@ -50,6 +50,12 @@ module.exports = function execute(message, user, guild, client, logger) {
 
 	function easterEggs() {
 		switch (number) {
+			case 7:
+				message.react('🍀');
+				break;
+			case 13:
+				message.react('✡️');
+				break;
 			case 42:
 				message.react(client.emojiCharacters[0]);
 				break;
@@ -67,6 +73,12 @@ module.exports = function execute(message, user, guild, client, logger) {
 				break;
 			case 333:
 				message.react(client.emojiCharacters[3]);
+				break;
+			case 314:
+				message.react('🥧');
+				break;
+			case 404:
+				message.react('❔');
 				break;
 			case 444:
 				message.react(client.emojiCharacters[4]);
