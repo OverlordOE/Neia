@@ -21,6 +21,7 @@ module.exports = {
 			.setThumbnail(message.guild.iconURL())
 			.addField('Channel', channel)
 			.addField('Current Number', numberGameInfo.currentNumber, true)
+			.addField('Last Checkpoint', numberGameInfo.lastCheckpoint, true)
 			.addField('Total Numbers Counted', numberGameInfo.totalCounted, true)
 			.addField('Highest Streak', numberGameInfo.highestStreak, true)
 			.addField('Streaks Ruined', numberGameInfo.streaksRuined, true)

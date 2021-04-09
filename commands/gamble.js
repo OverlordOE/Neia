@@ -1,4 +1,3 @@
-const emojiCharacters = require('../data/emojiCharacters');
 const Discord = require('discord.js');
 module.exports = {
 	name: 'Gamble',
@@ -15,7 +14,7 @@ module.exports = {
 		let gambleType = '';
 
 		const filter = (reaction, user) => {
-			return ['✂️', emojiCharacters[5], '🃏'].includes(reaction.emoji.name) && user.id === message.author.id;
+			return ['✂️', client.emojiCharacters[5], '🃏'].includes(reaction.emoji.name) && user.id === message.author.id;
 		};
 
 		const embed = new Discord.MessageEmbed()
@@ -34,13 +33,13 @@ module.exports = {
 				}
 
 				if (gambleType == 'rock' || gambleType == 'rps' || gambleType == 'rock paper scissors' || gambleType == 'r') RPS(msgUser, logger, sentMessage, embed);
-				else if (gambleType == 'number' || gambleType == 'numbers') oneInFive(msgUser, logger, sentMessage, embed);
+				else if (gambleType == 'number' || gambleType == 'numbers') oneInFive(msgUser, logger, sentMessage, embed, client);
 				else if (gambleType == 'blackjack' || gambleType == 'jack' || gambleType == 'black') blackjack(msgUser, logger, sentMessage, embed);
 
 				else {
 					sentMessage.edit(embed.setDescription(`You can play the following games:\n
 
-							${emojiCharacters[5]}__Number Guessing__\n 
+							${client.emojiCharacters[5]}__Number Guessing__\n 
 							Guess which number is correct, guess right and you win.\n
 					
 							✂️__Rock, paper, scissors__\n
@@ -52,7 +51,7 @@ module.exports = {
 							Press one of the emojis below to start a game.
 					`));
 					sentMessage.react('✂️');
-					sentMessage.react(emojiCharacters[5]);
+					sentMessage.react(client.emojiCharacters[5]);
 					sentMessage.react('🃏');
 
 					sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
@@ -60,7 +59,7 @@ module.exports = {
 							const reaction = collected.first();
 
 							sentMessage.reactions.removeAll();
-							if (reaction.emoji.name == emojiCharacters[5]) oneInFive(msgUser, logger, sentMessage, embed);
+							if (reaction.emoji.name == client.emojiCharacters[5]) oneInFive(msgUser, logger, sentMessage, embed, client);
 							else if (reaction.emoji.name == '✂️') RPS(msgUser, logger, sentMessage, embed);
 							else if (reaction.emoji.name == '🃏') blackjack(msgUser, logger, sentMessage, embed);
 						})
@@ -79,16 +78,16 @@ module.exports = {
 };
 
 
-async function oneInFive(msgUser, logger, sentMessage, embed) {
+async function oneInFive(msgUser, logger, sentMessage, embed, client) {
 	const filter = (reaction, user) => {
-		return [emojiCharacters[1], emojiCharacters[2], emojiCharacters[3], emojiCharacters[4], emojiCharacters[5]].includes(reaction.emoji.name) && user.id === msgUser.user_id;
+		return [client.emojiCharacters[1], client.emojiCharacters[2], client.emojiCharacters[3], client.emojiCharacters[4], client.emojiCharacters[5]].includes(reaction.emoji.name) && user.id === msgUser.user_id;
 	};
 
 	const answer = Math.floor((Math.random() * 5) + 1);
 
 	await sentMessage.edit(embed.setDescription('Guess the number between 1 and 5.').setTitle('Numbers'))
 		.then(() => {
-			for (let i = 1; i < 6; i++) sentMessage.react(emojiCharacters[i]);
+			for (let i = 1; i < 6; i++) sentMessage.react(client.emojiCharacters[i]);
 		})
 		.catch(e => {
 			logger.log('error', `One of the emojis failed to react because of:\n${e.info}`);
@@ -100,7 +99,7 @@ async function oneInFive(msgUser, logger, sentMessage, embed) {
 			const reaction = collected.first();
 
 
-			if (reaction.emoji.name === emojiCharacters[answer]) {
+			if (reaction.emoji.name === client.emojiCharacters[answer]) {
 				embed.setColor('#00fc43');
 				sentMessage.edit(embed.setDescription('Correct! You have won.'));
 			}

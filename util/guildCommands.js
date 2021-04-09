@@ -19,12 +19,13 @@ Reflect.defineProperty(guildCommands, 'newGuild', {
 			guild_id: id,
 			prefix: process.env.PREFIX,
 			numberGame: JSON.stringify({
-				currentNumber: 0,
 				lastUserId: null,
 				channelId: null,
-				highestStreak: 0,
+				currentNumber: 0,
+				lastCheckpoint: 0,
 				totalCounted: 0,
 				streaksRuined: 0,
+				highestStreak: 0,
 			}),
 		});
 		guildCommands.set(id, guild);
