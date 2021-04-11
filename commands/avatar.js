@@ -11,12 +11,11 @@ module.exports = {
 
 	execute(message, args, msgUser, msgGuild, client, logger) {
 		const target = message.mentions.users.first() || message.author;
-		const avatar = target.displayAvatarURL({ dynamic: true });
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`${target.tag}'s Avatar`)
-			.setDescription(avatar)
-			.setImage(avatar)
+			.setDescription(target.displayAvatarURL({ dynamic: true }))
+			.setImage(target.displayAvatarURL({ dynamic: true }))
 			.setColor(client.userCommands.getColour(msgUser));
 
 		message.channel.send(embed);
