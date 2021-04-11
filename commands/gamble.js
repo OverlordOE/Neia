@@ -5,8 +5,8 @@ module.exports = {
 	description: 'Play 1 of 3 minigames Rock, paper, scissors; Number guessing or Blackjack.',
 	category: 'misc',
 	aliases: ['guess'],
-	args: false,
-	usage: '<minigame>',
+	args: true,
+	usage: '<gamble amount> <minigame>',
 	example: 'blackjack',
 
 	execute(message, args, msgUser, msgGuild, client, logger) {
