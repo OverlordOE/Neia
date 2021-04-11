@@ -1,29 +1,26 @@
 const Discord = require('discord.js');
 module.exports = {
 	name: 'Stats',
-	summary: 'Shows how much servers and users use Neia',
-	description: 'Shows how much servers and users use Neia.',
+	summary: 'Shows your or the tagged user\'s stats and balance',
+	description: 'Shows your or the tagged user\'s stats and balance.',
 	category: 'misc',
-	aliases: ['stat', 'server', 'members'],
+	aliases: ['s', 'stat', 'info'],
 	args: false,
 	usage: '',
-	example: '',
 
 	async execute(message, args, msgUser, msgGuild, client, logger) {
+		const target = message.mentions.users.first() || message.author;
+		const user = await client.userCommands.getUser(target.id);
 
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neia Stats')
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-			.setColor(client.userCommands.getColour(msgUser))
-			.setFooter('Neia', client.user.displayAvatarURL({ dynamic: true }));
+			.setTitle(`${target.tag}'s General Stats`)
+			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
+			.addField('Balance:', `${client.util.formatNumber(user.balance)}💰`)
+			.addField('Numbers Counted:', user.numbersCounted, true)
+			.addField('Streaks Ruined:', user.streaksRuined, true)
+			.setFooter('You can tag someone else to get their stats.', client.user.displayAvatarURL())
+			;
 
-		let guildTotal = 0;
-		let memberTotal = 0;
-		client.guilds.cache.forEach(guild => {
-			guildTotal++;
-			if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount);
-		});
-		message.channel.send(embed.setDescription(`Neia is in **${guildTotal}** servers with a total of **${memberTotal}** users.`));
-		client.user.setActivity(`with ${memberTotal} users.`);
+		return message.channel.send(embed);
 	},
 };

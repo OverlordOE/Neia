@@ -10,7 +10,22 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: '',
 			allowNull: false,
 		},
-
+		
+		balance: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		numbersCounted: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		streaksRuined: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
 
 		// MISC
 		firstCommand: {

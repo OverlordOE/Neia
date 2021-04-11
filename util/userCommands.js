@@ -25,14 +25,28 @@ Reflect.defineProperty(userCommands, 'newUser', {
 		return user;
 	},
 });
-
-
-// Misc
 Reflect.defineProperty(userCommands, 'getUser', {
 	value: async function getUser(id) {
 		let user = userCommands.get(id);
 		if (!user) user = await userCommands.newUser(id);
 		return user;
+	},
+});
+
+
+
+
+
+
+// Misc
+Reflect.defineProperty(userCommands, 'addBalance', {
+	value: function addBalance(user, amount) {
+		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
+		user.balance += Number(amount);
+		if (amount > 0) user.totalEarned += Number(amount);
+
+		user.save();
+		return Math.floor(user.balance);
 	},
 });
 
