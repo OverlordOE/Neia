@@ -1,6 +1,8 @@
+const { userCommands } = require('../util/userCommands');
+
 const checkpoints = [50, 100, 250, 400, 600, 800, 1000, 1250, 1500, 1750, 2000];
 
-module.exports = function execute(message, user, guild, client, logger) {
+module.exports = function execute(message, msgUser, guild, client, logger) {
 
 	const numberGameInfo = client.guildCommands.getNumberGame(guild);
 
@@ -15,7 +17,7 @@ module.exports = function execute(message, user, guild, client, logger) {
 		if (numberGameInfo.lastCheckpoint > 0) checkpoint();
 		else wrongCount();
 	}
-	else if (number == numberGameInfo.currentNumber + 1) {succesfullCount();}
+	else if (number == numberGameInfo.currentNumber + 1) succesfullCount();
 	else {
 		message.react('❌');
 		message.channel.send(`**Wrong number.**\n${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!`);
@@ -37,6 +39,9 @@ module.exports = function execute(message, user, guild, client, logger) {
 		numberGameInfo.currentNumber++;
 		numberGameInfo.totalCounted++;
 		numberGameInfo.lastUserId = message.author.id;
+		client.userCommands.addBalance(msgUser, number);
+		msgUser.numbersCounted++;
+		msgUser.save();
 	}
 
 	function wrongCount() {
@@ -45,8 +50,9 @@ module.exports = function execute(message, user, guild, client, logger) {
 		numberGameInfo.lastCheckpoint = 0;
 		numberGameInfo.lastUserId = null;
 		numberGameInfo.streaksRuined++;
+		msgUser.streaksRuined++;
+		msgUser.save();
 	}
-
 
 	function easterEggs() {
 		switch (number) {
@@ -114,5 +120,8 @@ module.exports = function execute(message, user, guild, client, logger) {
 		numberGameInfo.currentNumber = numberGameInfo.lastCheckpoint;
 		numberGameInfo.lastCheckpoint = 0;
 		numberGameInfo.lastUserId = null;
+		numberGameInfo.streaksRuined++;
+		msgUser.streaksRuined++;
+		msgUser.save();
 	}
 };
