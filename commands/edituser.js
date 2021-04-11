@@ -9,8 +9,8 @@ module.exports = {
 
 	async execute(message, args, msgUser, msgGuild, client, logger) {
 		const target = await client.userCommands.getUser(message.mentions.users.first().id);
+	
 		try {
-
 			if (args[1] == 'reset') {
 				const user = await client.userCommands.getUser(target.id);
 				user.destroy();
