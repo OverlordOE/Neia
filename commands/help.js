@@ -1,8 +1,9 @@
 const Discord = require('discord.js');
 module.exports = {
 	name: 'Help',
+	summary: 'This command',
 	description: 'List all the commands or get info about a specific command.',
-	category: 'help',
+	category: 'info',
 	aliases: ['commands'],
 	usage: '<command name>',
 	example: 'avatar',
@@ -13,6 +14,7 @@ module.exports = {
 		let adminCommands = '';
 		let musicCommands = '';
 		let miscCommands = '';
+		let infoCommands = '';
 
 		const help = new Discord.MessageEmbed()
 			.setColor(client.userCommands.getColour(msgUser))
@@ -31,10 +33,14 @@ module.exports = {
 					case 'misc':
 						miscCommands += `**${command.name}** - ${command.summary}\n`;
 						break;
+					case 'info':
+						infoCommands += `**${command.name}** - ${command.summary}\n`;
+						break;
 				}
 			});
 
 			help.setDescription(`__**Miscellaneous Commands**__\n${miscCommands}\n
+								__**Info or Stat Commands**__\n${infoCommands}\n
 								__**Music Commands**__\n${musicCommands}\n
 								__**Admin Commands**__\n${adminCommands}\n
 								`)

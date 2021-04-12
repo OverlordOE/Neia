@@ -3,7 +3,7 @@ module.exports = {
 	name: 'Botstats',
 	summary: 'Shows how much servers and users use Neia',
 	description: 'Shows how much servers and users use Neia.',
-	category: 'misc',
+	category: 'info',
 	aliases: ['bs'],
 	args: false,
 	usage: '',

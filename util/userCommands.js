@@ -68,7 +68,7 @@ Reflect.defineProperty(userCommands, 'getVote', {
 
 
 Reflect.defineProperty(userCommands, 'getColour', {
-	value: function getColour(user) {
+	value: function getColour() {
 		return '#fcfcfc';
 	},
 });

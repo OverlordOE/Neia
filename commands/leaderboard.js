@@ -3,7 +3,7 @@ module.exports = {
 	name: 'Leaderboard',
 	summary: 'Shows global leaderboard',
 	description: 'Shows global leaderboard of the different stats.',
-	category: 'misc',
+	category: 'info',
 	aliases: ['lead', 'top', 'ranking'],
 	args: false,
 	usage: '<page>',

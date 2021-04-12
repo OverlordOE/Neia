@@ -2,8 +2,8 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'Stats',
 	summary: 'Shows your or the tagged user\'s stats and balance',
-	description: 'Shows your or the tagged user\'s stats and balance.',
-	category: 'misc',
+	description: 'Shows the tagged user\'s or your stats and balance.',
+	category: 'info',
 	aliases: ['s', 'stat', 'info'],
 	args: false,
 	usage: '',

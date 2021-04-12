@@ -7,7 +7,7 @@ module.exports = {
 	aliases: ['guess'],
 	args: true,
 	usage: '<gamble amount> <minigame>',
-	example: 'blackjack',
+	example: '100 blackjack',
 
 	execute(message, args, msgUser, msgGuild, client, logger) {
 		let gambleType = '';
