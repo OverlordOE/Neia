@@ -1,5 +1,3 @@
-const { userCommands } = require('../util/userCommands');
-
 const checkpoints = [50, 100, 250, 400, 600, 800, 1000, 1250, 1500, 1750, 2000];
 
 module.exports = function execute(message, msgUser, guild, client, logger) {
@@ -73,6 +71,12 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 				break;
 			case 111:
 				message.react(client.emojiCharacters[1]);
+				break;
+			case 112:
+				message.react('🚑');
+				break;
+			case 123:
+				message.react(client.emojiCharacters[4]);
 				break;
 			case 222:
 				message.react(client.emojiCharacters[2]);
