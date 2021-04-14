@@ -1,12 +1,10 @@
-/* eslint-disable no-shadow */
-/* eslint-disable max-nested-callbacks */
 const Discord = require('discord.js');
 module.exports = {
 	name: 'Trade',
 	summary: 'Trade money to other people',
 	description: 'Trade money to other people.',
 	aliases: ['give', 'donate', 'transfer'],
-	category: 'economy',
+	category: 'misc',
 	args: true,
 	usage: '<target> <amount>',
 	example: '@overlordOE 25',
