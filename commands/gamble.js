@@ -29,29 +29,27 @@ module.exports = {
 			.setFooter('Use the emojis to choose your game.', client.user.displayAvatarURL({ dynamic: true }));
 
 
-		message.channel.send(embed)
-			.then(sentMessage => {
 
-				for (let i = 0; i < args.length; i++) {
-					if (!(isNaN(args[i]))) gambleAmount = parseInt(args[i]);
-					else if (args[i] == 'all') gambleAmount = Math.floor(msgUser.balance);
-					else if (gambleType.length > 2) gambleType += ` ${args[i]}`;
-					else gambleType += `${args[i]}`;
-				}
+		for (let i = 0; i < args.length; i++) {
+			if (!(isNaN(args[i]))) gambleAmount = parseInt(args[i]);
+			else if (args[i] == 'all') gambleAmount = Math.floor(msgUser.balance);
+			else if (gambleType.length > 2) gambleType += ` ${args[i]}`;
+			else gambleType += `${args[i]}`;
+		}
 
-				if (!gambleAmount || isNaN(gambleAmount)) return sentMessage.edit(embed.setDescription(`Sorry *${message.author}*, that's an invalid amount.`));
-				if (gambleAmount > msgUser.balance) return sentMessage.edit(embed.setDescription(`Sorry *${message.author}*, you only have ${client.util.formatNumber(msgUser.balance)}💰.`));
-				if (gambleAmount <= 0) return sentMessage.edit(embed.setDescription(`Please enter an amount greater than zero, *${message.author}*.`));
+		if (!gambleAmount || isNaN(gambleAmount)) return message.channel.send(embed.setDescription(`Sorry *${message.author}*, that's an invalid amount.`));
+		if (gambleAmount > msgUser.balance) return message.channel.send(embed.setDescription(`Sorry *${message.author}*, you only have ${client.util.formatNumber(msgUser.balance)}💰.`));
+		if (gambleAmount <= 0) return message.channel.send(embed.setDescription(`Please enter an amount greater than zero, *${message.author}*.`));
 
-				client.userCommands.addBalance(msgUser, -gambleAmount);
+		client.userCommands.addBalance(msgUser, -gambleAmount);
 
-				if (gambleType == 'rock' || gambleType == 'rps' || gambleType == 'rock paper scissors' || gambleType == 'r') RPS(sentMessage);
-				else if (gambleType == 'number' || gambleType == 'numbers') oneInFive(sentMessage);
-				else if (gambleType == 'blackjack' || gambleType == 'jack' || gambleType == 'black' || gambleType == 'bj') blackjack(sentMessage);
-				else if (gambleType == 'fruit' || gambleType == 'fruits' || gambleType == 'fruitslots' || gambleType == 'slots' || gambleType == 's') fruitSlots(sentMessage);
+		if (gambleType == 'rock' || gambleType == 'rps' || gambleType == 'rock paper scissors' || gambleType == 'r') RPS();
+		else if (gambleType == 'number' || gambleType == 'numbers') oneInFive();
+		else if (gambleType == 'blackjack' || gambleType == 'jack' || gambleType == 'black' || gambleType == 'bj') blackjack();
+		else if (gambleType == 'fruit' || gambleType == 'fruits' || gambleType == 'fruitslots' || gambleType == 'slots' || gambleType == 's') fruitSlots();
 
-				else {
-					sentMessage.edit(embed.setDescription(`You can play the following games:\n
+		else {
+			message.channel.send(embed.setDescription(`You can play the following games:\n
 
 							${client.emojiCharacters[5]}__**Number Guessing**__\n
 							Guess which number is correct, guess right and you win.\n
@@ -70,29 +68,30 @@ module.exports = {
 							Potential winnings: ${client.util.formatNumber(slotsRate * gambleAmount)}💰
 						
 							Press one of the emojis below to start a game.
-					`));
+					`))
+				.then(sentMessage => {
 					for (let i = 0; i < icons.length; i++) sentMessage.react(icons[i]);
 
 					sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
 						.then(collected => {
 							const reaction = collected.first();
 
-							sentMessage.reactions.removeAll();
 							if (reaction.emoji.name == client.emojiCharacters[5]) oneInFive(sentMessage);
 							else if (reaction.emoji.name == '✂️') RPS(sentMessage);
 							else if (reaction.emoji.name == '🃏') blackjack(sentMessage);
 							else if (reaction.emoji.name == '🍒') fruitSlots(sentMessage);
+
+							sentMessage.delete();
 						})
 						.catch(error => {
 							message.reply('You failed to react in time.');
-							sentMessage.reactions.removeAll();
-							return logger.error(error.stack);
+							return sentMessage.reactions.removeAll();
 						});
-				}
-			});
+				});
+		}
 
 
-		function oneInFive(sentMessage) {
+		async function oneInFive() {
 			filter = (reaction, user) => {
 				return [client.emojiCharacters[1], client.emojiCharacters[2], client.emojiCharacters[3], client.emojiCharacters[4], client.emojiCharacters[5]]
 					.includes(reaction.emoji.name) && user.id === msgUser.user_id;
@@ -101,7 +100,7 @@ module.exports = {
 			const answer = Math.floor((Math.random() * 5) + 1);
 			const winAmount = numberRate * gambleAmount;
 
-			sentMessage.edit(embed.setDescription('Guess the number between 1 and 5.').setTitle('Numbers Guessing'));
+			const sentMessage = await message.channel.send(embed.setDescription('Guess the number between 1 and 5.').setTitle('Numbers Guessing'));
 			for (let i = 1; i < 6; i++) sentMessage.react(client.emojiCharacters[i]);
 
 			sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
@@ -121,7 +120,7 @@ module.exports = {
 				});
 		}
 
-		function blackjack(sentMessage) {
+		async function blackjack() {
 			filter = (reaction, user) => {
 				return ['🃏', '✅'].includes(reaction.emoji.name) && user.id === msgUser.user_id;
 			};
@@ -135,72 +134,69 @@ module.exports = {
 			let playerHand = '';
 			let botHand = '';
 
-			sentMessage.edit(embed
+			const sentMessage = await message.channel.send(embed
 				.setDescription('[Click here for the rules](https://bicyclecards.com/how-to-play/blackjack/)\nPress 🃏 to hit or ✅ to stand.')
-				.setTitle('Blackjack'))
-				.then(() => {
-					sentMessage.react('🃏'); // result 1
-					sentMessage.react('✅'); // result 2
+				.setTitle('Blackjack'));
 
-					const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
-					for (let i = 0; i < 2; i++) {
-						getCard('player');
-						getCard('client');
-					}
-					setEmbed();
+			sentMessage.react('🃏'); // result 1
+			sentMessage.react('✅'); // result 2
 
-					collector.on('collect', reaction => {
+			const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
+			for (let i = 0; i < 2; i++) {
+				getCard('player');
+				getCard('client');
+			}
+			setEmbed();
+
+			collector.on('collect', reaction => {
+				reaction.users.remove(msgUser.user_id);
+
+				switch (reaction.emoji.name) {
+
+					case '🃏':
 						reaction.users.remove(msgUser.user_id);
-
-						switch (reaction.emoji.name) {
-
-							case '🃏':
-								reaction.users.remove(msgUser.user_id);
-								getCard('player');
-								if (botHandValue < 17) getCard('client');
-								setEmbed();
-								if (playerHandValue >= 21 || botHandValue > 21 || (botHandValue >= 17 && playerHandValue > botHandValue) || cardsDrawn >= 5) {
-									collector.stop();
-									return;
-								}
-								break;
-
-							case '✅':
-								while (botHandValue < 17) {
-									getCard('client');
-									setEmbed();
-								}
-								collector.stop();
-								return;
+						getCard('player');
+						if (botHandValue < 17) getCard('client');
+						setEmbed();
+						if (playerHandValue >= 21 || botHandValue > 21 || (botHandValue >= 17 && playerHandValue > botHandValue) || cardsDrawn >= 5) {
+							collector.stop();
+							return;
 						}
-					});
+						break;
 
-					collector.on('end', () => {
-						if (playerHandValue > 21) sentMessage.edit(embed.setDescription(`__You busted__\n\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
-						else if (botHandValue > 21) {
-							const balance = client.userCommands.addBalance(msgUser, winAmount);
-							sentMessage.edit(embed.setDescription(`__The bot busted__. You Win!\n\nYou won **${winAmount}💰** and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
+					case '✅':
+						while (botHandValue < 17) {
+							getCard('client');
+							setEmbed();
 						}
-						else if (cardsDrawn >= 5) {
-							const balance = client.userCommands.addBalance(msgUser, winAmount);
-							return sentMessage.edit(embed.setDescription(`You have drawn 5 cards without busting.\n__You win__\n\n**You won ${winAmount}**💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
-						}
-						else if (botHandValue == playerHandValue) {
-							const balance = client.userCommands.addBalance(msgUser, gambleAmount);
-							sentMessage.edit(embed.setDescription(`__Its a draw__\n\nYour balance is ${client.util.formatNumber(balance)}💰`));
-						}
-						else if (playerHandValue > botHandValue) {
-							const balance = client.userCommands.addBalance(msgUser, winAmount);
-							sentMessage.edit(embed.setDescription(`__You win__\n\nYou won ${winAmount}💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
-						}
-						else if (botHandValue > playerHandValue) sentMessage.edit(embed.setDescription(`__The bot wins__\n\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
+						collector.stop();
+						return;
+				}
+			});
 
-						sentMessage.reactions.removeAll();
-					});
-				})
-				.catch(e => {
-					return logger.error(e.stack);
-				});
+			collector.on('end', () => {
+				if (playerHandValue > 21) sentMessage.edit(embed.setDescription(`__You busted__\n\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
+				else if (botHandValue > 21) {
+					const balance = client.userCommands.addBalance(msgUser, winAmount);
+					sentMessage.edit(embed.setDescription(`__The bot busted__. You Win!\n\nYou won **${winAmount}💰** and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
+				}
+				else if (cardsDrawn >= 5) {
+					const balance = client.userCommands.addBalance(msgUser, winAmount);
+					return sentMessage.edit(embed.setDescription(`You have drawn 5 cards without busting.\n__You win__\n\n**You won ${winAmount}**💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
+				}
+				else if (botHandValue == playerHandValue) {
+					const balance = client.userCommands.addBalance(msgUser, gambleAmount);
+					sentMessage.edit(embed.setDescription(`__Its a draw__\n\nYour balance is ${client.util.formatNumber(balance)}💰`));
+				}
+				else if (playerHandValue > botHandValue) {
+					const balance = client.userCommands.addBalance(msgUser, winAmount);
+					sentMessage.edit(embed.setDescription(`__You win__\n\nYou won ${winAmount}💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
+				}
+				else if (botHandValue > playerHandValue) sentMessage.edit(embed.setDescription(`__The bot wins__\n\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
+
+				sentMessage.reactions.removeAll();
+			});
+
 
 			function setEmbed() {
 				embed.spliceFields(0, 5, [
@@ -264,7 +260,7 @@ module.exports = {
 			}
 		}
 
-		function RPS(sentMessage) {
+		async function RPS() {
 			const symbols = ['✊', '🧻', '✂️'];
 			filter = (reaction, user) => {
 				return symbols.includes(reaction.emoji.name) && user.id === msgUser.user_id;
@@ -273,7 +269,7 @@ module.exports = {
 			const botAnswer = Math.floor(Math.random() * symbols.length);
 			const winAmount = rpsRate * gambleAmount;
 
-			sentMessage.edit(embed.setDescription('Choose Rock✊, Paper🧻 or Scissors✂️!').setTitle('Rock, Paper, Scissors'));
+			const sentMessage = await message.channel.send(embed.setDescription('Choose Rock✊, Paper🧻 or Scissors✂️!').setTitle('Rock, Paper, Scissors'));
 			for (let i = 0; i < symbols.length; i++) sentMessage.react(symbols[i]);
 
 
@@ -298,7 +294,7 @@ module.exports = {
 				.catch(() => sentMessage.reactions.removeAll());
 		}
 
-		function fruitSlots(sentMessage) {
+		async function fruitSlots() {
 			const icons = ['🍓', '🍉', '🍒', '🍌', '🍋'];
 			const slots = [];
 			const slotX = 3;
@@ -314,7 +310,7 @@ module.exports = {
 					slots[i][j] = slotIcon;
 				}
 			}
-			sentMessage.edit(embed.setDescription(output));
+			const sentMessage = await message.channel.send(embed.setDescription(output));
 			setEmbed();
 
 			function checkWins() {
@@ -322,33 +318,51 @@ module.exports = {
 					rowsWon++;
 					output += '**X**';
 				}
+				else output += 'x';
+			}
+
+			function checkVerticalWins(column) {
+				let win = true;
+				const tempIcon = slots[0][column];
+
+				for (let i = 0; i < slotY; i++)
+					if (slots[i][column] != tempIcon) win = false;
+
+				return win;
 			}
 
 			function endGame() {
 				if (rowsWon >= 1) {
 					const winAmount = gambleAmount * slotsRate * rowsWon;
 					const balance = client.userCommands.addBalance(msgUser, gambleAmount);
-					output += `\n__**You won**__ **${rowsWon}** rows!\nYou gained ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`;
+					output += `\n\n__**You won**__ **${rowsWon}** row(s)!\nYou gained ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`;
 				}
-				else {
-					output += `\n__**You lost**__\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
-				}
+				else output += `\n\n__**You lost**__\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
 
 				sentMessage.edit(embed.setDescription(output));
 			}
 
 			function setEmbed() {
 				for (let j = 0; j < slots[count].length; j++) output += slots[count][j];
-				
+
 				checkWins();
 				output += '\n';
 				sentMessage.edit(embed.setDescription(output));
 
 				count++;
-				if (count < 3) {
-					setTimeout(() => setEmbed(), 1000);
+				if (count < slotY) {
+					setTimeout(() => setEmbed(), 1500);
 				}
-				else endGame();
+				else {
+					for (let i = 0; i < slotX; i++) {
+						if (checkVerticalWins(i)) {
+							rowsWon++;
+							output += '**.X.**';
+						}
+						else output += '..x..';
+					}
+					endGame();
+				}
 			}
 
 
