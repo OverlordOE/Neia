@@ -334,7 +334,7 @@ module.exports = {
 			function endGame() {
 				if (rowsWon >= 1) {
 					const winAmount = gambleAmount * slotsRate * rowsWon;
-					const balance = client.userCommands.addBalance(msgUser, gambleAmount);
+					const balance = client.userCommands.addBalance(msgUser, winAmount);
 					output += `\n\n__**You won**__ **${rowsWon}** row(s)!\nYou gained ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`;
 				}
 				else output += `\n\n__**You lost**__\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
