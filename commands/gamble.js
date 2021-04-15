@@ -16,7 +16,7 @@ module.exports = {
 		const rpsRate = 1.80;
 		const numberRate = 3.2;
 		const blackjackRate = 2;
-		const slotsRate = 7.5;
+		const slotsRate = 6.5;
 
 		let filter = (reaction, user) => {
 			return icons.includes(reaction.emoji.name) && user.id === message.author.id;
@@ -27,7 +27,6 @@ module.exports = {
 			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
 			.setTitle('Neia\'s Gambling Imporium')
 			.setFooter('Use the emojis to choose your game.', client.user.displayAvatarURL({ dynamic: true }));
-
 
 
 		for (let i = 0; i < args.length; i++) {
@@ -41,7 +40,7 @@ module.exports = {
 		if (gambleAmount > msgUser.balance) return message.channel.send(embed.setDescription(`Sorry *${message.author}*, you only have ${client.util.formatNumber(msgUser.balance)}💰.`));
 		if (gambleAmount <= 0) return message.channel.send(embed.setDescription(`Please enter an amount greater than zero, *${message.author}*.`));
 
-		client.userCommands.addBalance(msgUser, -gambleAmount);
+		client.userCommands.addBalance(msgUser, -gambleAmount, true);
 
 		if (gambleType == 'rock' || gambleType == 'rps' || gambleType == 'rock paper scissors' || gambleType == 'r') RPS();
 		else if (gambleType == 'number' || gambleType == 'numbers') oneInFive();
@@ -108,7 +107,7 @@ module.exports = {
 					const reaction = collected.first();
 
 					if (reaction.emoji.name === client.emojiCharacters[answer]) {
-						const balance = client.userCommands.addBalance(msgUser, winAmount);
+						const balance = client.userCommands.addBalance(msgUser, winAmount, true);
 						embed.setColor('#00fc43');
 						sentMessage.edit(embed.setDescription(`Correct! You have successfully won ${client.util.formatNumber(winAmount)}💰.\nYour current balance is ${client.util.formatNumber(balance)}💰`));
 					}
@@ -177,11 +176,11 @@ module.exports = {
 			collector.on('end', () => {
 				if (playerHandValue > 21) sentMessage.edit(embed.setDescription(`__You busted__\n\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
 				else if (botHandValue > 21) {
-					const balance = client.userCommands.addBalance(msgUser, winAmount);
+					const balance = client.userCommands.addBalance(msgUser, winAmount, true);
 					sentMessage.edit(embed.setDescription(`__The bot busted__. You Win!\n\nYou won **${winAmount}💰** and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 				}
 				else if (cardsDrawn >= 5) {
-					const balance = client.userCommands.addBalance(msgUser, winAmount);
+					const balance = client.userCommands.addBalance(msgUser, winAmount, true);
 					return sentMessage.edit(embed.setDescription(`You have drawn 5 cards without busting.\n__You win__\n\n**You won ${winAmount}**💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 				}
 				else if (botHandValue == playerHandValue) {
@@ -189,7 +188,7 @@ module.exports = {
 					sentMessage.edit(embed.setDescription(`__Its a draw__\n\nYour balance is ${client.util.formatNumber(balance)}💰`));
 				}
 				else if (playerHandValue > botHandValue) {
-					const balance = client.userCommands.addBalance(msgUser, winAmount);
+					const balance = client.userCommands.addBalance(msgUser, winAmount, true);
 					sentMessage.edit(embed.setDescription(`__You win__\n\nYou won ${winAmount}💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 				}
 				else if (botHandValue > playerHandValue) sentMessage.edit(embed.setDescription(`__The bot wins__\n\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
@@ -286,7 +285,7 @@ module.exports = {
 						sentMessage.edit(embed.setDescription(`The bot chooses ${symbols[botAnswer]}. __You lose!__\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
 					}
 					else if (userAnswer - botAnswer === 1 || userAnswer - botAnswer === -2) {
-						const balance = client.userCommands.addBalance(msgUser, winAmount);
+						const balance = client.userCommands.addBalance(msgUser, winAmount, true);
 						sentMessage.edit(embed.setDescription(`The bot chooses ${symbols[botAnswer]}. __You Win!__\nYou won ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 					}
 					return sentMessage.reactions.removeAll();
@@ -334,7 +333,7 @@ module.exports = {
 			function endGame() {
 				if (rowsWon >= 1) {
 					const winAmount = gambleAmount * slotsRate * rowsWon;
-					const balance = client.userCommands.addBalance(msgUser, winAmount);
+					const balance = client.userCommands.addBalance(msgUser, winAmount, true);
 					output += `\n\n__**You won**__ **${rowsWon}** row(s)!\nYou gained ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`;
 				}
 				else output += `\n\n__**You lost**__\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
