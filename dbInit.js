@@ -14,10 +14,11 @@ require('./models/Guilds')(sequelize, Sequelize);
 
 
 // Execute node dbInit.js --force or node dbInit.js -f to force update the tables (this resets the db but removes unused tables).
-
+const force = process.argv.includes('--force') || process.argv.includes('-f');
+const alter = process.argv.includes('--alter') || process.argv.includes('-a');
 // Create tags
 sequelize
-	.sync({ force: true })
+	.sync({ alter: alter, force: force})
 	.then(async () => {
 		console.log('DB synced');
 		sequelize.close();

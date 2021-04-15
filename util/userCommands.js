@@ -20,6 +20,11 @@ Reflect.defineProperty(userCommands, 'newUser', {
 			user_id: id,
 			lastVote: now.subtract(1, 'days').toString(),
 			firstCommand: true,
+			streaksRuined: 0,
+			numbersCounted: 0,
+			gamblingDone: 0,
+			gamblingMoneyGained: 0,
+			gamblingMoneyLost: 0,
 		});
 		userCommands.set(id, user);
 		return user;
@@ -37,14 +42,17 @@ Reflect.defineProperty(userCommands, 'getUser', {
 
 
 
-
 // Misc
 Reflect.defineProperty(userCommands, 'addBalance', {
-	value: function addBalance(user, amount) {
+	value: function addBalance(user, amount, gambling = false) {
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 		user.balance += Number(amount);
-		if (amount > 0) user.totalEarned += Number(amount);
 
+		if (amount > 0 && gambling) user.gamblingMoneyGained += Number(amount);
+		else if (amount < 0 && gambling) {
+			user.gamblingMoneyLost -= Number(amount);
+			user.gamblingDone++;
+		}
 		user.save();
 		return Math.floor(user.balance);
 	},

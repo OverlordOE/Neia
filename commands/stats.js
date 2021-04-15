@@ -15,9 +15,12 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`${target.tag}'s General Stats`)
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
-			.addField('Balance:', `${client.util.formatNumber(user.balance)}💰`)
+			.addField('Balance:', `${client.util.formatNumber(user.balance)}💰`, true)
 			.addField('Numbers Counted:', user.numbersCounted, true)
 			.addField('Streaks Ruined:', user.streaksRuined, true)
+			.addField('Times Gambled:', user.gamblingDone, true)
+			.addField('Won with Gambling:', client.util.formatNumber(user.gamblingMoneyGained), true)
+			.addField('Lost with Gambling:', client.util.formatNumber(user.gamblingMoneyLost), true)
 			.setFooter('You can tag someone else to get their stats.', client.user.displayAvatarURL())
 			;
 
