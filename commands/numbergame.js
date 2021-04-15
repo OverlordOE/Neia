@@ -19,17 +19,17 @@ module.exports = {
 			.setTitle('Numbergame stats')
 			.setFooter('To change the channel for the number game use the `sc` command.', client.user.displayAvatarURL({ dynamic: true }))
 			.setThumbnail(message.guild.iconURL())
-			.addField('Channel', channel)
-			.addField('Current Number', numberGameInfo.currentNumber, true)
-			.addField('Last Checkpoint', numberGameInfo.lastCheckpoint, true)
-			;
-
-		if (numberGameInfo.lastUserId) {
+			.addField('Current Number', numberGameInfo.currentNumber)
+	
+			if (numberGameInfo.lastUserId) {
 			const lastCounter = await message.guild.members.fetch(numberGameInfo.lastUserId);
 			embed.addField('Last Counter', lastCounter, true);
 		}
-
-		embed.addField('Total Numbers Counted', numberGameInfo.totalCounted, true)
+	
+		embed.addField('Channel', channel, true)
+			.addField('Total Numbers Counted', numberGameInfo.totalCounted, true)
+			.addField('Last Checkpoint', numberGameInfo.lastCheckpoint, true)
+			.addField('Next Checkpoint', numberGameInfo.nextCheckpoint, true)
 			.addField('Highest Streak', numberGameInfo.highestStreak, true)
 			.addField('Streaks Ruined', numberGameInfo.streaksRuined, true)
 			;

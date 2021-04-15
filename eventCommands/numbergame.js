@@ -1,4 +1,4 @@
-const checkpoints = [50, 100, 250, 400, 600, 800, 1000, 1250, 1500, 1750, 2000];
+const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000];
 
 module.exports = function execute(message, msgUser, guild, client, logger) {
 
@@ -29,7 +29,9 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 		easterEggs();
 
 		if (checkpoints.includes(number)) {
+			const nextCheckpointIndex = checkpoints.indexOf(number) + 1;
 			numberGameInfo.lastCheckpoint = number;
+			numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
 			message.channel.send(`Checkpoint **${number}** reached!\nIf you make a mistake you will be reversed to this point`);
 		}
 
@@ -46,6 +48,7 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 		message.channel.send('Starting again from **1**.');
 		numberGameInfo.currentNumber = 0;
 		numberGameInfo.lastCheckpoint = 0;
+		numberGameInfo.nextCheckpoint = checkpoints[0];
 		numberGameInfo.lastUserId = null;
 		numberGameInfo.streaksRuined++;
 		msgUser.streaksRuined++;
