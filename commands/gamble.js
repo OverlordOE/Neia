@@ -3,7 +3,7 @@ module.exports = {
 	name: 'Gamble',
 	summary: 'Gives you a list of minigames to play',
 	description: 'Play 1 of 4 minigames Rock, paper, scissors; Number guessing ,Blackjack or Fruit Slots.',
-	category: 'misc',
+	category: 'economy',
 	aliases: ['guess'],
 	args: true,
 	usage: '<gamble amount> <minigame>',

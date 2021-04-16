@@ -4,7 +4,7 @@ module.exports = {
 	summary: 'Trade money to other people',
 	description: 'Trade money to other people.',
 	aliases: ['give', 'donate', 'transfer'],
-	category: 'misc',
+	category: 'economy',
 	args: true,
 	usage: '<target> <amount>',
 	example: '@overlordOE 25',
@@ -36,15 +36,15 @@ module.exports = {
 			else if (temp.length > 2) temp += ` ${args[i]}`;
 			else temp += `${args[i]}`;
 		}
-
+		if (!amount < 1) amount = 1;
+		
 		const item = client.userCommands.getItem(temp);
+		if (item && !await client.userCommands.hasItem(msgUser, item, amount)) return sentMessage.edit(embed.setDescription(`You don't have enough **${item.name}**.`));
 		const sentMessage = await message.channel.send(embed);
 		
 		if (target && item) itemTrade();
-		else if (target && amount > 1) moneyTrade();
-
+		else if (target) moneyTrade();
 		else if (amount > 1) return sentMessage.edit(embed.setDescription('You didn\'t specify a target.'));
-		else if (target) return sentMessage.edit(embed.setDescription('You didn\'t specify the amount or item you want to send.'));
 		else return sentMessage.edit(embed.setDescription('Please specify who you want to trade with and what you want to trade.'));
 
 

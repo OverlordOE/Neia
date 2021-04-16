@@ -4,10 +4,11 @@ module.exports = {
 	name: 'Item',
 	summary: 'Shows information about a specific item',
 	description: 'Shows information about a specific item.',
-	category: 'misc',
+	category: 'info',
 	aliases: ['items', 'i'],
 	args: false,
 	usage: '<item>',
+	example: 'chest',
 
 	execute(message, args, msgUser, msgGuild, client, logger) {
 		let temp = '';
