@@ -27,37 +27,33 @@ module.exports = {
 			else if (args[i].startsWith('<@') && args[i].endsWith('>')) {
 				let mention = args[i].slice(2, -1);
 				if (mention.startsWith('!')) mention = mention.slice(1);
+
 				target = client.users.cache.get(mention);
 				targetUser = await client.userCommands.getUser(target.id);
-				embed.setThumbnail(target.displayAvatarURL());
+				embed.setThumbnail(target.displayAvatarURL({ dynamic: true }));
 			}
 
 			else if (temp.length > 2) temp += ` ${args[i]}`;
 			else temp += `${args[i]}`;
 		}
 
+		const item = client.userCommands.getItem(temp);
+		const sentMessage = await message.channel.send(embed);
+		
+		if (target && item) itemTrade();
+		else if (target && amount > 1) moneyTrade();
 
-		message.channel.send(embed)
-			.then(sentMessage => {
-				// const item = client.userCommands.getItem(temp);
-				// if (target && item) itemTrade(client, target, amount, item, sentMessage, embed, msgUser);
-				if (target && amount > 1) moneyTrade(sentMessage);
-				else if (amount > 1) return sentMessage.edit(embed.setDescription('You didn\'t specify a target, please try again.'));
-				else if (amount < 1) return sentMessage.edit(embed.setDescription('You can\'t trade 0 or negative amounts, please try again.'));
-				else if (target) return sentMessage.edit(embed.setDescription('You didn\'t specify the amount you want to send, please try again.'));
-				else return sentMessage.edit(embed.setDescription('You didn\'t specify the amount you want to send or the target you want to send it too, please try again.'));
-			});
+		else if (amount > 1) return sentMessage.edit(embed.setDescription('You didn\'t specify a target.'));
+		else if (target) return sentMessage.edit(embed.setDescription('You didn\'t specify the amount or item you want to send.'));
+		else return sentMessage.edit(embed.setDescription('Please specify who you want to trade with and what you want to trade.'));
 
 
-		function moneyTrade(sentMessage) {
-			if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
+		function moneyTrade() {
+			if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a whole number`));
 			else if (amount < 1) amount = 1;
 
 			let balance = msgUser.balance;
-
-			if (!amount || isNaN(amount)) return sentMessage.edit(embed.setDescription(`${amount} is an invalid amount.`));
 			if (amount > balance) return sentMessage.edit(embed.setDescription(`You only have ${client.util.formatNumber(balance)}💰 but need ${client.util.formatNumber(amount)}.`));
-			if (amount <= 0) return sentMessage.edit(embed.setDescription('Please enter an amount greater than zero.'));
 
 			balance = client.userCommands.addBalance(msgUser, -amount);
 			client.userCommands.addBalance(targetUser, amount);
@@ -67,8 +63,7 @@ module.exports = {
 		}
 
 
-		/*
-		async function itemTrade(client, target, amount, item, sentMessage, embed, msgUser) {
+		async function itemTrade() {
 			if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 			else if (amount < 1) amount = 1;
 
@@ -76,7 +71,7 @@ module.exports = {
 			client.userCommands.removeItem(msgUser, item, amount);
 			sentMessage.edit(embed.setDescription(`Trade with *${target}* succesfull!\n\nTraded ${amount} ${item.emoji}__${item.name}__ to *${target}*.`));
 		}
-		*/
+
 	},
 };
 
