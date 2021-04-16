@@ -18,7 +18,8 @@ module.exports = {
 	async execute(message, args, msgUser, msgGuild, client, logger) {
 
 		let embed = new Discord.MessageEmbed()
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }));
+			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
+			.setColor('#f3ab16');
 
 		if (!message.member.voice.channel) return message.channel.send(embed.setDescription('you are not in a voice channel.'));
 

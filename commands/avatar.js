@@ -16,7 +16,7 @@ module.exports = {
 			.setTitle(`${target.tag}'s Avatar`)
 			.setDescription(target.displayAvatarURL({ dynamic: true }))
 			.setImage(target.displayAvatarURL({ dynamic: true }))
-			.setColor(client.userCommands.getColour(msgUser));
+			.setColor('#f3ab16');
 
 		message.channel.send(embed);
 	},

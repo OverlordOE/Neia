@@ -23,7 +23,7 @@ module.exports = {
 		};
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(client.userCommands.getColour(msgUser))
+			.setColor('#f3ab16')
 			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
 			.setTitle('Neia\'s Gambling Imporium')
 			.setFooter('Use the emojis to choose your game.', client.user.displayAvatarURL({ dynamic: true }));
@@ -335,9 +335,12 @@ module.exports = {
 					const winAmount = gambleAmount * slotsRate * rowsWon;
 					const balance = client.userCommands.addBalance(msgUser, winAmount, true);
 					output += `\n\n__**You won**__ **${rowsWon}** row(s)!\nYou gained ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`;
+					embed.setColor('#00fc43');
 				}
-				else output += `\n\n__**You lost**__\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
-
+				else {
+					embed.setColor('#fc0303');
+					output += `\n\n__**You lost**__\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
+				}
 				sentMessage.edit(embed.setDescription(output));
 			}
 

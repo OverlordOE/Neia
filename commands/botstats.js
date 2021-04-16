@@ -14,7 +14,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Neia Stats')
 			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-			.setColor(client.userCommands.getColour(msgUser))
+			.setColor('#f3ab16')
 			.setFooter('Neia', client.user.displayAvatarURL({ dynamic: true }));
 
 		let guildTotal = 0;

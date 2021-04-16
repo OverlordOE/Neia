@@ -39,7 +39,8 @@ module.exports = {
 			.setTitle('Project Neia leaderboard')
 			.setDescription(editDescription(currentList, page, ' Current Balance \n'))
 			.setThumbnail(client.user.displayAvatarURL())
-			.setFooter('Use the emojis to scroll through the list or switch the list.', client.user.displayAvatarURL());
+			.setFooter('Use the emojis to scroll through the list or switch the list.', client.user.displayAvatarURL())
+			.setColor('#f3ab16');
 
 
 		message.channel.send(embed).then(sentMessage => {

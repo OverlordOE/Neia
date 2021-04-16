@@ -13,7 +13,8 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Project Neia Trading Center')
-			.setFooter('You can only trade to people on the same server.', client.user.displayAvatarURL());
+			.setFooter('You can only trade to people on the same server.', client.user.displayAvatarURL())
+			.setColor('#f3ab16');
 
 		let target;
 		let targetUser;

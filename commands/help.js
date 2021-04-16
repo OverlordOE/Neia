@@ -17,8 +17,7 @@ module.exports = {
 		let infoCommands = '';
 
 		const help = new Discord.MessageEmbed()
-			.setColor(client.userCommands.getColour(msgUser))
-			;
+			.setColor('#f3ab16');
 
 		if (!args.length) {
 			help.setTitle('Neia command list');

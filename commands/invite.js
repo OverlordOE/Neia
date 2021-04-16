@@ -19,7 +19,8 @@ module.exports = {
 							[Click here to join the support server](https://discord.gg/hFGxVDT)\n
 							[Click here to submit a bug or request  feature](https://github.com/OverlordOE/Neia/issues/new/choose)\n
 							For more info contact: OverlordOE#0717
-			`);
+			`)
+			.setColor('#f3ab16');
 		message.channel.send(embed);
 	},
 };

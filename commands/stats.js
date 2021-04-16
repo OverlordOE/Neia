@@ -22,7 +22,7 @@ module.exports = {
 			.addField('Won with Gambling:', client.util.formatNumber(user.gamblingMoneyGained), true)
 			.addField('Lost with Gambling:', client.util.formatNumber(user.gamblingMoneyLost), true)
 			.setFooter('You can tag someone else to get their stats.', client.user.displayAvatarURL())
-			;
+			.setColor('#f3ab16');
 
 		return message.channel.send(embed);
 	},
