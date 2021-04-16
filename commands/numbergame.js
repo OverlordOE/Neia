@@ -19,7 +19,7 @@ module.exports = {
 			.setTitle('Numbergame stats')
 			.setFooter('To change the channel for the number game use the `sc` command.', client.user.displayAvatarURL({ dynamic: true }))
 			.setThumbnail(message.guild.iconURL())
-			.addField('Current Number', numberGameInfo.currentNumber)
+			.addField('Current Number', numberGameInfo.currentNumber);
 	
 			if (numberGameInfo.lastUserId) {
 			const lastCounter = await message.guild.members.fetch(numberGameInfo.lastUserId);

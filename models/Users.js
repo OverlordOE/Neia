@@ -17,6 +17,8 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 		},
 
+
+		// Stats
 		numbersCounted: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
@@ -42,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
+		
 
 		// MISC
 		firstCommand: {
