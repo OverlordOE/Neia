@@ -16,7 +16,7 @@ module.exports = {
 		const rpsRate = 1.80;
 		const numberRate = 3.2;
 		const blackjackRate = 2;
-		const slotsRate = 6.5;
+		const slotsRate = 5;
 
 		let filter = (reaction, user) => {
 			return icons.includes(reaction.emoji.name) && user.id === message.author.id;
