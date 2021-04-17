@@ -15,7 +15,9 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 		if (numberGameInfo.lastCheckpoint > 0) checkpoint();
 		else wrongCount();
 	}
-	else if (number == numberGameInfo.currentNumber + 1) succesfullCount();
+	else if (number == numberGameInfo.currentNumber + 1) {
+		succesfullCount();
+	}
 	else {
 		message.react('❌');
 		message.channel.send(`**Wrong number.**\n${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!`);
@@ -27,6 +29,7 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 
 	function succesfullCount() {
 		easterEggs();
+		message.react(msgUser.reaction);
 
 		if (checkpoints.includes(number)) {
 			const nextCheckpointIndex = checkpoints.indexOf(number) + 1;
@@ -114,10 +117,6 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 			case 1000:
 				message.react(client.emojiCharacters[1]);
 				message.react('🇰');
-				break;
-
-			default:
-				message.react('✅');
 				break;
 		}
 	}

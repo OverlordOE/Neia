@@ -50,7 +50,7 @@ module.exports = {
 							const item = itemInfo[i.name.toLowerCase()];
 							const refundAmount = sellPercentage * item.value * i.amount;
 							client.userCommands.removeItem(msgUser, item, i.amount);
-							balance = client.userCommands.addMoney(msgUser, refundAmount);
+							balance = client.userCommands.addBalance(msgUser, refundAmount);
 							totalReceived += refundAmount;
 						});
 						logger.debug(totalReceived);
@@ -65,9 +65,9 @@ module.exports = {
 				if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 				else if (amount < 1) amount = 1;
 				const refundAmount = sellPercentage * item.value * amount;
-				
+
 				client.userCommands.removeItem(msgUser, item, amount);
-				const balance = client.userCommands.addMoney(msgUser, refundAmount);
+				const balance = client.userCommands.addBalance(msgUser, refundAmount);
 
 				sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${client.util.formatNumber(refundAmount)}💰 back.\nYour balance is ${client.util.formatNumber(balance)}💰!`));
 			}

@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
+		reaction: {
+			type: DataTypes.STRING,
+			defaultValue: '✅',
+			allowNull: false,
+		},
 
 
 		// Stats

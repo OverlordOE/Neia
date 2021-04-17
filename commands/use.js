@@ -11,7 +11,7 @@ module.exports = {
 
 	async execute(message, args, msgUser, msgGuild, client, logger) {
 		const filter = m => m.author.id === msgUser;
-		let amount;
+		let amount = 1;
 		let temp = '';
 
 		const embed = new Discord.MessageEmbed()
@@ -29,6 +29,7 @@ module.exports = {
 			else if (temp.length > 2) temp += ` ${args[i]}`;
 			else temp += `${args[i]}`;
 		}
+		if(amount < 1) amount = 1;
 
 		const item = client.util.getItem(temp);
 		if (item) {
@@ -47,6 +48,12 @@ module.exports = {
 					else return sentMessage.edit(embed.setDescription('An error has occurred, please report this to OverlordOE#0717'));
 				}
 
+				else if (item.ctg == 'reaction') {
+					msgUser.reaction = item.emoji;
+					client.userCommands.removeItem(msgUser, item);
+					msgUser.save();
+					return sentMessage.edit(embed.setDescription(`Number Game reaction emoji is now: ${item.emoji}`));
+				}
 				else if (item.ctg == 'chest') return sentMessage.edit(embed.setDescription('Please use the `open` command to use a chest'));
 				else if (item.ctg == 'equipment') return sentMessage.edit(embed.setDescription('Please use the `equip` command to use equipment'));
 				else if (item.ctg == 'collectable') return sentMessage.edit(embed.setDescription('Collectables are passive items that will award you with extra money with your time based rewards.'));
