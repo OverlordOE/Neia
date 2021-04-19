@@ -36,9 +36,10 @@ module.exports = {
 			else if (temp.length > 2) temp += ` ${args[i]}`;
 			else temp += `${args[i]}`;
 		}
-		if (!amount < 1) amount = 1;
+		if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a whole number`));
+		else if (amount < 1) amount = 1;
 		
-		const item = client.userCommands.getItem(temp);
+		const item = client.util.getItem(temp);
 		if (item && !await client.userCommands.hasItem(msgUser, item, amount)) return sentMessage.edit(embed.setDescription(`You don't have enough **${item.name}**.`));
 		const sentMessage = await message.channel.send(embed);
 		
@@ -49,9 +50,6 @@ module.exports = {
 
 
 		function moneyTrade() {
-			if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a whole number`));
-			else if (amount < 1) amount = 1;
-
 			let balance = msgUser.balance;
 			if (amount > balance) return sentMessage.edit(embed.setDescription(`You only have ${client.util.formatNumber(balance)}💰 but need ${client.util.formatNumber(amount)}.`));
 
@@ -64,9 +62,6 @@ module.exports = {
 
 
 		async function itemTrade() {
-			if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
-			else if (amount < 1) amount = 1;
-
 			client.userCommands.addItem(await client.userCommands.getUser(target.id), item, amount);
 			client.userCommands.removeItem(msgUser, item, amount);
 			sentMessage.edit(embed.setDescription(`Trade with *${target}* succesfull!\n\nTraded ${amount} ${item.emoji}__${item.name}__ to *${target}*.`));
