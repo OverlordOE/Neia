@@ -29,15 +29,15 @@ module.exports = {
 			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(user.balance)}💰`);
 
 
-		let currentList = balanceList;
-		let description = 'Current Balance\n';
+		const listArray = [{ list: balanceList, title: 'Current Balance' }, { list: ruinedList, title: 'Streaks Ruined' }, { list: countList, title: 'Total Numbers Counted' } ];
+		let listIndex = 0;
 		let page = 0;
 		if (!isNaN(args[0]) && args[0] > 0 && args[0] < 6) page = args[0] - 1;
 
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Project Neia leaderboard')
-			.setDescription(editDescription(currentList, page, ' Current Balance \n'))
+			.setDescription(editDescription(listArray[listIndex], page))
 			.setThumbnail(client.user.displayAvatarURL())
 			.setFooter('Use the emojis to scroll through the list or switch the list.', client.user.displayAvatarURL())
 			.setColor('#f3ab16');
@@ -54,26 +54,17 @@ module.exports = {
 				reaction.users.remove(message.author.id);
 				if (reaction.emoji.name == '◀️' && page > 0) {
 					page--;
-					sentMessage.edit(embed.setDescription(editDescription(currentList, page, description)));
+					sentMessage.edit(embed.setDescription(editDescription(listArray[listIndex], page)));
 				}
 				else if (reaction.emoji.name == '▶️' && page < 4) {
 					page++;
-					sentMessage.edit(embed.setDescription(editDescription(currentList, page, description)));
+					sentMessage.edit(embed.setDescription(editDescription(listArray[listIndex], page)));
 				}
 				else if (reaction.emoji.name == '🔀') {
-					if (currentList == ruinedList) {
-						currentList = balanceList;
-						description = 'Current Balance\n';
-					}
-					else if (currentList == balanceList) {
-						currentList = countList;
-						description = 'Total Numbers Counted\n';
-					}
-					else {
-						currentList = ruinedList;
-						description = 'Total Streaks Ruined\n';
-					}
-					sentMessage.edit(embed.setDescription(editDescription(currentList, page, description)));
+					listIndex++;
+					if (listIndex >= listArray.length) listIndex = 0;
+
+					sentMessage.edit(embed.setDescription(editDescription(listArray[listIndex], page)));
 				}
 			});
 			collector.on('end', () => sentMessage.reactions.removeAll());
@@ -81,9 +72,10 @@ module.exports = {
 	},
 };
 
-function editDescription(currentList, page, description) {
+function editDescription(currentList, page) {
+	let description = `__**${currentList.title}**__`;
 	for (let i = page * 10; i < (10 + page * 10); i++) {
-		if (currentList[i]) description += currentList[i];
+		if (currentList.list[i]) description += currentList.list[i];
 		else description += `\n__${i + 1}.__ noone`;
 	}
 	return description;
