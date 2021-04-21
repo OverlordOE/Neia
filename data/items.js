@@ -29,7 +29,7 @@ module.exports = {
 		name: 'Plus One',
 		value: 5000,
 		buyable: true,
-		emoji: '<:plus1:721750172710993922>🐒',
+		emoji: '<:plus1:721750172710993922>',
 		rarity: 'common',
 		picture: null,
 		ctg: 'reaction',
