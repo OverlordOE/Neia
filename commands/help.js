@@ -16,6 +16,7 @@ module.exports = {
 		let miscCommands = '';
 		let infoCommands = '';
 		let economyCommands = '';
+		let gamblingCommands = '';
 
 		const help = new Discord.MessageEmbed()
 			.setColor('#f3ab16');
@@ -26,6 +27,9 @@ module.exports = {
 				switch (command.category) {
 					case 'admin':
 						adminCommands += `**${command.name}** - ${command.summary}\n`;
+						break;
+					case 'gambling':
+						gamblingCommands += `**${command.name}** - ${command.summary}\n`;
 						break;
 					case 'economy':
 						economyCommands += `**${command.name}** - ${command.summary}\n`;
@@ -44,6 +48,7 @@ module.exports = {
 
 			help.setDescription(`__**Miscellaneous Commands**__\n${miscCommands}\n
 								__**Economy Commands**__\n${economyCommands}\n
+								__**Gambling Commands**__\n${gamblingCommands}\n
 								__**Info or Stat Commands**__\n${infoCommands}\n
 								__**Music Commands**__\n${musicCommands}\n
 								__**Admin Commands**__\n${adminCommands}\n

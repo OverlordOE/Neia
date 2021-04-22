@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const items = require('../data/items');
 module.exports = {
-	name: 'shop',
+	name: 'Shop',
 	summary: 'Shows all the shop items',
 	description: 'Shows all the shop items.',
 	category: 'info',

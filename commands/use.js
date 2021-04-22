@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 module.exports = {
-	name: 'use',
+	name: 'Use',
 	summary: 'Use an item from your inventory',
 	description: 'Use an item from your inventory.',
 	category: 'misc',

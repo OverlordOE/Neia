@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 module.exports = {
-	name: 'buy',
+	name: 'Buy',
 	summary: 'Buy an item from the shop',
 	description: 'With this you can buy an item from the shop.',
 	category: 'economy',

@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const itemInfo = require('../data/items');
 const sellPercentage = 0.6;
 module.exports = {
-	name: 'sell',
+	name: 'Sell',
 	summary: `Sell items to get ${sellPercentage * 100}% of your money back`,
 	description: `Sell items to get ${sellPercentage * 100}% of your money back.`,
 	aliases: ['refund'],
