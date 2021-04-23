@@ -50,7 +50,6 @@ module.exports = {
 
 				else if (item.ctg == 'reaction') {
 					msgUser.reaction = item.emoji;
-					client.userCommands.removeItem(msgUser, item);
 					msgUser.save();
 					return sentMessage.edit(embed.setDescription(`Number Game reaction emoji is now: ${item.emoji}`));
 				}
