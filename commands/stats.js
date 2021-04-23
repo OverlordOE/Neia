@@ -12,7 +12,7 @@ module.exports = {
 		const target = message.mentions.users.first() || message.author;
 		const user = await client.userCommands.getUser(target.id);
 		const items = await client.userCommands.getInventory(user);
-		const reaction = client.userCommands.getReaction(msgUser);
+		const reaction = client.userCommands.getReaction(user);
 		const filter = (r, emojiUser) => {
 			return emojiUser.id === message.author.id;
 		};
