@@ -165,6 +165,7 @@ Reflect.defineProperty(userCommands, 'getColour', {
 
 Reflect.defineProperty(userCommands, 'getReaction', {
 	value: function getReaction(user) {
+		if (user.reaction)
 		const reaction = JSON.parse(user.reaction);
 		if (reaction) return reaction;
 		return {
