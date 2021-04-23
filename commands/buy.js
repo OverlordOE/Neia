@@ -45,6 +45,7 @@ module.exports = {
 
 		}
 		else if (item) return sentMessage.edit(embed.setDescription('You can\'t buy this item?'));
+		else if (temp) return sentMessage.edit(embed.setDescription(`__${temp}__ is not a valid item.`));
 		else return sentMessage.edit(embed.setDescription('You didn\'t specify the item you want to use.'));
 	},
 };

@@ -57,6 +57,7 @@ module.exports = {
 			}
 			else return sentMessage.edit(embed.setDescription(`You don't have enough ${item.emoji}__${item.name}(s)__!`));
 		}
+		else if (temp) return sentMessage.edit(embed.setDescription(`__${temp}__ is not a valid item.`));
 		else return sentMessage.edit(embed.setDescription('You didn\'t specify the item you want to use.'));
 	},
 };
