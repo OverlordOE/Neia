@@ -45,7 +45,7 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 			const nextCheckpointIndex = checkpoints.indexOf(number) + 1;
 			numberGameInfo.lastCheckpoint = number;
 			numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
-			message.channel.send(`Checkpoint **${number}** reached!\nIf you make a mistake you will be reversed to this point`);
+			message.channel.send(`Checkpoint **${number}** reached!\nIf you make a mistake you will be reversed to this point.`);
 		}
 
 		if (number > numberGameInfo.highestStreak) numberGameInfo.highestStreak = number;
@@ -132,7 +132,7 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 	}
 
 	function checkpoint() {
-		message.channel.send(`Starting from checkpoint **${numberGameInfo.lastCheckpoint}**.\nCheckpoint has reset to **0**`);
+		message.channel.send(`Starting from checkpoint **${numberGameInfo.lastCheckpoint}**.\nCheckpoint has reset.`);
 		numberGameInfo.currentNumber = numberGameInfo.lastCheckpoint;
 		numberGameInfo.lastCheckpoint = 0;
 		numberGameInfo.lastUserId = null;
