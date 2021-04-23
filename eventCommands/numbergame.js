@@ -30,14 +30,16 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 	function succesfullCount() {
 		try {
 			const reaction = client.userCommands.getReaction(msgUser);
-			if (reaction.emoji) message.react(reaction.emoji);
-			else message.react('✅');
-			client.userCommands.addBalance(msgUser, Math.sqrt(reaction.value));
-			easterEggs();
-		} catch (error) {
-			logger.warn('Emoji failed');
+			if (reaction.emoji && reaction.value) {
+				message.react(reaction.emoji);
+				client.userCommands.addBalance(msgUser, Math.sqrt(reaction.value));
+			}
 		}
-		
+		catch (error) {
+			logger.warn('Emoji failed');
+			message.react('✅');
+		}
+		easterEggs();
 
 		if (checkpoints.includes(number)) {
 			const nextCheckpointIndex = checkpoints.indexOf(number) + 1;
