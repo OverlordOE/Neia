@@ -29,7 +29,8 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 
 	function succesfullCount() {
 		const reaction = client.userCommands.getReaction(msgUser);
-		message.react(reaction.emoji);
+		if (reaction.emoji)	message.react(reaction.emoji);
+		else message.react('✅');
 		client.userCommands.addBalance(msgUser, Math.sqrt(reaction.value));
 		easterEggs();
 
