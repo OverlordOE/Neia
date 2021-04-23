@@ -11,7 +11,7 @@ module.exports = {
 
 	async execute(message, args, msgUser, msgGuild, client, logger) {
 		let gambleAmount = 0;
-		const payoutRate = 2;
+		const payoutRate = 1.8;
 
 		const embed = new Discord.MessageEmbed()
 			.setColor('#f3ab16')
@@ -155,7 +155,10 @@ module.exports = {
 			else if (player == 'player') {
 				cardsDrawn++;
 				if (card.value == 'A') {
-					if ((playerHandValue + 11) < 21 && (playerHandValue + 11) > botHandValue && botHandValue > 17 || ((playerHandValue + 11) < 21 && botHandValue < 17) || (playerHandValue + 11) == 21) {
+					if ((playerHandValue + 11) == 21
+					|| (playerHandValue + 11) < 21 && (playerHandValue + 11) > botHandValue && botHandValue > 17
+					|| ((playerHandValue + 11) < 21 && botHandValue < 17)) {
+					
 						playerHand += `${card.suit}${card.value}(11) `;
 						playerHandValue += card.weight;
 					}
