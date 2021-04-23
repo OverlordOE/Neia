@@ -35,36 +35,20 @@ module.exports = {
 		}
 
 		const item = client.util.getItem(temp);
-		if (temp == 'all') {
-			sentMessage.edit(embed.setDescription('Are you sure that you want to sell your WHOLE inventory?\n\nReply with yes to continue'));
-			message.channel.awaitMessages(filter, { max: 1, time: 60000 })
-				.then(async collected => {
-					collected.first().delete();
-					if (collected.first().content.toLowerCase() == 'yes') {
 
-						const inventory = await client.userCommands.getInventory(msgUser);
-						let totalReceived = 0;
-						let balance;
-
-						inventory.map(i => {
-							const item = itemInfo[i.name.toLowerCase()];
-							const refundAmount = sellPercentage * item.value * i.amount;
-							client.userCommands.removeItem(msgUser, item, i.amount);
-							balance = client.userCommands.addBalance(msgUser, refundAmount);
-							totalReceived += refundAmount;
-						});
-						logger.debug(totalReceived);
-						sentMessage.edit(embed.setDescription(`You sold your whole inventory for ${client.util.formatNumber(totalReceived)}💰\n\nCurrent balance is ${client.util.formatNumber(balance)}💰`));
-					}
-					else return sentMessage.edit(embed.setDescription('Cancelled selling inventory'));
-				});
-		}
-
-		else if (item) {
+		if (item) {
 			if (await client.userCommands.hasItem(msgUser, item, amount)) {
 				if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
 				else if (amount < 1) amount = 1;
 				const refundAmount = sellPercentage * item.value * amount;
+
+				if (item.emoji == msgUser.reaction) {
+					msgUser.reaction == JSON.stringify({
+						emoji: '✅',
+						value: 1,
+					});
+					msgUser.save();
+				}
 
 				client.userCommands.removeItem(msgUser, item, amount);
 				const balance = client.userCommands.addBalance(msgUser, refundAmount);

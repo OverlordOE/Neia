@@ -12,7 +12,8 @@ module.exports = {
 		const target = message.mentions.users.first() || message.author;
 		const user = await client.userCommands.getUser(target.id);
 		const items = await client.userCommands.getInventory(user);
-		const filter = (reaction, emojiUser) => {
+		const reaction = client.userCommands.getReaction(msgUser);
+		const filter = (r, emojiUser) => {
 			return emojiUser.id === message.author.id;
 		};
 
@@ -25,7 +26,8 @@ module.exports = {
 			.addField('Times Gambled:', user.gamblingDone, true)
 			.addField('Won with Gambling:', client.util.formatNumber(user.gamblingMoneyGained), true)
 			.addField('Lost with Gambling:', client.util.formatNumber(user.gamblingMoneyLost), true)
-			.addField('Number Game Reaction:', user.reaction, true)
+			.addField('Number Game Reaction:', reaction.emoji, true)
+			.addField('Number Game Reaction Bonus', `${client.util.formatNumber(Math.sqrt(reaction.value))}💰`, true)
 			.setFooter('You can tag someone else to get their stats.', client.user.displayAvatarURL())
 			.setColor('#f3ab16');
 

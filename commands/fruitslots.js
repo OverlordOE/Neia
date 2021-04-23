@@ -11,7 +11,7 @@ module.exports = {
 
 	async execute(message, args, msgUser, msgGuild, client, logger) {
 		let gambleAmount = 0;
-		const payoutRate = 5.3;
+		const payoutRate = 5;
 		const icons = ['🍓', '🍉', '🍒', '🍌', '🍋'];
 		const slots = [];
 		const slotX = 3;

@@ -49,9 +49,13 @@ module.exports = {
 				}
 
 				else if (item.ctg == 'reaction') {
-					msgUser.reaction = item.emoji;
+					msgUser.reaction = JSON.stringify({
+						emoji: item.emoji,
+						value: item.value,
+					});
 					msgUser.save();
-					return sentMessage.edit(embed.setDescription(`Number Game reaction emoji is now: ${item.emoji}`));
+					return sentMessage.edit(embed.setDescription(`Number Game reaction **emoji** is now: ${item.emoji}
+											It will add ${client.util.formatNumber(Math.sqrt(item.value))}💰 for each number counted.`));
 				}
 				else if (item.ctg == 'chest') return sentMessage.edit(embed.setDescription('Please use the `open` command to use a chest'));
 				else if (item.ctg == 'equipment') return sentMessage.edit(embed.setDescription('Please use the `equip` command to use equipment'));

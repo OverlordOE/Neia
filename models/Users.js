@@ -17,8 +17,11 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 		},
 		reaction: {
-			type: DataTypes.STRING,
-			defaultValue: '✅',
+			type: DataTypes.JSON,
+			defaultValue: JSON.stringify({
+				value: 1,
+				emoji: '✅',
+			}),
 			allowNull: false,
 		},
 
@@ -49,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 0,
 			allowNull: false,
 		},
-		
+
 
 		// MISC
 		firstCommand: {

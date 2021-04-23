@@ -162,4 +162,17 @@ Reflect.defineProperty(userCommands, 'getColour', {
 	},
 });
 
+
+Reflect.defineProperty(userCommands, 'getReaction', {
+	value: function getReaction(user) {
+		return JSON.parse(user.reaction);
+	},
+});
+Reflect.defineProperty(userCommands, 'saveReaction', {
+	value: function saveReaction(user, reactionInfo) {
+		user.reaction = JSON.stringify(reactionInfo);
+		return user.save();
+	},
+});
+
 module.exports = { Users, userCommands };

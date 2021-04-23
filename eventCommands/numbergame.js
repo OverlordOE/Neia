@@ -28,8 +28,10 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);
 
 	function succesfullCount() {
+		const reaction = client.userCommands.getReaction(msgUser);
+		message.react(reaction.emoji);
+		client.userCommands.addBalance(msgUser, Math.sqrt(reaction.value));
 		easterEggs();
-		message.react(msgUser.reaction);
 
 		if (checkpoints.includes(number)) {
 			const nextCheckpointIndex = checkpoints.indexOf(number) + 1;
