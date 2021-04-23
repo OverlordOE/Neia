@@ -3,7 +3,7 @@ module.exports = {
 	name: 'Invite',
 	summary: 'Sends a bunch of helpfull links',
 	description: 'Sends links to invite the client to your own server, to join the support server and to request a feature or report a bug.',
-	category: 'misc',
+	category: 'info',
 	args: false,
 	usage: '',
 	aliases: ['inv', 'bug', 'join', 'support', 'link'],
@@ -19,7 +19,8 @@ module.exports = {
 							[Click here to join the support server](https://discord.gg/hFGxVDT)\n
 							[Click here to submit a bug or request  feature](https://github.com/OverlordOE/Neia/issues/new/choose)\n
 							For more info contact: OverlordOE#0717
-			`);
+			`)
+			.setColor('#f3ab16');
 		message.channel.send(embed);
 	},
 };

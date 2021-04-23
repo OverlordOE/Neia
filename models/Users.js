@@ -11,6 +11,48 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 		},
 
+		balance: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		reaction: {
+			type: DataTypes.JSON,
+			defaultValue: JSON.stringify({
+				value: 1,
+				emoji: '✅',
+			}),
+			allowNull: false,
+		},
+
+
+		// Stats
+		numbersCounted: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		streaksRuined: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		gamblingDone: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		gamblingMoneyLost: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		gamblingMoneyGained: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+
 
 		// MISC
 		firstCommand: {

@@ -3,7 +3,7 @@ module.exports = {
 	summary: 'Bans the mentioned user',
 	description: 'Bans the mentioned user, you can add a reason after the mention.',
 	category: 'admin',
-	aliases: [''],
+	aliases: [],
 	args: true,
 	usage: '<user> (reason)',
 	example: '@OverlordOE tried to take over the server',

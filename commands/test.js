@@ -4,8 +4,6 @@ module.exports = {
 	aliases: ['t'],
 
 	async execute(message, args, msgUser, msgGuild, client, logger) {
-
-		const search = args.join(' ');
-
+		
 	},
 };

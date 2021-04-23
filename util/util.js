@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const util = new Discord.Collection();
-
+const items = require('../data/items');
 
 Reflect.defineProperty(util, 'formatNumber', {
 /**
@@ -21,5 +21,13 @@ Reflect.defineProperty(util, 'formatNumber', {
 	},
 });
 
+
+Reflect.defineProperty(util, 'getItem', {
+	value: function getItem(itemName) {
+		const item = itemName.toLowerCase();
+		if (items[item]) return items[item];
+		return false;
+	},
+});
 
 module.exports = { util };

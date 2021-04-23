@@ -3,7 +3,7 @@ module.exports = {
 	summary: 'Kick the mentioned user',
 	description: 'Kick the mentioned user, you can add a reason after the mention.',
 	category: 'admin',
-	aliases: [''],
+	aliases: [],
 	args: true,
 	usage: '<user> (reason)',
 	example: '@OverlordOE couldn\'t stop spamming conk emotes',

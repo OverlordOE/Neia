@@ -9,7 +9,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 	logging: false,
 	storage: 'database.sqlite',
 });
-const Guilds = sequelize.import('../models/Guilds');
+const Guilds = require('../models/Guilds')(sequelize, Sequelize);
 
 
 // GUILDS
@@ -19,12 +19,13 @@ Reflect.defineProperty(guildCommands, 'newGuild', {
 			guild_id: id,
 			prefix: process.env.PREFIX,
 			numberGame: JSON.stringify({
-				currentNumber: 0,
 				lastUserId: null,
 				channelId: null,
-				highestStreak: 0,
+				currentNumber: 0,
+				lastCheckpoint: 0,
 				totalCounted: 0,
 				streaksRuined: 0,
+				highestStreak: 0,
 			}),
 		});
 		guildCommands.set(id, guild);

@@ -9,15 +9,17 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 // Import tables
-sequelize.import('models/Users');
-sequelize.import('models/Guilds');
+require('./models/Users')(sequelize, Sequelize);
+require('./models/Guilds')(sequelize, Sequelize);
+require('./models/UserItems')(sequelize, Sequelize);
 
 
 // Execute node dbInit.js --force or node dbInit.js -f to force update the tables (this resets the db but removes unused tables).
-
+const force = process.argv.includes('--force') || process.argv.includes('-f');
+const alter = process.argv.includes('--alter') || process.argv.includes('-a');
 // Create tags
 sequelize
-	.sync({ force: true })
+	.sync({ alter: alter, force: force })
 	.then(async () => {
 		console.log('DB synced');
 		sequelize.close();

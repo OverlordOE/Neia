@@ -18,7 +18,8 @@ module.exports = {
 	async execute(message, args, msgUser, msgGuild, client, logger) {
 
 		let embed = new Discord.MessageEmbed()
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }));
+			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
+			.setColor('#f3ab16');
 
 		if (!message.member.voice.channel) return message.channel.send(embed.setDescription('you are not in a voice channel.'));
 
@@ -171,23 +172,18 @@ module.exports = {
 
 
 		function Finish() {
-
-
 			data.queue.shift();
 
 			if (data.queue.length > 0) {
 				client.music.active.set(data.dispatcher.guildID, data);
 				Play(client, data, logger, msgUser, message);
 			}
-
 			else {
 				client.music.active.delete(data.dispatcher.guildID);
 				const voiceChannel = client.guilds.cache.get(data.dispatcher.guildID).me.voice.channel;
 				if (voiceChannel) voiceChannel.leave();
 			}
 		}
-
-
 	},
 };
 
