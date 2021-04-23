@@ -79,7 +79,7 @@ Reflect.defineProperty(userCommands, 'removeItem', {
 
 		if (userItem.amount >= removeAmount) {
 			// user.networth -= item.value * removeAmount;
-		
+
 			if (userItem.amount == removeAmount) userItem.destroy();
 			else userItem.amount -= removeAmount;
 			return userItem.save();
@@ -165,7 +165,12 @@ Reflect.defineProperty(userCommands, 'getColour', {
 
 Reflect.defineProperty(userCommands, 'getReaction', {
 	value: function getReaction(user) {
-		return JSON.parse(user.reaction);
+		const reaction = JSON.parse(user.reaction);
+		if (reaction) return reaction;
+		return {
+			value: 1,
+			emoji: '✅',
+		};
 	},
 });
 Reflect.defineProperty(userCommands, 'saveReaction', {
