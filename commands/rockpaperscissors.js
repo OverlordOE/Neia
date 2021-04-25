@@ -64,7 +64,7 @@ module.exports = {
 				return sentMessage.reactions.removeAll();
 			})
 			.catch(() => sentMessage.reactions.removeAll());
-
+-
 
 
 	},
