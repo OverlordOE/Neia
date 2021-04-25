@@ -13,14 +13,14 @@ module.exports = (sequelize, DataTypes) => {
 
 
 		// NumberGame
-		// reaction: {
-		// 	type: DataTypes.JSON,
-		// 	defaultValue: JSON.stringify({
-		// 		value: 1,
-		// 		emoji: '✅',
-		// 	}),
-		// 	allowNull: false,
-		// },
+		reaction: {
+			type: DataTypes.JSON,
+			defaultValue: JSON.stringify({
+				value: 1,
+				emoji: '✅',
+			}),
+			allowNull: false,
+		},
 		lastProtection: {
 			type: DataTypes.DATE,
 			defaultValue: moment().subtract(1, 'days').toDate(),
