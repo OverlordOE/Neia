@@ -9,6 +9,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 
 const moment = require('moment');
 const Discord = require('discord.js');
+const { util } = require('./util');
 const userCommands = new Discord.Collection();
 const Users = require('../models/Users')(sequelize, Sequelize);
 const UserItems = require('../models/UserItems')(sequelize, Sequelize);
@@ -17,16 +18,8 @@ const UserItems = require('../models/UserItems')(sequelize, Sequelize);
 
 Reflect.defineProperty(userCommands, 'newUser', {
 	value: async function newUser(id) {
-		const now = moment();
 		const user = await Users.create({
 			user_id: id,
-			lastVote: now.subtract(1, 'days').toString(),
-			firstCommand: true,
-			streaksRuined: 0,
-			numbersCounted: 0,
-			gamblingDone: 0,
-			gamblingMoneyGained: 0,
-			gamblingMoneyLost: 0,
 		});
 		userCommands.set(id, user);
 		return user;
@@ -79,7 +72,7 @@ Reflect.defineProperty(userCommands, 'removeItem', {
 
 		if (userItem.amount >= removeAmount) {
 			// user.networth -= item.value * removeAmount;
-		
+
 			if (userItem.amount == removeAmount) userItem.destroy();
 			else userItem.amount -= removeAmount;
 			return userItem.save();
@@ -95,7 +88,7 @@ Reflect.defineProperty(userCommands, 'hasItem', {
 			where: { user_id: user.user_id, name: item.name },
 		});
 		const check = parseInt(amount);
-		if (userItem.amount >= check && check >= 1) return true;
+		if (userItem && userItem.amount >= check && check >= 1) return true;
 		return false;
 	},
 });
@@ -142,7 +135,7 @@ Reflect.defineProperty(userCommands, 'addBalance', {
 
 Reflect.defineProperty(userCommands, 'setVote', {
 	value: function setVote(user) {
-		user.lastVote = moment().toString();
+		user.lastVote = moment().toDate();
 		return user.save();
 	},
 });
@@ -156,9 +149,27 @@ Reflect.defineProperty(userCommands, 'getVote', {
 });
 
 
-Reflect.defineProperty(userCommands, 'getColour', {
-	value: function getColour() {
-		return '#fcfcfc';
+Reflect.defineProperty(userCommands, 'getProtection', {
+	value: function getProtection(user) {
+		const now = moment();
+		const dCheck = moment(user.lastProtection).add(1, 'd');
+		if (moment(dCheck).isBefore(now)) return true;
+		else return dCheck.format('MMM Do HH:mm');
+	},
+});
+Reflect.defineProperty(userCommands, 'setProtection', {
+	value: function setProtection(user) {
+		user.lastProtection = moment().toDate();
+		return user.save();
+	},
+});
+Reflect.defineProperty(userCommands, 'protectionAllowed', {
+	value: async function protectionAllowed(user) {
+		const protectionItem = util.getItem('streak protection');
+		const hasProtection = await userCommands.hasItem(user, protectionItem, 1);
+		const hasCooldown = userCommands.getProtection(user);
+		if (hasProtection || hasCooldown === true) return false;
+		return true;
 	},
 });
 
@@ -174,5 +185,14 @@ Reflect.defineProperty(userCommands, 'saveReaction', {
 		return user.save();
 	},
 });
+
+
+Reflect.defineProperty(userCommands, 'getColour', {
+	value: function getColour() {
+		return '#fcfcfc';
+	},
+});
+
+
 
 module.exports = { Users, userCommands };

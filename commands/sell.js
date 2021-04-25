@@ -42,12 +42,15 @@ module.exports = {
 				else if (amount < 1) amount = 1;
 				const refundAmount = sellPercentage * item.value * amount;
 
-				if (item.emoji == msgUser.reaction) {
-					msgUser.reaction == JSON.stringify({
-						emoji: '✅',
-						value: 1,
-					});
-					msgUser.save();
+				if (item.ctg == 'reaction') {
+					const reaction = client.userCommands.getReaction();
+					if (item.emoji == reaction.emoji) {
+						msgUser.reaction == JSON.stringify({
+							emoji: '✅',
+							value: 1,
+						});
+						msgUser.save();
+					}
 				}
 
 				client.userCommands.removeItem(msgUser, item, amount);
@@ -57,6 +60,7 @@ module.exports = {
 			}
 			else return sentMessage.edit(embed.setDescription(`You don't have enough ${item.emoji}__${item.name}(s)__!`));
 		}
+		else if (temp) return sentMessage.edit(embed.setDescription(`__${temp}__ is not a valid item.`));
 		else return sentMessage.edit(embed.setDescription('You didn\'t specify the item you want to use.'));
 	},
 };

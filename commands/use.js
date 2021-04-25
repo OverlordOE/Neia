@@ -29,7 +29,7 @@ module.exports = {
 			else if (temp.length > 2) temp += ` ${args[i]}`;
 			else temp += `${args[i]}`;
 		}
-		if(amount < 1) amount = 1;
+		if (amount < 1) amount = 1;
 
 		const item = client.util.getItem(temp);
 		if (item) {
@@ -38,7 +38,7 @@ module.exports = {
 				else if (amount < 1 || amount > 10000 || !amount) amount = 1;
 
 				if (item.use) {
-					const result = await item.use(client, amount, embed, item, msgUser);
+					const result = await item.use(client, amount, embed, item, msgUser, message);
 
 					if (result.succes) {
 						client.userCommands.removeItem(msgUser, item, amount);
@@ -57,14 +57,12 @@ module.exports = {
 					return sentMessage.edit(embed.setDescription(`Number Game reaction **emoji** is now: ${item.emoji}
 											It will add ${client.util.formatNumber(Math.sqrt(item.value))}💰 for each number counted.`));
 				}
-				else if (item.ctg == 'chest') return sentMessage.edit(embed.setDescription('Please use the `open` command to use a chest'));
-				else if (item.ctg == 'equipment') return sentMessage.edit(embed.setDescription('Please use the `equip` command to use equipment'));
-				else if (item.ctg == 'collectable') return sentMessage.edit(embed.setDescription('Collectables are passive items that will award you with extra money with your time based rewards.'));
+				// else if (item.ctg == 'chest') return sentMessage.edit(embed.setDescription('Please use the `open` command to use a chest'));
 				else return sentMessage.edit(embed.setDescription(`There is no use for __${item.name}__ yet, the item was not used.`));
 			}
 			else return sentMessage.edit(embed.setDescription(`You don't have enough __${item.emoji}${item.name}(s)__!`));
 		}
+		else if (temp) return sentMessage.edit(embed.setDescription(`__${temp}__ is not a valid item.`));
 		else return sentMessage.edit(embed.setDescription('You didn\'t specify the item you want to use.'));
-
 	},
 };
