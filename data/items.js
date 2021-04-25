@@ -367,7 +367,7 @@ module.exports = {
 		rarity: 'epic',
 		picture: null,
 		ctg: 'powerup',
-		description: 'This will prevent from ruining a streak 1 time. Has a cooldown of 24 hours. You can have a max of 1 in your inventory',
+		description: 'This will prevent from ruining a streak 1 time. Once consumed it will go on a 24h cooldown. You can have a max of 1 in your inventory',
 	},
 
 
