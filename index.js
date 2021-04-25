@@ -71,13 +71,7 @@ client.login(process.env.TOKEN);
 client.on('ready', async () => {
 	try {
 		const storedUsers = await Users.findAll();
-		storedUsers.forEach(b => {
-			userCommands.saveReaction(b, {
-				value: 1,
-				emoji: '✅',
-			});
-			userCommands.set(b.user_id, b);
-		});
+		storedUsers.forEach(b => userCommands.set(b.user_id, b));
 		const storedGuilds = await Guilds.findAll();
 		storedGuilds.forEach(b => guildCommands.set(b.guild_id, b));
 		let memberTotal = 0;

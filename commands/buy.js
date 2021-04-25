@@ -30,8 +30,8 @@ module.exports = {
 
 		const item = client.util.getItem(temp);
 		if (item.buyable) {
-
-			if (!(await client.userCommands.protectionAllowed(msgUser))) return sentMessage.edit(embed.setDescription('You can\'t buy Streak Protection.\nYou can only have 1 at a time and your cooldown should be worn off'));
+			const protectionItem = client.util.getItem('streak protection');
+			if (item == protectionItem && !(await client.userCommands.protectionAllowed(msgUser))) return sentMessage.edit(embed.setDescription('You can\'t buy Streak Protection.\nYou can only have 1 at a time and your cooldown should be worn off'));
 			else buyItem(1);
 
 		}
