@@ -16,6 +16,7 @@ module.exports = {
 		const filter = (r, emojiUser) => {
 			return emojiUser.id === message.author.id;
 		};
+		const protection = client.userCommands.getProtection(user);
 
 		const statEmbed = new Discord.MessageEmbed()
 			.setTitle(`${target.tag}'s General Stats`)
@@ -28,6 +29,7 @@ module.exports = {
 			.addField('Lost with Gambling:', client.util.formatNumber(user.gamblingMoneyLost), true)
 			.addField('Number Game Reaction:', reaction.emoji, true)
 			.addField('Number Game Reaction Bonus', `${client.util.formatNumber(Math.sqrt(reaction.value))}💰`, true)
+			.addField('Protection Available:', protection, true)
 			.setFooter('You can tag someone else to get their stats.', client.user.displayAvatarURL())
 			.setColor('#f3ab16');
 

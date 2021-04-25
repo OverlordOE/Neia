@@ -134,7 +134,7 @@ module.exports = {
 		picture: null,
 		ctg: 'reaction',
 		description: 'A custom emoji you can equip to change thye number game emojis.',
-	}, 
+	},
 	'moon': {
 		name: 'Moon',
 		value: 70000,
@@ -357,6 +357,18 @@ module.exports = {
 	},
 
 
+	// POWERUPS
+
+	'streak protection': {
+		name: 'Streak Protection',
+		value: 25000,
+		buyable: true,
+		emoji: '🛡️',
+		rarity: 'epic',
+		picture: null,
+		ctg: 'powerup',
+		description: 'This will prevent from ruining a streak 1 time. Has a cooldown of 24 hours. You can have a max of 1 in your inventory',
+	},
 
 
 	/*

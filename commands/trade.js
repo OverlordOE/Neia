@@ -38,12 +38,15 @@ module.exports = {
 		}
 		if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a whole number`));
 		else if (amount < 1) amount = 1;
-		
+
 		const item = client.util.getItem(temp);
 		if (item && !await client.userCommands.hasItem(msgUser, item, amount)) return sentMessage.edit(embed.setDescription(`You don't have enough **${item.name}**.`));
 		const sentMessage = await message.channel.send(embed);
-		
-		if (target && item) itemTrade();
+
+		if (target && item) {
+			if (!(await client.userCommands.protectionAllowed(targetUser))) return sentMessage.edit(embed.setDescription(`${target} already has a Streak Protection or it's on cooldown.`));
+			else itemTrade();
+		}
 		else if (target) moneyTrade();
 		else if (amount > 1) return sentMessage.edit(embed.setDescription('You didn\'t specify a target.'));
 		else return sentMessage.edit(embed.setDescription('Please specify who you want to trade with and what you want to trade.'));
@@ -59,7 +62,6 @@ module.exports = {
 				`Trade with *${target}* succesfull!\n\nTransferred ${client.util.formatNumber(amount)}💰 to *${target}*.
 				Your current balance is ${client.util.formatNumber(balance)}💰`));
 		}
-
 
 		async function itemTrade() {
 			client.userCommands.addItem(await client.userCommands.getUser(target.id), item, amount);

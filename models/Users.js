@@ -1,21 +1,18 @@
+const moment = require('moment');
 module.exports = (sequelize, DataTypes) => {
 	return sequelize.define('users', {
 		user_id: {
 			type: DataTypes.STRING,
 			primaryKey: true,
 		},
-
-		lastVote: {
-			type: DataTypes.STRING,
-			defaultValue: '',
-			allowNull: false,
-		},
-
 		balance: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
 			allowNull: false,
 		},
+
+
+		// NumberGame
 		reaction: {
 			type: DataTypes.JSON,
 			defaultValue: JSON.stringify({
@@ -24,7 +21,11 @@ module.exports = (sequelize, DataTypes) => {
 			}),
 			allowNull: false,
 		},
-
+		lastProtection: {
+			type: DataTypes.DATE,
+			defaultValue: moment().subtract(1, 'days').toDate(),
+			allowNull: false,
+		},
 
 		// Stats
 		numbersCounted: {
@@ -58,6 +59,11 @@ module.exports = (sequelize, DataTypes) => {
 		firstCommand: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: true,
+		},
+		lastVote: {
+			type: DataTypes.DATE,
+			defaultValue: moment().subtract(1, 'days').toDate(),
+			allowNull: false,
 		},
 	},
 		{

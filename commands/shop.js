@@ -12,18 +12,19 @@ module.exports = {
 	execute(message, args, msgUser, msgGuild, client, logger) {
 
 		let reactions = '__**Reactions:**__\n';
+		let powerups = '__**Powerups:**__\n';
 		let chests = '__**Chests:**__\n';
 		let equipment = '__**Equipment:**__\n';
 
 		Object.values(items).sort((a, b) => a.value - b.value).map((i) => {
 			if (i.buyable) {
 				if (i.ctg == 'reaction') reactions += `${i.emoji} ${i.name}: ${client.util.formatNumber(i.value)}💰\n`;
-				// else if (i.ctg == 'chest') chests += `${i.emoji} ${i.name}: ${client.util.formatNumber(i.value)}💰\n`;
+				else if (i.ctg == 'powerup') powerups += `${i.emoji} ${i.name}: ${client.util.formatNumber(i.value)}💰\n`;
 				// else if (i.ctg == 'equipment') equipment += `${i.emoji}${i.name}: ${client.util.formatNumber(i.value)}💰\n`;
 			}
 		});
 
-		const description = `${reactions}`;
+		const description = `${powerups}\n${reactions}\n`;
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Project Neia Shop')

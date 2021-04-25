@@ -10,22 +10,26 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 	if (numberGameInfo.currentNumber == 0 && number != 1) return;
 
 	if (numberGameInfo.lastUserId == message.author.id) {
-		message.react('❌');
-		message.channel.send(`**You can't count twice in a row.**\n${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!`);
-		if (numberGameInfo.lastCheckpoint > 0) checkpoint();
-		else wrongCount();
+		message.channel.send('**You can\'t count twice in a row.**');
+		mistake();
+
 	}
 	else if (number == numberGameInfo.currentNumber + 1) {
 		succesfullCount();
 	}
 	else {
-		message.react('❌');
-		message.channel.send(`**Wrong number.**\n${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!`);
-		if (numberGameInfo.lastCheckpoint > 0) checkpoint();
-		else wrongCount();
+		message.channel.send('**Wrong number.**');
+		mistake();
 	}
 
 	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);
+
+	async function mistake() {
+		
+		if (await client.userCommands.protectionAllowed(msgUser)) protection();
+		else if (numberGameInfo.lastCheckpoint > 0) checkpoint();
+		else wrongCount();
+	}
 
 	function succesfullCount() {
 		try {
@@ -58,7 +62,9 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 	}
 
 	function wrongCount() {
-		message.channel.send('Starting again from **1**.');
+		message.react('❌');
+		message.channel.send(`${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!\nStarting again from **0**.`);
+
 		numberGameInfo.currentNumber = 0;
 		numberGameInfo.lastCheckpoint = 0;
 		numberGameInfo.nextCheckpoint = checkpoints[0];
@@ -132,12 +138,23 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 	}
 
 	function checkpoint() {
-		message.channel.send(`Starting from checkpoint **${numberGameInfo.lastCheckpoint}**.\nCheckpoint has reset.`);
+		message.react('🏁');
+		message.channel.send(`${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!
+		Starting from checkpoint **${numberGameInfo.lastCheckpoint}**.\nCheckpoint has reset.`);
+
 		numberGameInfo.currentNumber = numberGameInfo.lastCheckpoint;
 		numberGameInfo.lastCheckpoint = 0;
 		numberGameInfo.lastUserId = null;
 		numberGameInfo.streaksRuined++;
 		msgUser.streaksRuined++;
 		msgUser.save();
+	}
+
+	function protection() {
+		const protectionItem = client.util.getItem('streak protection');
+		message.react('🛡️');
+		message.channel.send('Your streak protection has been used and will go on a 24 hour cooldown.');
+		client.userCommands.setProtection(msgUser);
+		client.userCommands.removeItem(msgUser, protectionItem, 1);
 	}
 };
