@@ -168,7 +168,7 @@ Reflect.defineProperty(userCommands, 'protectionAllowed', {
 		const protectionItem = util.getItem('streak protection');
 		const hasProtection = await userCommands.hasItem(user, protectionItem, 1);
 		const hasCooldown = userCommands.getProtection(user);
-		if (hasProtection || hasCooldown === true) return false;
+		if (hasProtection || hasCooldown !== true) return false;
 		return true;
 	},
 });
