@@ -9,7 +9,7 @@ module.exports = function execute(message, msgUser, guild, client, logger) {
 
 	if (numberGameInfo.currentNumber == 0 && number != 1) return;
 
-	if (numberGameInfo.lastUserId == message.author.id) {
+	if (numberGameInfo.lastUserId == message.author.id && !msgUser.powerCounting) {
 		message.channel.send('**You can\'t count twice in a row.**');
 		mistake();
 

@@ -367,9 +367,58 @@ module.exports = {
 		rarity: 'epic',
 		picture: null,
 		ctg: 'powerup',
-		description: 'This will prevent from ruining a streak 1 time. Once consumed it will go on a 24h cooldown. You can have a max of 1 in your inventory',
+		description: 'This will prevent you from __ruining a streak__ **__1__** time.\nOnce consumed it will go on a **24h** cooldown.\nYou can have a max of **__1__** in your inventory',
 	},
+	'power count': {
+		name: 'Power Count',
+		value: 5000,
+		buyable: true,
+		emoji: '🔄',
+		rarity: 'rare',
+		picture: null,
+		ctg: 'powerup',
+		description: 'Once you activate this item you will be able to count alone for **__1 minute__** in the Number Game. Neia will notify you when your time is up.',
+		use: async function (client, amount, embed, item, msgUser, msgGuild, message) {
+			if (msgUser.powerCounting) {
+				return {
+					succes: false,
+					message: 'You already have a **Power Count** active.',
+				};
+			}
+			const powerCountingCooldown = client.userCommands.getPowerCounting(msgUser);
+			if (powerCountingCooldown !== true) {
+				return {
+					succes: false,
+					message: `Your **Power Couting** is on __Cooldown__.\nNext **Power Counting**: ${powerCountingCooldown}`,
+				};
+			}
 
+			const numberGameChannelID = client.guildCommands.getNumberGame(msgGuild).channelId;
+			if (!numberGameChannelID) {
+				return {
+					succes: false,
+					message: 'The number game has not been setup yet.',
+				};
+			}
+			const numberGameChannel = await client.channels.fetch(numberGameChannelID);
+			numberGameChannel.send(`${message.author} **has activated Power Counting!**.\nThey have __**1 minute**__ to count by themself.`);
+
+			msgUser.save();
+			msgUser.powerCounting = true;
+			client.userCommands.setPowerCounting(msgUser);
+
+			setTimeout(function () {
+				msgUser.powerCounting = false;
+				msgUser.save();
+				numberGameChannel.send(`${message.author} Your **Power Counting** has ended.\n Next **Power Counting** in __**3 hours**__.`);
+			}, 60000);
+
+			return {
+				message: '**Power Counting activated!**.\nYou have __**1 minute**__ to count by yourself.',
+				succes: true,
+			};
+		},
+	},
 
 	/*
 	// CHESTS

@@ -174,6 +174,22 @@ Reflect.defineProperty(userCommands, 'protectionAllowed', {
 });
 
 
+Reflect.defineProperty(userCommands, 'getPowerCounting', {
+	value: function getPowerCounting(user) {
+		const now = moment();
+		const dCheck = moment(user.lastPowerCounting).add(3, 'h');
+		if (moment(dCheck).isBefore(now)) return true;
+		else return dCheck.format('MMM Do HH:mm');
+	},
+});
+Reflect.defineProperty(userCommands, 'setPowerCounting', {
+	value: function setPowerCounting(user) {
+		user.lastPowerCounting = moment().toDate();
+		return user.save();
+	},
+});
+
+
 Reflect.defineProperty(userCommands, 'getReaction', {
 	value: function getReaction(user) {
 		return JSON.parse(user.reaction);
