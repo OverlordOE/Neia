@@ -31,8 +31,6 @@ module.exports = {
 				.addField('Buyable', item.buyable, true)
 				.addField('Category', item.ctg, true)
 				.setFooter('Use the command without arguments to see the item list', client.user.displayAvatarURL())
-				.attachFiles(`assets/rarity/${item.rarity}.jpg`)
-				.setThumbnail(`attachment://${item.rarity}.jpg`);
 
 			if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
 				.setImage(`attachment://${item.picture}`);
@@ -45,9 +43,8 @@ module.exports = {
 		}
 
 		else {
-			let collectables = '__Collectables:__\n';
-			let chests = '__Chests:__\n';
-			let equipment = '__Equipment:__\n';
+			let reactions = '__**Reactions:**__\n';
+			let powerups = '__**Powerups:**__\n';
 
 			Object.values(items).sort((a, b) => {
 				if (a.name < b.name) return -1;
@@ -55,12 +52,11 @@ module.exports = {
 				return 0;
 			}).map((i) => {
 
-				if (i.ctg == 'collectable') collectables += `${i.emoji}${i.name}\n`;
-				else if (i.ctg == 'chest') chests += `${i.emoji}${i.name}\n`;
-				else if (i.ctg == 'equipment') equipment += `${i.emoji}${i.name}\n`;
+				if (i.ctg == 'reaction') reactions += `${i.emoji}${i.name}\n`;
+				else if (i.ctg == 'powerup') powerups += `${i.emoji}${i.name}\n`;
 			});
 
-			const description = `${chests}\n${equipment}\n${collectables}`;
+			const description = `${reactions}\n${powerups}\n`;
 
 			embed = new Discord.MessageEmbed()
 				.setTitle('Project Neia Item List')
