@@ -21,7 +21,9 @@ module.exports = {
 		const sentMessage = await message.channel.send(embed);
 
 		for (let i = 0; i < args.length; i++) {
-			if (!(isNaN(args[i]))) amount = parseInt(args[i]);
+			console.log(args[i]);
+			console.log(!isNaN(parseInt(args[i])));
+			if (!isNaN(parseInt(args[i]))) amount = parseInt(args[i]);
 
 			else if (temp.length > 2) temp += ` ${args[i]}`;
 			else temp += `${args[i]}`;
@@ -32,7 +34,7 @@ module.exports = {
 		if (item.buyable) {
 			const protectionItem = client.util.getItem('streak protection');
 			if (item == protectionItem && !(await client.userCommands.protectionAllowed(msgUser))) return sentMessage.edit(embed.setDescription('You can\'t buy Streak Protection.\nYou can only have 1 at a time and your cooldown should be worn off'));
-			else buyItem(1);
+			else buyItem(amount);
 
 		}
 		else if (item) return sentMessage.edit(embed.setDescription('You can\'t buy this item?'));

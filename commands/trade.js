@@ -22,7 +22,7 @@ module.exports = {
 		let temp = '';
 
 		for (let i = 0; i < args.length; i++) {
-			if (!(isNaN(args[i]))) amount = parseInt(args[i]);
+			if (!isNaN(parseInt(args[i]))) amount = parseInt(args[i]);
 
 			else if (args[i].startsWith('<@') && args[i].endsWith('>')) {
 				let mention = args[i].slice(2, -1);

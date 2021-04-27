@@ -24,7 +24,7 @@ module.exports = {
 		const sentMessage = await message.channel.send(embed);
 
 		for (let i = 0; i < args.length; i++) {
-			if (!(isNaN(args[i]))) amount = parseInt(args[i]);
+			if (!isNaN(parseInt(args[i]))) amount = parseInt(args[i]);
 
 			else if (temp.length > 2) temp += ` ${args[i]}`;
 			else temp += `${args[i]}`;
@@ -34,11 +34,9 @@ module.exports = {
 		const item = client.util.getItem(temp);
 		if (item) {
 			if (await client.userCommands.hasItem(msgUser, item, amount)) {
-				if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`**${amount}** is not a whole number`));
-				else if (amount < 1 || amount > 10000 || !amount) amount = 1;
 
 				if (item.use) {
-					const result = await item.use(client, amount, embed, item, msgUser, message);
+					const result = await item.use(client, amount, embed, item, msgUser, msgGuild, message);
 
 					if (result.succes) {
 						client.userCommands.removeItem(msgUser, item, amount);

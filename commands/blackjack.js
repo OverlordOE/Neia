@@ -21,7 +21,7 @@ module.exports = {
 
 
 		for (let i = 0; i < args.length; i++) {
-			if (!(isNaN(args[i]))) gambleAmount = parseInt(args[i]);
+			if (!isNaN(parseInt(args[i]))) gambleAmount = parseInt(args[i]);
 			else if (args[i] == 'all') gambleAmount = Math.floor(msgUser.balance);
 		}
 
