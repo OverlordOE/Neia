@@ -44,7 +44,9 @@ module.exports = {
 		const sentMessage = await message.channel.send(embed);
 
 		if (target && item) {
-			if (!(await client.userCommands.newProtectionAllowed(targetUser))) return sentMessage.edit(embed.setDescription(`${target} already has a Streak Protection or it's on cooldown.`));
+			const protectionItem = client.util.getItem('streak protection');
+			
+      if (item == protectionItem && !(await client.userCommands.newProtectionAllowed(msgUser))) return sentMessage.edit(embed.setDescription(`${target} already has a Streak Protection or it's on cooldown.`));
 			else itemTrade();
 		}
 		else if (target) moneyTrade();
