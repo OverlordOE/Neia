@@ -10,22 +10,31 @@ module.exports = {
 
 	execute(message, args, msgUser, msgGuild, client, logger) {
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neia V3.3: Powerups and bug fixes')
+			.setTitle('Neia V3.4: Power Counting')
 			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL({ dynamic: true }))
-			.addField('**Powerups**', `Powerups will be a new item type added to be consumable items used to boost your number game experience. Currently there is 1 powerup, The Streak Protection. I already have plans for additional powerups.
-			- **Streak Protection** is a new item that will prevent 1 streak from being ruined. You can only have 1 in your inventory at any time and once is has been consumed it will go on a 24h cooldown. You can see the cooldown in your \`stats\`.`)
+			.addField('**Items**', `- New powerup: \`Power Counting\`.
+			This powerup will let you count by yourself for **1 minute**. Has a **3 hour** cooldown.
+- Added **pepeThat** reaction.
+- Added **pepeEZ** reaction.
+- Lowered **pepeBiz** value from **250k -> 200k.**
+- Lowered **Monkey** value from **200k -> 150k.**
+`)
 
 
-			.addField('**Number Game**', `
-			- When someone makes a mistake in the number game it will now react with different emojis based on if its __under protection__, __goes back to a checkpoint__ or __resets to 0__.
-			- Changed text of checkpoint resets to avoid confusion.`)
+			.addField('**Stats**', `
+			- Split the main stats page into **2 pages**. 1 for cooldowns and balance, the other one for non important stats like __Streaks Ruined__.
+- Added stat for **Power Counting** cooldown.
+			`)
 
-			.addField('**Number Guessing**', `- Increased payout from 3.2 -> 4.5. Now its actually worth playing.`)
+			.addField('**Gambling**', `- Added some more text highlighting.
+			`)
 
 
-			.addField('**Bug Fixes**', `- Fixed bug that would break he numbergame.
-			- Fixed that your own reaction emoji would show when looking at someone else's stats.
-			- Fixed custom reactions not resetting when sold.`);
+			.addField('**Bug Fixes**', `
+			- Fixed bug where Neia wouldn't recognize the amount you put in with the \`Buy\` and \`Trade\` commands.
+- Fixed \`Item\` command not working at all.
+- Fixed bug where you couldn't buy **Streak Protection**.
+`);
 
 		return message.channel.send(embed);
 	},

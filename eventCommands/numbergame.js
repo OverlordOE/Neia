@@ -5,11 +5,12 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 	const numberGameInfo = client.guildCommands.getNumberGame(guild);
 
 	if (!numberGameInfo || message.channel.id !== numberGameInfo.channelId) return;
-	const number = Number(message.content);
+	if (isNaN(message.content)) return;
 
+	const number = Number(message.content);
 	if (numberGameInfo.currentNumber == 0 && number != 1) return;
 
-	if (numberGameInfo.lastUserId == message.author.id) {
+	if (numberGameInfo.lastUserId == message.author.id && !msgUser.powerCounting) {
 		message.channel.send('**You can\'t count twice in a row.**');
 		await mistake();
 	}
@@ -21,10 +22,11 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		await mistake();
 	}
 
-	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);
+	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);	
 
+	
+	// Functions
 	async function mistake() {
-		
 		if (await client.userCommands.protectionAllowed(msgUser)) protection();
 		else if (numberGameInfo.lastCheckpoint > 0) checkpoint();
 		else wrongCount();

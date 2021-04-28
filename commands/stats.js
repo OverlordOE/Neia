@@ -17,19 +17,27 @@ module.exports = {
 			return emojiUser.id === message.author.id;
 		};
 		const protection = client.userCommands.getProtection(user);
+		const powerCounting = client.userCommands.getPowerCounting(user);
+
+		const mainEmbed = new Discord.MessageEmbed()
+			.setTitle(`${target.tag}'s Main Page`)
+			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
+			.addField('Balance:', `${client.util.formatNumber(user.balance)}💰`, true)
+			.addField('Number Game Reaction:', reaction.emoji, true)
+			.addField('Number Game Reaction Bonus', `${client.util.formatNumber(Math.sqrt(reaction.value))}💰`, true)
+			.addField('Protection Available:', `**${protection}**`, true)
+			.addField('Power Counting Available:', `**${powerCounting}**`, true)
+			.setFooter('You can tag someone else to get their stats.', client.user.displayAvatarURL())
+			.setColor('#f3ab16');
 
 		const statEmbed = new Discord.MessageEmbed()
 			.setTitle(`${target.tag}'s General Stats`)
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
-			.addField('Balance:', `${client.util.formatNumber(user.balance)}💰`, true)
 			.addField('Numbers Counted:', user.numbersCounted, true)
 			.addField('Streaks Ruined:', user.streaksRuined, true)
 			.addField('Times Gambled:', user.gamblingDone, true)
 			.addField('Won with Gambling:', client.util.formatNumber(user.gamblingMoneyGained), true)
 			.addField('Lost with Gambling:', client.util.formatNumber(user.gamblingMoneyLost), true)
-			.addField('Number Game Reaction:', reaction.emoji, true)
-			.addField('Number Game Reaction Bonus', `${client.util.formatNumber(Math.sqrt(reaction.value))}💰`, true)
-			.addField('Protection Available:', protection, true)
 			.setFooter('You can tag someone else to get their stats.', client.user.displayAvatarURL())
 			.setColor('#f3ab16');
 
@@ -56,16 +64,18 @@ module.exports = {
 		}
 		else inventoryEmbed.addField('Inventory:', `*${target.tag}* has nothing!`);
 
-		message.channel.send(statEmbed)
+		message.channel.send(mainEmbed)
 			.then(sentMessage => {
 				sentMessage.react('💰');
+				sentMessage.react('📊');
 				sentMessage.react('📦');
 				const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
 
-				collector.on('collect', (reaction) => {
-					reaction.users.remove(message.author.id);
-					if (reaction.emoji.name == '💰') sentMessage.edit(statEmbed);
-					else if (reaction.emoji.name == '📦') sentMessage.edit(inventoryEmbed);
+				collector.on('collect', (r) => {
+					r.users.remove(message.author.id);
+					if (r.emoji.name == '💰') sentMessage.edit(mainEmbed);
+					else if (r.emoji.name == '📊') sentMessage.edit(statEmbed);
+					else if (r.emoji.name == '📦') sentMessage.edit(inventoryEmbed);
 				});
 				collector.on('end', () => sentMessage.reactions.removeAll());
 			});

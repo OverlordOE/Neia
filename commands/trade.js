@@ -22,7 +22,7 @@ module.exports = {
 		let temp = '';
 
 		for (let i = 0; i < args.length; i++) {
-			if (!(isNaN(args[i]))) amount = parseInt(args[i]);
+			if (!isNaN(parseInt(args[i]))) amount = parseInt(args[i]);
 
 			else if (args[i].startsWith('<@') && args[i].endsWith('>')) {
 				let mention = args[i].slice(2, -1);
@@ -45,7 +45,8 @@ module.exports = {
 
 		if (target && item) {
 			const protectionItem = client.util.getItem('streak protection');
-			if (item == protectionItem && !(await client.userCommands.protectionAllowed(msgUser))) return sentMessage.edit(embed.setDescription(`${target} already has a Streak Protection or it's on cooldown.`));
+			
+      if (item == protectionItem && !(await client.userCommands.newProtectionAllowed(msgUser))) return sentMessage.edit(embed.setDescription(`${target} already has a Streak Protection or it's on cooldown.`));
 			else itemTrade();
 		}
 		else if (target) moneyTrade();
