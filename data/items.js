@@ -17,7 +17,7 @@ module.exports = {
 	},
 	'pepe biz': {
 		name: 'Pepe Biz',
-		value: 250000,
+		value: 200000,
 		buyable: true,
 		emoji: '<:pepebiz:834427799329833040>',
 		rarity: 'legendary',
