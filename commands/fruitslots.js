@@ -16,7 +16,7 @@ module.exports = {
 		const slots = [];
 		const slotX = 3;
 		const slotY = 3;
-		let output = `Get **${slotX}** of the same in a row to win.\n\n`;
+		let output = `Get **${slotX}** of the __same fruit__ in a row to **win**.\n\n`;
 		let count = 0;
 		let rowsWon = 0;
 
@@ -34,9 +34,9 @@ module.exports = {
 
 		if (gambleAmount < 1) gambleAmount = 1;
 
-		if (!gambleAmount || isNaN(gambleAmount)) return message.channel.send(embed.setDescription(`Sorry *${message.author}*, that's an invalid amount.`));
+		if (!gambleAmount || isNaN(gambleAmount)) return message.channel.send(embed.setDescription(`Sorry *${message.author}*, that's an **invalid amount**.`));
 		if (gambleAmount > msgUser.balance) return message.channel.send(embed.setDescription(`Sorry *${message.author}*, you only have ${client.util.formatNumber(msgUser.balance)}💰.`));
-		if (gambleAmount <= 0) return message.channel.send(embed.setDescription(`Please enter an amount greater than zero, *${message.author}*.`));
+		if (gambleAmount <= 0) return message.channel.send(embed.setDescription(`Please enter an amount **greater than zero**, *${message.author}*.`));
 
 		client.userCommands.addBalance(msgUser, -gambleAmount, true);
 
@@ -73,12 +73,12 @@ module.exports = {
 			if (rowsWon >= 1) {
 				const winAmount = gambleAmount * payoutRate * rowsWon;
 				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
-				output += `\n\n__**You won**__ **${rowsWon}** row(s)!\nYou gained ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`;
+				output += `\n\n__**You won!**__ **${rowsWon}** row(s)!\nYou gained ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`;
 				embed.setColor('#00fc43');
 			}
 			else {
 				embed.setColor('#fc0303');
-				output += `\n\n__**You lost**__\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
+				output += `\n\n__**You lost!**__\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
 			}
 			sentMessage.edit(embed.setDescription(output));
 		}
