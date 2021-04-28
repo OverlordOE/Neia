@@ -7,7 +7,7 @@ module.exports = {
 	// CUSTOM EMOJIS
 	'monkey': {
 		name: 'Monkey',
-		value: 200000,
+		value: 150000,
 		buyable: true,
 		emoji: '🐒',
 		rarity: 'legendary',
