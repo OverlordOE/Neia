@@ -1,31 +1,32 @@
 const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000];
 
-module.exports = function execute(message, msgUser, guild, client, logger) {
+module.exports = async function execute(message, msgUser, guild, client, logger) {
 
 	const numberGameInfo = client.guildCommands.getNumberGame(guild);
 
 	if (!numberGameInfo || message.channel.id !== numberGameInfo.channelId) return;
-	const number = Number(message.content);
+	if (isNaN(message.content)) return;
 
+	const number = Number(message.content);
 	if (numberGameInfo.currentNumber == 0 && number != 1) return;
 
 	if (numberGameInfo.lastUserId == message.author.id && !msgUser.powerCounting) {
 		message.channel.send('**You can\'t count twice in a row.**');
-		mistake();
-
+		await mistake();
 	}
 	else if (number == numberGameInfo.currentNumber + 1) {
 		succesfullCount();
 	}
 	else {
 		message.channel.send('**Wrong number.**');
-		mistake();
+		await mistake();
 	}
 
-	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);
+	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);	
 
+	
+	// Functions
 	async function mistake() {
-		
 		if (await client.userCommands.protectionAllowed(msgUser)) protection();
 		else if (numberGameInfo.lastCheckpoint > 0) checkpoint();
 		else wrongCount();

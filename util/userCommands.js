@@ -167,8 +167,17 @@ Reflect.defineProperty(userCommands, 'protectionAllowed', {
 	value: async function protectionAllowed(user) {
 		const protectionItem = util.getItem('streak protection');
 		const hasProtection = await userCommands.hasItem(user, protectionItem, 1);
-		const hasCooldown = userCommands.getProtection(user);
-		if (hasProtection || hasCooldown === true) return false;
+		const noCooldown = userCommands.getProtection(user);
+		if (hasProtection && noCooldown === true) return true;
+		return false;
+	},
+});
+Reflect.defineProperty(userCommands, 'newProtectionAllowed', {
+	value: async function newProtectionAllowed(user) {
+		const protectionItem = util.getItem('streak protection');
+		const hasProtection = await userCommands.hasItem(user, protectionItem, 1);
+		const noCooldown = userCommands.getProtection(user);
+		if (hasProtection || noCooldown !== true) return false;
 		return true;
 	},
 });
