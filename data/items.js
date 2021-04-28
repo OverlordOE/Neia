@@ -25,6 +25,16 @@ module.exports = {
 		ctg: 'reaction',
 		description: 'A custom emoji you can equip to change thye number game emojis.',
 	},
+	'pepe that': {
+		name: 'Pepe That',
+		value: 200000,
+		buyable: true,
+		emoji: '<:pepethat:836926487180869632>',
+		rarity: 'legendary',
+		picture: null,
+		ctg: 'reaction',
+		description: 'A custom emoji you can equip to change thye number game emojis.',
+	},
 	'plus one': {
 		name: 'Plus One',
 		value: 5000,
