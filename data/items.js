@@ -428,10 +428,15 @@ module.exports = {
 			client.userCommands.setPowerCounting(msgUser);
 
 			setTimeout(function () {
-				msgUser.powerCounting = false;
-				msgUser.save();
-				numberGameChannel.send(`${message.author} Your **Power Counting** has ended.\n Next **Power Counting** in __**3 hours**__.`);
-			}, 60000);
+				numberGameChannel.send(`${message.author} Your **Power Counting** will end in __**10 seconds**__!`);
+				setTimeout(function () {
+					msgUser.powerCounting = false;
+					msgUser.save();
+					numberGameChannel.send(`${message.author} Your **Power Counting** has ended.\n Next **Power Counting** in __**3 hours**__.`);
+				}, 10000);
+			}, 50000);
+
+			
 
 			return {
 				message: '**Power Counting activated!**.\nYou have __**1 minute**__ to count by yourself.',
