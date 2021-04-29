@@ -33,19 +33,19 @@ module.exports = {
 			else if (temp.length > 2) temp += ` ${args[i]}`;
 			else temp += `${args[i]}`;
 		}
+		if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
+		else if (amount < 1) amount = 1;
 
 		const item = client.util.getItem(temp);
 
 		if (item) {
 			if (await client.userCommands.hasItem(msgUser, item, amount)) {
-				if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
-				else if (amount < 1) amount = 1;
 				const refundAmount = sellPercentage * item.value * amount;
 
 				if (item.ctg == 'reaction') {
-					const reaction = client.userCommands.getReaction();
+					const reaction = client.userCommands.getReaction(msgUser);
 					if (item.emoji == reaction.emoji) {
-						msgUser.reaction == JSON.stringify({
+						msgUser.reaction = JSON.stringify({
 							emoji: '✅',
 							value: 1,
 						});
