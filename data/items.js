@@ -437,7 +437,6 @@ module.exports = {
 			}, 50000);
 
 			
-
 			return {
 				message: '**Power Counting activated!**.\nYou have __**1 minute**__ to count by yourself.',
 				succes: true,

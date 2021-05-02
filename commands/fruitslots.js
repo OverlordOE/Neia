@@ -16,7 +16,7 @@ module.exports = {
 		const slots = [];
 		const slotX = 3;
 		const slotY = 3;
-		let output = `Get **${slotX}** of the __same fruit__ in a row to **win**.\n\n`;
+		let output = '';
 		let count = 0;
 		let rowsWon = 0;
 
@@ -40,6 +40,10 @@ module.exports = {
 
 		client.userCommands.addBalance(msgUser, -gambleAmount, true);
 
+		output += `
+		You have bet ${client.util.formatNumber(gambleAmount)}💰.
+		Get **${slotX}** of the __same fruit__ in a row to **win**.\n\n
+		`;
 
 		for (let i = 0; i < slotY; i++) {
 			slots[i] = [];
@@ -54,9 +58,9 @@ module.exports = {
 		function checkWins() {
 			if (slots[count].every((val, g, arr) => val === arr[0])) {
 				rowsWon++;
-				output += '**X**';
+				output += '✅';
 			}
-			else output += 'x';
+			else output += '❌';
 		}
 
 		function checkVerticalWins(column) {
@@ -98,9 +102,9 @@ module.exports = {
 				for (let i = 0; i < slotX; i++) {
 					if (checkVerticalWins(i)) {
 						rowsWon++;
-						output += '**.X.**';
+						output += '✅';
 					}
-					else output += '..x..';
+					else output += '❌';
 				}
 				endGame();
 			}

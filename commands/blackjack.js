@@ -35,7 +35,7 @@ module.exports = {
 
 
 		const filter = (reaction, user) => {
-			return ['🃏', '✅'].includes(reaction.emoji.name) && user.id === msgUser.user_id;
+			return ['🃏', '🖐️'].includes(reaction.emoji.name) && user.id === msgUser.user_id;
 		};
 
 		const winAmount = payoutRate * gambleAmount;
@@ -48,11 +48,14 @@ module.exports = {
 		let neiaHand = '';
 
 		const sentMessage = await message.channel.send(embed
-			.setDescription('[Click here for the rules](https://bicyclecards.com/how-to-play/blackjack/)\nPress 🃏 to **hit** or ✅ to **stand.**')
+			.setDescription(`[Click here for the rules](https://bicyclecards.com/how-to-play/blackjack/)
+			
+			You have **bet** ${client.util.formatNumber(gambleAmount)}💰.
+			Press 🃏 to **hit** or 🖐️ to **stand.**`)
 			.setTitle('Blackjack'));
 
 		sentMessage.react('🃏'); // result 1
-		sentMessage.react('✅'); // result 2
+		sentMessage.react('🖐️'); // result 2
 
 		const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
 		for (let i = 0; i < 2; i++) {
@@ -77,7 +80,7 @@ module.exports = {
 					}
 					break;
 
-				case '✅':
+				case '🖐️':
 					while (neiaHandValue < 17) {
 						getCard('client');
 						setEmbed();
@@ -156,9 +159,9 @@ module.exports = {
 				cardsDrawn++;
 				if (card.value == 'A') {
 					if ((playerHandValue + 11) == 21
-					|| (playerHandValue + 11) < 21 && (playerHandValue + 11) > neiaHandValue && neiaHandValue > 17
-					|| ((playerHandValue + 11) < 21 && neiaHandValue < 17)) {
-					
+						|| (playerHandValue + 11) < 21 && (playerHandValue + 11) > neiaHandValue && neiaHandValue > 17
+						|| ((playerHandValue + 11) < 21 && neiaHandValue < 17)) {
+
 						playerHand += `${card.suit}${card.value}(11) `;
 						playerHandValue += card.weight;
 					}
