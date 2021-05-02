@@ -12,7 +12,7 @@ module.exports = {
 	async execute(message, args, msgUser, msgGuild, client, logger) {
 		let gambleAmount = 0;
 		const payoutRate = 5;
-		const icons = ['🍓', '🍉', '🍒', '🍌', '🍋'];
+		const icons = ['🍓', '🍉', '🍒', '🍌', '🍋', '<:luckyseven:838417718944333884>'];
 		const slots = [];
 		const slotX = 3;
 		const slotY = 3;
@@ -42,7 +42,8 @@ module.exports = {
 
 		output += `
 		You have bet ${client.util.formatNumber(gambleAmount)}💰.
-		Get **${slotX}** of the __same fruit__ in a row to **win**.\n\n
+		Get **${slotX}** of the __**same symbol**__ in a row to **win**.
+		Getting a <:luckyseven:838417718944333884> row will give **3X payout**.\n
 		`;
 
 		for (let i = 0; i < slotY; i++) {
@@ -57,6 +58,10 @@ module.exports = {
 
 		function checkWins() {
 			if (slots[count].every((val, g, arr) => val === arr[0])) {
+				if (slots[count][0] == '<:luckyseven:838417718944333884>') {
+					rowsWon += 2;
+					output += '⭐';
+				}
 				rowsWon++;
 				output += '✅';
 			}
@@ -101,6 +106,10 @@ module.exports = {
 			else {
 				for (let i = 0; i < slotX; i++) {
 					if (checkVerticalWins(i)) {
+						if (slots[0][i] == '<:luckyseven:838417718944333884>') {
+							rowsWon += 2;
+							output += '⭐';
+						}
 						rowsWon++;
 						output += '✅';
 					}
