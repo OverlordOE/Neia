@@ -409,7 +409,7 @@ module.exports = {
 			if (powerCountingCooldown !== true) {
 				return {
 					succes: false,
-					message: `Your **Power Couting** is on __Cooldown__.\nNext **Power Counting**: ${powerCountingCooldown}`,
+					message: `Your **Power Couting** is on __Cooldown__.\nNext **Power Count**: ${powerCountingCooldown}`,
 				};
 			}
 
@@ -421,24 +421,24 @@ module.exports = {
 				};
 			}
 			const numberGameChannel = await client.channels.fetch(numberGameChannelID);
-			numberGameChannel.send(`${message.author} **has activated Power Counting!**.\nThey have __**1 minute**__ to count by themself.`);
+			numberGameChannel.send(`${message.author} **has activated Power Count!**.\nThey have __**1 minute**__ to count by themself.`);
 
 			msgUser.save();
 			msgUser.powerCounting = true;
 			client.userCommands.setPowerCounting(msgUser);
 
 			setTimeout(function () {
-				numberGameChannel.send(`${message.author} Your **Power Counting** will end in __**10 seconds**__!`);
+				numberGameChannel.send(`${message.author} Your **Power Count** will end in __**10 seconds**__!`);
 				setTimeout(function () {
 					msgUser.powerCounting = false;
 					msgUser.save();
-					numberGameChannel.send(`${message.author} Your **Power Counting** has ended.\n Next **Power Counting** in __**3 hours**__.`);
+					numberGameChannel.send(`${message.author} Your **Power Count** has ended.\n Next **Power Count** in __**3 hours**__.`);
 				}, 10000);
 			}, 50000);
 
 			
 			return {
-				message: '**Power Counting activated!**.\nYou have __**1 minute**__ to count by yourself.',
+				message: '**Power Count activated!**.\nYou have __**1 minute**__ to count by yourself.',
 				succes: true,
 			};
 		},
