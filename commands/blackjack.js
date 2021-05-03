@@ -91,14 +91,14 @@ module.exports = {
 		});
 
 		collector.on('end', () => {
-			if (playerHandValue > 21) sentMessage.edit(embed.setDescription(`__**You busted!**__\n\nYour **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
+			if (playerHandValue > 21) sentMessage.edit(embed.setDescription(`__**You busted!**__\n\n__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰\nYour **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
 			else if (neiaHandValue > 21) {
 				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
 				sentMessage.edit(embed.setDescription(`__Neia busted!__. __**You Win!**__\n\nYou have won **${winAmount}💰** and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 			}
 			else if (cardsDrawn >= 5) {
 				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
-				return sentMessage.edit(embed.setDescription(`You have drawn **5 cards** without busting!\n__**You win**__\n\n**You have won ${winAmount}**💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
+				return sentMessage.edit(embed.setDescription(`You have drawn **5 cards** without busting!\n__**You win**__\n\n**You have won ${client.util.formatNumber(winAmount)}**💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 			}
 			else if (neiaHandValue == playerHandValue) {
 				const balance = client.userCommands.addBalance(msgUser, gambleAmount);
@@ -106,9 +106,9 @@ module.exports = {
 			}
 			else if (playerHandValue > neiaHandValue) {
 				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
-				sentMessage.edit(embed.setDescription(`__You win!__\n\nYou have won ${winAmount}💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
+				sentMessage.edit(embed.setDescription(`__You win!__\n\nYou have won ${client.util.formatNumber(winAmount)}💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 			}
-			else if (neiaHandValue > playerHandValue) sentMessage.edit(embed.setDescription(`__**Neia wins!**__\n\nYour **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
+			else if (neiaHandValue > playerHandValue) sentMessage.edit(embed.setDescription(`__**Neia wins!**__\n\n__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰\nYour **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
 
 			sentMessage.reactions.removeAll();
 		});

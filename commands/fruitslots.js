@@ -11,8 +11,8 @@ module.exports = {
 
 	async execute(message, args, msgUser, msgGuild, client, logger) {
 		let gambleAmount = 0;
-		const payoutRate = 5;
-		const icons = ['🍓', '🍉', '🍒', '🍌', '🍋', '<:luckyseven:838417718944333884>'];
+		const payoutRate = 4.5;
+		const icons = ['🍓', '🍉', '🍒', '🍌', '<:luckyseven:838417718944333884>'];
 		const slots = [];
 		const slotX = 3;
 		const slotY = 3;
@@ -87,7 +87,7 @@ module.exports = {
 			}
 			else {
 				embed.setColor('#fc0303');
-				output += `\n\n__**You lost!**__\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
+				output += `\n\n__**You lost!**__ ${client.util.formatNumber(gambleAmount)}💰\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
 			}
 			sentMessage.edit(embed.setDescription(output));
 		}
