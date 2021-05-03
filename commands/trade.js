@@ -18,7 +18,7 @@ module.exports = {
 
 		let target;
 		let targetUser;
-		let amount = 0;
+		let amount = 1;
 		let temp = '';
 
 		for (let i = 0; i < args.length; i++) {
@@ -36,39 +36,46 @@ module.exports = {
 			else if (temp.length > 2) temp += ` ${args[i]}`;
 			else temp += `${args[i]}`;
 		}
-		if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a whole number`));
-		else if (amount < 1) amount = 1;
+		if (amount < 1) amount = 1;
 
 		const item = client.util.getItem(temp);
-		if (item && !await client.userCommands.hasItem(msgUser, item, amount)) return sentMessage.edit(embed.setDescription(`You don't have enough **${item.name}**.`));
-		const sentMessage = await message.channel.send(embed);
-
-		if (target && item) {
-			const protectionItem = client.util.getItem('streak protection');
-			
-      if (item == protectionItem && !(await client.userCommands.newProtectionAllowed(msgUser))) return sentMessage.edit(embed.setDescription(`${target} already has a Streak Protection or it's on cooldown.`));
-			else itemTrade();
-		}
+		if (target && item) itemTrade();
 		else if (target) moneyTrade();
-		else if (amount > 1) return sentMessage.edit(embed.setDescription('You didn\'t specify a target.'));
-		else return sentMessage.edit(embed.setDescription('Please specify who you want to trade with and what you want to trade.'));
+		else if (amount > 1) return message.channel.send(embed.setDescription('You didn\'t specify a target.').setColor('#fc0303'));
+		else return message.channel.send(embed.setDescription('Please specify who you want to trade with and what you want to trade.').setColor('#fc0303'));
 
 
 		function moneyTrade() {
 			let balance = msgUser.balance;
-			if (amount > balance) return sentMessage.edit(embed.setDescription(`You only have ${client.util.formatNumber(balance)}💰 but need ${client.util.formatNumber(amount)}.`));
+			if (amount > balance) {
+				return message.channel.send(embed.setDescription(`__**MONEY NOT TRADED!**__
+					You only have ${client.util.formatNumber(balance)}💰 but need ${client.util.formatNumber(amount)}.`)
+					.setColor('#fc0303'));
+			}
 
 			balance = client.userCommands.addBalance(msgUser, -amount);
 			client.userCommands.addBalance(targetUser, amount);
-			return sentMessage.edit(embed.setDescription(
+			return message.channel.send(embed.setDescription(
 				`Trade with *${target}* succesfull!\n\nTransferred ${client.util.formatNumber(amount)}💰 to *${target}*.
-				Your current balance is ${client.util.formatNumber(balance)}💰`));
+				Your current balance is ${client.util.formatNumber(balance)}💰`)
+				.setColor('#fc0303'));
 		}
 
 		async function itemTrade() {
+			if (!await client.userCommands.hasItem(msgUser, item, amount)) {
+				return message.channel.send(embed.setDescription(`__**ITEM(S) NOT TRADED!**__
+					You don't have enough **${item.name}**.`)
+					.setColor('#fc0303'));
+			}
+
+			const protectionItem = client.util.getItem('streak protection');
+			if (item == protectionItem && !(await client.userCommands.newProtectionAllowed(msgUser))) return message.channel.send(embed.setDescription(`__**ITEM(S) NOT TRADED!**__\n${target} already has a Streak Protection or it's on cooldown.`).setColor('#fc0303'));
+			
 			client.userCommands.addItem(await client.userCommands.getUser(target.id), item, amount);
 			client.userCommands.removeItem(msgUser, item, amount);
-			sentMessage.edit(embed.setDescription(`Trade with *${target}* succesfull!\n\nTraded ${amount} ${item.emoji}__${item.name}__ to *${target}*.`));
+			message.channel.send(embed.setDescription(`Trade with *${target}* succesfull!
+			\nTraded ${amount} ${item.emoji}__${item.name}__ to *${target}*.`)
+				.setColor('#fc0303'));
 		}
 
 	},

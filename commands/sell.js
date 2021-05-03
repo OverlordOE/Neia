@@ -1,7 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable max-nested-callbacks */
 const Discord = require('discord.js');
-const itemInfo = require('../data/items');
 const sellPercentage = 0.6;
 module.exports = {
 	name: 'Sell',
@@ -14,14 +13,12 @@ module.exports = {
 	example: 'chest 2',
 
 	async execute(message, args, msgUser, msgGuild, client, logger) {
-		const filter = m => m.author.id === msgUser.user_id;
 		let amount = 1;
 		let temp = '';
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Project Neia Refunds')
 			.setThumbnail(message.author.displayAvatarURL())
-			.setDescription('What do you want to refund? `80% refund`')
 			.setColor('#f3ab16')
 			.setFooter('You can type `sell all` to sell your whole inventory.', client.user.displayAvatarURL());
 
@@ -33,11 +30,9 @@ module.exports = {
 			else if (temp.length > 2) temp += ` ${args[i]}`;
 			else temp += `${args[i]}`;
 		}
-		if (!Number.isInteger(amount)) return sentMessage.edit(embed.setDescription(`${amount} is not a number`));
-		else if (amount < 1) amount = 1;
+		if (amount < 1) amount = 1;
 
 		const item = client.util.getItem(temp);
-
 		if (item) {
 			if (await client.userCommands.hasItem(msgUser, item, amount)) {
 				const refundAmount = sellPercentage * item.value * amount;
@@ -56,11 +51,13 @@ module.exports = {
 				client.userCommands.removeItem(msgUser, item, amount);
 				const balance = client.userCommands.addBalance(msgUser, refundAmount);
 
-				sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${client.util.formatNumber(refundAmount)}💰 back.\nYour balance is ${client.util.formatNumber(balance)}💰!`));
+				sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${client.util.formatNumber(refundAmount)}💰 back.
+				Your balance is ${client.util.formatNumber(balance)}💰!`)
+					.setColor('#fc0303'));
 			}
-			else return sentMessage.edit(embed.setDescription(`You don't have enough ${item.emoji}__${item.name}(s)__!`));
+			else return sentMessage.edit(embed.setDescription(`__**ITEM(S) NOT SOLD!**__\nYou don't have enough ${item.emoji}__${item.name}(s)__!`).setColor('#fc0303'));
 		}
-		else if (temp) return sentMessage.edit(embed.setDescription(`__${temp}__ is not a valid item.`));
-		else return sentMessage.edit(embed.setDescription('You didn\'t specify the item you want to use.'));
+		else if (temp) return sentMessage.edit(embed.setDescription(`__**ITEM(S) NOT SOLD!**__\n__${temp}__ is not a valid item.`).setColor('#fc0303'));
+		else return sentMessage.edit(embed.setDescription('__**ITEM(S) NOT SOLD!**__\nYou didn\'t specify the item you want to use.').setColor('#fc0303'));
 	},
 };

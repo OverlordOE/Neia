@@ -16,6 +16,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Project Neia Shop')
+			.setColor('#f3ab16')
 			.setThumbnail(message.author.displayAvatarURL());
 
 		const sentMessage = await message.channel.send(embed);
@@ -31,26 +32,27 @@ module.exports = {
 		const item = client.util.getItem(temp);
 		if (item.buyable) {
 			const protectionItem = client.util.getItem('streak protection');
-			if (item == protectionItem && !(await client.userCommands.newProtectionAllowed(msgUser))) return sentMessage.edit(embed.setDescription('You can\'t buy Streak Protection.\nYou can only have 1 at a time and your cooldown should be worn off'));
+			if (item == protectionItem && !(await client.userCommands.newProtectionAllowed(msgUser))) return sentMessage.edit(embed.setDescription('You can\'t buy Streak Protection.\nYou can only have 1 at a time and your cooldown should be worn off').setColor('#fc0303'));
 			else buyItem(amount);
 
 		}
-		else if (item) return sentMessage.edit(embed.setDescription('You can\'t buy this item?'));
-		else if (temp) return sentMessage.edit(embed.setDescription(`__${temp}__ is not a valid item.`));
-		else return sentMessage.edit(embed.setDescription('You didn\'t specify the item you want to use.'));
+		else if (item) return sentMessage.edit(embed.setDescription('You can\'t buy this item.').setColor('#fc0303'));
+		else if (temp) return sentMessage.edit(embed.setDescription(`__${temp}__ is not a valid item.`).setColor('#fc0303'));
+		else return sentMessage.edit(embed.setDescription('You didn\'t specify the item you want to use.').setColor('#fc0303'));
 
 		function buyItem(buyAmount) {
 			let balance = msgUser.balance;
 			const cost = buyAmount * item.value;
 			if (cost > balance) return sentMessage.edit(embed.setDescription(`
+					__**ITEM(S) NOT BOUGHT!**__
 					You currently have ${client.util.formatNumber(balance)}💰 but __${client.util.formatNumber(buyAmount)}__ ${item.emoji}${item.name}(s) costs ${client.util.formatNumber(cost)}💰!
-					You need ${client.util.formatNumber(cost - balance)}💰 more
-					`));
+					You need ${client.util.formatNumber(cost - balance)}💰 more.
+					`).setColor('#fc0303'));
 
 			client.userCommands.addItem(msgUser, item, buyAmount);
 			balance = client.userCommands.addBalance(msgUser, -cost);
 
-			sentMessage.edit(embed.setDescription(`You've bought: __${client.util.formatNumber(buyAmount)}__ ${item.emoji}__${item.name}(s)__.\n\nCurrent balance is ${client.util.formatNumber(balance)}💰.`));
+			sentMessage.edit(embed.setDescription(`You've bought: __${client.util.formatNumber(buyAmount)}__ ${item.emoji}__${item.name}(s)__.\n\nCurrent balance is ${client.util.formatNumber(balance)}💰.`).setColor('#00fc43'));
 
 		}
 	},
