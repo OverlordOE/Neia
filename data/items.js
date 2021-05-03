@@ -13,7 +13,7 @@ module.exports = {
 		rarity: 'legendary',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'pepe biz': {
 		name: 'Pepe Biz',
@@ -23,7 +23,17 @@ module.exports = {
 		rarity: 'legendary',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
+	'pepe money': {
+		name: 'Pepe Money',
+		value: 200100,
+		buyable: true,
+		emoji: '<:pepeMoney:838477116894478426>',
+		rarity: 'legendary',
+		picture: null,
+		ctg: 'reaction',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'pepe that': {
 		name: 'Pepe That',
@@ -33,7 +43,7 @@ module.exports = {
 		rarity: 'legendary',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'pepe ez': {
 		name: 'Pepe EZ',
@@ -43,7 +53,7 @@ module.exports = {
 		rarity: 'legendary',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'plus one': {
 		name: 'Plus One',
@@ -53,7 +63,7 @@ module.exports = {
 		rarity: 'common',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'feels good': {
 		name: 'Feels Good',
@@ -63,7 +73,7 @@ module.exports = {
 		rarity: 'legendary',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'thumbs up': {
 		name: 'Thumbs Up',
@@ -73,7 +83,7 @@ module.exports = {
 		rarity: 'common',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'ok hand': {
 		name: 'Ok Hand',
@@ -83,7 +93,7 @@ module.exports = {
 		rarity: 'uncommon',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'vingertje': {
 		name: 'Vingertje',
@@ -93,7 +103,7 @@ module.exports = {
 		rarity: 'uncommon',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'metal': {
 		name: 'Metal',
@@ -103,7 +113,7 @@ module.exports = {
 		rarity: 'common',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'preach': {
 		name: 'Preach',
@@ -113,7 +123,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'eye': {
 		name: 'Eye',
@@ -123,7 +133,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'peace': {
 		name: 'Peace',
@@ -133,7 +143,7 @@ module.exports = {
 		rarity: 'common',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'frog': {
 		name: 'Frog',
@@ -143,7 +153,7 @@ module.exports = {
 		rarity: 'legendary',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'smile': {
 		name: 'Smile',
@@ -153,7 +163,7 @@ module.exports = {
 		rarity: 'epic',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'moon': {
 		name: 'Moon',
@@ -163,7 +173,7 @@ module.exports = {
 		rarity: 'epic',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'star': {
 		name: 'Star',
@@ -173,7 +183,7 @@ module.exports = {
 		rarity: 'epic',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'shooting star': {
 		name: 'Shooting Star',
@@ -183,7 +193,7 @@ module.exports = {
 		rarity: 'epic',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'medal': {
 		name: 'Medal',
@@ -193,7 +203,7 @@ module.exports = {
 		rarity: 'uncommon',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'medal2': {
 		name: 'Medal2',
@@ -203,7 +213,7 @@ module.exports = {
 		rarity: 'uncommon',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'target': {
 		name: 'Target',
@@ -213,7 +223,7 @@ module.exports = {
 		rarity: 'epic',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'ribbon': {
 		name: 'Ribbon',
@@ -223,7 +233,7 @@ module.exports = {
 		rarity: 'uncommon',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'rocket': {
 		name: 'Rocket',
@@ -233,7 +243,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'party': {
 		name: 'Party',
@@ -243,7 +253,7 @@ module.exports = {
 		rarity: 'uncommon',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'ribbon2': {
 		name: 'Ribbon2',
@@ -253,7 +263,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'red heart': {
 		name: 'Red Heart',
@@ -263,7 +273,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'orange heart': {
 		name: 'Ribbon',
@@ -273,7 +283,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'yellow heart': {
 		name: 'Yellow Heart',
@@ -283,7 +293,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'green heart': {
 		name: 'Green Heart',
@@ -293,7 +303,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'purple heart': {
 		name: 'Purple Heart',
@@ -303,7 +313,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'blue heart': {
 		name: 'Blue Heart',
@@ -313,7 +323,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'black heart': {
 		name: 'Black Heart',
@@ -323,7 +333,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'brown heart': {
 		name: 'Brown Heart',
@@ -333,7 +343,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'white heart': {
 		name: 'White Heart',
@@ -343,7 +353,7 @@ module.exports = {
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'circle': {
 		name: 'Circle',
@@ -353,7 +363,7 @@ module.exports = {
 		rarity: 'common',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'blue checkmark': {
 		name: 'Blue Checkmark',
@@ -363,7 +373,7 @@ module.exports = {
 		rarity: 'common',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 	'green checkmark': {
 		name: 'Green Checkmark',
@@ -373,7 +383,7 @@ module.exports = {
 		rarity: 'common',
 		picture: null,
 		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change thye number game emojis.',
+		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
 
 
