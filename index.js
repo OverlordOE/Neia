@@ -186,9 +186,7 @@ client.on('message', async message => {
 
 
 // Random number game event every hour
-const randomMinute = '*'; // Math.floor(Math.random() * 60);
-const numberGameEvents = new cron.CronJob(`${randomMinute} * * * *`, () => {
-
+const numberGameEvents = new cron.CronJob(`${Math.floor(Math.random() * 60)} * * * *`, () => {
 	client.guilds.cache.forEach(async g => {
 		const guild = await guildCommands.getGuild(g.id);
 		const numberGameInfo = client.guildCommands.getNumberGame(guild);
