@@ -11,7 +11,15 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		numberGame: {
 			type: DataTypes.JSON,
-			defaultValue: null,
+			defaultValue: JSON.stringify({
+				lastUserId: null,
+				channelId: null,
+				currentNumber: 0,
+				lastCheckpoint: 0,
+				totalCounted: 0,
+				streaksRuined: 0,
+				highestStreak: 0,
+			}),
 			allowNull: true,
 		},
 	},
