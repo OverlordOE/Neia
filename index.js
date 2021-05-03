@@ -238,6 +238,7 @@ const numberGameEvents = new cron.CronJob(`${Math.floor(Math.random() * 60)} * *
 				description += `\n\n**__THIS EVENT HAS BEEN CLAIMED BY:__ ${u}!**`;
 				sentMessage.edit(embed.setDescription(description).setColor('#00fc43'));
 
+				numberGameInfo.lastUserId = null;
 				client.userCommands.addBalance(user, payout);
 				client.guildCommands.saveNumberGameInfo(await client.guildCommands.getGuild(sentMessage.guild.id), numberGameInfo);
 				numberGameChannel.send(oldNumber + numberIncrease).then(m => m.react('✅'));
