@@ -41,7 +41,7 @@ module.exports = {
 		const botAnswer = Math.floor(Math.random() * symbols.length);
 		const winAmount = payoutRate * gambleAmount;
 
-		const sentMessage = await message.channel.send(embed.setDescription('Choose **__Rock__✊, __Paper__🧻 or __Scissors__✂️!**').setTitle('Rock, Paper, Scissors'));
+		const sentMessage = await message.channel.send(embed.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.\nChoose **__Rock__✊, __Paper__🧻 or __Scissors__✂️!**`).setTitle('Rock, Paper, Scissors'));
 		for (let i = 0; i < symbols.length; i++) sentMessage.react(symbols[i]);
 
 

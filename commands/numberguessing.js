@@ -41,7 +41,7 @@ module.exports = {
 		const answer = Math.floor((Math.random() * 5) + 1);
 		const winAmount = payoutRate * gambleAmount;
 
-		const sentMessage = await message.channel.send(embed.setDescription('**Guess the __number__ between __1 and 5__.**').setTitle('Number Guessing'));
+		const sentMessage = await message.channel.send(embed.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.\n**Guess the __number__ between __1 and 5__.**`).setTitle('Number Guessing'));
 		for (let i = 1; i < 6; i++) sentMessage.react(client.emojiCharacters[i]);
 
 		sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })

@@ -35,7 +35,7 @@ module.exports = {
 
 
 		const filter = (reaction, user) => {
-			return ['🃏', '✅'].includes(reaction.emoji.name) && user.id === msgUser.user_id;
+			return ['🃏', '🖐️'].includes(reaction.emoji.name) && user.id === msgUser.user_id;
 		};
 
 		const winAmount = payoutRate * gambleAmount;
@@ -48,11 +48,14 @@ module.exports = {
 		let neiaHand = '';
 
 		const sentMessage = await message.channel.send(embed
-			.setDescription('[Click here for the rules](https://bicyclecards.com/how-to-play/blackjack/)\nPress 🃏 to **hit** or ✅ to **stand.**')
+			.setDescription(`[Click here for the rules](https://bicyclecards.com/how-to-play/blackjack/)
+			
+			You have **bet** ${client.util.formatNumber(gambleAmount)}💰.
+			Press 🃏 to **hit** or 🖐️ to **stand.**`)
 			.setTitle('Blackjack'));
 
 		sentMessage.react('🃏'); // result 1
-		sentMessage.react('✅'); // result 2
+		sentMessage.react('🖐️'); // result 2
 
 		const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
 		for (let i = 0; i < 2; i++) {
@@ -77,7 +80,7 @@ module.exports = {
 					}
 					break;
 
-				case '✅':
+				case '🖐️':
 					while (neiaHandValue < 17) {
 						getCard('client');
 						setEmbed();
@@ -88,14 +91,14 @@ module.exports = {
 		});
 
 		collector.on('end', () => {
-			if (playerHandValue > 21) sentMessage.edit(embed.setDescription(`__**You busted!**__\n\nYour **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
+			if (playerHandValue > 21) sentMessage.edit(embed.setDescription(`__**You busted!**__\n\n__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰\nYour **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
 			else if (neiaHandValue > 21) {
 				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
 				sentMessage.edit(embed.setDescription(`__Neia busted!__. __**You Win!**__\n\nYou have won **${winAmount}💰** and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 			}
 			else if (cardsDrawn >= 5) {
 				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
-				return sentMessage.edit(embed.setDescription(`You have drawn **5 cards** without busting!\n__**You win**__\n\n**You have won ${winAmount}**💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
+				return sentMessage.edit(embed.setDescription(`You have drawn **5 cards** without busting!\n__**You win**__\n\n**You have won ${client.util.formatNumber(winAmount)}**💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 			}
 			else if (neiaHandValue == playerHandValue) {
 				const balance = client.userCommands.addBalance(msgUser, gambleAmount);
@@ -103,9 +106,9 @@ module.exports = {
 			}
 			else if (playerHandValue > neiaHandValue) {
 				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
-				sentMessage.edit(embed.setDescription(`__You win!__\n\nYou have won ${winAmount}💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
+				sentMessage.edit(embed.setDescription(`__You win!__\n\nYou have won ${client.util.formatNumber(winAmount)}💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 			}
-			else if (neiaHandValue > playerHandValue) sentMessage.edit(embed.setDescription(`__**Neia wins!**__\n\nYour **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
+			else if (neiaHandValue > playerHandValue) sentMessage.edit(embed.setDescription(`__**Neia wins!**__\n\n__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰\nYour **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
 
 			sentMessage.reactions.removeAll();
 		});
@@ -156,9 +159,9 @@ module.exports = {
 				cardsDrawn++;
 				if (card.value == 'A') {
 					if ((playerHandValue + 11) == 21
-					|| (playerHandValue + 11) < 21 && (playerHandValue + 11) > neiaHandValue && neiaHandValue > 17
-					|| ((playerHandValue + 11) < 21 && neiaHandValue < 17)) {
-					
+						|| (playerHandValue + 11) < 21 && (playerHandValue + 11) > neiaHandValue && neiaHandValue > 17
+						|| ((playerHandValue + 11) < 21 && neiaHandValue < 17)) {
+
 						playerHand += `${card.suit}${card.value}(11) `;
 						playerHandValue += card.weight;
 					}

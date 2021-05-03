@@ -11,12 +11,12 @@ module.exports = {
 
 	async execute(message, args, msgUser, msgGuild, client, logger) {
 		let gambleAmount = 0;
-		const payoutRate = 5;
-		const icons = ['🍓', '🍉', '🍒', '🍌', '🍋'];
+		const payoutRate = 4.5;
+		const icons = ['🍓', '🍉', '🍒', '🍌', '<:luckyseven:838417718944333884>'];
 		const slots = [];
 		const slotX = 3;
 		const slotY = 3;
-		let output = `Get **${slotX}** of the __same fruit__ in a row to **win**.\n\n`;
+		let output = '';
 		let count = 0;
 		let rowsWon = 0;
 
@@ -40,6 +40,11 @@ module.exports = {
 
 		client.userCommands.addBalance(msgUser, -gambleAmount, true);
 
+		output += `
+		You have bet ${client.util.formatNumber(gambleAmount)}💰.
+		Get **${slotX}** of the __**same symbol**__ in a row to **win**.
+		Getting a <:luckyseven:838417718944333884> row will give **3X payout**.\n
+		`;
 
 		for (let i = 0; i < slotY; i++) {
 			slots[i] = [];
@@ -53,10 +58,14 @@ module.exports = {
 
 		function checkWins() {
 			if (slots[count].every((val, g, arr) => val === arr[0])) {
+				if (slots[count][0] == '<:luckyseven:838417718944333884>') {
+					rowsWon += 2;
+					output += '⭐';
+				}
 				rowsWon++;
-				output += '**X**';
+				output += '✅';
 			}
-			else output += 'x';
+			else output += '❌';
 		}
 
 		function checkVerticalWins(column) {
@@ -78,7 +87,7 @@ module.exports = {
 			}
 			else {
 				embed.setColor('#fc0303');
-				output += `\n\n__**You lost!**__\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
+				output += `\n\n__**You lost!**__ ${client.util.formatNumber(gambleAmount)}💰\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
 			}
 			sentMessage.edit(embed.setDescription(output));
 		}
@@ -97,10 +106,14 @@ module.exports = {
 			else {
 				for (let i = 0; i < slotX; i++) {
 					if (checkVerticalWins(i)) {
+						if (slots[0][i] == '<:luckyseven:838417718944333884>') {
+							rowsWon += 2;
+							output += '⭐';
+						}
 						rowsWon++;
-						output += '**.X.**';
+						output += '✅';
 					}
-					else output += '..x..';
+					else output += '❌';
 				}
 				endGame();
 			}

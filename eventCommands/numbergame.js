@@ -154,7 +154,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 	function protection() {
 		const protectionItem = client.util.getItem('streak protection');
 		message.react('🛡️');
-		message.channel.send('Your streak protection has been used and will go on a 24 hour cooldown.');
+		message.channel.send(`${message.author}, your streak protection has been used and will go on a 24 hour cooldown.`);
 		client.userCommands.setProtection(msgUser);
 		client.userCommands.removeItem(msgUser, protectionItem, 1);
 	}

@@ -17,16 +17,6 @@ Reflect.defineProperty(guildCommands, 'newGuild', {
 	value: async function newGuild(id) {
 		const guild = await Guilds.create({
 			guild_id: id,
-			prefix: process.env.PREFIX,
-			numberGame: JSON.stringify({
-				lastUserId: null,
-				channelId: null,
-				currentNumber: 0,
-				lastCheckpoint: 0,
-				totalCounted: 0,
-				streaksRuined: 0,
-				highestStreak: 0,
-			}),
 		});
 		guildCommands.set(id, guild);
 		return guild;
@@ -58,6 +48,7 @@ Reflect.defineProperty(guildCommands, 'setPrefix', {
 
 Reflect.defineProperty(guildCommands, 'getNumberGame', {
 	value: function getNumberGameInfo(guild) {
+		if (!guild.numberGame) return null;
 		return JSON.parse(guild.numberGame);
 	},
 });
