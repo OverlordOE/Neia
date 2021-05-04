@@ -108,7 +108,7 @@ module.exports = {
 			else {
 				for (let i = 0; i < slotX; i++) {
 					if (checkVerticalWins(i)) {
-						if (slots[count][0] == '<:luckyseven:838417718944333884>') {
+						if (slots[0][i] == '<:luckyseven:838417718944333884>') {
 							rowsWon += 3;
 							output += '⭐';
 						}
