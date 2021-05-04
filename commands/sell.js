@@ -53,7 +53,7 @@ module.exports = {
 
 				sentMessage.edit(embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${client.util.formatNumber(refundAmount)}💰 back.
 				Your balance is ${client.util.formatNumber(balance)}💰!`)
-					.setColor('#fc0303'));
+					.setColor('#00fc43'));
 			}
 			else return sentMessage.edit(embed.setDescription(`__**ITEM(S) NOT SOLD!**__\nYou don't have enough ${item.emoji}__${item.name}(s)__!`).setColor('#fc0303'));
 		}

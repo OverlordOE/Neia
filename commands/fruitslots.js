@@ -59,11 +59,13 @@ module.exports = {
 		function checkWins() {
 			if (slots[count].every((val, g, arr) => val === arr[0])) {
 				if (slots[count][0] == '<:luckyseven:838417718944333884>') {
-					rowsWon += 2;
+					rowsWon += 3;
 					output += '⭐';
 				}
-				rowsWon++;
-				output += '✅';
+				else {
+					rowsWon++;
+					output += '✅';
+				}
 			}
 			else output += '❌';
 		}
@@ -106,12 +108,14 @@ module.exports = {
 			else {
 				for (let i = 0; i < slotX; i++) {
 					if (checkVerticalWins(i)) {
-						if (slots[0][i] == '<:luckyseven:838417718944333884>') {
-							rowsWon += 2;
+						if (slots[count][0] == '<:luckyseven:838417718944333884>') {
+							rowsWon += 3;
 							output += '⭐';
 						}
-						rowsWon++;
-						output += '✅';
+						else {
+							rowsWon++;
+							output += '✅';
+						}
 					}
 					else output += '❌';
 				}

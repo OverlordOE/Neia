@@ -94,7 +94,7 @@ module.exports = {
 			if (playerHandValue > 21) sentMessage.edit(embed.setDescription(`__**You busted!**__\n\n__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰\nYour **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
 			else if (neiaHandValue > 21) {
 				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
-				sentMessage.edit(embed.setDescription(`__Neia busted!__. __**You Win!**__\n\nYou have won **${winAmount}💰** and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
+				sentMessage.edit(embed.setDescription(`__Neia busted!__. __**You Win!**__\n\nYou have won **${client.util.formatNumber(winAmount)}💰** and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
 			}
 			else if (cardsDrawn >= 5) {
 				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
