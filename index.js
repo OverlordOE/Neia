@@ -187,8 +187,8 @@ client.on('message', async message => {
 
 
 // Random number game event every hour
-const numberGameEvents = new cron.CronJob('0 * * * *', () => {
-	const time = Math.floor(Math.random() * 60) * 60000;
+const numberGameEvents = new cron.CronJob('0 0/2 * * *', () => {
+	const time = Math.floor(Math.random() * 60) * 120000;
 	console.log(time);
 	setTimeout(
 		numberEvent,
