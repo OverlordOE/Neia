@@ -58,7 +58,7 @@ module.exports = {
 			return message.channel.send(embed.setDescription(
 				`Trade with *${target}* succesfull!\n\nTransferred ${client.util.formatNumber(amount)}💰 to *${target}*.
 				Your current balance is ${client.util.formatNumber(balance)}💰`)
-				.setColor('#fc0303'));
+				.setColor('#00fc43'));
 		}
 
 		async function itemTrade() {
@@ -75,7 +75,7 @@ module.exports = {
 			client.userCommands.removeItem(msgUser, item, amount);
 			message.channel.send(embed.setDescription(`Trade with *${target}* succesfull!
 			\nTraded ${amount} ${item.emoji}__${item.name}__ to *${target}*.`)
-				.setColor('#fc0303'));
+				.setColor('#00fc43'));
 		}
 
 	},
