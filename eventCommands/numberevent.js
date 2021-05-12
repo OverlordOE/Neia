@@ -31,6 +31,7 @@ module.exports = async function execute(client, logger) {
 			const collector = sentMessage.createReactionCollector(filter, { time: 600000 });
 
 			collector.on('collect', async (r, u) => {
+				let payout = 0;
 				const user = await client.userCommands.getUser(u.id);
 				const oldNumber = numberGameInfo.currentNumber;
 
@@ -38,7 +39,6 @@ module.exports = async function execute(client, logger) {
 				claimed = true;
 
 				const reaction = client.userCommands.getReaction(user);
-				let payout = 0;
 				if (reaction.emoji && reaction.value) {
 					for (let i = oldNumber; i < oldNumber + numberIncrease; i++) {
 						if (checkpoints.includes(i)) {

@@ -53,28 +53,54 @@ module.exports = {
 		const sentMessage = await message.channel.send(embed.setDescription(output));
 		setEmbed();
 
-		function checkWins() {
-			if (slots[count].every((val, g, arr) => val === arr[0])) {
-				if (slots[count][0] == '<:luckyseven:838417718944333884>') {
-					rowsWon += 2;
-					output += '⭐';
-				}
-				else {
-					rowsWon++;
-					output += '✅';
-				}
-			}
+		function checkHorizontalWins() {
+			if (slots[count].every((val, g, arr) => val === arr[0])) checkWinType(count, 0);
 			else output += '❌';
 		}
 
-		function checkVerticalWins(column) {
+		function checkVerticalWins() {
+			for (let i = 0; i < slotX; i++) {
+				let win = true;
+				const tempIcon = slots[0][i];
+
+				for (let j = 0; j < slotY; j++)
+					if (slots[j][i] != tempIcon) win = false;
+
+				if (win) checkWinType(0, i);
+				else output += '❌';
+			}
+		}
+
+		function checkDiagonalWins() {
 			let win = true;
-			const tempIcon = slots[0][column];
+			let tempIcon = slots[0][0];
 
 			for (let i = 0; i < slotY; i++)
-				if (slots[i][column] != tempIcon) win = false;
+				if (slots[i][i] != tempIcon) win = false;
 
-			return win;
+			if (win) checkWinType(0, 0);
+			else output += '❌';
+
+			win = true;
+			tempIcon = slots[0][slotX - 1];
+
+			for (let i = 0; i < slotX; i++)
+				if (slots[i][slotX - i - 1] != tempIcon) win = false;
+
+			if (win) checkWinType(0, slotX - 1);
+			else output += '❌';
+
+		}
+
+		function checkWinType(x, y) {
+			if (slots[x][y] == '<:luckyseven:838417718944333884>') {
+				rowsWon += 2;
+				output += '⭐';
+			}
+			else {
+				rowsWon++;
+				output += '✅';
+			}
 		}
 
 		function endGame() {
@@ -94,7 +120,7 @@ module.exports = {
 		function setEmbed() {
 			for (let j = 0; j < slots[count].length; j++) output += slots[count][j];
 
-			checkWins();
+			checkHorizontalWins();
 			output += '\n';
 			sentMessage.edit(embed.setDescription(output));
 
@@ -103,19 +129,9 @@ module.exports = {
 				setTimeout(() => setEmbed(), 1500);
 			}
 			else {
-				for (let i = 0; i < slotX; i++) {
-					if (checkVerticalWins(i)) {
-						if (slots[0][i] == '<:luckyseven:838417718944333884>') {
-							rowsWon += 2;
-							output += '⭐';
-						}
-						else {
-							rowsWon++;
-							output += '✅';
-						}
-					}
-					else output += '❌';
-				}
+				checkVerticalWins();
+				output += '\n🇽';
+				checkDiagonalWins();
 				endGame();
 			}
 		}
