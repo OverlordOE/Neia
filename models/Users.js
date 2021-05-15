@@ -37,46 +37,32 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 		},
 
-		// Stats
-		numbersCounted: {
-			type: DataTypes.INTEGER,
-			defaultValue: 0,
-			allowNull: false,
-		},
-		streaksRuined: {
-			type: DataTypes.INTEGER,
-			defaultValue: 0,
-			allowNull: false,
-		},
-		gamblingDone: {
-			type: DataTypes.INTEGER,
-			defaultValue: 0,
-			allowNull: false,
-		},
-		gamblingMoneyLost: {
-			type: DataTypes.INTEGER,
-			defaultValue: 0,
-			allowNull: false,
-		},
-		gamblingMoneyGained: {
-			type: DataTypes.INTEGER,
-			defaultValue: 0,
+
+		stats: {
+			type: DataTypes.JSON,
+			defaultValue: JSON.stringify({
+				numbersCounted: 0,
+				streaksRuined: 0,
+				gamblingDone: 0,
+				gamblingMoneyLost: 0,
+				gamblingMoneyGained: 0,
+			}),
 			allowNull: false,
 		},
 
 
 		// MISC
 		firstCommand: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: true,
-		},
-		lastVote: {
-			type: DataTypes.DATE,
-			defaultValue: moment().subtract(1, 'days').toDate(),
-			allowNull: false,
-		},
+		type: DataTypes.BOOLEAN,
+		defaultValue: true,
 	},
-		{
-			timestamps: false,
-		});
+		lastVote: {
+		type: DataTypes.DATE,
+		defaultValue: moment().subtract(1, 'days').toDate(),
+		allowNull: false,
+	},
+	},
+{
+	timestamps: false,
+});
 };

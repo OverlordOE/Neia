@@ -18,6 +18,7 @@ module.exports = {
 		};
 		const protection = client.userCommands.getProtection(user);
 		const powerCounting = client.userCommands.getPowerCounting(user);
+		const stats = client.userCommands.getStats(user);
 
 		const mainEmbed = new Discord.MessageEmbed()
 			.setTitle(`${target.tag}'s Main Page`)
@@ -33,11 +34,11 @@ module.exports = {
 		const statEmbed = new Discord.MessageEmbed()
 			.setTitle(`${target.tag}'s General Stats`)
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
-			.addField('Numbers Counted:', user.numbersCounted, true)
-			.addField('Streaks Ruined:', user.streaksRuined, true)
-			.addField('Times Gambled:', user.gamblingDone, true)
-			.addField('Won with Gambling:', client.util.formatNumber(user.gamblingMoneyGained), true)
-			.addField('Lost with Gambling:', client.util.formatNumber(user.gamblingMoneyLost), true)
+			.addField('Numbers Counted:', stats.numbersCounted, true)
+			.addField('Streaks Ruined:', stats.streaksRuined, true)
+			.addField('Times Gambled:', stats.gamblingDone, true)
+			.addField('Won with Gambling:', client.util.formatNumber(stats.gamblingMoneyGained), true)
+			.addField('Lost with Gambling:', client.util.formatNumber(stats.gamblingMoneyLost), true)
 			.setFooter('You can tag someone else to get their stats.', client.user.displayAvatarURL())
 			.setColor('#f3ab16');
 

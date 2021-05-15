@@ -58,8 +58,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		numberGameInfo.totalCounted++;
 		numberGameInfo.lastUserId = message.author.id;
 		client.userCommands.addBalance(msgUser, number);
-		msgUser.numbersCounted++;
-		msgUser.save();
+		client.userCommands.addStats(msgUser, 'numbersCounted', 1);
 	}
 
 	function wrongCount() {
@@ -71,8 +70,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		numberGameInfo.nextCheckpoint = checkpoints[0];
 		numberGameInfo.lastUserId = null;
 		numberGameInfo.streaksRuined++;
-		msgUser.streaksRuined++;
-		msgUser.save();
+		client.userCommands.addStats(msgUser, 'streaksRuined', 1);
 	}
 
 	function easterEggs() {
@@ -147,8 +145,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		numberGameInfo.lastCheckpoint = 0;
 		numberGameInfo.lastUserId = null;
 		numberGameInfo.streaksRuined++;
-		msgUser.streaksRuined++;
-		msgUser.save();
+		client.userCommands.addStats(msgUser, 'streaksRuined', 1);
 	}
 
 	function protection() {

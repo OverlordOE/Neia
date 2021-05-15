@@ -122,13 +122,32 @@ Reflect.defineProperty(userCommands, 'addBalance', {
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 		user.balance += Number(amount);
 
-		if (amount > 0 && gambling) user.gamblingMoneyGained += Number(amount);
+		if (amount > 0 && gambling) userCommands.addStats(user, 'gamblingMoneyGained', Number(amount));
 		else if (amount < 0 && gambling) {
-			user.gamblingMoneyLost -= Number(amount);
-			user.gamblingDone++;
+			userCommands.addStats(user, 'gamblingMoneyLost', -Number(amount));
+			userCommands.addStats(user, 'gamblingDone', 1);
 		}
 		user.save();
 		return Math.floor(user.balance);
+	},
+});
+
+
+Reflect.defineProperty(userCommands, 'getStats', {
+	value: function getStats(user) {
+		return JSON.parse(user.stats);
+	},
+});
+Reflect.defineProperty(userCommands, 'addStats', {
+	value: function addStats(user, statName, amount) {
+		const userStats = JSON.parse(user.stats);
+		if (userStats[statName]) userStats[statName] += amount;
+		else userStats[statName] = amount;
+
+		user.stats = JSON.stringify(userStats);
+		user.save();
+
+		return userStats;
 	},
 });
 
