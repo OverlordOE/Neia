@@ -11,7 +11,7 @@ module.exports = {
 
 	async execute(message, args, msgUser, msgGuild, client, logger) {
 		let gambleAmount = 0;
-		const payoutRate = 4.5;
+		const payoutRate = 5;
 
 		const embed = new Discord.MessageEmbed()
 			.setColor('#f3ab16')
