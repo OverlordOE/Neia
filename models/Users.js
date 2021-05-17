@@ -31,6 +31,16 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: moment().subtract(1, 'days').toDate(),
 			allowNull: false,
 		},
+		lastDailyCount: {
+			type: DataTypes.DATE,
+			defaultValue: moment().subtract(1, 'days').toDate(),
+			allowNull: false,
+		},
+		lastHourlyCount: {
+			type: DataTypes.DATE,
+			defaultValue: moment().subtract(1, 'days').toDate(),
+			allowNull: false,
+		},
 		powerCounting: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,

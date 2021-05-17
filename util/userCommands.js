@@ -218,6 +218,38 @@ Reflect.defineProperty(userCommands, 'setPowerCounting', {
 });
 
 
+Reflect.defineProperty(userCommands, 'getDailyCount', {
+	value: function getDailyCount(user) {
+		const now = moment();
+		const dCheck = moment(user.lastDailyCount).add(1, 'd');
+		if (moment(dCheck).isBefore(now)) return true;
+		else return dCheck.format('MMM Do HH:mm');
+	},
+});
+Reflect.defineProperty(userCommands, 'setDailyCount', {
+	value: function setDailyCount(user) {
+		user.lastDailyCount = moment().toDate();
+		return user.save();
+	},
+});
+
+
+Reflect.defineProperty(userCommands, 'getHourlyCount', {
+	value: function getHourlyCount(user) {
+		const now = moment();
+		const dCheck = moment(user.lastHourlyCount).add(1, 'h');
+		if (moment(dCheck).isBefore(now)) return true;
+		else return dCheck.format('MMM Do HH:mm');
+	},
+});
+Reflect.defineProperty(userCommands, 'setHourlyCount', {
+	value: function setHourlyCount(user) {
+		user.lastHourlyCount = moment().toDate();
+		return user.save();
+	},
+});
+
+
 Reflect.defineProperty(userCommands, 'getReaction', {
 	value: function getReaction(user) {
 		return JSON.parse(user.reaction);

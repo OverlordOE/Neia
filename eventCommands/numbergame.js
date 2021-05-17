@@ -1,4 +1,5 @@
 const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000];
+const Discord = require('discord.js');
 
 module.exports = async function execute(message, msgUser, guild, client, logger) {
 
@@ -44,6 +45,8 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 			logger.warn('Emoji failed');
 			message.react('✅');
 		}
+
+		giveBonus();
 		easterEggs();
 
 		if (checkpoints.includes(number)) {
@@ -154,5 +157,36 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		message.channel.send(`${message.author}, your streak protection has been used and will go on a 24 hour cooldown.`);
 		client.userCommands.setProtection(msgUser);
 		client.userCommands.removeItem(msgUser, protectionItem, 1);
+	}
+
+	function giveBonus() {
+		const dailyMultiplier = 10;
+		const hourlyMultiplier = 2.5;
+		const daily = client.userCommands.getDailyCount(msgUser);
+		const hourly = client.userCommands.getHourlyCount(msgUser);
+
+		const embed = new Discord.MessageEmbed()
+			.setTitle('Count Reward')
+			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
+			.setColor('#f3ab16')
+			.setFooter('Neia', client.user.displayAvatarURL());
+
+		if (daily === true) {
+			const balance = client.userCommands.addBalance(msgUser, number * dailyMultiplier);
+			message.author.send(embed.setDescription(`You have received your __**Daily Count**__ reward
+								You gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.
+								You will get your next __**Daily Count**__ in 1 day.
+								`));
+			client.userCommands.setDailyCount(msgUser);
+		}
+
+		else if (hourly === true) {
+			const balance = client.userCommands.addBalance(msgUser, number * hourlyMultiplier);
+			message.author.send(embed.setDescription(`You have received your __**Hourly Count**__ reward!
+								You gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.
+								You will get your next __**Hourly Count**__ in 1 hour.
+								`));
+			client.userCommands.setHourlyCount(msgUser);
+		}
 	}
 };
