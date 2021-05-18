@@ -1,4 +1,4 @@
-const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000];
+const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000, 3300, 3600, 3900, 4200, 4600, 5000];
 const Discord = require('discord.js');
 
 module.exports = async function execute(message, msgUser, guild, client, logger) {
@@ -53,14 +53,14 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 			const nextCheckpointIndex = checkpoints.indexOf(number) + 1;
 			numberGameInfo.lastCheckpoint = number;
 			numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
-			message.channel.send(`Checkpoint **${number}** reached!\nIf you make a mistake you will be reversed to this point.`);
+			message.channel.send(`Checkpoint **${number}** reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
 		}
 
 		if (number > numberGameInfo.highestStreak) numberGameInfo.highestStreak = number;
 		numberGameInfo.currentNumber++;
 		numberGameInfo.totalCounted++;
 		numberGameInfo.lastUserId = message.author.id;
-		client.userCommands.addBalance(msgUser, number);
+		client.userCommands.addBalance(msgUser, number + msgUser.countBoost);
 		client.userCommands.addStats(msgUser, 'numbersCounted', 1);
 	}
 
