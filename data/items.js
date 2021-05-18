@@ -315,11 +315,11 @@ module.exports = {
 					message: 'You already have a **Power Count** active.',
 				};
 			}
-			const powerCountingCooldown = client.userCommands.getPowerCounting(msgUser);
-			if (powerCountingCooldown !== true) {
+			const powerCountCooldown = client.userCommands.getPowerCounting(msgUser);
+			if (powerCountCooldown !== true) {
 				return {
 					succes: false,
-					message: `Your **Power Couting** is on __Cooldown__.\nNext **Power Count**: ${powerCountingCooldown}`,
+					message: `Your **Power Count** is on __Cooldown__.\nNext **Power Count**: ${powerCountCooldown}`,
 				};
 			}
 
