@@ -17,7 +17,8 @@ module.exports = {
 			return emojiUser.id === message.author.id;
 		};
 		const protection = client.userCommands.getProtection(user);
-		const powerCounting = client.userCommands.getPowerCounting(user);
+		const powerCounting = client.userCommands.getPowerCount(user);
+		const countBoost = client.userCommands.getCountBoost(user);
 		const hourlyCount = client.userCommands.getHourlyCount(user);
 		const dailyCount = client.userCommands.getDailyCount(user);
 		const stats = client.userCommands.getStats(user);
@@ -30,6 +31,7 @@ module.exports = {
 			.addField('Number Game Reaction Bonus', `${client.util.formatNumber(Math.sqrt(reaction.value))}💰`, true)
 			.addField('Protection Available:', `**${protection}**`, true)
 			.addField('Power Count Available:', `**${powerCounting}**`, true)
+			.addField('Count Boost Available:', `**${countBoost}**`, true)
 			.addField('Next Daily Count Reward:', `**${dailyCount}**`, true)
 			.addField('Next Hourly Count Reward:', `**${hourlyCount}**`, true)
 			.setFooter('You can tag someone else to get their stats.', client.user.displayAvatarURL())
@@ -52,7 +54,7 @@ module.exports = {
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
 			.setFooter('You can use the emojis to switch pages.', client.user.displayAvatarURL());
 
-		
+
 		let inventory = '__Inventory:__\n\n';
 		if (items.length) {
 			items.map(i => {
