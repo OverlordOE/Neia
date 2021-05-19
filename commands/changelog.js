@@ -38,14 +38,6 @@ You will get a DM from Neia when they activate. You can see the cooldowns in you
 - fruit slots payout decreased from **4.5 - > 4.0**.
 			`)
 
-			.addField('**Gambling**', `
-			- Fruit Slots: 
-A new symbol 7️⃣ has been added to replace the 🍋 . If you get a 7️⃣ row you will get **3** rows instead of **1**.
-- Gambling commands now show you how much you have bet.
-- \`Blackjack\` and \`Fruit Slots\` now show how much money you have won and lost.
-			`)
-
-
 			.addField('**Bug Fixes and Minor Changes**', `
 			- \`Number Guessing\` payout increased from **4.5 -> 5.0**
 - Added more checkpoints to the number game.
