@@ -10,22 +10,32 @@ module.exports = {
 
 	execute(message, args, msgUser, msgGuild, client, logger) {
 		const embed = new Discord.MessageEmbed()
-			.setTitle('Neia V3.4: Power Counting')
+			.setTitle('**__Neia V3.5: Hourly Counts & Reset__**')
 			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL({ dynamic: true }))
-			.addField('**Number Game Event**', `
-			A random event will now pop-up in the designated Number Game channel randomly every hour.
-Only 1 person can claim it and when they do the bot will count around 10 numbers for them and give them all the money they would normally would gain from counting.
-If the event isn't claimed within 10 minutes it will expire.
-`)
-
-
-			.addField('**Items**', `
-			- Added **Pepe Money** custom reaction priced **200.1k**
+			
+			.addField('**Reset**', `
+			Because i had to make some drastic changes in the database stat structure and the inflated economy i have decided to reset the database.
+This means that everything will be reset to 0, including the number game and your money.
 			`)
 
-			.addField('**Power Count**', `
-			- Changed name from \`Power Counting\` to \`Power Count\`.
-- It will now give you a warning **10 seconds** before it runs out.
+			.addField('** Daily and Hourly Counts **', `
+			Daily and Hourly counts activate when you count in the number game. You will get a greater count reward when they activate.
+You will get a DM from Neia when they activate. You can see the cooldowns in your `Stats`.
+			`)
+
+			.addField('**Count Boost**', `
+			This is a new power-up that gives you extra money per count that you make for a minute. It has a **3 hour** cooldown.
+			`)
+			
+			.addField('**Number Game Event**', `
+			- Spawn time increased from **1 hour -> 3 hours**.
+- Count amount increased to compensate from **8-12 -> 10-15**.
+`)			
+
+			.addField('**Fruit Slots**', `
+			- You can now get rewards for the diagonal rows.
+- Decreased extra row payout for :seven: from **3 -> 2**.
+- fruit slots payout decreased from **4.5 - > 4.0**.
 			`)
 
 			.addField('**Gambling**', `
@@ -36,9 +46,12 @@ A new symbol 7️⃣ has been added to replace the 🍋 . If you get a 7️⃣ r
 			`)
 
 
-			.addField('**Bug Fixes**', `
-			- Fixed \`Sell\` command not working at all.
-- \`Buy\`, \`Trade\` and \`Sell\`  now change colour based on if the command was successful.
+			.addField('**Bug Fixes and Minor Changes**', `
+			- \`Number Guessing\` payout increased from **4.5 -> 5.0**
+- Added more checkpoints to the number game.
+- Fixed some typos.
+- Removed a lot of unused reactions so they won't clutter the shop as much. 
+- \`Trade\` should now change colour correctly to green on a success.
 `);
 
 		return message.channel.send(embed);
