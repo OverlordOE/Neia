@@ -20,7 +20,7 @@ This means that everything will be reset to 0, including the number game and you
 
 			.addField('** Daily and Hourly Counts **', `
 			Daily and Hourly counts activate when you count in the number game. You will get a greater count reward when they activate.
-You will get a DM from Neia when they activate. You can see the cooldowns in your `Stats`.
+You will get a DM from Neia when they activate. You can see the cooldowns in your \`Stats\`.
 			`)
 
 			.addField('**Count Boost**', `
