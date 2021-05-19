@@ -106,7 +106,7 @@ client.on('message', async message => {
 	const id = message.author.id;
 	const user = await userCommands.getUser(id);
 
-	if (Number.isInteger(Number(message.content)) && !message.attachments.first()) numberGame(message, user, guild, client, logger);
+	if (Number.isInteger(Number(message.content)) && !message.attachments.first()) return numberGame(message, user, guild, client, logger);
 
 	// split message for further use
 	const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`);
