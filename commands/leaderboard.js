@@ -10,18 +10,20 @@ module.exports = {
 	example: '2',
 
 	execute(message, args, msgUser, msgGuild, client, logger) {
-
 		const filter = (reaction, user) => { return ['◀️', '▶️', '🔀'].includes(reaction.emoji.name) && user.id === message.author.id; };
 
-		const ruinedList = client.userCommands.sort((a, b) => b.streaksRuined - a.streaksRuined)
-			.filter(user => client.users.cache.has(user.user_id))
-			.first(50)
-			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(user.streaksRuined)}`);
 
-		const countList = client.userCommands.sort((a, b) => b.numbersCounted - a.numbersCounted)
+		const ruinedList = client.userCommands.sort((a, b) => client.userCommands.getStats(b).streaksRuined - client.userCommands.getStats(a).streaksRuined)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(user.numbersCounted)}`);
+			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(client.userCommands.getStats(user).streaksRuined)}`);
+
+
+		const countList = client.userCommands.sort((a, b) => client.userCommands.getStats(b).numbersCounted - client.userCommands.getStats(a).numbersCounted)
+			.filter(user => client.users.cache.has(user.user_id))
+			.first(50)
+			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(client.userCommands.getStats(user).numbersCounted)}`);
+
 
 		const balanceList = client.userCommands.sort((a, b) => b.balance - a.balance)
 			.filter(user => client.users.cache.has(user.user_id))
@@ -29,7 +31,7 @@ module.exports = {
 			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(user.balance)}💰`);
 
 
-		const listArray = [{ list: balanceList, title: 'Current Balance' }, { list: ruinedList, title: 'Streaks Ruined' }, { list: countList, title: 'Total Numbers Counted' } ];
+		const listArray = [{ list: balanceList, title: 'Current Balance' }, { list: ruinedList, title: 'Streaks Ruined' }, { list: countList, title: 'Total Numbers Counted' }];
 		let listIndex = 0;
 		let page = 0;
 		if (!isNaN(args[0]) && args[0] > 0 && args[0] < 6) page = args[0] - 1;

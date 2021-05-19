@@ -21,9 +21,9 @@ module.exports = (sequelize, DataTypes) => {
 			}),
 			allowNull: false,
 		},
-		lastProtection: {
-			type: DataTypes.DATE,
-			defaultValue: moment().subtract(1, 'days').toDate(),
+		powerCounting: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
 			allowNull: false,
 		},
 		lastPowerCounting: {
@@ -31,41 +31,45 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: moment().subtract(1, 'days').toDate(),
 			allowNull: false,
 		},
-		powerCounting: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: false,
-			allowNull: false,
-		},
-
-		// Stats
-		numbersCounted: {
+		countBoost: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
 			allowNull: false,
 		},
-		streaksRuined: {
-			type: DataTypes.INTEGER,
-			defaultValue: 0,
+		lastCountBoost: {
+			type: DataTypes.DATE,
+			defaultValue: moment().subtract(1, 'days').toDate(),
 			allowNull: false,
 		},
-		gamblingDone: {
-			type: DataTypes.INTEGER,
-			defaultValue: 0,
+		lastDailyCount: {
+			type: DataTypes.DATE,
+			defaultValue: moment().subtract(1, 'days').toDate(),
 			allowNull: false,
 		},
-		gamblingMoneyLost: {
-			type: DataTypes.INTEGER,
-			defaultValue: 0,
+		lastHourlyCount: {
+			type: DataTypes.DATE,
+			defaultValue: moment().subtract(1, 'days').toDate(),
 			allowNull: false,
 		},
-		gamblingMoneyGained: {
-			type: DataTypes.INTEGER,
-			defaultValue: 0,
+		lastProtection: {
+			type: DataTypes.DATE,
+			defaultValue: moment().subtract(1, 'days').toDate(),
 			allowNull: false,
 		},
 
 
 		// MISC
+		stats: {
+			type: DataTypes.JSON,
+			defaultValue: JSON.stringify({
+				numbersCounted: 0,
+				streaksRuined: 0,
+				gamblingDone: 0,
+				gamblingMoneyLost: 0,
+				gamblingMoneyGained: 0,
+			}),
+			allowNull: false,
+		},
 		firstCommand: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: true,

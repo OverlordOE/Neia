@@ -197,16 +197,6 @@ module.exports = {
 	},
 	'medal': {
 		name: 'Medal',
-		value: 12000,
-		buyable: true,
-		emoji: '🎖️',
-		rarity: 'uncommon',
-		picture: null,
-		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change the number game emojis.',
-	},
-	'medal2': {
-		name: 'Medal2',
 		value: 11000,
 		buyable: true,
 		emoji: '🏅',
@@ -221,16 +211,6 @@ module.exports = {
 		buyable: true,
 		emoji: '🎯',
 		rarity: 'epic',
-		picture: null,
-		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change the number game emojis.',
-	},
-	'ribbon': {
-		name: 'Ribbon',
-		value: 10000,
-		buyable: true,
-		emoji: '🎗️',
-		rarity: 'uncommon',
 		picture: null,
 		ctg: 'reaction',
 		description: 'A custom emoji you can equip to change the number game emojis.',
@@ -255,8 +235,8 @@ module.exports = {
 		ctg: 'reaction',
 		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
-	'ribbon2': {
-		name: 'Ribbon2',
+	'ribbon': {
+		name: 'Ribbon',
 		value: 15000,
 		buyable: true,
 		emoji: '🎀',
@@ -270,86 +250,6 @@ module.exports = {
 		value: 25000,
 		buyable: true,
 		emoji: '❤️',
-		rarity: 'rare',
-		picture: null,
-		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change the number game emojis.',
-	},
-	'orange heart': {
-		name: 'Ribbon',
-		value: 25000,
-		buyable: true,
-		emoji: '🧡',
-		rarity: 'rare',
-		picture: null,
-		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change the number game emojis.',
-	},
-	'yellow heart': {
-		name: 'Yellow Heart',
-		value: 25000,
-		buyable: true,
-		emoji: '💛',
-		rarity: 'rare',
-		picture: null,
-		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change the number game emojis.',
-	},
-	'green heart': {
-		name: 'Green Heart',
-		value: 25000,
-		buyable: true,
-		emoji: '💚',
-		rarity: 'rare',
-		picture: null,
-		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change the number game emojis.',
-	},
-	'purple heart': {
-		name: 'Purple Heart',
-		value: 25000,
-		buyable: true,
-		emoji: '💜',
-		rarity: 'rare',
-		picture: null,
-		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change the number game emojis.',
-	},
-	'blue heart': {
-		name: 'Blue Heart',
-		value: 25000,
-		buyable: true,
-		emoji: '💙',
-		rarity: 'rare',
-		picture: null,
-		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change the number game emojis.',
-	},
-	'black heart': {
-		name: 'Black Heart',
-		value: 25000,
-		buyable: true,
-		emoji: '🖤',
-		rarity: 'rare',
-		picture: null,
-		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change the number game emojis.',
-	},
-	'brown heart': {
-		name: 'Brown Heart',
-		value: 25000,
-		buyable: true,
-		emoji: '🤎',
-		rarity: 'rare',
-		picture: null,
-		ctg: 'reaction',
-		description: 'A custom emoji you can equip to change the number game emojis.',
-	},
-	'white heart': {
-		name: 'White Heart',
-		value: 25000,
-		buyable: true,
-		emoji: '🤍',
 		rarity: 'rare',
 		picture: null,
 		ctg: 'reaction',
@@ -415,11 +315,11 @@ module.exports = {
 					message: 'You already have a **Power Count** active.',
 				};
 			}
-			const powerCountingCooldown = client.userCommands.getPowerCounting(msgUser);
-			if (powerCountingCooldown !== true) {
+			const powerCountCooldown = client.userCommands.getPowerCount(msgUser);
+			if (powerCountCooldown !== true) {
 				return {
 					succes: false,
-					message: `Your **Power Couting** is on __Cooldown__.\nNext **Power Count**: ${powerCountingCooldown}`,
+					message: `Your **Power Count** is on __Cooldown__.\nNext **Power Count**: ${powerCountCooldown}`,
 				};
 			}
 
@@ -435,7 +335,7 @@ module.exports = {
 
 			msgUser.save();
 			msgUser.powerCounting = true;
-			client.userCommands.setPowerCounting(msgUser);
+			client.userCommands.setPowerCount(msgUser);
 
 			setTimeout(function () {
 				numberGameChannel.send(`${message.author} Your **Power Count** will end in __**10 seconds**__!`);
@@ -446,9 +346,63 @@ module.exports = {
 				}, 10000);
 			}, 50000);
 
-			
+
 			return {
 				message: '**Power Count activated!**.\nYou have __**1 minute**__ to count by yourself.',
+				succes: true,
+			};
+		},
+	},
+	'count boost': {
+		name: 'Count Boost',
+		value: 1000,
+		buyable: true,
+		emoji: '📈',
+		rarity: 'rare',
+		picture: null,
+		ctg: 'powerup',
+		description: 'Once you activate this item your counts will give you extra 💰 for **__1 minute__**. Neia will notify you when your time is up.',
+		use: async function (client, amount, embed, item, msgUser, msgGuild, message) {
+			if (msgUser.countBoost > 0) {
+				return {
+					succes: false,
+					message: 'You already have a **Count Boost** active.',
+				};
+			}
+			const countBoostCooldown = client.userCommands.getCountBoost(msgUser);
+			if (countBoostCooldown !== true) {
+				return {
+					succes: false,
+					message: `Your **Count Boost** is on __Cooldown__.\nNext **Count Boost**: ${countBoostCooldown}`,
+				};
+			}
+
+			const numberGameChannelID = client.guildCommands.getNumberGame(msgGuild).channelId;
+			if (!numberGameChannelID) {
+				return {
+					succes: false,
+					message: 'The number game has not been setup yet.',
+				};
+			}
+			const numberGameChannel = await client.channels.fetch(numberGameChannelID);
+			numberGameChannel.send(`${message.author} **has activated Count Boost!**.\nThey get extra 💰 per count for __**1 minute**__.`);
+
+			msgUser.save();
+			msgUser.countBoost = 100;
+			client.userCommands.setCountBoost(msgUser);
+
+			setTimeout(function () {
+				numberGameChannel.send(`${message.author} Your **Count Boost** will end in __**10 seconds**__!`);
+				setTimeout(function () {
+					msgUser.countBoost = 0;
+					msgUser.save();
+					numberGameChannel.send(`${message.author} Your **Count Boost** has ended.\n Next **Count Boost** in __**3 hours**__.`);
+				}, 10000);
+			}, 50000);
+
+
+			return {
+				message: '**Count Boost activated!**.\nYou get extra 💰 per count for __**1 minute**__.',
 				succes: true,
 			};
 		},

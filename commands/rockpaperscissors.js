@@ -26,10 +26,7 @@ module.exports = {
 		}
 
 		if (gambleAmount < 1) gambleAmount = 1;
-
-		if (!gambleAmount || isNaN(gambleAmount)) return message.channel.send(embed.setDescription(`Sorry *${message.author}*, that's an **invalid amount.**`));
 		if (gambleAmount > msgUser.balance) return message.channel.send(embed.setDescription(`Sorry *${message.author}*, you only have ${client.util.formatNumber(msgUser.balance)}💰.`));
-		if (gambleAmount <= 0) return message.channel.send(embed.setDescription(`Please enter an amount **greater than zero**, *${message.author}*.`));
 
 		client.userCommands.addBalance(msgUser, -gambleAmount, true);
 

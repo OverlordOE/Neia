@@ -19,11 +19,11 @@ module.exports = async function execute(client, logger) {
 
 
 			const numberGameChannel = await client.channels.fetch(numberGameInfo.channelId);
-			const numberIncrease = Math.floor(Math.random() * 5) + 8;
+			const numberIncrease = Math.floor(Math.random() * 10) + 6;
 			let description = `Be the **first** to click the emoji and the bot will count **${numberIncrease} times** for you.
-			You will gain __normal count__ and __custom reaction__ **rewards** for every number counted.
+			You will gain __**normal count**__ and __**custom reaction**__ rewards for **every number** counted.
 			
-			This event will expire in **10 minutes**`;
+			This event will expire in **10 minutes.**`;
 			const sentMessage = await numberGameChannel.send(embed.setDescription(description));
 
 
@@ -31,6 +31,7 @@ module.exports = async function execute(client, logger) {
 			const collector = sentMessage.createReactionCollector(filter, { time: 600000 });
 
 			collector.on('collect', async (r, u) => {
+				let payout = 0;
 				const user = await client.userCommands.getUser(u.id);
 				const oldNumber = numberGameInfo.currentNumber;
 
@@ -38,14 +39,13 @@ module.exports = async function execute(client, logger) {
 				claimed = true;
 
 				const reaction = client.userCommands.getReaction(user);
-				let payout = 0;
 				if (reaction.emoji && reaction.value) {
 					for (let i = oldNumber; i < oldNumber + numberIncrease; i++) {
 						if (checkpoints.includes(i)) {
 							const nextCheckpointIndex = checkpoints.indexOf(i) + 1;
 							numberGameInfo.lastCheckpoint = i;
 							numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
-							numberGameChannel.send(`Checkpoint __**${i}**__ reached!\nIf you make a mistake you will be reversed to this point.`);
+							numberGameChannel.send(`Checkpoint __**${i}**__ reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
 						}
 						payout += i + Math.sqrt(reaction.value);
 					}

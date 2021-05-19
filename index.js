@@ -106,7 +106,7 @@ client.on('message', async message => {
 	const id = message.author.id;
 	const user = await userCommands.getUser(id);
 
-	if (Number.isInteger(Number(message.content)) && !message.attachments.first()) numberGame(message, user, guild, client, logger);
+	if (Number.isInteger(Number(message.content)) && !message.attachments.first()) return numberGame(message, user, guild, client, logger);
 
 	// split message for further use
 	const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`);
@@ -186,9 +186,9 @@ client.on('message', async message => {
 
 
 
-// Random number game event every hour
-const numberGameEvents = new cron.CronJob('0 * * * *', () => {
-	const time = Math.floor(Math.random() * 60) * 60000;
+// Random number game event every 3 hours
+const numberGameEvents = new cron.CronJob('0 0/3 * * *', () => {
+	const time = Math.floor(Math.random() * 60) * 180000;
 	console.log(time);
 	setTimeout(
 		numberEvent,
