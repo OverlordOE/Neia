@@ -20,15 +20,16 @@ module.exports = async function execute(client, logger) {
 
 			const numberGameChannel = await client.channels.fetch(numberGameInfo.channelId);
 			const numberIncrease = Math.floor(Math.random() * 10) + 6;
+			const timeoutLength = 30;
 			let description = `Be the **first** to click the emoji and the bot will count **${numberIncrease} times** for you.
 			You will gain __**normal count**__ and __**custom reaction**__ rewards for **every number** counted.
 			
-			This event will expire in **10 minutes.**`;
+			This event will expire in **${timeoutLength} minutes.**`;
 			const sentMessage = await numberGameChannel.send(embed.setDescription(description));
 
 
 			sentMessage.react('💰');
-			const collector = sentMessage.createReactionCollector(filter, { time: 600000 });
+			const collector = sentMessage.createReactionCollector(filter, { time: timeoutLength * 60000 });
 
 			collector.on('collect', async (r, u) => {
 				let payout = 0;
