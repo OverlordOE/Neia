@@ -1,0 +1,33 @@
+{
+  "name": "neia",
+  "version": "1.0.0",
+  "description": "Discord bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daylandelange/syndicatebot.git"
+  },
+  "author": "OverlordOE",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Daylandelange/syndicatebot/issues"
+  },
+  "homepage": "https://github.com/Daylandelange/syndicatebot#readme",
+  "dependencies": {
+    "@discordjs/builders": "^0.6.0",
+    "@discordjs/rest": "*",
+    "discord-api-types": "^0.23.1",
+    "discord.js": "^13.2.0",
+    "dotenv": "^10.0.0",
+    "moment": "^2.29.1",
+    "sequelize": "^6.6.5",
+    "sqlite3": "^5.0.2",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0"
+  }
+}
