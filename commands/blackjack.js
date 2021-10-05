@@ -57,7 +57,7 @@ module.exports = {
 		sentMessage.react('🃏'); // result 1
 		sentMessage.react('🖐️'); // result 2
 
-		const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
+		const collector = sentMessage.createReactionCollector({ filter, time: 60000 });
 		for (let i = 0; i < 2; i++) {
 			getCard('player');
 			getCard('client');

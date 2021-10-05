@@ -29,7 +29,7 @@ module.exports = async function execute(client, logger) {
 
 
 			sentMessage.react('💰');
-			const collector = sentMessage.createReactionCollector(filter, { time: timeoutLength * 60000 });
+			const collector = sentMessage.createReactionCollector({ filter, time: timeoutLength * 60000 });
 
 			collector.on('collect', async (r, u) => {
 				let payout = 0;

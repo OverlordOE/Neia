@@ -44,7 +44,7 @@ module.exports = {
 		const sentMessage = await message.channel.send(embed.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.\n**Guess the __number__ between __1 and 5__.**`).setTitle('Number Guessing'));
 		for (let i = 1; i < 6; i++) sentMessage.react(client.emojiCharacters[i]);
 
-		sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+		sentMessage.awaitReactions({ filter, max: 1, time: 60000, errors: ['time'] })
 			.then(collected => {
 				const reaction = collected.first();
 

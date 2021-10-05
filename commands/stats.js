@@ -76,7 +76,7 @@ module.exports = {
 				sentMessage.react('💰');
 				sentMessage.react('📊');
 				sentMessage.react('📦');
-				const collector = sentMessage.createReactionCollector(filter, { time: 60000 });
+				const collector = sentMessage.createReactionCollector({ filter, time: 60000 });
 
 				collector.on('collect', (r) => {
 					r.users.remove(message.author.id);

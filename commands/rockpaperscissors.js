@@ -42,7 +42,7 @@ module.exports = {
 		for (let i = 0; i < symbols.length; i++) sentMessage.react(symbols[i]);
 
 
-		sentMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+		sentMessage.awaitReactions({ filter, max: 1, time: 60000, errors: ['time'] })
 			.then(collected => {
 				const reaction = collected.first();
 				const userAnswer = symbols.indexOf(reaction.emoji.name);

@@ -323,14 +323,14 @@ module.exports = {
 				};
 			}
 
-			const numberGameChannelID = client.guildCommands.getNumberGame(msgGuild).channelId;
-			if (!numberGameChannelID) {
+			const numberGameChannelId = client.guildCommands.getNumberGame(msgGuild).channelId;
+			if (!numberGameChannelId) {
 				return {
 					succes: false,
 					message: 'The number game has not been setup yet.',
 				};
 			}
-			const numberGameChannel = await client.channels.fetch(numberGameChannelID);
+			const numberGameChannel = await client.channels.fetch(numberGameChannelId);
 			numberGameChannel.send(`${message.author} **has activated Power Count!**.\nThey have __**1 minute**__ to count by themself.`);
 
 			msgUser.save();
@@ -377,14 +377,14 @@ module.exports = {
 				};
 			}
 
-			const numberGameChannelID = client.guildCommands.getNumberGame(msgGuild).channelId;
-			if (!numberGameChannelID) {
+			const numberGameChannelId = client.guildCommands.getNumberGame(msgGuild).channelId;
+			if (!numberGameChannelId) {
 				return {
 					succes: false,
 					message: 'The number game has not been setup yet.',
 				};
 			}
-			const numberGameChannel = await client.channels.fetch(numberGameChannelID);
+			const numberGameChannel = await client.channels.fetch(numberGameChannelId);
 			numberGameChannel.send(`${message.author} **has activated Count Boost!**.\nThey get extra 💰 per count for __**1 minute**__.`);
 
 			msgUser.save();

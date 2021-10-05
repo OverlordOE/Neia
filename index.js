@@ -1,5 +1,5 @@
 /* eslint-disable no-multiple-empty-lines */
-const Discord = require('discord.js');
+const { Client, Intents, Collection } = require('discord.js');
 const winston = require('winston');
 const moment = require('moment');
 const cron = require('cron');
@@ -9,8 +9,12 @@ const { Users, userCommands } = require('./util/userCommands');
 const { guildCommands, Guilds } = require('./util/guildCommands');
 const { util } = require('./util/util');
 const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: process.env.WEBHOOK_TOKEN });
-const client = new Discord.Client();
-const cooldowns = new Discord.Collection();
+const client = new Client({
+	intents: new Intents(
+		[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]
+	)
+});
+const cooldowns = new Collection();
 const active = new Map();
 const numberGame = require('./eventCommands/numbergame.js');
 const numberEvent = require('./eventCommands/numberevent.js');
@@ -59,7 +63,7 @@ process.on('uncaughtException', e => logger.error(e));
 
 
 // Load in Commands
-client.commands = new Discord.Collection();
+client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -97,7 +101,7 @@ client.on('ready', async () => {
 
 
 // Command handler
-client.on('message', async message => {
+client.on('messageCreate', async message => {
 
 	if (message.author.bot || message.channel.type == 'dm') return;
 
@@ -135,7 +139,7 @@ client.on('message', async message => {
 
 	// cooldowns
 	if (id != 137920111754346496) {
-		if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
+		if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Collection());
 		const timestamps = cooldowns.get(command.name);
 		const cooldownAmount = command.cooldown || 1500;
 		const now = Date.now();
@@ -166,10 +170,10 @@ client.on('message', async message => {
 	}
 
 	// Chech for manage message permission
-	if (!message.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) {
-		logger.warn(`Neia doesnt have MANAGE_MESSAGES permissions on guild ${guild.name}`);
-		message.reply('Please make sure Neia has the `Manage Messages` permissions, otherwise the commands may not function properly');
-	}
+	// if (!message.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) {
+	// 	logger.warn(`Neia doesnt have MANAGE_MESSAGES permissions on guild ${guild.name}`);
+	// 	message.reply('Please make sure Neia has the `Manage Messages` permissions, otherwise the commands may not function properly');
+	// }
 
 
 	// Execute command
@@ -227,8 +231,8 @@ dbl.webhook.on('ready', () => logger.info('DBL Webhook up and running.'));
 dbl.on('error', e => logger.error(`Oops! ${e}`));
 
 dbl.webhook.on('vote', async vote => {
-	const userID = vote.user;
-	const discordUser = client.users.cache.get(userID);
+	const userId = vote.user;
+	const discordUser = client.users.cache.get(userId);
 	logger.info(`${discordUser.tag} has just voted.`);
 
 	return discordUser.send('Thank you for voting!\n You can vote again in 12 hours.');

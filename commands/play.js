@@ -2,7 +2,7 @@ const ytdl = require('discord-ytdl-core');
 const YouTube = require('youtube-sr');
 const Discord = require('discord.js');
 const cookie = process.env.YT_COOKIE;
-const youtubeID = process.env.YT_ID;
+const youtubeId = process.env.YT_Id;
 let hasSearched = false;
 
 module.exports = {
@@ -51,7 +51,7 @@ module.exports = {
 
 		if (!data.queue) data.queue = [];
 		if (data.queue.length >= 5) return message.channel.send(embed.setDescription('You have reached the maximum queue size for free users.\nIf you want to upgrade your queue size contact OverlordOE#0717.'));
-		data.guildID = message.guild.id;
+		data.guildId = message.guild.id;
 
 		const tempMessage = await message.channel.send('Finding youtube video...');
 
@@ -79,7 +79,7 @@ module.exports = {
 					requestOptions: {
 						headers: {
 							Cookie: cookie,
-							'x-youtube-identity-token': youtubeID,
+							'x-youtube-identity-token': youtubeId,
 						},
 					},
 				});
@@ -143,7 +143,7 @@ module.exports = {
 				requestOptions: {
 					headers: {
 						Cookie: cookie,
-						'x-youtube-identity-token': youtubeID,
+						'x-youtube-identity-token': youtubeId,
 					},
 				},
 				filter: 'audioonly',
@@ -153,7 +153,7 @@ module.exports = {
 				type: 'opus',
 				bitrate: 'auto',
 			});
-			data.dispatcher.guildID = data.guildID;
+			data.dispatcher.guildId = data.guildId;
 
 
 			data.dispatcher.on('finish', () => Finish(client, data.dispatcher, logger, msgUser, message));
@@ -175,12 +175,12 @@ module.exports = {
 			data.queue.shift();
 
 			if (data.queue.length > 0) {
-				client.music.active.set(data.dispatcher.guildID, data);
+				client.music.active.set(data.dispatcher.guildId, data);
 				Play(client, data, logger, msgUser, message);
 			}
 			else {
-				client.music.active.delete(data.dispatcher.guildID);
-				const voiceChannel = client.guilds.cache.get(data.dispatcher.guildID).me.voice.channel;
+				client.music.active.delete(data.dispatcher.guildId);
+				const voiceChannel = client.guilds.cache.get(data.dispatcher.guildId).me.voice.channel;
 				if (voiceChannel) voiceChannel.leave();
 			}
 		}
