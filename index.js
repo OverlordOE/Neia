@@ -1,4 +1,10 @@
 const { Client, Intents, Collection } = require('discord.js');
+//* Make client
+const client = new Client({
+	intents: new Intents(
+		[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]
+	)
+});
 const { Users, userCommands } = require('./util/userCommands');
 const { guildCommands, Guilds } = require('./util/guildCommands');
 const { util } = require('./util/util');
@@ -11,12 +17,7 @@ client.emojiCharacters = require('./data/emojiCharacters');
 client.music = { active: active };
 require('dotenv').config();
 
-//* Make client
-const client = new Client({
-	intents: new Intents(
-		[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]
-	)
-});
+// Initialize client
 client.login(process.env.TOKEN);
 client.once('ready', async () => {
 	let memberTotal = 0;
@@ -42,6 +43,16 @@ client.once('ready', async () => {
 	logger.info(`Logged in as ${client.user.tag}!`);
 });
 
+
+//? Bad error handling
+client.on('warn', e => logger.warn(e));
+client.on('error', e => logger.error(e));
+process.on('warning', e => logger.warn(e));
+process.on('unhandledRejection', e => logger.error(e));
+process.on('TypeError', e => logger.error(e));
+process.on('uncaughtException', e => logger.error(e));
+
+
 //* Gather all commands
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -54,27 +65,15 @@ for (const file of commandFiles) {
 }
 
 
-//* Gather all events
-const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
-
-for (const file of eventFiles) {
-	const event = require(`./events/${file}`);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args));
-	}
-}
-
-
 client.on('messageCreate', async message => {
-	const guild = await guildCommands.getGuild(message.guild.id);
+	const guild = await guildCommands.getGuild(message.guildId);
 	const id = message.author.id;
 	const user = await userCommands.getUser(id);
-	if (Number.isInteger(Number(message.content)) && !message.attachments.first()) return numberGame(message, user, guild, client, logger);
+	
+	if (Number.isInteger(Number(message.content)) && !message.attachments.first() && !message.interaction) {
+		return numberGame(message, user, guild, client, logger);
+	}
 });
-
-
 
 
 //* Handle interactions
@@ -82,12 +81,15 @@ client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
 	const command = client.commands.get(interaction.commandName);
-
 	if (!command) return;
+
+	const guild = await guildCommands.getGuild(interaction.guildId);
+	const id = interaction.user.id;
+	const user = await userCommands.getUser(id);
 
 	logger.info(`${interaction.user.tag} called "${interaction.commandName}" in "${interaction.guild.name}#${interaction.channel.name}".`);
 	try {	
-		await command.execute(interaction, client);
+		await command.execute(interaction, user, guild, client, logger);
 	} catch (error) {
 		console.error(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });

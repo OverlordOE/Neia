@@ -12,14 +12,14 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 	if (numberGameInfo.currentNumber == 0 && number != 1) return;
 
 	if (numberGameInfo.lastUserId == message.author.id && !msgUser.powerCounting) {
-		message.channel.send('**You can\'t count twice in a row.**');
+		message.reply('**You can\'t count twice in a row.**');
 		await mistake();
 	}
 	else if (number == numberGameInfo.currentNumber + 1) {
 		succesfullCount();
 	}
 	else {
-		message.channel.send('**Wrong number.**');
+		message.reply('**Wrong number.**');
 		await mistake();
 	}
 
@@ -53,7 +53,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 			const nextCheckpointIndex = checkpoints.indexOf(number) + 1;
 			numberGameInfo.lastCheckpoint = number;
 			numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
-			message.channel.send(`Checkpoint **${number}** reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
+			message.reply(`Checkpoint **${number}** reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
 		}
 
 		if (number > numberGameInfo.highestStreak) numberGameInfo.highestStreak = number;
@@ -154,7 +154,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 	function protection() {
 		const protectionItem = client.util.getItem('streak protection');
 		message.react('🛡️');
-		message.channel.send(`${message.author}, your streak protection has been used and will go on a __**24 hour**__ cooldown.
+		message.channel.send(`Your streak protection has been used and will go on a __**24 hour**__ cooldown.
 							Last number was **${numberGameInfo.currentNumber}**.`);
 		client.userCommands.setProtection(msgUser);
 		client.userCommands.removeItem(msgUser, protectionItem, 1);
