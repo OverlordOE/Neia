@@ -78,7 +78,7 @@ client.on('messageCreate', async message => {
 
 //* Handle interactions
 client.on('interactionCreate', async interaction => {
-	if (!interaction.isCommand()) return;
+	if (!interaction.isCommand() || interaction.isMessageComponent() || interaction.isButton()) return;
 
 	const command = client.commands.get(interaction.commandName);
 	if (!command) return;

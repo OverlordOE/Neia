@@ -9,7 +9,7 @@ module.exports = {
 				.setName('target')
 				.setDescription('Select a user')),
 
-	async execute(interaction, msgUser, guild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client, logger) {
 		const target = interaction.options.getUser('target') || interaction.user;
 		const user = await client.userCommands.getUser(target.id);
 		const items = await client.userCommands.getInventory(user);
@@ -33,7 +33,7 @@ module.exports = {
 			.addField('Count Boost Available:', `**${countBoost}**`, true)
 			.addField('Next Daily Count Reward:', `**${dailyCount}**`, true)
 			.addField('Next Hourly Count Reward:', `**${hourlyCount}**`, true)
-			.setFooter('You can tag someone else to get their stats.', client.user.displayAvatarURL())
+			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL())
 			.setColor('#f3ab16');
 
 		const statEmbed = new MessageEmbed()
@@ -44,14 +44,14 @@ module.exports = {
 			.addField('Times Gambled:', stats.gamblingDone.toString(), true)
 			.addField('Won with Gambling:', client.util.formatNumber(stats.gamblingMoneyGained), true)
 			.addField('Lost with Gambling:', client.util.formatNumber(stats.gamblingMoneyLost), true)
-			.setFooter('You can tag someone else to get their stats.', client.user.displayAvatarURL())
+			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL())
 			.setColor('#f3ab16');
 
 		const inventoryEmbed = new MessageEmbed()
 			.setColor('#f3ab16')
 			.setTitle(`${target.tag}'s Inventory`)
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
-			.setFooter('You can use the emojis to switch pages.', client.user.displayAvatarURL());
+			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL());
 
 
 		let inventory = '__Inventory:__\n\n';
@@ -91,13 +91,24 @@ module.exports = {
 
 		interaction.reply({ embeds: [mainEmbed], components: [row] });
 
-		const filter = i => i.customId === 'primary' && i.user.id === '122157285790187530';
-		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
+		const collector = interaction.channel.createMessageComponentCollector({ time: 60000 });
 
 		collector.on('collect', async i => {
-			if (i.customId === 'primary') {
-				await i.update({ content: 'A button was clicked!', components: [] });
+			if (i.customId === 'main') {
+				if (i.user.id === interaction.user.id) await i.update({ embeds: [mainEmbed], components: [row] });
+				else await i.reply({ content: 'These buttons aren\'t for you!', ephemeral: true });
+			}
+			else if (i.customId === 'stats') {
+				if (i.user.id === interaction.user.id) await i.update({ embeds: [statEmbed], components: [row] });
+				else await i.reply({ content: 'These buttons aren\'t for you!', ephemeral: true });
+			}
+			else if (i.customId === 'inventory') {
+				if (i.user.id === interaction.user.id) await i.update({ embeds: [inventoryEmbed], components: [row] });
+				else await i.reply({ content: 'These buttons aren\'t for you!', ephemeral: true });
 			}
 		});
+
+		collector.on('end', async () => await interaction.editReply({ embeds: [mainEmbed], components: [] }));
+
 	},
 };
