@@ -11,6 +11,7 @@ const { util } = require('./util/util');
 const numberGame = require('./eventCommands/numbergame');
 const numberEvent = require('./eventCommands/numberevent');
 const logger = require('./util/logger');
+const cron = require('cron');
 const fs = require('fs');
 const active = new Map();
 client.emojiCharacters = require('./data/emojiCharacters');
@@ -99,7 +100,7 @@ client.on('interactionCreate', async interaction => {
 // Random number game event every 3 hours
 const numberGameEvents = new cron.CronJob('0 0/3 * * *', () => {
 	const time = Math.floor(Math.random() * 60) * 180000;
-	console.log(time);
+	console.log(10000);
 	setTimeout(
 		numberEvent,
 		time,
