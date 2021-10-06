@@ -23,9 +23,9 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		await mistake();
 	}
 
-	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);	
+	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);
 
-	
+
 	// Functions
 	async function mistake() {
 		if (await client.userCommands.protectionAllowed(msgUser)) protection();
@@ -174,19 +174,24 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 
 		if (daily === true) {
 			const balance = client.userCommands.addBalance(msgUser, number * dailyMultiplier);
-			message.author.send(embed.setDescription(`You have received your __**Daily Count**__ reward
+			message.author.send({
+				embeds: [embed.setDescription(`You have received your __**Daily Count**__ reward
 								You gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.
 								You will get your next __**Daily Count**__ in 1 day.
-								`));
+								`)]
+			});
 			client.userCommands.setDailyCount(msgUser);
 		}
 
 		else if (hourly === true) {
 			const balance = client.userCommands.addBalance(msgUser, number * hourlyMultiplier);
-			message.author.send(embed.setDescription(`You have received your __**Hourly Count**__ reward!
+			message.author.send({
+				embeds: [embed.setDescription(`You have received your __**Hourly Count**__ reward!
 								You gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.
 								You will get your next __**Hourly Count**__ in 1 hour.
-								`));
+								`)]
+			}
+			);
 			client.userCommands.setHourlyCount(msgUser);
 		}
 	}

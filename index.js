@@ -95,3 +95,15 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
+
+// Random number game event every 3 hours
+const numberGameEvents = new cron.CronJob('0 0/3 * * *', () => {
+	const time = Math.floor(Math.random() * 60) * 180000;
+	console.log(time);
+	setTimeout(
+		numberEvent,
+		time,
+		client, logger,
+	);
+});
+numberGameEvents.start();
