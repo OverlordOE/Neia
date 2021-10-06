@@ -70,8 +70,9 @@ client.on('messageCreate', async message => {
 	const guild = await guildCommands.getGuild(message.guildId);
 	const id = message.author.id;
 	const user = await userCommands.getUser(id);
+	if (message.type != 'DEFAULT' || message.attachments.first() || message.interaction || message.author.bot) return;
 	
-	if (Number.isInteger(Number(message.content)) && !message.attachments.first() && !message.interaction) {
+	if (Number.isInteger(Number(message.content))) {
 		return numberGame(message, user, guild, client, logger);
 	}
 });
@@ -79,6 +80,7 @@ client.on('messageCreate', async message => {
 
 //* Handle interactions
 client.on('interactionCreate', async interaction => {
+	
 	if (!interaction.isCommand() || interaction.isMessageComponent() || interaction.isButton()) return;
 
 	const command = client.commands.get(interaction.commandName);
@@ -97,10 +99,10 @@ client.on('interactionCreate', async interaction => {
 	}
 });
 
-// Random number game event every 3 hours
-const numberGameEvents = new cron.CronJob('0 0/3 * * *', () => {
-	const time = Math.floor(Math.random() * 60) * 180000;
-	console.log(10000);
+// Random number game event every 3 hours0 0/3 * * *
+const numberGameEvents = new cron.CronJob('0/2 * * *', () => {
+	const time = Math.floor(Math.random() * 60) * 120000;
+	console.log(time);
 	setTimeout(
 		numberEvent,
 		time,
