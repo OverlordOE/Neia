@@ -1,5 +1,4 @@
-const { Client, Intents, Collection } = require('discord.js');
-//* Make client
+const { Client, Intents, Collection, Permissions } = require('discord.js');
 const client = new Client({
 	intents: new Intents(
 		[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]
@@ -71,7 +70,7 @@ client.on('messageCreate', async message => {
 	const id = message.author.id;
 	const user = await userCommands.getUser(id);
 	if (message.type != 'DEFAULT' || message.attachments.first() || message.interaction || message.author.bot) return;
-	
+
 	if (Number.isInteger(Number(message.content))) {
 		return numberGame(message, user, guild, client, logger);
 	}
@@ -80,7 +79,7 @@ client.on('messageCreate', async message => {
 
 //* Handle interactions
 client.on('interactionCreate', async interaction => {
-	
+
 	if (!interaction.isCommand() || interaction.isMessageComponent() || interaction.isButton()) return;
 
 	const command = client.commands.get(interaction.commandName);
@@ -90,8 +89,15 @@ client.on('interactionCreate', async interaction => {
 	const id = interaction.user.id;
 	const user = await userCommands.getUser(id);
 
+	if (command.permissions) {
+		const member = interaction.options.getMember('target');
+		if (!interaction.member.permissions.has(Permissions.FLAGS[command.permissions])) {
+			return interaction.reply({ content: `You need the \`${command.permissions}\` permission to use this command!`, ephemeral: true });
+		}
+	}
+
 	logger.info(`${interaction.user.tag} called "${interaction.commandName}" in "${interaction.guild.name}#${interaction.channel.name}".`);
-	try {	
+	try {
 		await command.execute(interaction, user, guild, client, logger);
 	} catch (error) {
 		console.error(error);
@@ -100,7 +106,7 @@ client.on('interactionCreate', async interaction => {
 });
 
 // Random number game event every 3 hours0 0/3 * * *
-const numberGameEvents = new cron.CronJob('0/2 * * *', () => {
+const numberGameEvents = new cron.CronJob('0 0/2 * * *', () => {
 	const time = Math.floor(Math.random() * 60) * 120000;
 	console.log(time);
 	setTimeout(
