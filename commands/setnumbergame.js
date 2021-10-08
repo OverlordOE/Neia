@@ -1,11 +1,14 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+
 module.exports = {
 	data: new SlashCommandBuilder()
-			.setName('setnumbergame')
-		.setDescription('Set a channel for the Numbergame.'),
+		.setName('setnumbergame')
+		.setDescription('Set a channel for the Numbergame. REQUIRES MANAGE_CHANNELS PERMISSION!'),
 
-//	permissions: 'MANAGE_GUILD',
+	permissions: 'MANAGE_CHANNELS',
+
 	async execute(interaction, msgUser, msgGuild, client, logger) {
+
 		client.guildCommands.setNumberChannel(msgGuild, interaction.channel.id);
 		return interaction.reply(`This channel has been set for the numbergame
 		**Rules:**

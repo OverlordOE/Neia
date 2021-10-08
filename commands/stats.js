@@ -33,7 +33,7 @@ module.exports = {
 			.addField('Count Boost Available:', `**${countBoost}**`, true)
 			.addField('Next Daily Count Reward:', `**${dailyCount}**`, true)
 			.addField('Next Hourly Count Reward:', `**${hourlyCount}**`, true)
-			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL())
+			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16');
 
 		const statEmbed = new MessageEmbed()
@@ -44,14 +44,14 @@ module.exports = {
 			.addField('Times Gambled:', stats.gamblingDone.toString(), true)
 			.addField('Won with Gambling:', client.util.formatNumber(stats.gamblingMoneyGained), true)
 			.addField('Lost with Gambling:', client.util.formatNumber(stats.gamblingMoneyLost), true)
-			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL())
+			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16');
 
 		const inventoryEmbed = new MessageEmbed()
 			.setColor('#f3ab16')
 			.setTitle(`${target.tag}'s Inventory`)
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
-			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL());
+			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL({ dynamic: true }));
 
 
 		let inventory = '__Inventory:__\n\n';

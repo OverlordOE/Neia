@@ -11,6 +11,9 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 	const number = Number(message.content);
 	if (numberGameInfo.currentNumber == 0 && number != 1) return;
 
+	console.log(`Counted Number ${number}`);
+	console.log(`Previous Number ${numberGameInfo.currentNumber}`);
+
 	if (numberGameInfo.lastUserId == message.author.id && !msgUser.powerCounting) {
 		message.reply('**You can\'t count twice in a row.**');
 		await mistake();
@@ -141,7 +144,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 
 	function checkpoint() {
 		message.react('🏁');
-		message.channel.send(`${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!
+		message.send(`${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!
 		Starting from checkpoint **${numberGameInfo.lastCheckpoint}**.\nCheckpoint has reset.`);
 
 		numberGameInfo.currentNumber = numberGameInfo.lastCheckpoint;
@@ -170,7 +173,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 			.setTitle('Count Reward')
 			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16')
-			.setFooter('Neia', client.user.displayAvatarURL());
+			.setFooter('Neia', client.user.displayAvatarURL({ dynamic: true }));
 
 		if (daily === true) {
 			const balance = client.userCommands.addBalance(msgUser, number * dailyMultiplier);

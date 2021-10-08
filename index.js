@@ -45,12 +45,12 @@ client.once('ready', async () => {
 
 
 //? Bad error handling
-client.on('warn', e => logger.warn(e));
-client.on('error', e => logger.error(e));
-process.on('warning', e => logger.warn(e));
-process.on('unhandledRejection', e => logger.error(e));
-process.on('TypeError', e => logger.error(e));
-process.on('uncaughtException', e => logger.error(e));
+client.on('warn', e => console.log(e));
+client.on('error', e => console.log(e));
+process.on('warning', e => console.log(e));
+process.on('unhandledRejection', e => console.log(e));
+process.on('TypeError', e => console.log(e));
+process.on('uncaughtException', e => console.log(e));
 
 
 //* Gather all commands
@@ -66,7 +66,10 @@ for (const file of commandFiles) {
 
 
 client.on('messageCreate', async message => {
-	const guild = await guildCommands.getGuild(message.guildId);
+	if (message.author.bot || message.channel.type == 'dm') return;
+	// if (message.author.id === '137920111754346496')	console.log(message); //! 390502342908444683 		726889304995135608
+
+	const guild = await guildCommands.getGuild(message.guildId); 
 	const id = message.author.id;
 	const user = await userCommands.getUser(id);
 	if (message.type != 'DEFAULT' || message.attachments.first() || message.interaction || message.author.bot) return;
@@ -90,7 +93,6 @@ client.on('interactionCreate', async interaction => {
 	const user = await userCommands.getUser(id);
 
 	if (command.permissions) {
-		const member = interaction.options.getMember('target');
 		if (!interaction.member.permissions.has(Permissions.FLAGS[command.permissions])) {
 			return interaction.reply({ content: `You need the \`${command.permissions}\` permission to use this command!`, ephemeral: true });
 		}

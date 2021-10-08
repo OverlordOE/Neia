@@ -9,7 +9,7 @@ module.exports = {
 
 		const embed = new MessageEmbed()
 			.setTitle('Neia Stats')
-			.setThumbnail(client.user.displayAvatarURL.displayAvatarURL({ dynamic: true }))
+			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16')
 			.setFooter('Neia', client.user.displayAvatarURL({ dynamic: true }));
 

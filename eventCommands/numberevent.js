@@ -11,7 +11,7 @@ module.exports = async function execute(client, logger) {
 		if (numberGameInfo.channelId) {
 			const embed = new MessageEmbed()
 				.setTitle('__**NUMBER BOOST EVENT**__')
-				.setFooter('These events happen randomly every 2 hours.', client.user.displayAvatarURL())
+				.setFooter('These events happen randomly every 2 hours.', client.user.displayAvatarURL({ dynamic: true }))
 				.setColor('#f3ab16');
 
 			const row = new MessageActionRow()
@@ -33,7 +33,7 @@ module.exports = async function execute(client, logger) {
 			const sentMessage = await numberGameChannel.send({ embeds: [embed.setDescription(description)], components: [row] });
 
 
-			const collector = numberGameChannel.createMessageComponentCollector({ time: 60000 });
+			const collector = numberGameChannel.createMessageComponentCollector({ time: timeoutLength * 60000 });
 
 			collector.on('collect', async button => {
 				if (button.customId === 'claim') {

@@ -73,7 +73,7 @@ module.exports = {
 				case 'hit':
 					getCard('player');
 					if (neiaHandValue < 17) getCard('client');
-					setEmbed(button);
+					await setEmbed(button);
 					if (playerHandValue >= 21 || neiaHandValue > 21 || (neiaHandValue >= 17 && playerHandValue > neiaHandValue) || cardsDrawn >= 5) {
 						collector.stop();
 						return;
@@ -82,9 +82,9 @@ module.exports = {
 
 				case 'stand':
 					while (neiaHandValue < 17) {
-						await wait(1000);
+						await wait(500);
 						getCard('client');
-						setEmbed(button);
+						await setEmbed(button);
 					}
 					collector.stop();
 					return;
@@ -133,7 +133,7 @@ module.exports = {
 		});
 
 
-		function setEmbed(button) {
+		async function setEmbed(button) {
 			embed.spliceFields(0, 5, [
 				{ name: 'Players Hand', value: playerHand.toString(), inline: true },
 				{ name: 'Players Value', value: playerHandValue.toString(), inline: true },
@@ -141,7 +141,7 @@ module.exports = {
 				{ name: 'Neia\'s Hand', value: neiaHand.toString(), inline: true },
 				{ name: 'Neia\'s Value', value: neiaHandValue.toString(), inline: true },
 			]);
-			button.update({ embeds: [embed], components: [row] });
+			await button.update({ embeds: [embed], components: [row] });
 		}
 
 		function getCard(player) {
