@@ -1,7 +1,7 @@
 const { Client, Intents, Collection, Permissions } = require('discord.js');
 const client = new Client({
 	intents: new Intents(
-		[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]
+		[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_VOICE_STATES]
 	)
 });
 const { Users, userCommands } = require('./util/userCommands');
@@ -67,7 +67,6 @@ for (const file of commandFiles) {
 
 client.on('messageCreate', async message => {
 	if (message.author.bot || message.channel.type == 'dm') return;
-	// if (message.author.id === '137920111754346496')	console.log(message); //! 390502342908444683 		726889304995135608
 
 	const guild = await guildCommands.getGuild(message.guildId); 
 	const id = message.author.id;

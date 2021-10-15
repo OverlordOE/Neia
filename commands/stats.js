@@ -57,9 +57,10 @@ module.exports = {
 		let inventory = '__Inventory:__\n\n';
 		if (items.length) {
 			items.map(i => {
-				if (i.amount < 1) return;
-				const item = client.util.getItem(i.name);
-				inventory += `${item.emoji}${item.name}: ${client.util.formatNumber(i.amount)}\n`;
+				if (i.amount >= 1) {
+					const item = client.util.getItem(i.name);
+					inventory += `${item.emoji}${item.name}: ${client.util.formatNumber(i.amount)}\n`;
+				}
 			});
 			inventoryEmbed.setDescription(inventory);
 		}

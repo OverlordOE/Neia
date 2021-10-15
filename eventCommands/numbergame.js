@@ -144,7 +144,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 
 	function checkpoint() {
 		message.react('🏁');
-		message.send(`${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!
+		message.channel.send(`${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!
 		Starting from checkpoint **${numberGameInfo.lastCheckpoint}**.\nCheckpoint has reset.`);
 
 		numberGameInfo.currentNumber = numberGameInfo.lastCheckpoint;
@@ -169,32 +169,40 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		const daily = client.userCommands.getDailyCount(msgUser);
 		const hourly = client.userCommands.getHourlyCount(msgUser);
 
-		const embed = new Discord.MessageEmbed()
-			.setTitle('Count Reward')
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-			.setColor('#f3ab16')
-			.setFooter('Neia', client.user.displayAvatarURL({ dynamic: true }));
 
 		if (daily === true) {
 			const balance = client.userCommands.addBalance(msgUser, number * dailyMultiplier);
-			message.author.send({
-				embeds: [embed.setDescription(`You have received your __**Daily Count**__ reward
+
+			const embed = new Discord.MessageEmbed()
+				.setTitle('Count Reward')
+				.setDescription(`You have received your __**Daily Count**__ reward
 								You gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.
 								You will get your next __**Daily Count**__ in 1 day.
-								`)]
-			});
+								`)
+				.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
+				.setColor('#f3ab16')
+				.setFooter('Neia', client.user.displayAvatarURL({ dynamic: true }));
+
+
+			message.author.send({ embeds: [embed] });
 			client.userCommands.setDailyCount(msgUser);
 		}
 
-		else if (hourly === true) {
+		if (hourly === true) {
 			const balance = client.userCommands.addBalance(msgUser, number * hourlyMultiplier);
-			message.author.send({
-				embeds: [embed.setDescription(`You have received your __**Hourly Count**__ reward!
+
+			const embed = new Discord.MessageEmbed()
+				.setTitle('Count Reward')
+				.setDescription(`You have received your __**Hourly Count**__ reward!
 								You gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.
 								You will get your next __**Hourly Count**__ in 1 hour.
-								`)]
-			}
-			);
+								`)
+				.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
+				.setColor('#f3ab16')
+				.setFooter('Neia', client.user.displayAvatarURL({ dynamic: true }));
+
+
+			message.author.send({ embeds: [embed] });
 			client.userCommands.setHourlyCount(msgUser);
 		}
 	}
