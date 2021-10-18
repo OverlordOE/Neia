@@ -36,20 +36,6 @@ module.exports = {
 		const data = client.music.active.get(interaction.guildId) || {};
 
 		try {
-			// if (!data.connection) {
-
-			// 	const permissions = interaction.member.voice.channel.permissionsFor(interaction.guild.member(client.user));
-			// 	if (!permissions.any('CONNECT')) {
-			// 		logger.warn('Neia couldnt join the voice channel');
-			// 		return interaction.reply({ content: 'Neia does not have permission to join the voice channel!', ephemeral: true });
-			// 	}
-
-			// }
-			// else if (data.connection.status == 4 && data.queue) {
-			// 	data.dispatcher = null;
-			// 	data.queue = [];
-			// }
-
 			data.connection = joinVoiceChannel({
 				channelId: interaction.member.voice.channelId,
 				guildId: interaction.guildId,
@@ -58,7 +44,7 @@ module.exports = {
 		}
 		catch (error) {
 			logger.warn('Neia couldnt join the voice channel');
-			return interaction.reply({ content: 'Something went wrong when joining the voice channel', ephemeral: true });
+			return interaction.reply({ content: 'Neia can\'t join the voice channel', ephemeral: true });
 		}
 
 
@@ -71,14 +57,12 @@ module.exports = {
 
 		if (!video) {
 			logger.warn(`Could not find youtube video with search terms "${search}"`);
-			return interaction.editReply({ embeds: [embed.setDescription(`Neia could not find any video connected to the search terms of \`${search}\``)], ephemeral: true });
+			return interaction.editReply({ embeds: [embed.setDescription(`Neia could not find any video with the search terms \`${search}\``)], ephemeral: true });
 		}
 
-
-		if (!data.player) Play(client, data, logger, msgUser, interaction);
 		interaction.followUp({ embeds: [embed.setDescription(`**${video.title}**\nBy **${video.channel}**\n Has been added to the queue.\n\nRequested by ${interaction.user}`)] });
-
 		client.music.active.set(interaction.guildId, data);
+		if (!data.player) Play(client, data, logger, msgUser, interaction);
 
 
 		async function SearchVideo() {
@@ -145,10 +129,11 @@ module.exports = {
 		async function Play() {
 			data.paused = false;
 			const channel = client.channels.cache.get(data.queue[0].announceChannel);
-			embed = new MessageEmbed()
-				.setThumbnail(data.queue[0].thumbnail);
 
-			channel.send({ embeds: [embed.setDescription(`Now playing **${data.queue[0].title}**\nBy **${data.queue[0].channel}**\n\nRequested by ${data.queue[0].requester}`)] });
+			embed = new MessageEmbed()
+				.setDescription(`Now playing **${data.queue[0].title}**\nBy **${data.queue[0].channel}**\n\nRequested by ${data.queue[0].requester}`)
+				.setThumbnail(data.queue[0].thumbnail);
+			channel.send({ embeds: [embed] });
 
 
 			const stream = ytdl(data.queue[0].url, { filter: 'audioonly' });
@@ -159,37 +144,7 @@ module.exports = {
 			player.play(resource);
 			data.connection.subscribe(player);
 
-
 			player.on(AudioPlayerStatus.Idle, () => Finish());
-			// data.dispatcher = data.connection.play(ytdl(data.queue[0].url, {
-			// 	requestOptions: {
-			// 		headers: {
-			// 			Cookie: cookie,
-			// 			'x-youtube-identity-token': youtubeId,
-			// 		},
-			// 	},
-			// 	filter: 'audioonly',
-			// 	highWaterMark: 1 << 25,
-			// 	opusEncoded: true,
-			// }), {
-			// 	type: 'opus',
-			// 	bitrate: 'auto',
-			// });
-			// data.dispatcher.guildId = data.guildId;
-
-
-			// data.dispatcher.on('finish', () => Finish(client, data.dispatcher, logger, msgUser, interaction));
-			// data.dispatcher.on('debug', e => {
-			// 	channel.send({ embeds: [embed.setDescription(`error:  ${e.info}`)], ephemeral: true });
-			// 	logger.error(e);
-			// });
-
-			// data.dispatcher.on('disconnect', e => {
-			// 	data.queue = [];
-			// 	data.dispatcher.emit('finish');
-			// 	logger.log('info', `Bot got forcefully disconnected by: ${e.info}}`);
-			// });
-
 		}
 
 
@@ -207,4 +162,3 @@ module.exports = {
 		}
 	},
 };
-

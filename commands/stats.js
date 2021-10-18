@@ -95,18 +95,12 @@ module.exports = {
 		const collector = interaction.channel.createMessageComponentCollector({ time: 60000 });
 
 		collector.on('collect', async i => {
-			if (i.customId === 'main') {
-				if (i.user.id === interaction.user.id) await i.update({ embeds: [mainEmbed], components: [row] });
-				else await i.reply({ content: 'These buttons aren\'t for you!', ephemeral: true });
+			if (i.user.id === interaction.user.id) {
+				if (i.customId === 'main') await i.update({ embeds: [mainEmbed], components: [row] });
+				else if (i.customId === 'stats') await i.update({ embeds: [statEmbed], components: [row] });
+				else if (i.customId === 'inventory') await i.update({ embeds: [inventoryEmbed], components: [row] });
 			}
-			else if (i.customId === 'stats') {
-				if (i.user.id === interaction.user.id) await i.update({ embeds: [statEmbed], components: [row] });
-				else await i.reply({ content: 'These buttons aren\'t for you!', ephemeral: true });
-			}
-			else if (i.customId === 'inventory') {
-				if (i.user.id === interaction.user.id) await i.update({ embeds: [inventoryEmbed], components: [row] });
-				else await i.reply({ content: 'These buttons aren\'t for you!', ephemeral: true });
-			}
+			else await i.followUp({ content: 'These buttons aren\'t for you!', ephemeral: true });
 		});
 
 		collector.on('end', async () => await interaction.editReply({ embeds: [mainEmbed], components: [] }));
