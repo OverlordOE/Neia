@@ -64,8 +64,10 @@ module.exports = {
 				{ name: 'Neia\'s Value', value: neiaHandValue.toString(), inline: true },
 			]);
 
+
+		const filter = i => i.user.id == interaction.user.id;
 		await interaction.reply({ embeds: [embed], components: [row] });
-		const collector = interaction.channel.createMessageComponentCollector({ time: 60000 });
+		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
 
 		collector.on('collect', async button => {
 			switch (button.customId) {

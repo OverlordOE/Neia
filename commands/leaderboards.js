@@ -68,8 +68,8 @@ module.exports = {
 
 
 		interaction.reply({ embeds: [embed], components: [row] });
-
-		const collector = interaction.channel.createMessageComponentCollector({ time: 60000 });
+		const filter = i => i.user.id == interaction.user.id;
+		const collector = interaction.channel.createMessageComponentCollector({filter, time: 60000 });
 
 		collector.on('collect', async i => {
 			if (i.user.id === interaction.user.id) {
