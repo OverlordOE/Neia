@@ -41,7 +41,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 			const reaction = client.userCommands.getReaction(msgUser);
 			if (reaction.emoji && reaction.value) {
 				message.react(reaction.emoji);
-				client.userCommands.addBalance(msgUser, Math.sqrt(reaction.value));
+				client.userCommands.addBalance(msgUser, Math.sqrt(reaction.value) / 3);
 			}
 		}
 		catch (error) {

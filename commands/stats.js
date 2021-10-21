@@ -27,7 +27,7 @@ module.exports = {
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
 			.addField('Balance:', `${client.util.formatNumber(user.balance)}💰`, true)
 			.addField('Number Game Reaction:', reaction.emoji, true)
-			.addField('Number Game Reaction Bonus', `${client.util.formatNumber(Math.sqrt(reaction.value))}💰`, true)
+			.addField('Number Game Reaction Bonus', `${client.util.formatNumber(Math.sqrt(reaction.value) / 3)}💰`, true)
 			.addField('Protection Available:', `**${protection}**`, true)
 			.addField('Power Count Available:', `**${powerCounting}**`, true)
 			.addField('Count Boost Available:', `**${countBoost}**`, true)
