@@ -15,6 +15,7 @@ const fs = require('fs');
 const active = new Map();
 client.emojiCharacters = require('./data/emojiCharacters');
 client.music = { active: active };
+client.logger = logger;
 require('dotenv').config();
 
 // Initialize client

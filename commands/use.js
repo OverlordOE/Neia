@@ -15,7 +15,7 @@ module.exports = {
 				.setDescription('The amount of items you want to use.')),
 
 
-	async execute(interaction, msgUser, msgGuild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client) {
 		const embed = new MessageEmbed()
 			.setTitle('Neia Item Use')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))

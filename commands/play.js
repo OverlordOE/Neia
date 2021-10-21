@@ -24,7 +24,7 @@ module.exports = {
 				.setRequired(true)),
 
 
-	async execute(interaction, msgUser, msgGuild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client) {
 
 		let embed = new MessageEmbed()
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
@@ -43,7 +43,7 @@ module.exports = {
 			});
 		}
 		catch (error) {
-			logger.warn('Neia couldnt join the voice channel');
+			client.logger.warn('Neia couldnt join the voice channel');
 			return interaction.reply({ content: 'Neia can\'t join the voice channel', ephemeral: true });
 		}
 
@@ -56,13 +56,13 @@ module.exports = {
 		const video = await SearchVideo();
 
 		if (!video) {
-			logger.warn(`Could not find youtube video with search terms "${search}"`);
+			client.logger.warn(`Could not find youtube video with search terms "${search}"`);
 			return interaction.editReply({ embeds: [embed.setDescription(`Neia could not find any video with the search terms \`${search}\``)], ephemeral: true });
 		}
 
 		interaction.followUp({ embeds: [embed.setDescription(`**${video.title}**\nBy **${video.channel}**\n Has been added to the queue.\n\nRequested by ${interaction.user}`)] });
 		client.music.active.set(interaction.guildId, data);
-		if (!data.player) Play(client, data, logger, msgUser, interaction);
+		if (!data.player) Play(client, data, client.logger, msgUser, interaction);
 
 
 		async function SearchVideo() {
@@ -117,7 +117,7 @@ module.exports = {
 
 				else if (hasSearched) return null;
 				else {
-					logger.warn('Search 1 has failed');
+					client.logger.warn('Search 1 has failed');
 					hasSearched = true;
 					await SearchVideo();
 				}

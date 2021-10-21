@@ -15,7 +15,7 @@ module.exports = {
 				.setDescription('The amount of items you want to buy.')),
 
 
-	async execute(interaction, msgUser, msgGuild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client) {
 		const embed = new MessageEmbed()
 			.setTitle('Neia Shop')
 			.setColor('#f3ab16')

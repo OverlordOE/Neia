@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const { SlashCommandBuilder, hyperlink } = require('@discordjs/builders');
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -9,7 +9,7 @@ module.exports = {
 				.setName('target')
 				.setDescription('Select a user')),
 
-	execute(interaction, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
 		const target = interaction.options.getUser('target') || interaction.user;
 		const avatarLink = target.displayAvatarURL({ dynamic: true });
 

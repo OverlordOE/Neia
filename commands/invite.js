@@ -5,7 +5,7 @@ module.exports = {
 		.setName('invite')
 		.setDescription('Sends a bunch of helpfull links.'),
 
-	execute(interaction, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
 
 		const embed = new MessageEmbed()
 			.setTitle('Neia Invites')

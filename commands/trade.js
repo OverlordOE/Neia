@@ -43,7 +43,7 @@ module.exports = {
 						.setRequired(true),
 				)),
 
-	async execute(interaction, msgUser, msgGuild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client) {
 
 		const embed = new MessageEmbed()
 			.setTitle('Neia Trading Center')
@@ -56,7 +56,7 @@ module.exports = {
 		if (amount < 1) amount = 1;
 		let item;
 
-		
+
 		if (interaction.options.getSubcommand() === 'item') {
 			const tempItem = interaction.options.getString('item');
 			item = client.util.getItem(tempItem);

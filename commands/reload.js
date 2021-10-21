@@ -9,7 +9,7 @@ module.exports = {
 				.setDescription('The command to reload.')
 				.setRequired(true)),
 
-	execute(interaction, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
 		if (interaction.user.id != 137920111754346496) return interaction.reply({ content: 'Only Neia\'s owner can use this command!', ephemeral: true });
 		const commandName = interaction.options.getString('command');
 
@@ -27,7 +27,7 @@ module.exports = {
 			else return interaction.reply({ content: `There is no command with name \`${commandName}\`!`, ephemeral: true });
 		}
 		catch (e) {
-			logger.error(e.stack);
+			client.logger.error(e.stack);
 			return interaction.reply({ content: `There was an error while reloading a command \`${commandName}\`:\n\`${e.message}\``, ephemeral: true });
 		}
 		interaction.reply(`Command \`${commandName}\` was reloaded!`);

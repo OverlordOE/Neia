@@ -16,7 +16,7 @@ module.exports = {
 				.setDescription('The amount of items you want to sell.')),
 
 
-	async execute(interaction, msgUser, msgGuild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client) {
 		const embed = new MessageEmbed()
 			.setTitle('Neia Refunds')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))

@@ -4,7 +4,7 @@ module.exports = {
 		.setName('pause')
 		.setDescription('Pause or unpause the current playing song in your voice channel.'),
 
-	execute(interaction, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
 		const data = client.music.active.get(interaction.guildId);
 
 		if (!interaction.member.voice.channel) return interaction.reply({ content: 'You are not in a voice channel.', ephemeral: true });

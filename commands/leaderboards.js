@@ -9,7 +9,7 @@ module.exports = {
 				.setName('page')
 				.setDescription('The page you want to see.')),
 
-	execute(interaction, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
 
 		const ruinedList = client.userCommands.sort((a, b) => client.userCommands.getStats(b).streaksRuined - client.userCommands.getStats(a).streaksRuined)
 			.filter(user => client.users.cache.has(user.user_id))
@@ -69,7 +69,7 @@ module.exports = {
 
 		interaction.reply({ embeds: [embed], components: [row] });
 		const filter = i => i.user.id == interaction.user.id;
-		const collector = interaction.channel.createMessageComponentCollector({filter, time: 60000 });
+		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
 
 		collector.on('collect', async i => {
 			if (i.user.id === interaction.user.id) {

@@ -10,7 +10,7 @@ module.exports = {
 				.setDescription('The amount you want to gamble.')
 				.setRequired(true)),
 
-	async execute(interaction, msgUser, msgGuild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client) {
 		/*
 		?Profitability formula: y(1) = x*a*c / b^3
 		y = avarage profit per spin in decimal percentage
@@ -41,7 +41,7 @@ module.exports = {
 		if (gambleAmount > msgUser.balance) return interaction.reply({ content: `You don't have enough 💰.\n${client.util.formatNumber(gambleAmount - msgUser.balance)}💰 more needed.`, ephemeral: true });
 		client.userCommands.addBalance(msgUser, -gambleAmount, true);
 
-		
+
 		output += `
 		You have bet ${client.util.formatNumber(gambleAmount)}💰.
 		Get **${slotX}** of the __**same symbol**__ in a row to **win**.

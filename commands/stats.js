@@ -9,7 +9,7 @@ module.exports = {
 				.setName('target')
 				.setDescription('Select a user')),
 
-	async execute(interaction, msgUser, msgGuild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client) {
 		const target = interaction.options.getUser('target') || interaction.user;
 		const user = await client.userCommands.getUser(target.id);
 		const items = await client.userCommands.getInventory(user);

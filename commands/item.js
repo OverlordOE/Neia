@@ -11,7 +11,7 @@ module.exports = {
 				.setDescription('The item you want to see.')),
 
 
-	execute(interaction, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
 		const embed = new MessageEmbed();
 		const tempItem = interaction.options.getString('item');
 

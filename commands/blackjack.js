@@ -11,7 +11,7 @@ module.exports = {
 				.setDescription('The amount you want to gamble.')
 				.setRequired(true)),
 
-	async execute(interaction, msgUser, msgGuild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client) {
 		const payoutRate = 1.8;
 		let gambleAmount = interaction.options.getInteger('amount');
 

@@ -7,7 +7,7 @@ module.exports = {
 
 	permissions: 'MANAGE_CHANNELS',
 
-	async execute(interaction, msgUser, msgGuild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client) {
 
 		client.guildCommands.setNumberChannel(msgGuild, interaction.channel.id);
 		return interaction.reply(`This channel has been set for the numbergame

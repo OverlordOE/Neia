@@ -12,7 +12,7 @@ module.exports = {
 
 	permissions: 'MANAGE_MESSAGES',
 
-	execute(interaction, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
 
 		const amount = interaction.options.getInteger('amount');
 		if (isNaN(amount)) return interaction.reply(`**${amount}** is not a valid number`);
@@ -21,10 +21,10 @@ module.exports = {
 		try {
 			interaction.channel.bulkDelete(amount);
 			interaction.reply({ content: `You succesfully deleted **${amount}** messages.`, ephemeral: true });
-			logger.log('info', `*${interaction.user.tag}* deleted **${amount}** messages in channel ${interaction.channel.name}`);
+			client.logger.log('info', `*${interaction.user.tag}* deleted **${amount}** messages in channel ${interaction.channel.name}`);
 		}
 		catch (error) {
-			logger.error(error.stack);
+			client.logger.error(error.stack);
 			throw Error('Something went wrong');
 		}
 	},

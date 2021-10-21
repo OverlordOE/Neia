@@ -6,7 +6,7 @@ module.exports = {
 		.setName('shop')
 		.setDescription('Shows all the items you can buy.'),
 
-	execute(interaction, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
 
 		let reactions = '__**Reactions:**__\n';
 		let powerups = '__**Powerups:**__\n';

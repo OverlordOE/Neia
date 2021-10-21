@@ -15,7 +15,7 @@ module.exports = {
 				.setDescription('The amount of dice you want to use. MAX 100!')
 				.setRequired(true)),
 
-	execute(interaction, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
 		let total = 0;
 		let result = '';
 		const sides = interaction.options.getInteger('sides');

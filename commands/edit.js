@@ -89,7 +89,7 @@ module.exports = {
 
 		),
 
-	async execute(interaction, msgUser, msgGuild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client) {
 		if (interaction.user.id != 137920111754346496) return interaction.reply({ content: 'Only Neia\'s owner can use this command!', ephemeral: true });
 		const command = interaction.options;
 
@@ -137,7 +137,7 @@ module.exports = {
 		}
 		catch (e) {
 			interaction.reply({ content: 'something went wrong', ephemeral: true });
-			return logger.error(e.stack);
+			return client.logger.error(e.stack);
 		}
 
 	},

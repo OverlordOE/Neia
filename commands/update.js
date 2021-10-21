@@ -4,7 +4,7 @@ module.exports = {
 		.setName('update')
 		.setDescription('BOT OWNER DEBUG COMMAND'),
 
-	execute(interaction, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
 		if (interaction.user.id != 137920111754346496) return interaction.reply({ content: 'Only Neia\'s owner can use this command!', ephemeral: true });
 
 		try {
@@ -15,7 +15,7 @@ module.exports = {
 			});
 		}
 		catch (error) {
-			return logger.error(error.stack);
+			return client.logger.error(error.stack);
 		}
 	},
 };

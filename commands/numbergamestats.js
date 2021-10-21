@@ -6,7 +6,7 @@ module.exports = {
 		.setDescription('Shows the stats of your server\'s numbergame'),
 
 
-	async execute(interaction, msgUser, msgGuild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client) {
 		const numberGameInfo = client.guildCommands.getNumberGame(msgGuild);
 		if (!numberGameInfo.channelId) return interaction.reply('You don\'t have a numbergame setup yet!\nUse the command `setchannel` to designate a channel for the numbergame');
 

@@ -5,7 +5,7 @@ module.exports = {
 		.setDescription('Clears the music queue.'),
 
 
-	execute(interaction, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
 		const data = client.music.active.get(interaction.guildId);
 
 		if (!data) return interaction.reply({ content: 'There are no songs in the queue.', ephemeral: true });

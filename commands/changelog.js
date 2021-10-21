@@ -6,7 +6,7 @@ module.exports = {
 		.setDescription('Shows the latest major update that the bot has received.'),
 
 
-	execute(interaction, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
 		const embed = new MessageEmbed()
 			.setTitle('Neia V3.4: Power Counting')
 			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL({ dynamic: true }))

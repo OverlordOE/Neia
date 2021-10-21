@@ -5,7 +5,7 @@ module.exports = {
 		.setName('botstats')
 		.setDescription('Shows how many servers and users use Neia.'),
 
-	async execute(interaction, msgUser, msgGuild, client, logger) {
+	async execute(interaction, msgUser, msgGuild, client) {
 
 		const embed = new MessageEmbed()
 			.setTitle('Neia Stats')
