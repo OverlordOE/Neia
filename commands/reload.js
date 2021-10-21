@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('reload')
-		.setDescription('Play blackjack against Neia.')
+		.setDescription('BOT OWNER DEBUG COMMAND.')
 		.addStringOption(option =>
 			option
 				.setName('command')
@@ -11,22 +11,25 @@ module.exports = {
 
 	execute(interaction, msgUser, msgGuild, client, logger) {
 		if (interaction.user.id != 137920111754346496) return interaction.reply({ content: 'Only Neia\'s owner can use this command!', ephemeral: true });
-
-
 		const commandName = interaction.options.getString('command');
-		const command = client.commands.get(commandName);
-		if (!command) return interaction.reply(`There is no command with name \`${commandName}\`!`);
-
-		delete require.cache[require.resolve(`./${command.name}.js`)];
 
 		try {
-			const newCommand = require(`./${command.name}.js`);
-			client.commands.set(newCommand.name.toLowerCase(), newCommand);
+			const command = client.commands.get(commandName);
+			let newCommand;
+
+			if (command) {
+				delete require.cache[require.resolve(`./${command.data.name}.js`)];
+				newCommand = require(`./${command.data.name}.js`);
+			}
+			else newCommand = require(`./${commandName}.js`);
+
+			if (newCommand) client.commands.set(newCommand.data.name.toLowerCase(), newCommand);
+			else return interaction.reply({ content: `There is no command with name \`${commandName}\`!`, ephemeral: true });
 		}
 		catch (e) {
 			logger.error(e.stack);
-			return interaction.reply(`There was an error while reloading a command \`${commandName}\`:\n\`${e.message}\``);
+			return interaction.reply({ content: `There was an error while reloading a command \`${commandName}\`:\n\`${e.message}\``, ephemeral: true });
 		}
-		interaction.reply(`Command \`${command.name}\` was reloaded!`);
+		interaction.reply(`Command \`${commandName}\` was reloaded!`);
 	},
 };
