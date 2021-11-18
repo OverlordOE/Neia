@@ -1,8 +1,8 @@
 const { Client, Intents, Collection, Permissions } = require('discord.js');
 const client = new Client({
 	intents: new Intents(
-		[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_VOICE_STATES]
-	)
+		[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.DIRECT_MESSAGES],
+	), partials: ['CHANNEL'],
 });
 const { Users, userCommands } = require('./util/userCommands');
 const { guildCommands, Guilds } = require('./util/guildCommands');
@@ -45,7 +45,7 @@ client.once('ready', async () => {
 });
 
 
-//? Bad error handling
+// ? Bad error handling
 client.on('warn', e => console.log(e));
 client.on('error', e => console.log(e));
 process.on('warning', e => console.log(e));
@@ -67,9 +67,14 @@ for (const file of commandFiles) {
 
 
 client.on('messageCreate', async message => {
-	if (message.author.bot || message.channel.type == 'dm') return;
-
-	const guild = await guildCommands.getGuild(message.guildId); 
+	if (message.author.bot) return;
+	else if (message.channel.type == 'DM') {
+		logger.info(`${message.author.username} send message to Neia: ${message.content}`);
+		const response = Math.floor((Math.random() * 5));
+		if (!response) message.author.send('🙂');
+		return;
+	}
+	const guild = await guildCommands.getGuild(message.guildId);
 	const id = message.author.id;
 	const user = await userCommands.getUser(id);
 	if (message.type != 'DEFAULT' || message.attachments.first() || message.interaction || message.author.bot) return;
@@ -83,7 +88,7 @@ client.on('messageCreate', async message => {
 //* Handle interactions
 client.on('interactionCreate', async interaction => {
 
-	if (!interaction.isCommand() || interaction.isMessageComponent() || interaction.isButton()) return;
+	if (!interaction.isCommand() || interaction.isMessageComponent() || interaction.isButton() || interaction.channel.type == 'DM') return;
 
 	const command = client.commands.get(interaction.commandName);
 	if (!command) return;
@@ -101,7 +106,8 @@ client.on('interactionCreate', async interaction => {
 	logger.info(`${interaction.user.tag} called "${interaction.commandName}" in "${interaction.guild.name}#${interaction.channel.name}".`);
 	try {
 		await command.execute(interaction, user, guild, client, logger);
-	} catch (error) {
+	}
+ catch (error) {
 		console.error(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}

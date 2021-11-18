@@ -10,7 +10,7 @@ const {
 	joinVoiceChannel,
 } = require('@discordjs/voice');
 const cookie = process.env.YT_COOKIE;
-const youtubeId = process.env.YT_Id;
+const youtubeId = process.env.YT_ID;
 let hasSearched = false;
 
 module.exports = {

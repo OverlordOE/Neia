@@ -66,7 +66,7 @@ module.exports = {
 			if (i == answer) {
 				trueRow.addComponents(
 					new MessageButton()
-						.setCustomId(`${i}`)
+						.setCustomId(`true${i}`)
 						.setStyle('SUCCESS')
 						.setLabel(`${i}`),
 				);
