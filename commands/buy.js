@@ -1,59 +1,68 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
-	name: 'Buy',
-	summary: 'Buy an item from the shop',
-	description: 'With this you can buy an item from the shop.',
-	category: 'economy',
-	aliases: ['get'],
-	args: true,
-	usage: '<item> <amount>',
-	example: 'chest 2',
+	data: new SlashCommandBuilder()
+		.setName('buy')
+		.setDescription('Buy an item from the shop.')
+		.addStringOption(option =>
+			option
+				.setName('item')
+				.setDescription('The item you want to buy.')
+				.setRequired(true))
+		.addIntegerOption(option =>
+			option
+				.setName('amount')
+				.setDescription('The amount of items you want to buy.')),
 
-	async execute(message, args, msgUser, msgGuild, client, logger) {
-		const filter = m => m.author.id === message.author.id;
-		let amount = 1;
-		let temp = '';
 
-		const embed = new Discord.MessageEmbed()
-			.setTitle('Project Neia Shop')
+	async execute(interaction, msgUser, msgGuild, client) {
+		const embed = new MessageEmbed()
+			.setTitle('Neia Shop')
 			.setColor('#f3ab16')
-			.setThumbnail(message.author.displayAvatarURL());
+			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }));
 
-		const sentMessage = await message.channel.send(embed);
 
-		for (let i = 0; i < args.length; i++) {
-			if (!isNaN(parseInt(args[i]))) amount = parseInt(args[i]);
+		let amount = interaction.options.getInteger('amount');
+		if (amount < 1 || !amount) amount = 1;
+		const tempItem = interaction.options.getString('item');
+		const item = client.util.getItem(tempItem);
 
-			else if (temp.length > 2) temp += ` ${args[i]}`;
-			else temp += `${args[i]}`;
+		if (item) {
+
+			if (item.buyable) {
+				const protectionItem = client.util.getItem('streak protection');
+				if (item == protectionItem && !(await client.userCommands.newProtectionAllowed(msgUser))) {
+					return interaction.reply({
+						embeds: [embed.setDescription('You can\'t buy Streak Protection.\nYou can only have 1 at a time and your cooldown should be worn off')
+							.setColor('#fc0303')], ephemeral: true
+					});
+				}
+				else buyItem(amount);
+			}
+			else if (item) return interaction.reply({ embeds: [embed.setDescription('You can\'t buy this item.').setColor('#fc0303')], ephemeral: true });
+
 		}
-		if (amount < 1) amount = 1;
-
-		const item = client.util.getItem(temp);
-		if (item.buyable) {
-			const protectionItem = client.util.getItem('streak protection');
-			if (item == protectionItem && !(await client.userCommands.newProtectionAllowed(msgUser))) return sentMessage.edit(embed.setDescription('You can\'t buy Streak Protection.\nYou can only have 1 at a time and your cooldown should be worn off').setColor('#fc0303'));
-			else buyItem(amount);
-
-		}
-		else if (item) return sentMessage.edit(embed.setDescription('You can\'t buy this item.').setColor('#fc0303'));
-		else if (temp) return sentMessage.edit(embed.setDescription(`__${temp}__ is not a valid item.`).setColor('#fc0303'));
-		else return sentMessage.edit(embed.setDescription('You didn\'t specify the item you want to use.').setColor('#fc0303'));
+		else return interaction.reply({ embeds: [embed.setDescription(`__${tempItem}__ is not a valid item.`).setColor('#fc0303')], ephemeral: true });
 
 		function buyItem(buyAmount) {
 			let balance = msgUser.balance;
 			const cost = buyAmount * item.value;
-			if (cost > balance) return sentMessage.edit(embed.setDescription(`
+			if (cost > balance) {
+				return interaction.reply({
+					embeds: [embed.setDescription(`
 					__**ITEM(S) NOT BOUGHT!**__
 					You currently have ${client.util.formatNumber(balance)}💰 but __${client.util.formatNumber(buyAmount)}__ ${item.emoji}${item.name}(s) costs ${client.util.formatNumber(cost)}💰!
 					You need ${client.util.formatNumber(cost - balance)}💰 more.
-					`).setColor('#fc0303'));
-
+					`).setColor('#fc0303')]
+				});
+			}
 			client.userCommands.addItem(msgUser, item, buyAmount);
 			balance = client.userCommands.addBalance(msgUser, -cost);
 
-			sentMessage.edit(embed.setDescription(`You've bought: __${client.util.formatNumber(buyAmount)}__ ${item.emoji}__${item.name}(s)__.\n\nCurrent balance is ${client.util.formatNumber(balance)}💰.`).setColor('#00fc43'));
-
+			interaction.reply({
+				embeds: [embed.setDescription(`You've bought: __${client.util.formatNumber(buyAmount)}__ ${item.emoji}__${item.name}(s)__.
+				\nCurrent balance is ${client.util.formatNumber(balance)}💰.`).setColor('#00fc43')]
+			});
 		}
 	},
 };

@@ -1,66 +1,119 @@
-const Discord = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
-	name: 'RockPaperScisscors',
-	summary: 'Play a game of Rock, Paper, Scissors against Neia',
-	description: 'Play a game of Rock, Paper, Scissors against Neia.',
-	category: 'gambling',
-	aliases: ['rps', 'rock'],
-	args: true,
-	usage: '<gamble amount>',
-	example: '100',
+	data: new SlashCommandBuilder()
+		.setName('rockpaperscissors')
+		.setDescription('Play a game of Rock, Paper, Scissors against Neia.')
+		.addIntegerOption(option =>
+			option
+				.setName('amount')
+				.setDescription('The amount you want to gamble.')
+				.setRequired(true)),
 
-	async execute(message, args, msgUser, msgGuild, client, logger) {
-		let gambleAmount = 0;
+
+	async execute(interaction, msgUser, msgGuild, client) {
 		const payoutRate = 1.8;
 
-		const embed = new Discord.MessageEmbed()
+		const embed = new MessageEmbed()
 			.setColor('#f3ab16')
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-			.setTitle('Neia\'s Gambling Imporium')
+			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
+			.setTitle('Rock, Paper, Scissors')
 			.setFooter('Use the emojis to play the game.', client.user.displayAvatarURL({ dynamic: true }));
 
 
-		for (let i = 0; i < args.length; i++) {
-			if (!isNaN(parseInt(args[i]))) gambleAmount = parseInt(args[i]);
-			else if (args[i] == 'all') gambleAmount = Math.floor(msgUser.balance);
-		}
-
+		let gambleAmount = interaction.options.getInteger('amount');
 		if (gambleAmount < 1) gambleAmount = 1;
-		if (gambleAmount > msgUser.balance) return message.channel.send(embed.setDescription(`Sorry *${message.author}*, you only have ${client.util.formatNumber(msgUser.balance)}💰.`));
+		if (gambleAmount > msgUser.balance) return interaction.reply({ content: `You don't have enough 💰.\n${client.util.formatNumber(gambleAmount - msgUser.balance)}💰 more needed.`, ephemeral: true });
 
 		client.userCommands.addBalance(msgUser, -gambleAmount, true);
 
-		const symbols = ['✊', '🧻', '✂️'];
-		const filter = (reaction, user) => {
-			return symbols.includes(reaction.emoji.name) && user.id === msgUser.user_id;
-		};
-
-		const botAnswer = Math.floor(Math.random() * symbols.length);
+		const emojiArray = ['✊', '🧻', '✂️'];
+		const botAnswer = Math.floor(Math.random() * emojiArray.length);
 		const winAmount = payoutRate * gambleAmount;
 
-		const sentMessage = await message.channel.send(embed.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.\nChoose **__Rock__✊, __Paper__🧻 or __Scissors__✂️!**`).setTitle('Rock, Paper, Scissors'));
-		for (let i = 0; i < symbols.length; i++) sentMessage.react(symbols[i]);
+		const guessRow = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('0')
+					.setEmoji('✊')
+					.setStyle('PRIMARY')
+			)
+			.addComponents(
+				new MessageButton()
+					.setCustomId('1')
+					.setStyle('PRIMARY')
+					.setEmoji('🧻')
+			)
+			.addComponents(
+				new MessageButton()
+					.setCustomId('2')
+					.setStyle('PRIMARY')
+					.setEmoji('✂️')
+			);
 
+		const trueRow = new MessageActionRow();
+		for (let i = 0; i < emojiArray.length; i++) {
+			if (i == botAnswer) {
+				trueRow.addComponents(
+					new MessageButton()
+						.setCustomId(`true${i}`)
+						.setStyle('PRIMARY')
+						.setEmoji(`${emojiArray[i]}`),
+				);
+			}
+			else if (botAnswer - i === 1 || botAnswer - i === -2) {
+				trueRow.addComponents(
+					new MessageButton()
+						.setCustomId(`true${i}`)
+						.setStyle('DANGER')
+						.setEmoji(`${emojiArray[i]}`),
+				);
+			}
+			else if (i - botAnswer === 1 || i - botAnswer === -2) {
+				trueRow.addComponents(
+					new MessageButton()
+						.setCustomId(`true${i}`)
+						.setStyle('SUCCESS')
+						.setEmoji(`${emojiArray[i]}`),
+				);
+			}
+		}
 
-		sentMessage.awaitReactions({ filter, max: 1, time: 60000, errors: ['time'] })
-			.then(collected => {
-				const reaction = collected.first();
-				const userAnswer = symbols.indexOf(reaction.emoji.name);
+	
+		const filter = i => i.user.id == interaction.user.id;
+		interaction.reply({
+			embeds: [embed.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.
+			**Choose __Rock__, __Paper__ or __Scissors__.**`)], components: [guessRow]
+		});
+		const collector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 60000 });
 
-				if (userAnswer === botAnswer) {
-					const balance = client.userCommands.addBalance(msgUser, gambleAmount);
-					sentMessage.edit(embed.setDescription(`**Neia** chooses ${symbols[botAnswer]}. __**It's a tie!**__\nYour balance is ${client.util.formatNumber(balance)}💰`));
-				}
-				else if (botAnswer - userAnswer === 1 || botAnswer - userAnswer === -2) {
-					sentMessage.edit(embed.setDescription(`**Neia** chooses ${symbols[botAnswer]}. __**You lose!**__\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
-				}
-				else if (userAnswer - botAnswer === 1 || userAnswer - botAnswer === -2) {
-					const balance = client.userCommands.addBalance(msgUser, winAmount, true);
-					sentMessage.edit(embed.setDescription(`**Neia** chooses ${symbols[botAnswer]}. __**You Win!**__\nYou won ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
-				}
-				return sentMessage.reactions.removeAll();
-			})
-			.catch(() => sentMessage.reactions.removeAll());
+		collector.on('collect', async button => {
+			const userAnswer = button.customId;
+
+			if (botAnswer == userAnswer) {
+				const balance = client.userCommands.addBalance(msgUser, gambleAmount, true);
+				embed.setColor('#00fc43');
+				button.update({
+					embeds: [embed.setDescription(`__**You**__ have chosen ${emojiArray[userAnswer]}\n__**Neia**__ has chosen ${emojiArray[botAnswer]}.\n
+					__**You Tied.**__ ${client.util.formatNumber(winAmount)}💰.\nYour current balance is ${client.util.formatNumber(balance)}💰`)], components: [trueRow]
+				});
+			}
+			else if (botAnswer - userAnswer === 1 || botAnswer - userAnswer === -2) {
+				embed.setColor('#fc0303');
+				button.update({
+					embeds: [embed.setDescription(`__**You**__ have chosen ${emojiArray[userAnswer]}\n__**Neia**__ has chosen ${emojiArray[botAnswer]}.\n
+					__**You Lost**__ ${client.util.formatNumber(gambleAmount)}💰.\nYour current balance is ${client.util.formatNumber(msgUser.balance)}💰`)], components: [trueRow]
+				});
+			}
+			else if (userAnswer - botAnswer === 1 || userAnswer - botAnswer === -2) {
+				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
+				embed.setColor('#00fc43');
+				button.update({
+					embeds: [embed.setDescription(`__**You**__ have chosen ${emojiArray[userAnswer]}\n__**Neia**__ has chosen ${emojiArray[botAnswer]}.\n
+					__**You Win!**__ ${client.util.formatNumber(winAmount)}💰.\nYour current balance is ${client.util.formatNumber(balance)}💰`)], components: [trueRow]
+				});
+			}
+		});
 	},
 };
 

@@ -11,21 +11,23 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 	const number = Number(message.content);
 	if (numberGameInfo.currentNumber == 0 && number != 1) return;
 
+	logger.info(`Count ${numberGameInfo.currentNumber} --> ${number} in "${message.guild.name}#${message.channel.name}"`);
+
 	if (numberGameInfo.lastUserId == message.author.id && !msgUser.powerCounting) {
-		message.channel.send('**You can\'t count twice in a row.**');
+		message.reply('**You can\'t count twice in a row.**');
 		await mistake();
 	}
 	else if (number == numberGameInfo.currentNumber + 1) {
 		succesfullCount();
 	}
 	else {
-		message.channel.send('**Wrong number.**');
+		message.reply('**Wrong number.**');
 		await mistake();
 	}
 
-	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);	
+	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);
 
-	
+
 	// Functions
 	async function mistake() {
 		if (await client.userCommands.protectionAllowed(msgUser)) protection();
@@ -38,7 +40,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 			const reaction = client.userCommands.getReaction(msgUser);
 			if (reaction.emoji && reaction.value) {
 				message.react(reaction.emoji);
-				client.userCommands.addBalance(msgUser, Math.sqrt(reaction.value));
+				client.userCommands.addBalance(msgUser, Math.sqrt(reaction.value) / 3);
 			}
 		}
 		catch (error) {
@@ -53,7 +55,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 			const nextCheckpointIndex = checkpoints.indexOf(number) + 1;
 			numberGameInfo.lastCheckpoint = number;
 			numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
-			message.channel.send(`Checkpoint **${number}** reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
+			message.reply(`Checkpoint **${number}** reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
 		}
 
 		if (number > numberGameInfo.highestStreak) numberGameInfo.highestStreak = number;
@@ -154,39 +156,38 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 	function protection() {
 		const protectionItem = client.util.getItem('streak protection');
 		message.react('🛡️');
-		message.channel.send(`${message.author}, your streak protection has been used and will go on a __**24 hour**__ cooldown.
+		message.channel.send(`Your streak protection has been used and will go on a __**24 hour**__ cooldown.
 							Last number was **${numberGameInfo.currentNumber}**.`);
 		client.userCommands.setProtection(msgUser);
 		client.userCommands.removeItem(msgUser, protectionItem, 1);
 	}
 
 	function giveBonus() {
-		const dailyMultiplier = 10;
-		const hourlyMultiplier = 2.5;
+		const dailyMultiplier = 5;
+		const hourlyMultiplier = 1;
 		const daily = client.userCommands.getDailyCount(msgUser);
 		const hourly = client.userCommands.getHourlyCount(msgUser);
 
-		const embed = new Discord.MessageEmbed()
-			.setTitle('Count Reward')
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-			.setColor('#f3ab16')
-			.setFooter('Neia', client.user.displayAvatarURL());
 
 		if (daily === true) {
 			const balance = client.userCommands.addBalance(msgUser, number * dailyMultiplier);
-			message.author.send(embed.setDescription(`You have received your __**Daily Count**__ reward
-								You gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.
-								You will get your next __**Daily Count**__ in 1 day.
-								`));
+
+			const embed = new Discord.MessageEmbed()
+				.setDescription(`__**Daily Count**__ reward!\nYou gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
+				.setColor('#f3ab16');
+			message.author.send({ embeds: [embed] });
+
 			client.userCommands.setDailyCount(msgUser);
 		}
 
-		else if (hourly === true) {
+		if (hourly === true) {
 			const balance = client.userCommands.addBalance(msgUser, number * hourlyMultiplier);
-			message.author.send(embed.setDescription(`You have received your __**Hourly Count**__ reward!
-								You gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.
-								You will get your next __**Hourly Count**__ in 1 hour.
-								`));
+
+			const embed = new Discord.MessageEmbed()
+				.setDescription(`__**Hourly Count**__ reward!\nYou gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
+				.setColor('#f3ab16');
+			message.author.send({ embeds: [embed] });
+
 			client.userCommands.setHourlyCount(msgUser);
 		}
 	}

@@ -1,198 +1,121 @@
-/* eslint-disable no-multiple-empty-lines */
-const { Client, Intents, Collection } = require('discord.js');
-const winston = require('winston');
-const moment = require('moment');
-const cron = require('cron');
-const DBL = require('dblapi.js');
-const fs = require('fs');
+const { Client, Intents, Collection, Permissions } = require('discord.js');
+const client = new Client({
+	intents: new Intents(
+		[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.DIRECT_MESSAGES],
+	), partials: ['CHANNEL'],
+});
 const { Users, userCommands } = require('./util/userCommands');
 const { guildCommands, Guilds } = require('./util/guildCommands');
 const { util } = require('./util/util');
-const dbl = new DBL(process.env.DBL_TOKEN, { webhookPort: 3000, webhookAuth: process.env.WEBHOOK_TOKEN });
-const client = new Client({
-	intents: new Intents(
-		[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]
-	)
-});
-const cooldowns = new Collection();
+const numberGame = require('./eventCommands/numbergame');
+const numberEvent = require('./eventCommands/numberevent');
+const logger = require('./util/logger');
+const cron = require('cron');
+const fs = require('fs');
 const active = new Map();
-const numberGame = require('./eventCommands/numbergame.js');
-const numberEvent = require('./eventCommands/numberevent.js');
-client.emojiCharacters = require('./data/emojiCharacters.js');
+client.emojiCharacters = require('./data/emojiCharacters');
 client.music = { active: active };
-const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+client.logger = logger;
 require('dotenv').config();
-moment().format();
 
-
-// Logger
-const logger = winston.createLogger({
-	format: winston.format.combine(
-		winston.format.errors({ stack: true }),
-		winston.format.timestamp({ format: 'MM-DD HH:mm:ss' }),
-		winston.format.printf(log => {
-			if (log.stack && log.level == 'error') return `${log.timestamp}) [${log.level}] - ${log.message}\n${log.stack}`;
-			return `${log.timestamp}) [${log.level}] - ${log.message}`;
-		}),
-	),
-	transports: [
-		new winston.transports.Console({
-			format: winston.format.colorize({
-				all: true,
-				colors: {
-					error: 'red',
-					info: 'cyan',
-					warn: 'yellow',
-					debug: 'green',
-				},
-			}),
-		}),
-		new winston.transports.File({
-			filename: './logs/error.log',
-			level: 'warn',
-		}),
-		new winston.transports.File({ filename: './logs/log.log' }),
-	],
-});
-client.on('warn', e => logger.warn(e));
-client.on('error', e => logger.error(e));
-process.on('warning', e => logger.warn(e));
-process.on('unhandledRejection', e => logger.error(e));
-process.on('TypeError', e => logger.error(e));
-process.on('uncaughtException', e => logger.error(e));
-
-
-// Load in Commands
-client.commands = new Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name.toLowerCase(), command);
-}
-
-
-// Startup Tasks
+// Initialize client
 client.login(process.env.TOKEN);
-client.on('ready', async () => {
+client.once('ready', async () => {
+	let memberTotal = 0;
+	client.guilds.cache.forEach(g => { if (!isNaN(memberTotal) && g.id != 264445053596991498) memberTotal += Number(g.memberCount); });
+	client.user.setActivity('you.', { type: 'WATCHING' });
+
+
+	//* Load in database
 	try {
 		const storedUsers = await Users.findAll();
 		storedUsers.forEach(b => userCommands.set(b.user_id, b));
 		const storedGuilds = await Guilds.findAll();
 		storedGuilds.forEach(b => guildCommands.set(b.guild_id, b));
-		let memberTotal = 0;
-		client.guilds.cache.forEach(g => { if (!isNaN(memberTotal) && g.id != 264445053596991498) memberTotal += Number(g.memberCount); });
-		client.user.setActivity(`with ${memberTotal} users.`);
 
 		client.userCommands = userCommands;
 		client.guildCommands = guildCommands;
 		client.util = util;
-
-		logger.info(`Logged in as ${client.user.tag}!`);
 	}
 	catch (e) {
 		logger.error(e.stack);
 	}
+
+	logger.info(`Logged in as ${client.user.tag}!`);
 });
 
 
+// ? Bad error handling
+client.on('warn', e => console.log(e));
+client.on('error', e => console.log(e));
+process.on('warning', e => console.log(e));
+process.on('unhandledRejection', e => console.log(e));
+process.on('TypeError', e => console.log(e));
+process.on('uncaughtException', e => console.log(e));
 
 
+//* Gather all commands
+client.commands = new Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	// Set a new item in the Collection
+	// With the key as the command name and the value as the exported module
+	client.commands.set(command.data.name, command);
+}
 
 
-
-// Command handler
 client.on('messageCreate', async message => {
-
-	if (message.author.bot || message.channel.type == 'dm') return;
-
-	const guild = await guildCommands.getGuild(message.guild.id);
-	const prefix = await guildCommands.getPrefix(guild);
+	if (message.author.bot) return;
+	else if (message.channel.type == 'DM') {
+		logger.info(`${message.author.username} send message to Neia: ${message.content}`);
+		const response = Math.floor((Math.random() * 5));
+		if (!response) message.author.send('🙂');
+		return;
+	}
+	const guild = await guildCommands.getGuild(message.guildId);
 	const id = message.author.id;
 	const user = await userCommands.getUser(id);
+	if (message.type != 'DEFAULT' || message.attachments.first() || message.interaction || message.author.bot) return;
 
-	if (Number.isInteger(Number(message.content)) && !message.attachments.first()) return numberGame(message, user, guild, client, logger);
-
-	// split message for further use
-	const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`);
-	if (!prefixRegex.test(message.content)) return;
-
-	const [, matchedPrefix] = message.content.match(prefixRegex);
-	const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
-	const commandName = args.shift().toLowerCase();
-
-	// find command
-	const command = client.commands.get(commandName)
-		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
-	if (!command) return;
-	if (command.category == 'debug' && (id != 137920111754346496)) return message.channel.send('You are not the owner of this bot!');
-	if (command.permissions) if (!message.guild.member(message.author).hasPermission(command.permissions)) return message.reply(`you need the ${command.permissions} permission to use this command!`);
-
-
-	// if the command is used wrongly correct the user
-	if (command.args && !args.length) {
-		let reply = `You didn't provide any arguments, ${message.author}!`;
-		if (command.usage) reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
-		return message.channel.send(reply);
-	}
-
-
-	// cooldowns
-	if (id != 137920111754346496) {
-		if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Collection());
-		const timestamps = cooldowns.get(command.name);
-		const cooldownAmount = command.cooldown || 1500;
-		const now = Date.now();
-
-		if (timestamps.has(id)) {
-			const expirationTime = timestamps.get(id) + cooldownAmount;
-
-			if (now < expirationTime) {
-				const timeLeft = (expirationTime - now) / 1000;
-				const hourLeft = timeLeft / 3600;
-				const minLeft = (hourLeft - Math.floor(hourLeft)) * 60;
-				const secLeft = Math.floor((minLeft - Math.floor(minLeft)) * 60);
-
-				if (hourLeft >= 1) return message.reply(`Please wait **${Math.floor(hourLeft)} hours**, **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
-				else if (minLeft >= 1) return message.reply(`Please wait **${Math.floor(minLeft)} minutes** and **${secLeft} seconds** before reusing the \`${command.name}\` command.`);
-				else return message.reply(`Please wait **${timeLeft.toFixed(1)} second(s)** before reusing the \`${command.name}\` command.`);
-			}
-		}
-		timestamps.set(id, now);
-		setTimeout(() => timestamps.delete(id), cooldownAmount);
-	}
-
-	if (user.firstCommand) {
-		client.commands.get('changelog').execute(message, args, user, guild, client, logger);
-		user.firstCommand = false;
-		logger.info(`New user ${message.author.tag}`);
-		user.save();
-	}
-
-	// Chech for manage message permission
-	// if (!message.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) {
-	// 	logger.warn(`Neia doesnt have MANAGE_MESSAGES permissions on guild ${guild.name}`);
-	// 	message.reply('Please make sure Neia has the `Manage Messages` permissions, otherwise the commands may not function properly');
-	// }
-
-
-	// Execute command
-	logger.log('info', `${message.author.tag} Called command: ${commandName} ${args.join(' ')}, in guild: ${message.guild.name}`);
-	try {
-		command.execute(message, args, user, guild, client, logger);
-	}
-	catch (e) {
-		logger.error(e.stack);
-		message.reply('there was an error trying to execute that command!');
+	if (Number.isInteger(Number(message.content))) {
+		return numberGame(message, user, guild, client, logger);
 	}
 });
 
 
+//* Handle interactions
+client.on('interactionCreate', async interaction => {
 
+	if (!interaction.isCommand() || interaction.isMessageComponent() || interaction.isButton() || interaction.channel.type == 'DM') return;
 
-// Random number game event every 3 hours
-const numberGameEvents = new cron.CronJob('0 0/3 * * *', () => {
-	const time = Math.floor(Math.random() * 60) * 180000;
+	const command = client.commands.get(interaction.commandName);
+	if (!command) return;
+
+	const guild = await guildCommands.getGuild(interaction.guildId);
+	const id = interaction.user.id;
+	const user = await userCommands.getUser(id);
+
+	if (command.permissions) {
+		if (!interaction.member.permissions.has(Permissions.FLAGS[command.permissions])) {
+			return interaction.reply({ content: `You need the \`${command.permissions}\` permission to use this command!`, ephemeral: true });
+		}
+	}
+
+	logger.info(`${interaction.user.tag} called "${interaction.commandName}" in "${interaction.guild.name}#${interaction.channel.name}".`);
+	try {
+		await command.execute(interaction, user, guild, client, logger);
+	}
+ catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
+});
+
+// Random number game event every 3 hours0 0/3 * * *
+const numberGameEvents = new cron.CronJob('0 0/2 * * *', () => {
+	const time = Math.floor(Math.random() * 60) * 120000;
 	console.log(time);
 	setTimeout(
 		numberEvent,
@@ -201,39 +124,3 @@ const numberGameEvents = new cron.CronJob('0 0/3 * * *', () => {
 	);
 });
 numberGameEvents.start();
-
-
-
-
-// Regular tasks executed every hour
-const botTasks = new cron.CronJob('0 * * * *', () => {
-	let memberTotal = 0;
-	client.guilds.cache.forEach(guild => { if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount); });
-	client.user.setActivity(`with ${memberTotal} users.`);
-
-	logger.info('Finished regular tasks!');
-});
-botTasks.start();
-
-
-
-
-
-
-
-
-
-
-
-
-// DBL voting webhook handler
-dbl.webhook.on('ready', () => logger.info('DBL Webhook up and running.'));
-dbl.on('error', e => logger.error(`Oops! ${e}`));
-
-dbl.webhook.on('vote', async vote => {
-	const userId = vote.user;
-	const discordUser = client.users.cache.get(userId);
-	logger.info(`${discordUser.tag} has just voted.`);
-
-	return discordUser.send('Thank you for voting!\n You can vote again in 12 hours.');
-});

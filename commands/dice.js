@@ -1,34 +1,33 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
-	name: 'Dice',
-	summary: 'Roll up to 100 of any sided die',
-	description: 'Rolls dice and shows the total.\nThe first argument is the amount of sides you want the dice to have, the second argument is how many times to roll it(up to 100).',
-	category: 'misc',
-	aliases: ['roll'],
-	args: true,
-	usage: '<sides> <amount>',
-	example: '6 2',
+	data: new SlashCommandBuilder()
+		.setName('dice')
+		.setDescription('Play blackjack against Neia.')
+		.addIntegerOption(option =>
+			option
+				.setName('sides')
+				.setDescription('The amount of sides the dice have.')
+				.setRequired(true))
+		.addIntegerOption(option =>
+			option
+				.setName('amount')
+				.setDescription('The amount of dice you want to use. MAX 100!')
+				.setRequired(true)),
 
-	execute(message, args, msgUser, msgGuild, client, logger) {
-
-		const embed = new Discord.MessageEmbed()
-			.setColor('#f3ab16');
-
-		const sides = args[0];
-		let amount;
-		if (args[1]) amount = args[1];
-		else amount = 1;
-
-		if (amount > 100 || isNaN(amount) || amount < 0) return message.reply('maximum die amount is 100.');
-
+	execute(interaction, msgUser, msgGuild, client) {
 		let total = 0;
 		let result = '';
+		const sides = interaction.options.getInteger('sides');
+		const amount = interaction.options.getInteger('amount');
+
+		if (amount > 100 || amount < 1) return interaction.reply('The max die amount is 100.');
 
 
 		const firstRoll = Math.floor((Math.random() * sides) + 1);
 		total += firstRoll;
-		if (firstRoll == sides || firstRoll == 1) result += ` + **${firstRoll}**`;
-		else result += ` + ${firstRoll}`;
+		if (firstRoll == sides || firstRoll == 1) result += `**${firstRoll}**`;
+		else result += `${firstRoll}`;
 
 		for (let i = 1; i < amount; i++) {
 			const roll = Math.floor((Math.random() * sides) + 1);
@@ -37,6 +36,12 @@ module.exports = {
 			total += roll;
 		}
 
-		message.channel.send(embed.setDescription(`You rolled a __D${sides}__ **${amount}** times, these are the results: \n${result}\n= __**${total}**__`));
+		const embed = new MessageEmbed()
+			.setColor('#f3ab16')
+			.setDescription(`You rolled a **D${sides} ${amount}** times!\nThese are the results: \n${result}`)
+			.addField('Total:', `**${total}**`, true)
+			.addField('Average:', `**${Math.fround(total / amount)}**`, true);
+
+		interaction.reply({ embeds: [embed] });
 	},
 };

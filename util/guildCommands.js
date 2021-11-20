@@ -33,19 +33,6 @@ Reflect.defineProperty(guildCommands, 'getGuild', {
 });
 
 
-Reflect.defineProperty(guildCommands, 'getPrefix', {
-	value: function getPrefix(guild) {
-		return guild ? guild.prefix : 0;
-	},
-});
-Reflect.defineProperty(guildCommands, 'setPrefix', {
-	value: function setPrefix(guild, newPrefix) {
-		guild.prefix = newPrefix;
-		return guild.save();
-	},
-});
-
-
 Reflect.defineProperty(guildCommands, 'getNumberGame', {
 	value: function getNumberGameInfo(guild) {
 		if (!guild.numberGame) return null;

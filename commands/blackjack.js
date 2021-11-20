@@ -1,42 +1,41 @@
-const Discord = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const wait = require('util').promisify(setTimeout);
 module.exports = {
-	name: 'Blackjack',
-	summary: 'Play blackjack against Neia',
-	description: 'Play blackjack against Neia.',
-	category: 'gambling',
-	aliases: ['black', 'jack', 'bj'],
-	args: true,
-	usage: '<gamble amount>',
-	example: '100',
+	data: new SlashCommandBuilder()
+		.setName('blackjack')
+		.setDescription('Play blackjack against Neia.')
+		.addIntegerOption(option =>
+			option
+				.setName('amount')
+				.setDescription('The amount you want to gamble.')
+				.setRequired(true)),
 
-	async execute(message, args, msgUser, msgGuild, client, logger) {
-		let gambleAmount = 0;
+	async execute(interaction, msgUser, msgGuild, client) {
 		const payoutRate = 1.8;
-
-		const embed = new Discord.MessageEmbed()
-			.setColor('#f3ab16')
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-			.setTitle('Neia\'s Gambling Imporium')
-			.setFooter('Use the emojis to play the game.', client.user.displayAvatarURL({ dynamic: true }));
-
-
-		for (let i = 0; i < args.length; i++) {
-			if (!isNaN(parseInt(args[i]))) gambleAmount = parseInt(args[i]);
-			else if (args[i] == 'all') gambleAmount = Math.floor(msgUser.balance);
-		}
+		let gambleAmount = interaction.options.getInteger('amount');
 
 		if (gambleAmount < 1) gambleAmount = 1;
-
-		if (!gambleAmount || isNaN(gambleAmount)) return message.channel.send(embed.setDescription(`Sorry *${message.author}*, that's an __**invalid amount.**__`));
-		if (gambleAmount > msgUser.balance) return message.channel.send(embed.setDescription(`Sorry *${message.author}*, you only have ${client.util.formatNumber(msgUser.balance)}💰.`));
-		if (gambleAmount <= 0) return message.channel.send(embed.setDescription(`Please enter an amount __**greater than zero**__, *${message.author}*.`));
-
+		if (gambleAmount > msgUser.balance) return interaction.reply({ content: `You don't have enough 💰.\n${client.util.formatNumber(gambleAmount - msgUser.balance)}💰 more needed.`, ephemeral: true });
 		client.userCommands.addBalance(msgUser, -gambleAmount, true);
 
 
-		const filter = (reaction, user) => {
-			return ['🃏', '🖐️'].includes(reaction.emoji.name) && user.id === msgUser.user_id;
-		};
+		const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('hit')
+					.setLabel('Hit')
+					.setStyle('SUCCESS')
+					.setEmoji('🃏'),
+			)
+			.addComponents(
+				new MessageButton()
+					.setCustomId('stand')
+					.setLabel('Stand')
+					.setStyle('PRIMARY')
+					.setEmoji('🖐️'),
+			);
+
 
 		const winAmount = payoutRate * gambleAmount;
 		const suits = ['♠️', '♥️', '♦️', '♣️'];
@@ -46,91 +45,105 @@ module.exports = {
 		let cardsDrawn = 0;
 		let playerHand = '';
 		let neiaHand = '';
-
-		const sentMessage = await message.channel.send(embed
-			.setDescription(`[Click here for the rules](https://bicyclecards.com/how-to-play/blackjack/)
-			
-			You have **bet** ${client.util.formatNumber(gambleAmount)}💰.
-			Press 🃏 to **hit** or 🖐️ to **stand.**`)
-			.setTitle('Blackjack'));
-
-		sentMessage.react('🃏'); // result 1
-		sentMessage.react('🖐️'); // result 2
-
-		const collector = sentMessage.createReactionCollector({ filter, time: 60000 });
 		for (let i = 0; i < 2; i++) {
 			getCard('player');
 			getCard('client');
 		}
-		setEmbed();
 
-		collector.on('collect', reaction => {
-			reaction.users.remove(msgUser.user_id);
+		const embed = new MessageEmbed()
+			.setColor('#f3ab16')
+			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
+			.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.`)
+			.setTitle('Blackjack')
+			.setFooter('Use the buttons to play the game.', client.user.displayAvatarURL({ dynamic: true }))
+			.spliceFields(0, 5, [
+				{ name: 'Players Hand', value: playerHand.toString(), inline: true },
+				{ name: 'Players Value', value: playerHandValue.toString(), inline: true },
+				{ name: '\u200B', value: '\u200B' },
+				{ name: 'Neia\'s Hand', value: neiaHand.toString(), inline: true },
+				{ name: 'Neia\'s Value', value: neiaHandValue.toString(), inline: true },
+			]);
 
-			switch (reaction.emoji.name) {
 
-				case '🃏':
-					reaction.users.remove(msgUser.user_id);
+		const filter = i => i.user.id == interaction.user.id;
+		await interaction.reply({ embeds: [embed], components: [row] });
+		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
+
+		collector.on('collect', async button => {
+			switch (button.customId) {
+
+				case 'hit':
 					getCard('player');
 					if (neiaHandValue < 17) getCard('client');
-					setEmbed();
+					await setEmbed(button);
 					if (playerHandValue >= 21 || neiaHandValue > 21 || (neiaHandValue >= 17 && playerHandValue > neiaHandValue) || cardsDrawn >= 5) {
 						collector.stop();
 						return;
 					}
 					break;
 
-				case '🖐️':
+				case 'stand':
 					while (neiaHandValue < 17) {
+						await wait(500);
 						getCard('client');
-						setEmbed();
+						await setEmbed(button);
 					}
 					collector.stop();
 					return;
 			}
 		});
 
-		collector.on('end', () => {
+		collector.on('end', async () => {
 			if (playerHandValue > 21) {
-				sentMessage.edit(embed.setDescription(`__**You busted!**__\n
+				return await interaction.editReply({
+					embeds: [embed.setDescription(`__**You busted!**__\n
 			__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰
-			Your **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
+			Your **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303')], components: []
+				});
 			}
 			else if (neiaHandValue > 21) {
 				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
-				sentMessage.edit(embed.setDescription(`__Neia busted!__. __**You Win!**__\n
-				You have won **${client.util.formatNumber(winAmount)}💰** and your balance is **${client.util.formatNumber(balance)}💰**`).setColor('#00fc43'));
+				return await interaction.editReply({
+					embeds: [embed.setDescription(`__Neia busted!__. __**You Win!**__\n
+				You have won **${client.util.formatNumber(winAmount)}💰** and your balance is **${client.util.formatNumber(balance)}💰**`).setColor('#00fc43')], components: []
+				});
 			}
 			else if (cardsDrawn >= 5) {
 				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
-				return sentMessage.edit(embed.setDescription(`You have drawn **5 cards** without busting!\n__**You win**__\n
-				**You have won ${client.util.formatNumber(winAmount)}**💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
+				return await interaction.editReply({
+					embeds: [embed.setDescription(`You have drawn **5 cards** without busting!\n__**You win**__\n
+				**You have won ${client.util.formatNumber(winAmount)}**💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43')], components: []
+				});
 			}
 			else if (neiaHandValue == playerHandValue) {
 				const balance = client.userCommands.addBalance(msgUser, gambleAmount);
-				sentMessage.edit(embed.setDescription(`__**Its a draw!**__\n\nYour **balance** is ${client.util.formatNumber(balance)}💰`));
+				return await interaction.editReply({ embeds: [embed.setDescription(`__**Its a draw!**__\n\nYour **balance** is ${client.util.formatNumber(balance)}💰`)], components: [] });
 			}
 			else if (playerHandValue > neiaHandValue) {
 				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
-				sentMessage.edit(embed.setDescription(`__You win!__\n
-				You have won ${client.util.formatNumber(winAmount)}💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43'));
+				return await interaction.editReply({
+					embeds: [embed.setDescription(`__You win!__\n
+				You have won ${client.util.formatNumber(winAmount)}💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43')], components: []
+				});
 			}
-			else if (neiaHandValue > playerHandValue) sentMessage.edit(embed.setDescription(`__**Neia wins!**__\n
-			__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰\nYour **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303'));
-
-			sentMessage.reactions.removeAll();
+			else if (neiaHandValue > playerHandValue) {
+				return await interaction.editReply({
+					embeds: [embed.setDescription(`__**Neia wins!**__\n
+			__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰\nYour **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303')], components: []
+				});
+			}
 		});
 
 
-		function setEmbed() {
+		async function setEmbed(button) {
 			embed.spliceFields(0, 5, [
-				{ name: 'Players Hand', value: playerHand, inline: true },
-				{ name: 'Players Value', value: playerHandValue, inline: true },
+				{ name: 'Players Hand', value: playerHand.toString(), inline: true },
+				{ name: 'Players Value', value: playerHandValue.toString(), inline: true },
 				{ name: '\u200B', value: '\u200B' },
-				{ name: 'Neia\'s Hand', value: neiaHand, inline: true },
-				{ name: 'Neia\'s Value', value: neiaHandValue, inline: true },
+				{ name: 'Neia\'s Hand', value: neiaHand.toString(), inline: true },
+				{ name: 'Neia\'s Value', value: neiaHandValue.toString(), inline: true },
 			]);
-			sentMessage.edit(embed);
+			await button.update({ embeds: [embed], components: [row] });
 		}
 
 		function getCard(player) {

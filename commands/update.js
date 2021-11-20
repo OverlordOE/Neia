@@ -1,20 +1,21 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
-	name: 'Update',
-	description: '',
-	category: 'debug',
-	aliases: [],
-	args: false,
-	usage: '',
+	data: new SlashCommandBuilder()
+		.setName('update')
+		.setDescription('BOT OWNER DEBUG COMMAND'),
 
-	async execute(message, args, msgUser, msgGuild, client, logger) {
+	execute(interaction, msgUser, msgGuild, client) {
+		if (interaction.user.id != 137920111754346496) return interaction.reply({ content: 'Only Neia\'s owner can use this command!', ephemeral: true });
+
 		try {
 			client.userCommands.map(async (u) => {
 				const user = await client.userCommands.getUser(u.user_id);
 				user.firstCommand = true;
 				user.save();
 			});
-		} catch (error) {
-			return logger.error(error.stack);
+		}
+		catch (error) {
+			return client.logger.error(error.stack);
 		}
 	},
 };

@@ -4,11 +4,6 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			primaryKey: true,
 		},
-		prefix: {
-			type: DataTypes.STRING,
-			defaultValue: process.env.PREFIX,
-			allowNull: false,
-		},
 		numberGame: {
 			type: DataTypes.JSON,
 			defaultValue: JSON.stringify({

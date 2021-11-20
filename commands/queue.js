@@ -1,30 +1,26 @@
-const Discord = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed } = require('discord.js');
 module.exports = {
-	name: 'Queue',
-	description: 'Shows the song queue',
-	summary: 'Shows the song queue and information about the songs in the queue.',
-	category: 'music',
-	aliases: ['list'],
-	args: false,
-	usage: '',
-	example: '',
+	data: new SlashCommandBuilder()
+		.setName('queue')
+		.setDescription('See the current queue of music.'),
 
 
-	execute(message, args, msgUser, msgGuild, client, logger) {
-		const data = client.music.active.get(message.guild.id);
-		if (!data) return message.reply('no client.music queued at the moment.');
+	execute(interaction, msgUser, msgGuild, client) {
+		const data = client.music.active.get(interaction.guildId);
+		if (!data) return interaction.reply({ content: 'There are no songs in the queue.', ephemeral: true });
 
-		const embed = new Discord.MessageEmbed()
+		const embed = new MessageEmbed()
 			.setTitle('Neia Queue')
 			.setColor('#f3ab16');
 
-		const queue = data.queue;
+		const q = data.queue;
 
-		for (let i = 0; i < queue.length; i++) {
+		for (let i = 0; i < q.length; i++) {
 			if (data.paused) embed.addField('PAUSED', 'Use the `resume` command to unpause');
-			if (i == 0) embed.addField(`Now playing: **${queue[i].title}**`, `Channel: **${queue[i].channel}**\nDuration: **${queue[i].duration}**\nRequested by: ${queue[i].requester}`);
-			else embed.addField(`${i}: **${queue[i].title}**`, `Channel: **${queue[i].channel}**\nDuration: **${queue[i].duration}**\nRequested by: ${queue[i].requester}`);
+			if (i == 0) embed.addField(`Now playing: **${q[i].title}**`, `Channel: **${q[i].channel}**\nDuration: **${q[i].duration}**\nRequested by: ${q[i].requester}`);
+			else embed.addField(`${i}: **${q[i].title}**`, `Channel: **${q[i].channel}**\nDuration: **${q[i].duration}**\nRequested by: ${q[i].requester}`);
 		}
-		message.channel.send(embed.setThumbnail(queue[0].thumbnail));
+		interaction.reply({ embeds: [embed.setThumbnail(q[0].thumbnail)] });
 	},
 };
