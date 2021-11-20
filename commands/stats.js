@@ -131,7 +131,7 @@ module.exports = {
 					await i.update({ embeds: [inventoryEmbed], components: [row] });
 				}
 			}
-			else await i.followUp({ content: 'These buttons aren\'t for you!', ephemeral: true });
+			else await i.followUp({ content: 'this menu isn\'t for you!', ephemeral: true });
 		});
 
 		collector.on('end', async () => await interaction.editReply({ embeds: [mainEmbed], components: [] }));

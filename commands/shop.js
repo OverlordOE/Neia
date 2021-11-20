@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const items = require('../data/items');
 module.exports = {
@@ -21,15 +21,52 @@ module.exports = {
 			}
 		});
 
-		const description = `${powerups}\n${reactions}\n`;
-
 		const embed = new MessageEmbed()
 			.setTitle('Neia Shop')
 			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-			.setDescription(description)
+			.setDescription(`${reactions}`)
 			.setColor('#f3ab16')
 			.setFooter('Use the items command to see the full item list.', client.user.displayAvatarURL({ dynamic: true }));
 
-		return interaction.reply({ embeds: [embed] });
+		const row = new MessageActionRow()
+			.addComponents(
+				new MessageSelectMenu()
+					.setCustomId('select')
+					.setPlaceholder('Reactions')
+					.addOptions([
+						{
+							label: 'Reactions',
+							description: 'Number reactions for the number game.',
+							value: 'reactions',
+						},
+						{
+							label: 'Powerups',
+							description: 'Powerups for the number game',
+							value: 'powerups',
+						},
+					]),
+			);
+
+
+		interaction.reply({ embeds: [embed], components: [row] });
+		const filter = i => i.user.id == interaction.user.id;
+		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
+
+		collector.on('collect', async i => {
+			if (i.user.id === interaction.user.id) {
+				if (i.values[0] === 'reactions') {
+					row.components[0].setPlaceholder('Reactions');
+					await i.update({ embeds: [embed.setDescription(`${reactions}`)], components: [row] });
+				}
+				else if (i.values[0] === 'powerups') {
+					row.components[0].setPlaceholder('Powerups');
+					await i.update({ embeds: [embed.setDescription(`${powerups}`)], components: [row] });
+				}
+			}
+			else await i.followUp({ content: 'This menu isn\'t for you!', ephemeral: true });
+		});
+
+		collector.on('end', async () => await interaction.editReply({ embeds: [embed], components: [] }));
+
 	},
 };

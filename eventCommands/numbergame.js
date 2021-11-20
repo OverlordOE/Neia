@@ -11,8 +11,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 	const number = Number(message.content);
 	if (numberGameInfo.currentNumber == 0 && number != 1) return;
 
-	console.log(`Counted Number ${number}`);
-	console.log(`Previous Number ${numberGameInfo.currentNumber}`);
+	logger.info(`${message.user.tag} counted ${numberGameInfo.currentNumber} --> ${number} in "${message.guild.name}#${message.channel.name}"`);
 
 	if (numberGameInfo.lastUserId == message.author.id && !msgUser.powerCounting) {
 		message.reply('**You can\'t count twice in a row.**');
@@ -174,17 +173,10 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 			const balance = client.userCommands.addBalance(msgUser, number * dailyMultiplier);
 
 			const embed = new Discord.MessageEmbed()
-				.setTitle('Count Reward')
-				.setDescription(`You have received your __**Daily Count**__ reward
-								You gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.
-								You will get your next __**Daily Count**__ in 1 day.
-								`)
-				.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-				.setColor('#f3ab16')
-				.setFooter('Neia', client.user.displayAvatarURL({ dynamic: true }));
+				.setDescription(`__**Daily Count**__ reward!\nYou gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
+				.setColor('#f3ab16');
+			message.reply({ embeds: [embed], ephemeral: true });
 
-
-			message.author.send({ embeds: [embed] });
 			client.userCommands.setDailyCount(msgUser);
 		}
 
@@ -192,17 +184,10 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 			const balance = client.userCommands.addBalance(msgUser, number * hourlyMultiplier);
 
 			const embed = new Discord.MessageEmbed()
-				.setTitle('Count Reward')
-				.setDescription(`You have received your __**Hourly Count**__ reward!
-								You gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.
-								You will get your next __**Hourly Count**__ in 1 hour.
-								`)
-				.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-				.setColor('#f3ab16')
-				.setFooter('Neia', client.user.displayAvatarURL({ dynamic: true }));
+				.setDescription(`__**Hourly Count**__ reward!\nYou gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
+				.setColor('#f3ab16');
+			message.reply({ embeds: [embed], ephemeral: true });
 
-
-			message.author.send({ embeds: [embed] });
 			client.userCommands.setHourlyCount(msgUser);
 		}
 	}
