@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -25,7 +25,16 @@ module.exports = {
 		const mainEmbed = new MessageEmbed()
 			.setTitle(`${target.tag}'s Main Page`)
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
-			.addField('Balance:', `${client.util.formatNumber(user.balance)}💰`, true)
+			.addField('Balance:', `${client.util.formatNumber(user.balance)}💰`)
+			.addField('Number Game Reaction:', reaction.emoji, true)
+			.addField('Next Daily Count Reward:', `**${dailyCount}**`, true)
+			.addField('Next Hourly Count Reward:', `**${hourlyCount}**`, true)
+			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL({ dynamic: true }))
+			.setColor('#f3ab16');
+
+		const numbergameEmbed = new MessageEmbed()
+			.setTitle(`${target.tag}'s Number Game Page`)
+			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
 			.addField('Number Game Reaction:', reaction.emoji, true)
 			.addField('Number Game Reaction Bonus', `${client.util.formatNumber(Math.sqrt(reaction.value) / 3)}💰`, true)
 			.addField('Protection Available:', `**${protection}**`, true)
@@ -33,8 +42,11 @@ module.exports = {
 			.addField('Count Boost Available:', `**${countBoost}**`, true)
 			.addField('Next Daily Count Reward:', `**${dailyCount}**`, true)
 			.addField('Next Hourly Count Reward:', `**${hourlyCount}**`, true)
+			.addField('Numbers Counted:', stats.numbersCounted.toString(), true)
+			.addField('Streaks Ruined:', stats.streaksRuined.toString(), true)
 			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16');
+
 
 		const statEmbed = new MessageEmbed()
 			.setTitle(`${target.tag}'s General Stats`)
@@ -68,25 +80,31 @@ module.exports = {
 
 		const row = new MessageActionRow()
 			.addComponents(
-				new MessageButton()
-					.setCustomId('main')
-					.setLabel('Balance and Cooldowns')
-					.setStyle('PRIMARY')
-					.setEmoji('💰'),
-			)
-			.addComponents(
-				new MessageButton()
-					.setCustomId('stats')
-					.setLabel('Stats')
-					.setStyle('PRIMARY')
-					.setEmoji('📊'),
-			)
-			.addComponents(
-				new MessageButton()
-					.setCustomId('inventory')
-					.setLabel('Inventory')
-					.setStyle('PRIMARY')
-					.setEmoji('📦'),
+				new MessageSelectMenu()
+					.setCustomId('select')
+					.setPlaceholder('Main Page')
+					.addOptions([
+						{
+							label: 'Main Page',
+							description: 'Overview of the most used stats.',
+							value: 'main',
+						},
+						{
+							label: 'Number Game Page',
+							description: 'Everything related to your numbergame options.',
+							value: 'numbergame',
+						},
+						{
+							label: 'Statistics',
+							description: 'Different statistics about you.',
+							value: 'stats',
+						},
+						{
+							label: 'Inventory',
+							description: 'This is also a description',
+							value: 'inventory',
+						},
+					]),
 			);
 
 
@@ -96,9 +114,22 @@ module.exports = {
 
 		collector.on('collect', async i => {
 			if (i.user.id === interaction.user.id) {
-				if (i.customId === 'main') await i.update({ embeds: [mainEmbed], components: [row] });
-				else if (i.customId === 'stats') await i.update({ embeds: [statEmbed], components: [row] });
-				else if (i.customId === 'inventory') await i.update({ embeds: [inventoryEmbed], components: [row] });
+				if (i.values[0] === 'main') {
+					row.components[0].setPlaceholder('Main Page');
+					await i.update({ embeds: [mainEmbed], components: [row] });
+				}
+				else if (i.values[0] === 'numbergame') {
+					row.components[0].setPlaceholder('Number Game Page');
+					await i.update({ embeds: [numbergameEmbed], components: [row] });
+				}
+				else if (i.values[0] === 'stats') {
+					row.components[0].setPlaceholder('Statistics');
+					await i.update({ embeds: [statEmbed], components: [row] });
+				}
+				else if (i.values[0] === 'inventory') {
+					row.components[0].setPlaceholder('Inventory');
+					await i.update({ embeds: [inventoryEmbed], components: [row] });
+				}
 			}
 			else await i.followUp({ content: 'These buttons aren\'t for you!', ephemeral: true });
 		});
