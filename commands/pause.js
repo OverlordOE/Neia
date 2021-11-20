@@ -1,26 +1,24 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
-	name: 'Pause',
-	summary: 'Pauses the current song',
-	description: 'Pauses the current song. Use again to unpause',
-	category: 'music',
-	aliases: ['resume', 'unpause'],
-	args: false,
-	usage: '',
-	example: '',
+	data: new SlashCommandBuilder()
+		.setName('pause')
+		.setDescription('Pause or unpause the current playing song in your voice channel.'),
 
-	execute(message, args, msgUser, msgGuild, client, logger) {
-		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');
-		const data = client.music.active.get(message.guild.id);
-		if (!data) return message.reply('there are no songs to pause.');
+	execute(interaction, msgUser, msgGuild, client) {
+		const data = client.music.active.get(interaction.guildId);
+
+		if (!interaction.member.voice.channel) return interaction.reply({ content: 'You are not in a voice channel.', ephemeral: true });
+		if (!data) return interaction.reply({ content: 'There are no songs to pause.', ephemeral: true });
+
 
 		if (data.paused) {
-			data.dispatcher.resume();
-			message.reply('unpaused music.');
+			data.player.unpause();
+			interaction.reply('Unpaused the current song.');
 			data.paused = false;
 		}
 		else {
-			data.dispatcher.pause();
-			message.reply('paused music.');
+			data.player.pause();
+			interaction.reply('Paused the current song.');
 			data.paused = true;
 		}
 	},

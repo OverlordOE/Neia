@@ -1,18 +1,34 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
-	name: 'Fruitslots',
-	summary: 'Play a round of Fruit Slots',
-	description: 'Play a round of Fruit Slots. Horizontal rows and vertical rows only.',
-	category: 'gambling',
-	aliases: ['slots', 'fruit', 'fruits', 'slot'],
-	args: true,
-	usage: '<gamble amount>',
-	example: '100',
+	data: new SlashCommandBuilder()
+		.setName('slots')
+		.setDescription('Play a round of slots.')
+		.addIntegerOption(option =>
+			option
+				.setName('amount')
+				.setDescription('The amount you want to gamble.')
+				.setRequired(true)),
 
-	async execute(message, args, msgUser, msgGuild, client, logger) {
-		let gambleAmount = 0;
-		const payoutRate = 4;
-		const icons = ['🍓', '🍉', '🍒', '🍌', '<:luckyseven:838417718944333884>'];
+	async execute(interaction, msgUser, msgGuild, client) {
+		/*
+		?Profitability formula: y(1) = x*a*c / b^3
+		y = avarage profit per spin in decimal percentage
+		x = payout multiplier
+		a = amount of proftitable rows per row
+		b = amount of symbols
+		c = amount of rows
+		*/
+
+		const embed = new MessageEmbed()
+			.setColor('#f3ab16')
+			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
+			.setTitle('Neia\'s Gambling Imporium')
+			.setFooter('Use the emojis to play the game.', client.user.displayAvatarURL({ dynamic: true }));
+
+
+		const payoutRate = 1.8;
+		const icons = ['🍋', '🍋', '🍋', '🍉', '🍉', '🍉', '🍒', '🍒', '🍌', '🍌', '<:luckyseven:838417718944333884>'];
 		const slots = [];
 		const slotX = 3;
 		const slotY = 3;
@@ -20,28 +36,17 @@ module.exports = {
 		let count = 0;
 		let rowsWon = 0;
 
-		const embed = new Discord.MessageEmbed()
-			.setColor('#f3ab16')
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-			.setTitle('Neia\'s Gambling Imporium')
-			.setFooter('Use the emojis to play the game.', client.user.displayAvatarURL({ dynamic: true }));
-
-
-		for (let i = 0; i < args.length; i++) {
-			if (!isNaN(parseInt(args[i]))) gambleAmount = parseInt(args[i]);
-			else if (args[i] == 'all') gambleAmount = Math.floor(msgUser.balance);
-		}
-
+		let gambleAmount = interaction.options.getInteger('amount');
 		if (gambleAmount < 1) gambleAmount = 1;
-		if (gambleAmount > msgUser.balance) return message.channel.send(embed.setDescription(`Sorry *${message.author}*, you only have ${client.util.formatNumber(msgUser.balance)}💰.`));
-
+		if (gambleAmount > msgUser.balance) return interaction.reply({ content: `You don't have enough 💰.\n${client.util.formatNumber(gambleAmount - msgUser.balance)}💰 more needed.`, ephemeral: true });
 		client.userCommands.addBalance(msgUser, -gambleAmount, true);
+
 
 		output += `
 		You have bet ${client.util.formatNumber(gambleAmount)}💰.
 		Get **${slotX}** of the __**same symbol**__ in a row to **win**.
-		Getting a <:luckyseven:838417718944333884> row will give **3X payout**.\n
-		`;
+		Getting a 🍒 or 🍌 row will give **2X payout**.
+		Getting a <:luckyseven:838417718944333884> row will give **4X payout**.\n`;
 
 		for (let i = 0; i < slotY; i++) {
 			slots[i] = [];
@@ -50,7 +55,7 @@ module.exports = {
 				slots[i][j] = slotIcon;
 			}
 		}
-		const sentMessage = await message.channel.send(embed.setDescription(output));
+		await interaction.reply({ embeds: [embed.setDescription(output)] });
 		setEmbed();
 
 		function checkHorizontalWins() {
@@ -63,8 +68,9 @@ module.exports = {
 				let win = true;
 				const tempIcon = slots[0][i];
 
-				for (let j = 0; j < slotY; j++)
+				for (let j = 0; j < slotY; j++) {
 					if (slots[j][i] != tempIcon) win = false;
+				}
 
 				if (win) checkWinType(0, i);
 				else output += '❌';
@@ -75,8 +81,9 @@ module.exports = {
 			let win = true;
 			let tempIcon = slots[0][0];
 
-			for (let i = 0; i < slotY; i++)
+			for (let i = 0; i < slotY; i++) {
 				if (slots[i][i] != tempIcon) win = false;
+			}
 
 			if (win) checkWinType(0, 0);
 			else output += '❌';
@@ -84,8 +91,9 @@ module.exports = {
 			win = true;
 			tempIcon = slots[0][slotX - 1];
 
-			for (let i = 0; i < slotX; i++)
+			for (let i = 0; i < slotX; i++) {
 				if (slots[i][slotX - i - 1] != tempIcon) win = false;
+			}
 
 			if (win) checkWinType(0, slotX - 1);
 			else output += '❌';
@@ -94,6 +102,10 @@ module.exports = {
 
 		function checkWinType(x, y) {
 			if (slots[x][y] == '<:luckyseven:838417718944333884>') {
+				rowsWon += 4;
+				output += '🌟';
+			}
+			else if (slots[x][y] == '🍌' || slots[x][y] == '🍒') {
 				rowsWon += 2;
 				output += '⭐';
 			}
@@ -114,7 +126,7 @@ module.exports = {
 				embed.setColor('#fc0303');
 				output += `\n\n__**You lost!**__ ${client.util.formatNumber(gambleAmount)}💰\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
 			}
-			sentMessage.edit(embed.setDescription(output));
+			interaction.editReply({ embeds: [embed.setDescription(output)] });
 		}
 
 		function setEmbed() {
@@ -122,7 +134,7 @@ module.exports = {
 
 			checkHorizontalWins();
 			output += '\n';
-			sentMessage.edit(embed.setDescription(output));
+			interaction.editReply({ embeds: [embed.setDescription(output)] });
 
 			count++;
 			if (count < slotY) {

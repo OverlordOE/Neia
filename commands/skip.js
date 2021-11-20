@@ -1,18 +1,14 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
-	name: 'Skip',
-	summary: 'Skip the current song',
-	description: 'Skip the current song.',
-	category: 'music',
-	aliases: ['next'],
-	args: false,
-	usage: '',
-	example: '',
+	data: new SlashCommandBuilder()
+		.setName('skip')
+		.setDescription('Skip the current playing song in your voice channel.'),
 
-	execute(message, args, msgUser, msgGuild, client, logger) {
-		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');
-		if (!client.music.active.get(message.guild.id)) return message.reply('there are no songs to skip.');
+	execute(interaction, msgUser, msgGuild, client) {
+		if (!interaction.member.voice.channel) return interaction.reply({ content: 'You are not in a voice channel.', ephemeral: true });
+		if (!client.music.active.get(interaction.guildId)) return interaction.reply({ content: 'There are no songs to skip.', ephemeral: true });
 
-		return client.music.active.get(message.guild.id).dispatcher.emit('finish');
-
+		client.music.active.get(interaction.guildId).player.stop();
+		return interaction.reply('Song skipped!');
 	},
 };

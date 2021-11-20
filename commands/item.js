@@ -1,39 +1,37 @@
-const Discord = require('discord.js');
 const items = require('../data/items');
+const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
-	name: 'Item',
-	summary: 'Shows information about a specific item',
-	description: 'Shows information about a specific item.',
-	category: 'info',
-	aliases: ['items', 'i'],
-	args: false,
-	usage: '<item>',
-	example: 'chest',
-
-	execute(message, args, msgUser, msgGuild, client, logger) {
-		let temp = '';
-		let embed;
-
-		for (let i = 0; i < args.length; i++) {
-			if (temp.length > 2) temp += ` ${args[i]}`;
-			else temp += `${args[i]}`;
-		}
+	data: new SlashCommandBuilder()
+		.setName('item')
+		.setDescription('see the item list or details about a specific item.')
+		.addStringOption(option =>
+			option
+				.setName('item')
+				.setDescription('The item you want to see.')),
 
 
-		if (temp) {
-			const item = client.util.getItem(temp);
-			if (!item) return message.reply(`${item} is not a valid item`);
+	execute(interaction, msgUser, msgGuild, client) {
+		const embed = new MessageEmbed();
+		const tempItem = interaction.options.getString('item');
 
-			embed = new Discord.MessageEmbed()
+
+		if (tempItem) {
+			const item = client.util.getItem(tempItem);
+			if (!item) return interaction.reply({ embeds: [embed.setDescription(`__${tempItem}__ is not a valid item.`)], ephemeral: true });
+
+			embed
 				.setTitle(`${item.emoji}${item.name}`)
 				.setDescription(item.description)
 				.addField('Value', `${client.util.formatNumber(item.value)}💰`, true)
-				.addField('Buyable', item.buyable, true)
-				.addField('Category', item.ctg, true)
-				.setFooter('Use the command without arguments to see the item list', client.user.displayAvatarURL())
+				.addField('Buyable', item.buyable.toString(), true)
+				.addField('Category', item.ctg.toString(), true)
+				.setFooter('Use the command without arguments to see the item list', client.user.displayAvatarURL({ dynamic: true }));
 
-			if (item.picture) embed.attachFiles(`assets/items/${item.picture}`)
-				.setImage(`attachment://${item.picture}`);
+			if (item.picture) {
+				embed.attachFiles(`assets/items/${item.picture}`)
+					.setImage(`attachment://${item.picture}`);
+			}
 
 			if (item.rarity == 'uncommon') embed.setColor('#1eff00');
 			else if (item.rarity == 'rare') embed.setColor('#0070dd');
@@ -56,15 +54,13 @@ module.exports = {
 				else if (i.ctg == 'powerup') powerups += `${i.emoji}${i.name}\n`;
 			});
 
-			const description = `${reactions}\n${powerups}\n`;
-
-			embed = new Discord.MessageEmbed()
-				.setTitle('Project Neia Item List')
-				.setThumbnail(client.user.displayAvatarURL())
-				.setDescription(description)
+			embed
+				.setTitle('Neia Item List')
+				.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+				.setDescription(`${reactions}\n${powerups}\n`)
 				.setColor('#f3ab16');
 		}
 
-		return message.channel.send(embed);
+		return interaction.reply({ embeds: [embed] });
 	},
 };

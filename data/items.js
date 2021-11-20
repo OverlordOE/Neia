@@ -308,7 +308,7 @@ module.exports = {
 		picture: null,
 		ctg: 'powerup',
 		description: 'Once you activate this item you will be able to count alone for **__1 minute__** in the Number Game. Neia will notify you when your time is up.',
-		use: async function (client, amount, embed, item, msgUser, msgGuild, message) {
+		use: async function (client, amount, embed, item, msgUser, msgGuild, interaction) {
 			if (msgUser.powerCounting) {
 				return {
 					succes: false,
@@ -323,26 +323,26 @@ module.exports = {
 				};
 			}
 
-			const numberGameChannelID = client.guildCommands.getNumberGame(msgGuild).channelId;
-			if (!numberGameChannelID) {
+			const numberGameChannelId = client.guildCommands.getNumberGame(msgGuild).channelId;
+			if (!numberGameChannelId) {
 				return {
 					succes: false,
 					message: 'The number game has not been setup yet.',
 				};
 			}
-			const numberGameChannel = await client.channels.fetch(numberGameChannelID);
-			numberGameChannel.send(`${message.author} **has activated Power Count!**.\nThey have __**1 minute**__ to count by themself.`);
+			const numberGameChannel = await client.channels.fetch(numberGameChannelId);
+			numberGameChannel.send(`${interaction.user} **has activated Power Count!**.\nThey have __**1 minute**__ to count by themself.`);
 
 			msgUser.save();
 			msgUser.powerCounting = true;
 			client.userCommands.setPowerCount(msgUser);
 
 			setTimeout(function () {
-				numberGameChannel.send(`${message.author} Your **Power Count** will end in __**10 seconds**__!`);
+				numberGameChannel.send(`${interaction.user} Your **Power Count** will end in __**10 seconds**__!`);
 				setTimeout(function () {
 					msgUser.powerCounting = false;
 					msgUser.save();
-					numberGameChannel.send(`${message.author} Your **Power Count** has ended.\n Next **Power Count** in __**3 hours**__.`);
+					numberGameChannel.send(`${interaction.user} Your **Power Count** has ended.\n Next **Power Count** in __**3 hours**__.`);
 				}, 10000);
 			}, 50000);
 
@@ -362,7 +362,7 @@ module.exports = {
 		picture: null,
 		ctg: 'powerup',
 		description: 'Once you activate this item your counts will give you extra 💰 for **__1 minute__**. Neia will notify you when your time is up.',
-		use: async function (client, amount, embed, item, msgUser, msgGuild, message) {
+		use: async function (client, amount, embed, item, msgUser, msgGuild, interaction) {
 			if (msgUser.countBoost > 0) {
 				return {
 					succes: false,
@@ -377,26 +377,26 @@ module.exports = {
 				};
 			}
 
-			const numberGameChannelID = client.guildCommands.getNumberGame(msgGuild).channelId;
-			if (!numberGameChannelID) {
+			const numberGameChannelId = client.guildCommands.getNumberGame(msgGuild).channelId;
+			if (!numberGameChannelId) {
 				return {
 					succes: false,
 					message: 'The number game has not been setup yet.',
 				};
 			}
-			const numberGameChannel = await client.channels.fetch(numberGameChannelID);
-			numberGameChannel.send(`${message.author} **has activated Count Boost!**.\nThey get extra 💰 per count for __**1 minute**__.`);
+			const numberGameChannel = await client.channels.fetch(numberGameChannelId);
+			numberGameChannel.send(`${interaction.user} **has activated Count Boost!**.\nThey get extra 💰 per count for __**1 minute**__.`);
 
 			msgUser.save();
 			msgUser.countBoost = 100;
 			client.userCommands.setCountBoost(msgUser);
 
 			setTimeout(function () {
-				numberGameChannel.send(`${message.author} Your **Count Boost** will end in __**10 seconds**__!`);
+				numberGameChannel.send(`${interaction.user} Your **Count Boost** will end in __**10 seconds**__!`);
 				setTimeout(function () {
 					msgUser.countBoost = 0;
 					msgUser.save();
-					numberGameChannel.send(`${message.author} Your **Count Boost** has ended.\n Next **Count Boost** in __**3 hours**__.`);
+					numberGameChannel.send(`${interaction.user} Your **Count Boost** has ended.\n Next **Count Boost** in __**3 hours**__.`);
 				}, 10000);
 			}, 50000);
 

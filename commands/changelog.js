@@ -1,16 +1,14 @@
-const Discord = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed } = require('discord.js');
 module.exports = {
-	name: 'Changelog',
-	summary: 'Shows the latest major update that the bot has received',
-	description: 'Shows the latest major update that the bot has received.',
-	category: 'info',
-	aliases: ['update'],
-	args: false,
-	usage: '',
+	data: new SlashCommandBuilder()
+		.setName('changelog')
+		.setDescription('Shows the latest major update that the bot has received.'),
 
-	execute(message, args, msgUser, msgGuild, client, logger) {
-		const embed = new Discord.MessageEmbed()
-			.setTitle('**__Neia V3.5: Hourly Counts & Reset__**')
+
+	execute(interaction, msgUser, msgGuild, client) {
+		const embed = new MessageEmbed()
+			.setTitle('Neia V3.4: Power Counting')
 			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL({ dynamic: true }))
 			
 			.addField('**Reset**', `
@@ -46,6 +44,6 @@ You will get a DM from Neia when they activate. You can see the cooldowns in you
 - \`Trade\` should now change colour correctly to green on a success.
 `);
 
-		return message.channel.send(embed);
+		return interaction.reply({ embeds: [embed] });
 	},
 };

@@ -1,29 +1,23 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
-	name: 'Botstats',
-	summary: 'Shows how much servers and users use Neia',
-	description: 'Shows how much servers and users use Neia.',
-	category: 'info',
-	aliases: ['bs'],
-	args: false,
-	usage: '',
-	example: '',
+	data: new SlashCommandBuilder()
+		.setName('botstats')
+		.setDescription('Shows how many servers and users use Neia.'),
 
-	async execute(message, args, msgUser, msgGuild, client, logger) {
-
-		const embed = new Discord.MessageEmbed()
-			.setTitle('Neia Stats')
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-			.setColor('#f3ab16')
-			.setFooter('Neia', client.user.displayAvatarURL({ dynamic: true }));
-
+	async execute(interaction, msgUser, msgGuild, client) {
 		let guildTotal = 0;
 		let memberTotal = 0;
+		
 		client.guilds.cache.forEach(guild => {
 			guildTotal++;
 			if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount);
 		});
-		message.channel.send(embed.setDescription(`Neia is in **${guildTotal}** servers with a total of **${memberTotal}** users.`));
-		client.user.setActivity(`with ${memberTotal} users.`);
+
+		const embed = new MessageEmbed()
+			.setDescription(`Neia is in **${guildTotal}** servers with a total of **${memberTotal}** users.`)
+			.setColor('#f3ab16');
+
+		interaction.reply({ embeds: [embed] });
 	},
 };

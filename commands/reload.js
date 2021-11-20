@@ -1,26 +1,35 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
-	name: 'Reload',
-	aliases: ['r', 're'],
-	category: 'debug',
-	args: true,
+	data: new SlashCommandBuilder()
+		.setName('reload')
+		.setDescription('BOT OWNER DEBUG COMMAND.')
+		.addStringOption(option =>
+			option
+				.setName('command')
+				.setDescription('The command to reload.')
+				.setRequired(true)),
 
-	execute(message, args, msgUser, msgGuild, client, logger) {
-		const commandName = args[0].toLowerCase();
-		const command = message.client.commands.get(commandName)
-			|| message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
-		if (!command) return message.channel.send(`There is no command with name or alias \`${commandName}\`, ${message.author}!`);
-
-		delete require.cache[require.resolve(`./${command.name}.js`)];
+	execute(interaction, msgUser, msgGuild, client) {
+		if (interaction.user.id != 137920111754346496) return interaction.reply({ content: 'Only Neia\'s owner can use this command!', ephemeral: true });
+		const commandName = interaction.options.getString('command');
 
 		try {
-			const newCommand = require(`./${command.name}.js`);
-			message.client.commands.set(newCommand.name.toLowerCase(), newCommand);
+			const command = client.commands.get(commandName);
+			let newCommand;
+
+			if (command) {
+				delete require.cache[require.resolve(`./${command.data.name}.js`)];
+				newCommand = require(`./${command.data.name}.js`);
+			}
+			else newCommand = require(`./${commandName}.js`);
+
+			if (newCommand) client.commands.set(newCommand.data.name.toLowerCase(), newCommand);
+			else return interaction.reply({ content: `There is no command with name \`${commandName}\`!`, ephemeral: true });
 		}
 		catch (e) {
-			logger.error(e.stack);
-			return message.channel.send(`There was an error while reloading a command \`${commandName}\`:\n\`${e.message}\``);
+			client.logger.error(e.stack);
+			return interaction.reply({ content: `There was an error while reloading a command \`${commandName}\`:\n\`${e.message}\``, ephemeral: true });
 		}
-		message.channel.send(`Command \`${command.name}\` was reloaded!`);
+		interaction.reply(`Command \`${commandName}\` was reloaded!`);
 	},
 };

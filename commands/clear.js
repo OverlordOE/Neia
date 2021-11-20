@@ -1,23 +1,22 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
-	name: 'Clear',
-	summary: 'Clears the song queue',
-	description: 'Clears the song queue and makes the bot leave the voice channel.',
-	category: 'music',
-	aliases: ['stop'],
-	args: false,
-	usage: '',
-	example: '',
+	data: new SlashCommandBuilder()
+		.setName('clear')
+		.setDescription('Clears the music queue.'),
 
 
-	execute(message, args, msgUser, msgGuild, client, logger) {
-		if (!message.member.voice.channel) return message.reply('you are not in a voice channel.');
+	execute(interaction, msgUser, msgGuild, client) {
+		const data = client.music.active.get(interaction.guildId);
 
-		const guildIDData = client.music.active.get(message.guild.id);
-		if (guildIDData) {
-			guildIDData.queue = [];
-			guildIDData.dispatcher.emit('finish');
-			message.reply('cleared the queue.');
+		if (!data) return interaction.reply({ content: 'There are no songs in the queue.', ephemeral: true });
+		if (!interaction.member.voice.channel) return interaction.reply({ content: 'You are not in a voice channel.', ephemeral: true });
+
+
+		if (data) {
+			data.queue = [];
+			data.player.stop();
+			interaction.reply('Queue has been cleared.');
 		}
-		else message.reply('there is no queue to clear.');
+		else interaction.reply('There is no queue to cleared.');
 	},
 };
