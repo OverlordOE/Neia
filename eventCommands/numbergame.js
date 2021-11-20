@@ -11,7 +11,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 	const number = Number(message.content);
 	if (numberGameInfo.currentNumber == 0 && number != 1) return;
 
-	logger.info(`${message.user.tag} counted ${numberGameInfo.currentNumber} --> ${number} in "${message.guild.name}#${message.channel.name}"`);
+	logger.info(`Count ${numberGameInfo.currentNumber} --> ${number} in "${message.guild.name}#${message.channel.name}"`);
 
 	if (numberGameInfo.lastUserId == message.author.id && !msgUser.powerCounting) {
 		message.reply('**You can\'t count twice in a row.**');
