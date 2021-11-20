@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -43,7 +43,31 @@ module.exports = {
 			.setColor('#f3ab16');
 
 
-		const row = new MessageActionRow()
+		const menuRow = new MessageActionRow()
+			.addComponents(
+				new MessageSelectMenu()
+					.setCustomId('list')
+					.setPlaceholder('Balance List')
+					.addOptions([
+						{
+							label: 'Balance List',
+							description: 'Balance Leaderboard.',
+							value: 'balance',
+						},
+						{
+							label: 'Numbers Counted List',
+							description: 'Numbers Counted Leaderboard.',
+							value: 'count',
+						},
+						{
+							label: 'Streaks Ruined List',
+							description: 'Streaks Ruined Leaderboard.',
+							value: 'ruined',
+						},
+					]),
+			);
+
+		const buttonRow = new MessageActionRow()
 			.addComponents(
 				new MessageButton()
 					.setCustomId('previous')
@@ -57,17 +81,10 @@ module.exports = {
 					.setLabel('Next Page')
 					.setStyle('PRIMARY')
 					.setEmoji('▶️'),
-			)
-			.addComponents(
-				new MessageButton()
-					.setCustomId('list')
-					.setLabel('Next List')
-					.setStyle('PRIMARY')
-					.setEmoji('🔀'),
 			);
 
 
-		interaction.reply({ embeds: [embed], components: [row] });
+		interaction.reply({ embeds: [embed], components: [menuRow, buttonRow] });
 		const filter = i => i.user.id == interaction.user.id;
 		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
 
@@ -77,20 +94,34 @@ module.exports = {
 
 					page--;
 					embed.setDescription(editDescription(listArray[listIndex], page));
-					await i.update({ embeds: [embed], components: [row] });
+					await i.update({ embeds: [embed], components: [menuRow, buttonRow] });
 				}
 				else if (i.customId === 'next' && page < 4) {
 
 					page++;
 					embed.setDescription(editDescription(listArray[listIndex], page));
-					await i.update({ embeds: [embed], components: [row] });
+					await i.update({ embeds: [embed], components: [menuRow, buttonRow] });
 				}
 				else if (i.customId === 'list') {
 
-					listIndex++;
-					if (listIndex >= listArray.length) listIndex = 0;
-					embed.setDescription(editDescription(listArray[listIndex], page));
-					await i.update({ embeds: [embed], components: [row] });
+					if (i.values[0] === 'balance') {
+						listIndex = 0;
+						menuRow.components[0].setPlaceholder('Balance List');
+						embed.setDescription(editDescription(listArray[listIndex], page));
+						await i.update({ embeds: [embed], components: [menuRow, buttonRow] });
+					}
+					else if (i.values[0] === 'count') {
+						listIndex = 1;
+						menuRow.components[0].setPlaceholder('Numbers Counted List');
+						embed.setDescription(editDescription(listArray[listIndex], page));
+						await i.update({ embeds: [embed], components: [menuRow, buttonRow] });
+					}
+					else if (i.values[0] === 'ruined') {
+						listIndex = 2;
+						menuRow.components[0].setPlaceholder('Streaks Ruined List');
+						embed.setDescription(editDescription(listArray[listIndex], page));
+						await i.update({ embeds: [embed], components: [menuRow, buttonRow] });
+					}
 				}
 			}
 			else await i.reply({ content: 'These buttons aren\'t for you!', ephemeral: true });

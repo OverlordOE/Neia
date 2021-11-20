@@ -175,7 +175,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 			const embed = new Discord.MessageEmbed()
 				.setDescription(`__**Daily Count**__ reward!\nYou gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
 				.setColor('#f3ab16');
-			message.reply({ embeds: [embed], ephemeral: true });
+			message.author.send({ embeds: [embed] });
 
 			client.userCommands.setDailyCount(msgUser);
 		}
@@ -186,7 +186,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 			const embed = new Discord.MessageEmbed()
 				.setDescription(`__**Hourly Count**__ reward!\nYou gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
 				.setColor('#f3ab16');
-			message.reply({ embeds: [embed], ephemeral: true });
+			message.author.send({ embeds: [embed] });
 
 			client.userCommands.setHourlyCount(msgUser);
 		}
