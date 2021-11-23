@@ -55,8 +55,6 @@ client.once('ready', async () => {
 	client.logger.info(`Logged in as ${client.user.tag}!`);
 });
 
-module.exports = { client };
-
 // ? Bad error handling
 client.on('warn', e => console.log(e));
 client.on('error', e => console.log(e));
@@ -89,6 +87,7 @@ client.on('messageCreate', async message => {
 	const guild = await client.guildOverseer.getGuild(message.guildId);
 	const id = message.author.id;
 	const user = await client.userManager.getUser(id);
+	user.author = message.author;
 	if (message.type != 'DEFAULT' || message.attachments.first() || message.interaction || message.author.bot) return;
 
 	if (Number.isInteger(Number(message.content))) {
@@ -108,6 +107,7 @@ client.on('interactionCreate', async interaction => {
 	const guild = await client.guildOverseer.getGuild(interaction.guildId);
 	const id = interaction.user.id;
 	const user = await client.userManager.getUser(id);
+	user.author = interaction.user;
 
 	if (command.permissions) {
 		if (!interaction.member.permissions.has(Permissions.FLAGS[command.permissions])) {

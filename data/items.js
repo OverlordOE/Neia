@@ -1,9 +1,6 @@
 /* eslint-disable no-multiple-empty-lines */
 /* eslint-disable space-before-function-paren */
 module.exports = {
-
-
-
 	// CUSTOM EMOJIS
 	'monkey': {
 		name: 'Monkey',

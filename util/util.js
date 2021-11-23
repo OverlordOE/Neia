@@ -27,7 +27,7 @@ Reflect.defineProperty(util, 'getItem', {
 	value: function getItem(itemName) {
 		const item = itemName.toLowerCase();
 		if (items[item]) return items[item];
-		return false;
+		else return false;
 	},
 });
 
@@ -35,7 +35,7 @@ Reflect.defineProperty(util, 'getAchievement', {
 	value: function getAchievement(achievementName) {
 		const achievement = achievementName.toLowerCase();
 		if (achievements[achievement]) return achievements[achievement];
-		return false;
+		else return false;
 	},
 });
 
