@@ -27,7 +27,7 @@ module.exports = {
 			.setFooter('Use the emojis to play the game.', client.user.displayAvatarURL({ dynamic: true }));
 
 
-		const payoutRate = 1.8;
+		const payoutRate = 1.6;
 		const icons = ['🍋', '🍋', '🍋', '🍉', '🍉', '🍉', '🍒', '🍒', '🍌', '🍌', '<:luckyseven:838417718944333884>'];
 		const slots = [];
 		const slotX = 3;
