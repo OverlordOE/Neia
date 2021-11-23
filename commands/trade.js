@@ -51,7 +51,7 @@ module.exports = {
 			.setColor('#f3ab16');
 
 		const target = interaction.options.getUser('target');
-		const targetUser = await client.userCommands.getUser(target.id);
+		const targetUser = await client.userManager.getUser(target.id);
 		let amount = interaction.options.getInteger('amount');
 		if (amount < 1) amount = 1;
 		let item;
@@ -81,8 +81,8 @@ module.exports = {
 				});
 			}
 
-			balance = client.userCommands.addBalance(msgUser, -amount);
-			client.userCommands.addBalance(targetUser, amount);
+			balance = client.userManager.addBalance(msgUser, -amount);
+			client.userManager.addBalance(targetUser, amount);
 			return interaction.reply({
 				embeds: [embed.setDescription(
 					`Trade with *${target}* succesfull!\n\nTransferred ${client.util.formatNumber(amount)}💰 to *${target}*.
@@ -101,14 +101,14 @@ module.exports = {
 			}
 
 			const protectionItem = client.util.getItem('streak protection');
-			if (item == protectionItem && !(await client.userCommands.newProtectionAllowed(targetUser))) {
+			if (item == protectionItem && !(await client.userManager.newProtectionAllowed(targetUser))) {
 				return interaction.reply({
 					embeds: [embed.setDescription(`__**ITEM(S) NOT TRADED!**__
 					${target} already has a Streak Protection or it's on cooldown.`).setColor('#fc0303')], ephemeral: true,
 				});
 			}
 			if (item.ctg == 'reaction') {
-				const reaction = client.userCommands.getReaction(msgUser);
+				const reaction = client.userManager.getReaction(msgUser);
 				if (item.emoji == reaction.emoji) {
 					msgUser.reaction = JSON.stringify({
 						emoji: '✅',

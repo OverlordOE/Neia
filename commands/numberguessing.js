@@ -24,7 +24,7 @@ module.exports = {
 		if (gambleAmount < 1) gambleAmount = 1;
 		if (gambleAmount > msgUser.balance) return interaction.reply({ content: `You don't have enough 💰.\n${client.util.formatNumber(gambleAmount - msgUser.balance)}💰 more needed.`, ephemeral: true });
 
-		client.userCommands.addBalance(msgUser, -gambleAmount, true);
+		client.userManager.addBalance(msgUser, -gambleAmount, true);
 
 		const answer = Math.floor((Math.random() * 5) + 1);
 		const winAmount = payoutRate * gambleAmount;
@@ -91,7 +91,7 @@ module.exports = {
 
 		collector.on('collect', async button => {
 			if (button.customId == answer) {
-				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
+				const balance = client.userManager.addBalance(msgUser, winAmount, true);
 				embed.setColor('#00fc43');
 				button.update({
 					embeds: [embed.setDescription(`You have chosen __${button.customId}__\nThe correct answer was **${answer}**.\n

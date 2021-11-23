@@ -4,8 +4,8 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 module.exports = async function execute(client, logger) {
 
 	client.guilds.cache.forEach(async g => {
-		const guild = await client.guildCommands.getGuild(g.id);
-		const numberGameInfo = client.guildCommands.getNumberGame(guild);
+		const guild = await client.guildOverseer.getGuild(g.id);
+		const numberGameInfo = client.guildOverseer.getNumberGame(guild);
 		let claimed = false;
 
 		if (numberGameInfo.channelId) {
@@ -39,13 +39,13 @@ module.exports = async function execute(client, logger) {
 				if (button.customId === 'claim') {
 
 					let payout = 0;
-					const user = await client.userCommands.getUser(button.user.id);
+					const user = await client.userManager.getUser(button.user.id);
 					const oldNumber = numberGameInfo.currentNumber;
 
 					numberGameInfo.currentNumber += numberIncrease;
 					claimed = true;
 
-					const reaction = client.userCommands.getReaction(user);
+					const reaction = client.userManager.getReaction(user);
 					if (reaction.emoji && reaction.value) {
 						for (let i = oldNumber; i < oldNumber + numberIncrease; i++) {
 							if (checkpoints.includes(i)) {
@@ -61,8 +61,8 @@ module.exports = async function execute(client, logger) {
 					sentMessage.edit({ embeds: [embed.setDescription(description).setColor('#00fc43')], components: [] });
 
 					numberGameInfo.lastUserId = null;
-					client.userCommands.addBalance(user, payout);
-					client.guildCommands.saveNumberGameInfo(await client.guildCommands.getGuild(sentMessage.guildId), numberGameInfo);
+					client.userManager.addBalance(user, payout);
+					client.guildOverseer.saveNumberGameInfo(await client.guildOverseer.getGuild(sentMessage.guildId), numberGameInfo);
 					numberGameChannel.send(`${oldNumber + numberIncrease}`).then(m => m.react('✅'));
 					collector.stop();
 				}

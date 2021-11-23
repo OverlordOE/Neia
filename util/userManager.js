@@ -11,40 +11,40 @@ const moment = require('moment');
 const Discord = require('discord.js');
 const { util } = require('./util');
 const { itemHandler } = require('./itemHandler');
-const userCommands = new Discord.Collection();
+const userManager = new Discord.Collection();
 const Users = require('../models/Users')(sequelize, Sequelize);
 
 
 
 
 
-Reflect.defineProperty(userCommands, 'newUser', {
+Reflect.defineProperty(userManager, 'newUser', {
 	value: async function newUser(id) {
 		const user = await Users.create({
 			user_id: id,
 		});
-		userCommands.set(id, user);
+		userManager.set(id, user);
 		return user;
 	},
 });
-Reflect.defineProperty(userCommands, 'getUser', {
+Reflect.defineProperty(userManager, 'getUser', {
 	value: async function getUser(id) {
-		let user = userCommands.get(id);
-		if (!user) user = await userCommands.newUser(id);
+		let user = userManager.get(id);
+		if (!user) user = await userManager.newUser(id);
 		return user;
 	},
 });
 
 
-Reflect.defineProperty(userCommands, 'addBalance', {
+Reflect.defineProperty(userManager, 'addBalance', {
 	value: function addBalance(user, amount, gambling = false) {
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 		user.balance += Number(amount);
 
-		if (amount > 0 && gambling) userCommands.addStats(user, 'gamblingMoneyGained', Number(amount));
+		if (amount > 0 && gambling) userManager.addStats(user, 'gamblingMoneyGained', Number(amount));
 		else if (amount < 0 && gambling) {
-			userCommands.addStats(user, 'gamblingMoneyLost', -Number(amount));
-			userCommands.addStats(user, 'gamblingDone', 1);
+			userManager.addStats(user, 'gamblingMoneyLost', -Number(amount));
+			userManager.addStats(user, 'gamblingDone', 1);
 		}
 		user.save();
 		return Math.floor(user.balance);
@@ -52,12 +52,12 @@ Reflect.defineProperty(userCommands, 'addBalance', {
 });
 
 
-Reflect.defineProperty(userCommands, 'getStats', {
+Reflect.defineProperty(userManager, 'getStats', {
 	value: function getStats(user) {
 		return JSON.parse(user.stats);
 	},
 });
-Reflect.defineProperty(userCommands, 'addStats', {
+Reflect.defineProperty(userManager, 'addStats', {
 	value: function addStats(user, statName, amount) {
 		const userStats = JSON.parse(user.stats);
 		if (userStats[statName]) userStats[statName] += amount;
@@ -71,13 +71,13 @@ Reflect.defineProperty(userCommands, 'addStats', {
 });
 
 
-Reflect.defineProperty(userCommands, 'setVote', {
+Reflect.defineProperty(userManager, 'setVote', {
 	value: function setVote(user) {
 		user.lastVote = moment().toDate();
 		return user.save();
 	},
 });
-Reflect.defineProperty(userCommands, 'getVote', {
+Reflect.defineProperty(userManager, 'getVote', {
 	value: function getVote(user) {
 		const now = moment();
 		const vCheck = moment(user.lastVote).add(12, 'h');
@@ -87,7 +87,7 @@ Reflect.defineProperty(userCommands, 'getVote', {
 });
 
 
-Reflect.defineProperty(userCommands, 'getProtection', {
+Reflect.defineProperty(userManager, 'getProtection', {
 	value: function getProtection(user) {
 		const now = moment();
 		const dCheck = moment(user.lastProtection).add(1, 'd');
@@ -95,33 +95,33 @@ Reflect.defineProperty(userCommands, 'getProtection', {
 		else return dCheck.format('MMM Do HH:mm');
 	},
 });
-Reflect.defineProperty(userCommands, 'setProtection', {
+Reflect.defineProperty(userManager, 'setProtection', {
 	value: function setProtection(user) {
 		user.lastProtection = moment().toDate();
 		return user.save();
 	},
 });
-Reflect.defineProperty(userCommands, 'protectionAllowed', {
+Reflect.defineProperty(userManager, 'protectionAllowed', {
 	value: async function protectionAllowed(user) {
 		const protectionItem = util.getItem('streak protection');
 		const hasProtection = await itemHandler.hasItem(user, protectionItem, 1);
-		const noCooldown = userCommands.getProtection(user);
+		const noCooldown = userManager.getProtection(user);
 		if (hasProtection && noCooldown === true) return true;
 		return false;
 	},
 });
-Reflect.defineProperty(userCommands, 'newProtectionAllowed', {
+Reflect.defineProperty(userManager, 'newProtectionAllowed', {
 	value: async function newProtectionAllowed(user) {
 		const protectionItem = util.getItem('streak protection');
 		const hasProtection = await itemHandler.hasItem(user, protectionItem, 1);
-		const noCooldown = userCommands.getProtection(user);
+		const noCooldown = userManager.getProtection(user);
 		if (hasProtection || noCooldown !== true) return false;
 		return true;
 	},
 });
 
 
-Reflect.defineProperty(userCommands, 'getPowerCount', {
+Reflect.defineProperty(userManager, 'getPowerCount', {
 	value: function getPowerCount(user) {
 		const now = moment();
 		const dCheck = moment(user.lastPowerCounting).add(3, 'h');
@@ -129,7 +129,7 @@ Reflect.defineProperty(userCommands, 'getPowerCount', {
 		else return dCheck.format('MMM Do HH:mm');
 	},
 });
-Reflect.defineProperty(userCommands, 'setPowerCount', {
+Reflect.defineProperty(userManager, 'setPowerCount', {
 	value: function setPowerCount(user) {
 		user.lastPowerCounting = moment().toDate();
 		return user.save();
@@ -137,7 +137,7 @@ Reflect.defineProperty(userCommands, 'setPowerCount', {
 });
 
 
-Reflect.defineProperty(userCommands, 'getCountBoost', {
+Reflect.defineProperty(userManager, 'getCountBoost', {
 	value: function getCountBoost(user) {
 		const now = moment();
 		const dCheck = moment(user.lastCountBoost).add(3, 'h');
@@ -145,7 +145,7 @@ Reflect.defineProperty(userCommands, 'getCountBoost', {
 		else return dCheck.format('MMM Do HH:mm');
 	},
 });
-Reflect.defineProperty(userCommands, 'setCountBoost', {
+Reflect.defineProperty(userManager, 'setCountBoost', {
 	value: function setCountBoost(user) {
 		user.lastCountBoost = moment().toDate();
 		return user.save();
@@ -153,7 +153,7 @@ Reflect.defineProperty(userCommands, 'setCountBoost', {
 });
 
 
-Reflect.defineProperty(userCommands, 'getDailyCount', {
+Reflect.defineProperty(userManager, 'getDailyCount', {
 	value: function getDailyCount(user) {
 		const now = moment();
 		const dCheck = moment(user.lastDailyCount).add(1, 'd');
@@ -161,7 +161,7 @@ Reflect.defineProperty(userCommands, 'getDailyCount', {
 		else return dCheck.format('MMM Do HH:mm');
 	},
 });
-Reflect.defineProperty(userCommands, 'setDailyCount', {
+Reflect.defineProperty(userManager, 'setDailyCount', {
 	value: function setDailyCount(user) {
 		user.lastDailyCount = moment().toDate();
 		return user.save();
@@ -169,7 +169,7 @@ Reflect.defineProperty(userCommands, 'setDailyCount', {
 });
 
 
-Reflect.defineProperty(userCommands, 'getHourlyCount', {
+Reflect.defineProperty(userManager, 'getHourlyCount', {
 	value: function getHourlyCount(user) {
 		const now = moment();
 		const dCheck = moment(user.lastHourlyCount).add(1, 'h');
@@ -177,7 +177,7 @@ Reflect.defineProperty(userCommands, 'getHourlyCount', {
 		else return dCheck.format('MMM Do HH:mm');
 	},
 });
-Reflect.defineProperty(userCommands, 'setHourlyCount', {
+Reflect.defineProperty(userManager, 'setHourlyCount', {
 	value: function setHourlyCount(user) {
 		user.lastHourlyCount = moment().toDate();
 		return user.save();
@@ -185,12 +185,12 @@ Reflect.defineProperty(userCommands, 'setHourlyCount', {
 });
 
 
-Reflect.defineProperty(userCommands, 'getReaction', {
+Reflect.defineProperty(userManager, 'getReaction', {
 	value: function getReaction(user) {
 		return JSON.parse(user.reaction);
 	},
 });
-Reflect.defineProperty(userCommands, 'saveReaction', {
+Reflect.defineProperty(userManager, 'saveReaction', {
 	value: function saveReaction(user, reactionInfo) {
 		user.reaction = JSON.stringify(reactionInfo);
 		return user.save();
@@ -198,7 +198,7 @@ Reflect.defineProperty(userCommands, 'saveReaction', {
 });
 
 
-Reflect.defineProperty(userCommands, 'getColour', {
+Reflect.defineProperty(userManager, 'getColour', {
 	value: function getColour() {
 		return '#fcfcfc';
 	},
@@ -206,4 +206,4 @@ Reflect.defineProperty(userCommands, 'getColour', {
 
 
 
-module.exports = { Users, userCommands };
+module.exports = { Users, userManager };

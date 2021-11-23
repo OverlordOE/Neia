@@ -8,13 +8,14 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 
 const Discord = require('discord.js');
 const { util } = require('./util');
+const { userManager } = require('./userManager');
 
 const UserAchievements = require('../models/UserAchievements')(sequelize, Sequelize);
 const achievementHunter = new Discord.Collection();
 
 
 Reflect.defineProperty(achievementHunter, 'hunt', {
-	value: async function hunt(id) {
+	value: async function hunt(user, event) {
 
 
 
@@ -27,24 +28,24 @@ async function unlock() {
 }
 
 // Achievements
-Reflect.defineProperty(achievementHunter, 'addAchievement', {
-	value: async function addAchievement(user, achievement) {
-		if (achievementHunter.hasAchievement(achievement)) return;
 
-		return UserAchievements.create({
-			user_id: user.user_id,
-			name: achievement.name,
-		});
-	},
-});
-Reflect.defineProperty(achievementHunter, 'removeAchievement', {
-	value: async function removeAchievement(user, achievement) {
-		const oldAchievement = achievementHunter.hasAchievement(achievement);
+async function addAchievement(user, achievement) {
+	if (achievementHunter.hasAchievement(achievement)) return;
 
-		if (oldAchievement) return oldAchievement.destroy();
-		else throw Error(`User doesn't have achievement: ${achievement.name}`);
-	},
-});
+	return UserAchievements.create({
+		user_id: user.user_id,
+		name: achievement.name,
+	});
+}
+
+
+async function removeAchievement(user, achievement) {
+	const oldAchievement = achievementHunter.hasAchievement(achievement);
+
+	if (oldAchievement) return oldAchievement.destroy();
+	else throw Error(`User doesn't have achievement: ${achievement.name}`);
+}
+
 
 Reflect.defineProperty(achievementHunter, 'hasAchievement', {
 	value: async function hasAchievement(user, achievement) {

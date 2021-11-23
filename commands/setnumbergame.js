@@ -9,7 +9,7 @@ module.exports = {
 
 	async execute(interaction, msgUser, msgGuild, client) {
 
-		client.guildCommands.setNumberChannel(msgGuild, interaction.channel.id);
+		client.guildOverseer.setNumberChannel(msgGuild, interaction.channel.id);
 		return interaction.reply(`This channel has been set for the numbergame
 		**Rules:**
 		__- The same person can't count twice in a row.__

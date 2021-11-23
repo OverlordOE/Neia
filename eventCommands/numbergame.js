@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 
 module.exports = async function execute(message, msgUser, guild, client, logger) {
 
-	const numberGameInfo = client.guildCommands.getNumberGame(guild);
+	const numberGameInfo = client.guildOverseer.getNumberGame(guild);
 
 	if (!numberGameInfo || message.channel.id !== numberGameInfo.channelId) return;
 	if (isNaN(message.content)) return;
@@ -25,22 +25,22 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		await mistake();
 	}
 
-	return client.guildCommands.saveNumberGameInfo(guild, numberGameInfo);
+	return client.guildOverseer.saveNumberGameInfo(guild, numberGameInfo);
 
 
 	// Functions
 	async function mistake() {
-		if (await client.userCommands.protectionAllowed(msgUser)) protection();
+		if (await client.userManager.protectionAllowed(msgUser)) protection();
 		else if (numberGameInfo.lastCheckpoint > 0) checkpoint();
 		else wrongCount();
 	}
 
 	function succesfullCount() {
 		try {
-			const reaction = client.userCommands.getReaction(msgUser);
+			const reaction = client.userManager.getReaction(msgUser);
 			if (reaction.emoji && reaction.value) {
 				message.react(reaction.emoji);
-				client.userCommands.addBalance(msgUser, Math.sqrt(reaction.value) / 3);
+				client.userManager.addBalance(msgUser, Math.sqrt(reaction.value) / 3);
 			}
 		}
 		catch (error) {
@@ -62,8 +62,8 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		numberGameInfo.currentNumber++;
 		numberGameInfo.totalCounted++;
 		numberGameInfo.lastUserId = message.author.id;
-		client.userCommands.addBalance(msgUser, number + msgUser.countBoost);
-		client.userCommands.addStats(msgUser, 'numbersCounted', 1);
+		client.userManager.addBalance(msgUser, number + msgUser.countBoost);
+		client.userManager.addStats(msgUser, 'numbersCounted', 1);
 	}
 
 	function wrongCount() {
@@ -75,7 +75,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		numberGameInfo.nextCheckpoint = checkpoints[0];
 		numberGameInfo.lastUserId = null;
 		numberGameInfo.streaksRuined++;
-		client.userCommands.addStats(msgUser, 'streaksRuined', 1);
+		client.userManager.addStats(msgUser, 'streaksRuined', 1);
 	}
 
 	function easterEggs() {
@@ -150,7 +150,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		numberGameInfo.lastCheckpoint = 0;
 		numberGameInfo.lastUserId = null;
 		numberGameInfo.streaksRuined++;
-		client.userCommands.addStats(msgUser, 'streaksRuined', 1);
+		client.userManager.addStats(msgUser, 'streaksRuined', 1);
 	}
 
 	function protection() {
@@ -158,37 +158,37 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		message.react('🛡️');
 		message.channel.send(`Your streak protection has been used and will go on a __**24 hour**__ cooldown.
 							Last number was **${numberGameInfo.currentNumber}**.`);
-		client.userCommands.setProtection(msgUser);
+		client.userManager.setProtection(msgUser);
 		client.itemHandler.removeItem(msgUser, protectionItem, 1);
 	}
 
 	function giveBonus() {
 		const dailyMultiplier = 5;
 		const hourlyMultiplier = 1;
-		const daily = client.userCommands.getDailyCount(msgUser);
-		const hourly = client.userCommands.getHourlyCount(msgUser);
+		const daily = client.userManager.getDailyCount(msgUser);
+		const hourly = client.userManager.getHourlyCount(msgUser);
 
 
 		if (daily === true) {
-			const balance = client.userCommands.addBalance(msgUser, number * dailyMultiplier);
+			const balance = client.userManager.addBalance(msgUser, number * dailyMultiplier);
 
 			const embed = new Discord.MessageEmbed()
 				.setDescription(`__**Daily Count**__ reward!\nYou gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
 				.setColor('#f3ab16');
 			message.author.send({ embeds: [embed] });
 
-			client.userCommands.setDailyCount(msgUser);
+			client.userManager.setDailyCount(msgUser);
 		}
 
 		if (hourly === true) {
-			const balance = client.userCommands.addBalance(msgUser, number * hourlyMultiplier);
+			const balance = client.userManager.addBalance(msgUser, number * hourlyMultiplier);
 
 			const embed = new Discord.MessageEmbed()
 				.setDescription(`__**Hourly Count**__ reward!\nYou gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
 				.setColor('#f3ab16');
 			message.author.send({ embeds: [embed] });
 
-			client.userCommands.setHourlyCount(msgUser);
+			client.userManager.setHourlyCount(msgUser);
 		}
 	}
 };

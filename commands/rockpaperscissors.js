@@ -25,7 +25,7 @@ module.exports = {
 		if (gambleAmount < 1) gambleAmount = 1;
 		if (gambleAmount > msgUser.balance) return interaction.reply({ content: `You don't have enough 💰.\n${client.util.formatNumber(gambleAmount - msgUser.balance)}💰 more needed.`, ephemeral: true });
 
-		client.userCommands.addBalance(msgUser, -gambleAmount, true);
+		client.userManager.addBalance(msgUser, -gambleAmount, true);
 
 		const emojiArray = ['✊', '🧻', '✂️'];
 		const botAnswer = Math.floor(Math.random() * emojiArray.length);
@@ -79,7 +79,7 @@ module.exports = {
 			}
 		}
 
-	
+
 		const filter = i => i.user.id == interaction.user.id;
 		interaction.reply({
 			embeds: [embed.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.
@@ -91,7 +91,7 @@ module.exports = {
 			const userAnswer = button.customId;
 
 			if (botAnswer == userAnswer) {
-				const balance = client.userCommands.addBalance(msgUser, gambleAmount, true);
+				const balance = client.userManager.addBalance(msgUser, gambleAmount, true);
 				embed.setColor('#00fc43');
 				button.update({
 					embeds: [embed.setDescription(`__**You**__ have chosen ${emojiArray[userAnswer]}\n__**Neia**__ has chosen ${emojiArray[botAnswer]}.\n
@@ -106,7 +106,7 @@ module.exports = {
 				});
 			}
 			else if (userAnswer - botAnswer === 1 || userAnswer - botAnswer === -2) {
-				const balance = client.userCommands.addBalance(msgUser, winAmount, true);
+				const balance = client.userManager.addBalance(msgUser, winAmount, true);
 				embed.setColor('#00fc43');
 				button.update({
 					embeds: [embed.setDescription(`__**You**__ have chosen ${emojiArray[userAnswer]}\n__**Neia**__ has chosen ${emojiArray[botAnswer]}.\n

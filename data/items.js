@@ -315,7 +315,7 @@ module.exports = {
 					message: 'You already have a **Power Count** active.',
 				};
 			}
-			const powerCountCooldown = client.userCommands.getPowerCount(msgUser);
+			const powerCountCooldown = client.userManager.getPowerCount(msgUser);
 			if (powerCountCooldown !== true) {
 				return {
 					succes: false,
@@ -323,7 +323,7 @@ module.exports = {
 				};
 			}
 
-			const numberGameChannelId = client.guildCommands.getNumberGame(msgGuild).channelId;
+			const numberGameChannelId = client.guildOverseer.getNumberGame(msgGuild).channelId;
 			if (!numberGameChannelId) {
 				return {
 					succes: false,
@@ -335,7 +335,7 @@ module.exports = {
 
 			msgUser.save();
 			msgUser.powerCounting = true;
-			client.userCommands.setPowerCount(msgUser);
+			client.userManager.setPowerCount(msgUser);
 
 			setTimeout(function () {
 				numberGameChannel.send(`${interaction.user} Your **Power Count** will end in __**10 seconds**__!`);
@@ -369,7 +369,7 @@ module.exports = {
 					message: 'You already have a **Count Boost** active.',
 				};
 			}
-			const countBoostCooldown = client.userCommands.getCountBoost(msgUser);
+			const countBoostCooldown = client.userManager.getCountBoost(msgUser);
 			if (countBoostCooldown !== true) {
 				return {
 					succes: false,
@@ -377,7 +377,7 @@ module.exports = {
 				};
 			}
 
-			const numberGameChannelId = client.guildCommands.getNumberGame(msgGuild).channelId;
+			const numberGameChannelId = client.guildOverseer.getNumberGame(msgGuild).channelId;
 			if (!numberGameChannelId) {
 				return {
 					succes: false,
@@ -389,7 +389,7 @@ module.exports = {
 
 			msgUser.save();
 			msgUser.countBoost = 100;
-			client.userCommands.setCountBoost(msgUser);
+			client.userManager.setCountBoost(msgUser);
 
 			setTimeout(function () {
 				numberGameChannel.send(`${interaction.user} Your **Count Boost** will end in __**10 seconds**__!`);

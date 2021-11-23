@@ -31,7 +31,7 @@ module.exports = {
 
 			if (item.exchangeble) {
 				const protectionItem = client.util.getItem('streak protection');
-				if (item == protectionItem && !(await client.userCommands.newProtectionAllowed(msgUser))) {
+				if (item == protectionItem && !(await client.userManager.newProtectionAllowed(msgUser))) {
 					return interaction.reply({
 						embeds: [embed.setDescription('You can\'t buy Streak Protection.\nYou can only have 1 at a time and your cooldown should be worn off')
 							.setColor('#fc0303')], ephemeral: true
@@ -57,7 +57,7 @@ module.exports = {
 				});
 			}
 			client.itemHandler.addItem(msgUser, item, buyAmount);
-			balance = client.userCommands.addBalance(msgUser, -cost);
+			balance = client.userManager.addBalance(msgUser, -cost);
 
 			interaction.reply({
 				embeds: [embed.setDescription(`You've bought: __${client.util.formatNumber(buyAmount)}__ ${item.emoji}__${item.name}(s)__.

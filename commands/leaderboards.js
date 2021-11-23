@@ -11,19 +11,19 @@ module.exports = {
 
 	execute(interaction, msgUser, msgGuild, client) {
 
-		const ruinedList = client.userCommands.sort((a, b) => client.userCommands.getStats(b).streaksRuined - client.userCommands.getStats(a).streaksRuined)
+		const ruinedList = client.userManager.sort((a, b) => client.userManager.getStats(b).streaksRuined - client.userManager.getStats(a).streaksRuined)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(client.userCommands.getStats(user).streaksRuined)}`);
+			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(client.userManager.getStats(user).streaksRuined)}`);
 
 
-		const countList = client.userCommands.sort((a, b) => client.userCommands.getStats(b).numbersCounted - client.userCommands.getStats(a).numbersCounted)
+		const countList = client.userManager.sort((a, b) => client.userManager.getStats(b).numbersCounted - client.userManager.getStats(a).numbersCounted)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
-			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(client.userCommands.getStats(user).numbersCounted)}`);
+			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(client.userManager.getStats(user).numbersCounted)}`);
 
 
-		const balanceList = client.userCommands.sort((a, b) => b.balance - a.balance)
+		const balanceList = client.userManager.sort((a, b) => b.balance - a.balance)
 			.filter(user => client.users.cache.has(user.user_id))
 			.first(50)
 			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(user.balance)}💰`);

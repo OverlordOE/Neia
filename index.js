@@ -4,8 +4,8 @@ const client = new Client({
 		[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.DIRECT_MESSAGES],
 	), partials: ['CHANNEL'],
 });
-const { Users, userCommands } = require('./util/userCommands');
-const { guildCommands, Guilds } = require('./util/guildCommands');
+const { Users, userManager } = require('./util/userManager');
+const { guildOverseer, Guilds } = require('./util/guildOverseer');
 const { achievementHunter } = require('./util/achievementHunter');
 const { itemHandler } = require('./util//itemHandler');
 const { util } = require('./util/util');
@@ -34,12 +34,12 @@ client.once('ready', async () => {
 	//* Load in database
 	try {
 		const storedUsers = await Users.findAll();
-		storedUsers.forEach(b => userCommands.set(b.user_id, b));
+		storedUsers.forEach(b => userManager.set(b.user_id, b));
 		const storedGuilds = await Guilds.findAll();
-		storedGuilds.forEach(b => guildCommands.set(b.guild_id, b));
+		storedGuilds.forEach(b => guildOverseer.set(b.guild_id, b));
 
-		client.userCommands = userCommands;
-		client.guildCommands = guildCommands;
+		client.userManager = userManager;
+		client.guildOverseer = guildOverseer;
 		client.itemHandler = itemHandler;
 		client.achievementHunter = achievementHunter;
 		client.util = util;
@@ -81,9 +81,9 @@ client.on('messageCreate', async message => {
 		if (!response) message.author.send('🙂');
 		return;
 	}
-	const guild = await guildCommands.getGuild(message.guildId);
+	const guild = await guildOverseer.getGuild(message.guildId);
 	const id = message.author.id;
-	const user = await userCommands.getUser(id);
+	const user = await userManager.getUser(id);
 	if (message.type != 'DEFAULT' || message.attachments.first() || message.interaction || message.author.bot) return;
 
 	if (Number.isInteger(Number(message.content))) {
@@ -100,9 +100,9 @@ client.on('interactionCreate', async interaction => {
 	const command = client.commands.get(interaction.commandName);
 	if (!command) return;
 
-	const guild = await guildCommands.getGuild(interaction.guildId);
+	const guild = await guildOverseer.getGuild(interaction.guildId);
 	const id = interaction.user.id;
-	const user = await userCommands.getUser(id);
+	const user = await userManager.getUser(id);
 
 	if (command.permissions) {
 		if (!interaction.member.permissions.has(Permissions.FLAGS[command.permissions])) {
@@ -114,7 +114,7 @@ client.on('interactionCreate', async interaction => {
 	try {
 		await command.execute(interaction, user, guild, client, logger);
 	}
- catch (error) {
+	catch (error) {
 		console.error(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}

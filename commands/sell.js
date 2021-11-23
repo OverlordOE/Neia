@@ -33,7 +33,7 @@ module.exports = {
 				const refundAmount = sellPercentage * item.value * amount;
 
 				if (item.ctg == 'reaction') {
-					const reaction = client.userCommands.getReaction(msgUser);
+					const reaction = client.userManager.getReaction(msgUser);
 					if (item.emoji == reaction.emoji) {
 						msgUser.reaction = JSON.stringify({
 							emoji: '✅',
@@ -44,7 +44,7 @@ module.exports = {
 				}
 
 				await client.itemHandler.removeItem(msgUser, item, amount);
-				const balance = client.userCommands.addBalance(msgUser, refundAmount);
+				const balance = client.userManager.addBalance(msgUser, refundAmount);
 
 				interaction.reply({
 					embeds: [embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${client.util.formatNumber(refundAmount)}💰 back.

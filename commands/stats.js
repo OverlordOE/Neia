@@ -11,15 +11,15 @@ module.exports = {
 
 	async execute(interaction, msgUser, msgGuild, client) {
 		const target = interaction.options.getUser('target') || interaction.user;
-		const user = await client.userCommands.getUser(target.id);
+		const user = await client.userManager.getUser(target.id);
 		const items = await client.itemHandler.getInventory(user);
-		const reaction = client.userCommands.getReaction(user);
-		const protection = client.userCommands.getProtection(user);
-		const powerCounting = client.userCommands.getPowerCount(user);
-		const countBoost = client.userCommands.getCountBoost(user);
-		const hourlyCount = client.userCommands.getHourlyCount(user);
-		const dailyCount = client.userCommands.getDailyCount(user);
-		const stats = client.userCommands.getStats(user);
+		const reaction = client.userManager.getReaction(user);
+		const protection = client.userManager.getProtection(user);
+		const powerCounting = client.userManager.getPowerCount(user);
+		const countBoost = client.userManager.getCountBoost(user);
+		const hourlyCount = client.userManager.getHourlyCount(user);
+		const dailyCount = client.userManager.getDailyCount(user);
+		const stats = client.userManager.getStats(user);
 
 
 		const mainEmbed = new MessageEmbed()
