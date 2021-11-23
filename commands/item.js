@@ -24,7 +24,7 @@ module.exports = {
 				.setTitle(`${item.emoji}${item.name}`)
 				.setDescription(item.description)
 				.addField('Value', `${client.util.formatNumber(item.value)}💰`, true)
-				.addField('Buyable', item.buyable.toString(), true)
+				.addField('exchangeble', item.exchangeble.toString(), true)
 				.addField('Category', item.ctg.toString(), true)
 				.setFooter('Use the command without arguments to see the item list', client.user.displayAvatarURL({ dynamic: true }));
 

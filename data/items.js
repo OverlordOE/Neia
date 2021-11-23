@@ -8,7 +8,7 @@ module.exports = {
 	'monkey': {
 		name: 'Monkey',
 		value: 150000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🐒',
 		rarity: 'legendary',
 		picture: null,
@@ -18,7 +18,7 @@ module.exports = {
 	'pepe biz': {
 		name: 'Pepe Biz',
 		value: 200000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '<:pepebiz:834427799329833040>',
 		rarity: 'legendary',
 		picture: null,
@@ -28,7 +28,7 @@ module.exports = {
 	'pepe money': {
 		name: 'Pepe Money',
 		value: 200100,
-		buyable: true,
+		exchangeble: true,
 		emoji: '<:pepeMoney:838477116894478426>',
 		rarity: 'legendary',
 		picture: null,
@@ -38,7 +38,7 @@ module.exports = {
 	'pepe that': {
 		name: 'Pepe That',
 		value: 200000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '<:pepethat:836926487180869632>',
 		rarity: 'legendary',
 		picture: null,
@@ -48,7 +48,7 @@ module.exports = {
 	'pepe ez': {
 		name: 'Pepe EZ',
 		value: 200000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '<:pepeEZ:836926486928818206>',
 		rarity: 'legendary',
 		picture: null,
@@ -58,7 +58,7 @@ module.exports = {
 	'plus one': {
 		name: 'Plus One',
 		value: 5000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '<:plus1:721750172710993922>',
 		rarity: 'common',
 		picture: null,
@@ -68,7 +68,7 @@ module.exports = {
 	'feels good': {
 		name: 'Feels Good',
 		value: 100000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '<:feelsGoodMan:518535195218018322>',
 		rarity: 'legendary',
 		picture: null,
@@ -78,7 +78,7 @@ module.exports = {
 	'thumbs up': {
 		name: 'Thumbs Up',
 		value: 3000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '👍',
 		rarity: 'common',
 		picture: null,
@@ -88,7 +88,7 @@ module.exports = {
 	'ok hand': {
 		name: 'Ok Hand',
 		value: 9000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '👌',
 		rarity: 'uncommon',
 		picture: null,
@@ -98,7 +98,7 @@ module.exports = {
 	'vingertje': {
 		name: 'Vingertje',
 		value: 14000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '☝️',
 		rarity: 'uncommon',
 		picture: null,
@@ -108,7 +108,7 @@ module.exports = {
 	'metal': {
 		name: 'Metal',
 		value: 2000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🤙',
 		rarity: 'common',
 		picture: null,
@@ -118,7 +118,7 @@ module.exports = {
 	'preach': {
 		name: 'Preach',
 		value: 18000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🙏',
 		rarity: 'rare',
 		picture: null,
@@ -128,7 +128,7 @@ module.exports = {
 	'eye': {
 		name: 'Eye',
 		value: 30000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '👁️',
 		rarity: 'rare',
 		picture: null,
@@ -138,7 +138,7 @@ module.exports = {
 	'peace': {
 		name: 'Peace',
 		value: 5000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '✌️',
 		rarity: 'common',
 		picture: null,
@@ -148,7 +148,7 @@ module.exports = {
 	'frog': {
 		name: 'Frog',
 		value: 150000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🐸',
 		rarity: 'legendary',
 		picture: null,
@@ -158,7 +158,7 @@ module.exports = {
 	'smile': {
 		name: 'Smile',
 		value: 45000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🌝',
 		rarity: 'epic',
 		picture: null,
@@ -168,7 +168,7 @@ module.exports = {
 	'moon': {
 		name: 'Moon',
 		value: 70000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🌚',
 		rarity: 'epic',
 		picture: null,
@@ -178,7 +178,7 @@ module.exports = {
 	'star': {
 		name: 'Star',
 		value: 50000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '⭐',
 		rarity: 'epic',
 		picture: null,
@@ -188,7 +188,7 @@ module.exports = {
 	'shooting star': {
 		name: 'Shooting Star',
 		value: 60000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '💫',
 		rarity: 'epic',
 		picture: null,
@@ -198,7 +198,7 @@ module.exports = {
 	'medal': {
 		name: 'Medal',
 		value: 11000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🏅',
 		rarity: 'uncommon',
 		picture: null,
@@ -208,7 +208,7 @@ module.exports = {
 	'target': {
 		name: 'Target',
 		value: 40000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🎯',
 		rarity: 'epic',
 		picture: null,
@@ -218,7 +218,7 @@ module.exports = {
 	'rocket': {
 		name: 'Rocket',
 		value: 20000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🚀',
 		rarity: 'rare',
 		picture: null,
@@ -228,7 +228,7 @@ module.exports = {
 	'party': {
 		name: 'Party',
 		value: 13000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🎉',
 		rarity: 'uncommon',
 		picture: null,
@@ -238,7 +238,7 @@ module.exports = {
 	'ribbon': {
 		name: 'Ribbon',
 		value: 15000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🎀',
 		rarity: 'rare',
 		picture: null,
@@ -248,7 +248,7 @@ module.exports = {
 	'red heart': {
 		name: 'Red Heart',
 		value: 25000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '❤️',
 		rarity: 'rare',
 		picture: null,
@@ -258,7 +258,7 @@ module.exports = {
 	'circle': {
 		name: 'Circle',
 		value: 1500,
-		buyable: true,
+		exchangeble: true,
 		emoji: '⏺️',
 		rarity: 'common',
 		picture: null,
@@ -268,7 +268,7 @@ module.exports = {
 	'blue checkmark': {
 		name: 'Blue Checkmark',
 		value: 1000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '☑️',
 		rarity: 'common',
 		picture: null,
@@ -278,7 +278,7 @@ module.exports = {
 	'green checkmark': {
 		name: 'Green Checkmark',
 		value: 1000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '✅',
 		rarity: 'common',
 		picture: null,
@@ -292,7 +292,7 @@ module.exports = {
 	'streak protection': {
 		name: 'Streak Protection',
 		value: 25000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🛡️',
 		rarity: 'epic',
 		picture: null,
@@ -302,7 +302,7 @@ module.exports = {
 	'power count': {
 		name: 'Power Count',
 		value: 5000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '🔄',
 		rarity: 'rare',
 		picture: null,
@@ -356,7 +356,7 @@ module.exports = {
 	'count boost': {
 		name: 'Count Boost',
 		value: 1000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '📈',
 		rarity: 'rare',
 		picture: null,
@@ -413,7 +413,7 @@ module.exports = {
 	'common chest': {
 		name: 'Common Chest',
 		value: 600,
-		buyable: true,
+		exchangeble: true,
 		emoji: '<:chest_t_01:745278856201633832>',
 		rarity: 'common',
 		picture: 'common_closed.png',
@@ -423,7 +423,7 @@ module.exports = {
 	'rare chest': {
 		name: 'Rare Chest',
 		value: 3500,
-		buyable: true,
+		exchangeble: true,
 		emoji: '<:chest_t_02:745278856298102864>',
 		rarity: 'rare',
 		picture: 'rare_closed.png',
@@ -433,7 +433,7 @@ module.exports = {
 	'epic chest': {
 		name: 'Epic Chest',
 		value: 14000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '<:chest_t_03:745278856268742696>',
 		rarity: 'epic',
 		picture: 'epic_closed.png',
@@ -443,7 +443,7 @@ module.exports = {
 	'legendary chest': {
 		name: 'Legendary Chest',
 		value: 50000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '<:chest_t_04:745278855987593226>',
 		rarity: 'legendary',
 		picture: 'legendary_closed.png',
@@ -453,7 +453,7 @@ module.exports = {
 	'mystery chest': {
 		name: 'Mystery Chest',
 		value: 5000,
-		buyable: true,
+		exchangeble: true,
 		emoji: '<:chest_t_02:745278856298102864>',
 		rarity: 'rare',
 		picture: 'mystery_closed.png',

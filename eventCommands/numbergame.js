@@ -159,7 +159,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 		message.channel.send(`Your streak protection has been used and will go on a __**24 hour**__ cooldown.
 							Last number was **${numberGameInfo.currentNumber}**.`);
 		client.userCommands.setProtection(msgUser);
-		client.userCommands.removeItem(msgUser, protectionItem, 1);
+		client.itemHandler.removeItem(msgUser, protectionItem, 1);
 	}
 
 	function giveBonus() {

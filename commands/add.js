@@ -54,7 +54,7 @@ module.exports = {
 
 		if (interaction.options.getSubcommand() === 'item') {
 			const item = client.util.getItem(interaction.options.getUser('item'));
-			client.userCommands.addItem(targetUser, item, amount);
+			client.itemHandler.addItem(targetUser, item, amount);
 			return interaction.reply(`Added ${amount} __${item.name}__ to ${target}`);
 		}
 		else if (interaction.options.getSubcommand() === 'money') {

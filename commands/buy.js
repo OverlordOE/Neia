@@ -29,7 +29,7 @@ module.exports = {
 
 		if (item) {
 
-			if (item.buyable) {
+			if (item.exchangeble) {
 				const protectionItem = client.util.getItem('streak protection');
 				if (item == protectionItem && !(await client.userCommands.newProtectionAllowed(msgUser))) {
 					return interaction.reply({
@@ -56,7 +56,7 @@ module.exports = {
 					`).setColor('#fc0303')]
 				});
 			}
-			client.userCommands.addItem(msgUser, item, buyAmount);
+			client.itemHandler.addItem(msgUser, item, buyAmount);
 			balance = client.userCommands.addBalance(msgUser, -cost);
 
 			interaction.reply({

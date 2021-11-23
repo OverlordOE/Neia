@@ -12,6 +12,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 require('./models/Users')(sequelize, Sequelize);
 require('./models/Guilds')(sequelize, Sequelize);
 require('./models/UserItems')(sequelize, Sequelize);
+require('./models/UserAchievements')(sequelize, Sequelize);
 
 
 // Execute node dbInit.js --force or node dbInit.js -f to force update the tables (this resets the db but removes unused tables).

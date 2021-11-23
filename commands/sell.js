@@ -29,7 +29,7 @@ module.exports = {
 		const item = client.util.getItem(tempItem);
 
 		if (item) {
-			if (await client.userCommands.hasItem(msgUser, item, amount)) {
+			if (await client.itemHandler.hasItem(msgUser, item, amount)) {
 				const refundAmount = sellPercentage * item.value * amount;
 
 				if (item.ctg == 'reaction') {
@@ -43,7 +43,7 @@ module.exports = {
 					}
 				}
 
-				await client.userCommands.removeItem(msgUser, item, amount);
+				await client.itemHandler.removeItem(msgUser, item, amount);
 				const balance = client.userCommands.addBalance(msgUser, refundAmount);
 
 				interaction.reply({

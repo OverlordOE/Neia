@@ -12,7 +12,7 @@ module.exports = {
 	async execute(interaction, msgUser, msgGuild, client) {
 		const target = interaction.options.getUser('target') || interaction.user;
 		const user = await client.userCommands.getUser(target.id);
-		const items = await client.userCommands.getInventory(user);
+		const items = await client.itemHandler.getInventory(user);
 		const reaction = client.userCommands.getReaction(user);
 		const protection = client.userCommands.getProtection(user);
 		const powerCounting = client.userCommands.getPowerCount(user);

@@ -92,7 +92,7 @@ module.exports = {
 		}
 
 		async function itemTrade() {
-			if (!await client.userCommands.hasItem(msgUser, item, amount)) {
+			if (!await client.itemHandler.hasItem(msgUser, item, amount)) {
 				return interaction.reply({
 					embeds: [embed.setDescription(`__**ITEM(S) NOT TRADED!**__
 					You don't have enough **${item.name}**.`)
@@ -119,8 +119,8 @@ module.exports = {
 			}
 
 
-			client.userCommands.addItem(targetUser, item, amount);
-			client.userCommands.removeItem(msgUser, item, amount);
+			client.itemHandler.addItem(targetUser, item, amount);
+			client.itemHandler.removeItem(msgUser, item, amount);
 			interaction.reply({
 				embeds: [embed.setDescription(`Trade with *${target}* succesfull!
 			\nTraded ${amount} ${item.emoji}__${item.name}__ to *${target}*.`)

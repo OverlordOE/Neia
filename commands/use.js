@@ -30,13 +30,13 @@ module.exports = {
 
 
 		if (item) {
-			if (await client.userCommands.hasItem(msgUser, item, amount)) {
+			if (await client.itemHandler.hasItem(msgUser, item, amount)) {
 
 				if (item.use) {
 					const result = await item.use(client, amount, embed, item, msgUser, msgGuild, interaction);
 
 					if (result.succes) {
-						client.userCommands.removeItem(msgUser, item, amount);
+						client.itemHandler.removeItem(msgUser, item, amount);
 						return interaction.reply({ embeds: [embed.setDescription(result.message)] });
 					}
 					else if (result.message) return interaction.reply({ embeds: [embed.setDescription(result.message)] });

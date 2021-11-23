@@ -14,7 +14,7 @@ module.exports = {
 		let equipment = '__**Equipment:**__\n';
 
 		Object.values(items).sort((a, b) => a.value - b.value).map((i) => {
-			if (i.buyable) {
+			if (i.exchangeble) {
 				if (i.ctg == 'reaction') reactions += `${i.emoji} ${i.name}: ${client.util.formatNumber(i.value)}💰\n`;
 				else if (i.ctg == 'powerup') powerups += `${i.emoji} ${i.name}: ${client.util.formatNumber(i.value)}💰\n`;
 				// else if (i.ctg == 'equipment') equipment += `${i.emoji}${i.name}: ${client.util.formatNumber(i.value)}💰\n`;

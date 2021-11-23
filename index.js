@@ -6,6 +6,8 @@ const client = new Client({
 });
 const { Users, userCommands } = require('./util/userCommands');
 const { guildCommands, Guilds } = require('./util/guildCommands');
+const { achievementHunter } = require('./util/achievementHunter');
+const { itemHandler } = require('./util//itemHandler');
 const { util } = require('./util/util');
 const numberGame = require('./eventCommands/numbergame');
 const numberEvent = require('./eventCommands/numberevent');
@@ -38,6 +40,8 @@ client.once('ready', async () => {
 
 		client.userCommands = userCommands;
 		client.guildCommands = guildCommands;
+		client.itemHandler = itemHandler;
+		client.achievementHunter = achievementHunter;
 		client.util = util;
 	}
 	catch (e) {
