@@ -46,7 +46,7 @@ module.exports = {
 		You have bet ${client.util.formatNumber(gambleAmount)}💰.
 		Get **${slotX}** of the __**same symbol**__ in a row to **win**.
 		Getting a 🍒 or 🍌 row will give **2X payout**.
-		Getting a <:luckyseven:838417718944333884> row will give **4X payout**.\n`;
+		Getting a <:luckyseven:838417718944333884> row will give **4X payout**.\n\n`;
 
 		for (let i = 0; i < slotY; i++) {
 			slots[i] = [];
