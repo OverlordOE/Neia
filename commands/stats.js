@@ -53,7 +53,7 @@ module.exports = {
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
 			.addField('Numbers Counted:', stats.numbersCounted.toString(), true)
 			.addField('Streaks Ruined:', stats.streaksRuined.toString(), true)
-			.addField('Times Gambled:', stats.gamblingDone.toString(), true)
+			.addField('Times Gambled:', stats.timesGambled.toString(), true)
 			.addField('Won with Gambling:', client.util.formatNumber(stats.gamblingMoneyGained), true)
 			.addField('Lost with Gambling:', client.util.formatNumber(stats.gamblingMoneyLost), true)
 			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL({ dynamic: true }))

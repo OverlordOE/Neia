@@ -11,6 +11,7 @@ const moment = require('moment');
 const Discord = require('discord.js');
 const { util } = require('./util');
 const { itemHandler } = require('./itemHandler');
+const { achievementHunter } = require('./achievementHunter');
 const userManager = new Discord.Collection();
 const Users = require('../models/Users')(sequelize, Sequelize);
 
@@ -44,7 +45,7 @@ Reflect.defineProperty(userManager, 'addBalance', {
 		if (amount > 0 && gambling) userManager.addStats(user, 'gamblingMoneyGained', Number(amount));
 		else if (amount < 0 && gambling) {
 			userManager.addStats(user, 'gamblingMoneyLost', -Number(amount));
-			userManager.addStats(user, 'gamblingDone', 1);
+			userManager.addStats(user, 'timesGambled', 1);
 		}
 		user.save();
 		return Math.floor(user.balance);
@@ -62,6 +63,8 @@ Reflect.defineProperty(userManager, 'addStats', {
 		const userStats = JSON.parse(user.stats);
 		if (userStats[statName]) userStats[statName] += amount;
 		else userStats[statName] = amount;
+
+		achievementHunter.hunt(user, userStats, statName);
 
 		user.stats = JSON.stringify(userStats);
 		user.save();

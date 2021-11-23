@@ -1,7 +1,7 @@
 const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000, 3300, 3600, 3900, 4200, 4600, 5000];
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
-module.exports = async function execute(client, logger) {
+module.exports = async function execute(client) {
 
 	client.guilds.cache.forEach(async g => {
 		const guild = await client.guildOverseer.getGuild(g.id);
@@ -77,5 +77,5 @@ module.exports = async function execute(client, logger) {
 			});
 		}
 	});
-	logger.info('Finished Number Game Events!');
+	client.logger.info('Finished Number Game Events!');
 };

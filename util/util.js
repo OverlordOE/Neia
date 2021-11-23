@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const util = new Discord.Collection();
 const items = require('../data/items');
+const achievements = require('../data/achievements');
 
 Reflect.defineProperty(util, 'formatNumber', {
 /**
@@ -26,6 +27,14 @@ Reflect.defineProperty(util, 'getItem', {
 	value: function getItem(itemName) {
 		const item = itemName.toLowerCase();
 		if (items[item]) return items[item];
+		return false;
+	},
+});
+
+Reflect.defineProperty(util, 'getAchievement', {
+	value: function getAchievement(achievementName) {
+		const achievement = achievementName.toLowerCase();
+		if (achievements[achievement]) return achievements[achievement];
 		return false;
 	},
 });

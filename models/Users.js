@@ -59,19 +59,12 @@ module.exports = (sequelize, DataTypes) => {
 
 
 		// MISC
-		// achievements: {
-		// 	type: DataTypes.JSON,
-		// 	defaultValue: JSON.stringify({
-		// 		totalAchievements: 0,
-		// 	}),
-		// 	allowNull: false,
-		// },
 		stats: {
 			type: DataTypes.JSON,
 			defaultValue: JSON.stringify({
 				numbersCounted: 0,
 				streaksRuined: 0,
-				gamblingDone: 0,
+				timesGambled: 0,
 				gamblingMoneyLost: 0,
 				gamblingMoneyGained: 0,
 			}),

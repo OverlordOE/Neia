@@ -1,7 +1,7 @@
 const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000, 3300, 3600, 3900, 4200, 4600, 5000];
 const Discord = require('discord.js');
 
-module.exports = async function execute(message, msgUser, guild, client, logger) {
+module.exports = async function execute(message, msgUser, guild, client) {
 
 	const numberGameInfo = client.guildOverseer.getNumberGame(guild);
 
@@ -11,7 +11,7 @@ module.exports = async function execute(message, msgUser, guild, client, logger)
 	const number = Number(message.content);
 	if (numberGameInfo.currentNumber == 0 && number != 1) return;
 
-	logger.info(`Count ${numberGameInfo.currentNumber} --> ${number} in "${message.guild.name}#${message.channel.name}"`);
+	client.logger.info(`Count ${numberGameInfo.currentNumber} --> ${number} in "${message.guild.name}#${message.channel.name}"`);
 
 	if (numberGameInfo.lastUserId == message.author.id && !msgUser.powerCounting) {
 		message.reply('**You can\'t count twice in a row.**');
