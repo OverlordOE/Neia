@@ -17,14 +17,17 @@ client.emojiCharacters = require('./data/emojiCharacters');
 client.music = { active: active };
 client.logger = logger;
 require('dotenv').config();
+const activityArray = ['people count', 'you.', 'time fly by', 'Overlord', 'Ainz', 'the holy kingdom getting destroyed', 'out for you', 'the movie Vliegosaurus', 'Garbiel waste all his money', 'Jotan count in 10 servers'];
+
 
 // Initialize client
 client.login(process.env.TOKEN);
 client.once('ready', async () => {
 	let memberTotal = 0;
 	client.guilds.cache.forEach(g => { if (!isNaN(memberTotal) && g.id != 264445053596991498) memberTotal += Number(g.memberCount); });
-	client.user.setActivity('you.', { type: 'WATCHING' });
 
+	const activityNr = Math.floor(Math.random() * activityArray.length);
+	client.user.setActivity(activityArray[activityNr], { type: 'WATCHING' });
 
 	//* Load in database
 	try {
@@ -114,7 +117,11 @@ client.on('interactionCreate', async interaction => {
 });
 
 // Random number game event every 3 hours0 0/3 * * *
-const numberGameEvents = new cron.CronJob('0 0/2 * * *', () => {
+const botEvents = new cron.CronJob('0 0/2 * * *', () => {
+	const activityNr = Math.floor(Math.random() * activityArray.length);
+	client.user.setActivity(activityArray[activityNr], { type: 'WATCHING' });
+
+
 	const time = Math.floor(Math.random() * 60) * 120000;
 	console.log(time);
 	setTimeout(
@@ -123,4 +130,4 @@ const numberGameEvents = new cron.CronJob('0 0/2 * * *', () => {
 		client, logger,
 	);
 });
-numberGameEvents.start();
+botEvents.start();
