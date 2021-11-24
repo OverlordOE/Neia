@@ -7,7 +7,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 const Discord = require('discord.js');
-const { util } = require('./util');
+const { achievementHunter } = require('./achievementHunter');
 
 const UserItems = require('../models/UserItems')(sequelize, Sequelize);
 const itemHandler = new Discord.Collection();
@@ -20,14 +20,14 @@ Reflect.defineProperty(itemHandler, 'addItem', {
 			where: { user_id: user.user_id, name: item.name },
 		});
 
-		// user.networth += item.value * parseInt(amount);
-		// user.save();
 		if (parseInt(amount) < 1) throw Error('Can\'t add a negative amount of items!');
 
 		if (userItem) {
 			userItem.amount += parseInt(amount);
 			return userItem.save();
 		}
+
+		achievementHunter.hunt(user, 'itemAdded', null);
 
 		return UserItems.create({
 			user_id: user.user_id,

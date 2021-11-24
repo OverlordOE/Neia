@@ -24,7 +24,7 @@ module.exports = async function execute(client) {
 				);
 
 			const numberGameChannel = await client.channels.fetch(numberGameInfo.channelId);
-			const numberIncrease = Math.floor(Math.random() * 5) + 4;
+			const numberIncrease = Math.floor(Math.random() * 5) + 5;
 			const timeoutLength = 30;
 			let description = `Be the **first** to click the emoji and the bot will count **${numberIncrease} times** for you.
 			You will gain __**normal count**__ and __**custom reaction**__ rewards for **every number** counted.

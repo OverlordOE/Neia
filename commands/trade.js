@@ -99,33 +99,36 @@ module.exports = {
 						.setColor('#fc0303')], ephemeral: true,
 				});
 			}
-
-			const protectionItem = client.util.getItem('streak protection');
-			if (item == protectionItem && !(await client.userManager.newProtectionAllowed(targetUser))) {
-				return interaction.reply({
-					embeds: [embed.setDescription(`__**ITEM(S) NOT TRADED!**__
+			if (item.exchangeble) {
+				const protectionItem = client.util.getItem('streak protection');
+				if (item == protectionItem && !(await client.userManager.newProtectionAllowed(targetUser))) {
+					return interaction.reply({
+						embeds: [embed.setDescription(`__**ITEM(S) NOT TRADED!**__
 					${target} already has a Streak Protection or it's on cooldown.`).setColor('#fc0303')], ephemeral: true,
+					});
+				}
+				if (item.ctg == 'reaction') {
+					const reaction = client.userManager.getReaction(msgUser);
+					if (item.emoji == reaction.emoji) {
+						msgUser.reaction = JSON.stringify({
+							emoji: '✅',
+							value: 1,
+						});
+						msgUser.save();
+					}
+				}
+
+
+				client.itemHandler.addItem(targetUser, item, amount);
+				client.itemHandler.removeItem(msgUser, item, amount);
+				interaction.reply({
+					embeds: [embed.setDescription(`Trade with *${target}* succesfull!
+			\nTraded ${amount} ${item.emoji}__${item.name}__ to *${target}*.`)
+						.setColor('#00fc43')],
 				});
 			}
-			if (item.ctg == 'reaction') {
-				const reaction = client.userManager.getReaction(msgUser);
-				if (item.emoji == reaction.emoji) {
-					msgUser.reaction = JSON.stringify({
-						emoji: '✅',
-						value: 1,
-					});
-					msgUser.save();
-				}
-			}
+			else return interaction.reply({ embeds: [embed.setDescription('You can\'t trade this item.').setColor('#fc0303')], ephemeral: true });
 
-
-			client.itemHandler.addItem(targetUser, item, amount);
-			client.itemHandler.removeItem(msgUser, item, amount);
-			interaction.reply({
-				embeds: [embed.setDescription(`Trade with *${target}* succesfull!
-			\nTraded ${amount} ${item.emoji}__${item.name}__ to *${target}*.`)
-					.setColor('#00fc43')],
-			});
 		}
 
 	},

@@ -42,7 +42,10 @@ Reflect.defineProperty(userManager, 'addBalance', {
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 		user.balance += Number(amount);
 
-		if (amount > 0 && gambling) userManager.addStats(user, 'gamblingMoneyGained', Number(amount));
+		if (amount > 0 && gambling) {
+			userManager.addStats(user, 'gamblingMoneyGained', Number(amount));
+			achievementHunter.hunt(user, 'gamblingMoneyGainedSingle', Number(amount));
+		}
 		else if (amount < 0 && gambling) {
 			userManager.addStats(user, 'gamblingMoneyLost', -Number(amount));
 			userManager.addStats(user, 'timesGambled', 1);
@@ -64,7 +67,7 @@ Reflect.defineProperty(userManager, 'addStats', {
 		if (userStats[statName]) userStats[statName] += amount;
 		else userStats[statName] = amount;
 
-		achievementHunter.hunt(user, userStats, statName);
+		achievementHunter.hunt(user, statName, userStats);
 
 		user.stats = JSON.stringify(userStats);
 		user.save();
