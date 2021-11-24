@@ -13,6 +13,7 @@ module.exports = {
 		const target = interaction.options.getUser('target') || interaction.user;
 		const user = await client.userManager.getUser(target.id);
 		const items = await client.itemHandler.getInventory(user);
+		const achievements = await client.achievementHunter.getAchievements(user);
 		const reaction = client.userManager.getReaction(user);
 		const protection = client.userManager.getProtection(user);
 		const powerCounting = client.userManager.getPowerCount(user);
@@ -65,6 +66,12 @@ module.exports = {
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
 			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL({ dynamic: true }));
 
+		const achievementEmbed = new MessageEmbed()
+			.setColor('#f3ab16')
+			.setTitle(`${target.tag}'s Achievements`)
+			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
+			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL({ dynamic: true }));
+
 
 		let inventory = '__Inventory:__\n\n';
 		if (items.length) {
@@ -77,6 +84,16 @@ module.exports = {
 			inventoryEmbed.setDescription(inventory);
 		}
 		else inventoryEmbed.addField('Inventory:', `*${target.tag}* has nothing!`);
+
+		let achievementInv = '__Achievements:__\n\n';
+		if (achievements.length) {
+			achievements.map(a => {
+				const achievement = client.util.getAchievement(a.name);
+				achievementInv += `${achievement.emoji}**${achievement.name}**\n`;
+			});
+			achievementEmbed.setDescription(achievementInv);
+		}
+		else achievementEmbed.addField('Achievements:', `*${target.tag}* has no achievements!`);
 
 		const row = new MessageActionRow()
 			.addComponents(
@@ -101,8 +118,13 @@ module.exports = {
 						},
 						{
 							label: 'Inventory',
-							description: 'This is also a description',
+							description: 'Item Inventory',
 							value: 'inventory',
+						},
+						{
+							label: 'Achievements',
+							description: 'The list of achievements acquired',
+							value: 'achievements',
 						},
 					]),
 			);
@@ -129,6 +151,10 @@ module.exports = {
 				else if (i.values[0] === 'inventory') {
 					row.components[0].setPlaceholder('Inventory');
 					await i.update({ embeds: [inventoryEmbed], components: [row] });
+				}
+				else if (i.values[0] === 'achievements') {
+					row.components[0].setPlaceholder('Achievements');
+					await i.update({ embeds: [achievementEmbed], components: [row] });
 				}
 			}
 			else await i.followUp({ content: 'this menu isn\'t for you!', ephemeral: true });

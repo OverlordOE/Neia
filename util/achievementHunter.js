@@ -63,7 +63,7 @@ async function unlock(user, achievementName) {
 
 	const embed = new MessageEmbed()
 		.setTitle('Achievement Unlocked!')
-		.setDescription(`You have unlocked **${achievement.emoji}${achievementName}**\n__${achievement.unlockMessage}__\n\nYour reward for this is the reaction emoji: __**${reward.emoji}${achievement.reward}!**__`);
+		.setDescription(`You have unlocked **${achievement.emoji}${achievementName}**\n__${achievement.unlockMessage}__\n\nYour reward for this is the reaction emoji: _**${reward.emoji}${achievement.reward}!**_`);
 
 	user.author.send({ embeds: [embed] });
 }

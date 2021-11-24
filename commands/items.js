@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('item')
+		.setName('items')
 		.setDescription('see the item list or details about a specific item.')
 		.addStringOption(option =>
 			option
