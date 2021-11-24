@@ -15,7 +15,6 @@ module.exports = {
 		const embed = new MessageEmbed();
 		const tempItem = interaction.options.getString('item');
 
-
 		if (tempItem) {
 			const item = client.util.getItem(tempItem);
 			if (!item) return interaction.reply({ embeds: [embed.setDescription(`__${tempItem}__ is not a valid item.`)], ephemeral: true });

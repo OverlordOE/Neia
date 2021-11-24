@@ -39,7 +39,7 @@ module.exports = {
 				}
 				else buyItem(amount);
 			}
-			else if (item) return interaction.reply({ embeds: [embed.setDescription('You can\'t buy this item.').setColor('#fc0303')], ephemeral: true });
+			else return interaction.reply({ embeds: [embed.setDescription('You can\'t buy this item.').setColor('#fc0303')], ephemeral: true });
 
 		}
 		else return interaction.reply({ embeds: [embed.setDescription(`__${tempItem}__ is not a valid item.`).setColor('#fc0303')], ephemeral: true });
