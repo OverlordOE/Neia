@@ -29,7 +29,7 @@ module.exports = {
 			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(user.balance)}💰`);
 
 
-		const listArray = [{ list: balanceList, title: 'Current Balance' }, { list: ruinedList, title: 'Streaks Ruined' }, { list: countList, title: 'Total Numbers Counted' }];
+		const listArray = [{ list: balanceList, title: 'Current Balance' }, { list: countList, title: 'Total Numbers Counted' }, { list: ruinedList, title: 'Streaks Ruined' }];
 		let listIndex = 0;
 		let page = interaction.options.getInteger('page') || 0;
 		if (page < 0 && page > 4) page = 0;

@@ -2,10 +2,49 @@
 /* eslint-disable space-before-function-paren */
 module.exports = {
 	// CUSTOM EMOJIS  
-
+	'pentagram': {
+		name: 'Pentagram',
+		value: 66666,
+		exchangeble: false,
+		emoji: '🔯',
+		rarity: 'common',
+		picture: null,
+		ctg: 'reaction',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
+	'smart': {
+		name: 'Smart',
+		value: 69420,
+		exchangeble: false,
+		emoji: '<:smart:434448129757020173>',
+		rarity: 'common',
+		picture: null,
+		ctg: 'reaction',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
+	'coin': {
+		name: 'Coin',
+		value: 1111,
+		exchangeble: false,
+		emoji: '🪙',
+		rarity: 'common',
+		picture: null,
+		ctg: 'reaction',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
+	'slots': {
+		name: 'Slots',
+		value: 7777,
+		exchangeble: false,
+		emoji: '🎰',
+		rarity: 'uncommon',
+		picture: null,
+		ctg: 'reaction',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
 	'clover': {
 		name: 'Clover',
-		value: 7777,
+		value: 777,
 		exchangeble: false,
 		emoji: '🍀',
 		rarity: 'common',
@@ -165,10 +204,10 @@ module.exports = {
 	},
 	'plus one': {
 		name: 'Plus One',
-		value: 5000,
-		exchangeble: true,
+		value: 10000,
+		exchangeble: false,
 		emoji: '<:plus1:721750172710993922>',
-		rarity: 'common',
+		rarity: 'uncommon',
 		picture: null,
 		ctg: 'reaction',
 		description: 'A custom emoji you can equip to change the number game emojis.',
@@ -196,7 +235,7 @@ module.exports = {
 	'ok hand': {
 		name: 'Ok Hand',
 		value: 9000,
-		exchangeble: true,
+		exchangeble: false,
 		emoji: '👌',
 		rarity: 'uncommon',
 		picture: null,
@@ -256,7 +295,7 @@ module.exports = {
 	'frog': {
 		name: 'Frog',
 		value: 150000,
-		exchangeble: true,
+		exchangeble: false,
 		emoji: '🐸',
 		rarity: 'legendary',
 		picture: null,
@@ -316,7 +355,7 @@ module.exports = {
 	'target': {
 		name: 'Target',
 		value: 40000,
-		exchangeble: true,
+		exchangeble: false,
 		emoji: '🎯',
 		rarity: 'epic',
 		picture: null,
@@ -376,7 +415,7 @@ module.exports = {
 	'blue checkmark': {
 		name: 'Blue Checkmark',
 		value: 1000,
-		exchangeble: true,
+		exchangeble: false,
 		emoji: '☑️',
 		rarity: 'common',
 		picture: null,

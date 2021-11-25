@@ -7,10 +7,10 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 const { Collection, MessageEmbed } = require('discord.js');
-const { itemHandler } = require('./itemHandler');
 const { util } = require('./util');
 
 const UserAchievements = require('../models/UserAchievements')(sequelize, Sequelize);
+const UserItems = require('../models/UserItems')(sequelize, Sequelize);
 const achievementHunter = new Collection();
 
 
@@ -19,19 +19,20 @@ Reflect.defineProperty(achievementHunter, 'hunt', {
 
 		switch (event) {
 			case 'timesGambled':
-				if (stats['timesGambled'] == 1000) unlock(user, 'Gambling is my Job');
-				else if (stats['timesGambled'] == 500) unlock(user, 'Casino Regular');
-				else if (stats['timesGambled'] == 200) unlock(user, 'Is this Healthy?');
-				else if (stats['timesGambled'] == 50) unlock(user, 'The Start of an Addiction');
+				if (stats['timesGambled'] >= 1000) unlock(user, 'Gambling is my Job');
+				else if (stats['timesGambled'] >= 500) unlock(user, 'Casino Regular');
+				else if (stats['timesGambled'] >= 200) unlock(user, 'Is this Healthy?');
+				else if (stats['timesGambled'] >= 50) unlock(user, 'The Start of an Addiction');
+				else if (stats['timesGambled'] >= 5) unlock(user, 'Welcome to the Casino');
 				break;
 
 			case 'itemAdded':
 				// eslint-disable-next-line no-case-declarations
-				const inventory = await itemHandler.getInventory(user);
-				if (inventory.length == 60) unlock(user, 'Hoarder');
-				else if (inventory.length == 40) unlock(user, 'Trophy Hunter');
-				else if (inventory.length == 25) unlock(user, 'The Collector');
-				else if (inventory.length == 10) unlock(user, 'Oeh Shiny!');
+				if (stats.length >= 60) unlock(user, 'Hoarder');
+				else if (stats.length >= 40) unlock(user, 'Trophy Hunter');
+				else if (stats.length >= 25) unlock(user, 'The Collector');
+				else if (stats.length >= 10) unlock(user, 'Oeh Shiny!');
+				else if (stats.length >= 1) unlock(user, 'The First Piece');
 				break;
 
 			case 'gamblingMoneyGainedSingle':
@@ -40,12 +41,23 @@ Reflect.defineProperty(achievementHunter, 'hunt', {
 				else if (stats >= 120000) unlock(user, 'Its Raining Money');
 				else if (stats >= 50000) unlock(user, 'Big Stacks');
 				else if (stats >= 10000) unlock(user, 'Pure Luck');
+				else if (stats >= 1000) unlock(user, 'Big Stacks');
 				break;
+
 			case 'gamblingMoneyGained':
 				if (stats['gamblingMoneyGained'] >= 5000000) unlock(user, 'Still no Jeff Bezos');
 				else if (stats['gamblingMoneyGained'] >= 1000000) unlock(user, 'Millionaire!');
 				else if (stats['gamblingMoneyGained'] >= 500000) unlock(user, 'Half Person Half Millionaire');
 				else if (stats['gamblingMoneyGained'] >= 100000) unlock(user, 'A Small Fortune');
+				else if (stats['gamblingMoneyGained'] >= 10000) unlock(user, 'Starting Capital');
+				break;
+
+			case 'numbersCounted':
+				if (stats['numbersCounted'] >= 1000) unlock(user, 'Pretending to be Smart');
+				else if (stats['numbersCounted'] >= 500) unlock(user, 'Count Dracula');
+				else if (stats['numbersCounted'] >= 200) unlock(user, '200 Problems');
+				else if (stats['numbersCounted'] >= 50) unlock(user, 'Numberphile');
+				else if (stats['numbersCounted'] >= 1) unlock(user, 'Babys First Numbers');
 				break;
 
 		}
@@ -59,13 +71,30 @@ async function unlock(user, achievementName) {
 	await addAchievement(user, achievement);
 
 	const reward = util.getItem(achievement.reward);
-	itemHandler.addItem(user, reward);
+	addItem(user, reward);
 
 	const embed = new MessageEmbed()
 		.setTitle('Achievement Unlocked!')
 		.setDescription(`You have unlocked **${achievement.emoji}${achievementName}**\n__${achievement.unlockMessage}__\n\nYour reward for this is the reaction emoji: _**${reward.emoji}${achievement.reward}!**_`);
 
 	user.author.send({ embeds: [embed] });
+}
+
+async function addItem(user, item) {
+	const userItem = await UserItems.findOne({
+		where: { user_id: user.user_id, name: item.name },
+	});
+
+	if (userItem) {
+		userItem.amount += 1;
+		return userItem.save();
+	}
+
+	return UserItems.create({
+		user_id: user.user_id,
+		name: item.name,
+		amount: 1,
+	});
 }
 
 

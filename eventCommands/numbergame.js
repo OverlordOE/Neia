@@ -44,7 +44,7 @@ module.exports = async function execute(message, msgUser, guild, client) {
 			}
 		}
 		catch (error) {
-			logger.warn('Emoji failed');
+			client.logger.warn('Emoji failed');
 			message.react('✅');
 		}
 

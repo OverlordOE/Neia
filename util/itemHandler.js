@@ -26,8 +26,8 @@ Reflect.defineProperty(itemHandler, 'addItem', {
 			userItem.amount += parseInt(amount);
 			return userItem.save();
 		}
-
-		achievementHunter.hunt(user, 'itemAdded', null);
+		const inventory = await itemHandler.getInventory(user);
+		achievementHunter.hunt(user, 'itemAdded', inventory);
 
 		return UserItems.create({
 			user_id: user.user_id,

@@ -1,13 +1,21 @@
 module.exports = {
 	
 	// timesGambled
+	'welcome to the casino': {
+		name: 'Welcome to the Casino',
+		emoji: '🎲',
+		rarity: 'common',
+		description: 'Gamble 5 times.',
+		unlockMessage: 'You have gambled 5 times now\n\nWelcome to the casino, take a seat..\n\n',
+		reward: 'Party',
+	},
 	'the start of an addiction': {
 		name: 'The Start of an Addiction',
 		emoji: '🎲',
 		rarity: 'common',
 		description: 'Gamble 50 times.',
 		unlockMessage: 'You have gambled 50 times now\n\nThis might be a sign of addiction.\n\n',
-		reward: 'Party',
+		reward: 'Slots',
 	},
 	'is this healthy?': {
 		name: 'Is this Healthy?',
@@ -36,13 +44,21 @@ module.exports = {
 
 
 	// itemsAdded
+	'the first piece!': {
+		name: 'The First Piece',
+		emoji: '📦',
+		rarity: 'common',
+		description: 'Collect 1 items.',
+		unlockMessage: 'You have collected 10 items\n\nMake sure to polish them once in a while.\n\n',
+		reward: 'Box',
+	},
 	'oeh shiny!': {
 		name: 'Oeh Shiny!',
 		emoji: '📦',
 		rarity: 'common',
 		description: 'Collect 10 items.',
 		unlockMessage: 'You have collected 10 items\n\nMake sure to polish them once in a while.\n\n',
-		reward: 'Box',
+		reward: 'Raccoon',
 	},
 	'the collector': {
 		name: 'The Collector',
@@ -50,7 +66,7 @@ module.exports = {
 		rarity: 'uncommon',
 		description: 'Collect 25 items.',
 		unlockMessage: 'You have collected 25 items\n\nYou have started taking this seriously.\n\n',
-		reward: 'Raccoon',
+		reward: 'frog',
 	},
 	'trophy hunter': {
 		name: 'Trophy Hunter',
@@ -71,6 +87,14 @@ module.exports = {
 
 
 	// gamblingMoneyGainedSingle
+	'big stacks': {
+		name: 'Big Stacks',
+		emoji: '💎',
+		rarity: 'common',
+		description: 'Win 1K💰 from a single gamble.',
+		unlockMessage: 'You have won 1K💰 from a single gamble\n\nFlex those big stacks.\n\n',
+		reward: 'Ok hand',
+	},
 	'pure luck': {
 		name: 'Pure Luck',
 		emoji: '💎',
@@ -79,8 +103,8 @@ module.exports = {
 		unlockMessage: 'You have won 10K💰 from a single gamble\n\nYou just got lucky.\n\n',
 		reward: 'Clover',
 	},
-	'big stacks': {
-		name: 'Big Stacks',
+	'jackpot!': {
+		name: 'Jackpot!',
 		emoji: '💎',
 		rarity: 'uncommon',
 		description: 'Win 50K💰 from a single gamble.',
@@ -114,6 +138,14 @@ module.exports = {
 
 
 	// gamblingMoneyGained
+	'starting capital': {
+		name: 'Starting Capital',
+		emoji: '💵',
+		rarity: 'common',
+		description: 'Earn 10K💰 with gambling.',
+		unlockMessage: 'You have earned 10K💰 with gambling\n\nYou can survive a couple of years with this.\n\n',
+		reward: 'Coin',
+	},
 	'a small fortune': {
 		name: 'A Small Fortune',
 		emoji: '💵',
@@ -145,5 +177,47 @@ module.exports = {
 		description: 'Earn 5M💰 with gambling.',
 		unlockMessage: 'You have earned 5M💰 with gambling\n\nJeff Bezos is still 40000 times richer than you are right now.\n\n',
 		reward: 'pepe money',
+	},
+
+	// numbersCounted
+	'babys first numbers': {
+		name: 'Babys First Numbers',
+		emoji: '🔢',
+		rarity: 'common',
+		description: 'Count 1 time in the number game.',
+		unlockMessage: 'You have counted 1 in the number game\n\nCongrats you can now do what a baby can.\n\n',
+		reward: 'Blue Checkmark',
+	},
+	'numberphile': {
+		name: 'Numberphile',
+		emoji: '🔢',
+		rarity: 'uncommon',
+		description: 'Count 50 time in the number game.',
+		unlockMessage: 'You have counted 50 in the number game\n\nYou must really like numbers if you have counted this much.\n\n',
+		reward: '<:plus1:721750172710993922>',
+	},
+	'200 problems': {
+		name: '200 Problems',
+		emoji: '🔢',
+		rarity: 'rare',
+		description: 'Count 200 time in the number game.',
+		unlockMessage: 'You have counted 200 in the number game\n\nI have 200 problems but counting ain\'t one.\n\n',
+		reward: 'Target',
+	},
+	'count dracula': {
+		name: 'Count Dracula',
+		emoji: '🔢',
+		rarity: 'epic',
+		description: 'Count 500 time in the number game.',
+		unlockMessage: 'You have counted 500 in the number game\n\nCongrats you can now do what a baby can.\n\n',
+		reward: 'Pentagram',
+	},
+	'pretending to be smart': {
+		name: 'Pretending to be Smart',
+		emoji: '🔢',
+		rarity: 'legendary',
+		description: 'Count 1000 time in the number game.',
+		unlockMessage: 'You have counted 1000 in the number game\n\nCongrats you can now do what a baby can.\n\n',
+		reward: 'Blue Checkmark',
 	},
 };

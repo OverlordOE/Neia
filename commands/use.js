@@ -51,7 +51,7 @@ module.exports = {
 					msgUser.save();
 					return interaction.reply({
 						embeds: [embed.setDescription(`Number Game reaction **emoji** is now: ${item.emoji}
-											It will add ${client.util.formatNumber(Math.sqrt(item.value))}💰 for each number counted.`)]
+											It will add ${client.util.formatNumber(Math.sqrt(item.value) / 3)}💰 for each number counted.`)]
 					});
 				}
 				// else if (item.ctg == 'chest') return interaction.reply({ embeds: [embed.setDescription('Please use the `open` command to use a chest'));
