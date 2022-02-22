@@ -63,7 +63,7 @@ module.exports = async function execute(client) {
 					numberGameInfo.lastUserId = null;
 					client.userManager.changeBalance(user, payout);
 					client.guildOverseer.saveNumberGameInfo(await client.guildOverseer.getGuild(sentMessage.guildId), numberGameInfo);
-					numberGameChannel.send(`${oldNumber + numberIncrease}`).then(m => m.react('✅'));
+					numberGameChannel.send(`${oldNumber + numberIncrease}`).then(m => m.react(user.reaction));
 					collector.stop();
 				}
 			});
