@@ -39,4 +39,14 @@ Reflect.defineProperty(util, 'getAchievement', {
 	},
 });
 
+Reflect.defineProperty(util, 'setEmbedRarity', {
+	value: function setEmbedRarity(embed, rarity) {
+		if (rarity == 'uncommon') embed.setColor('#1eff00');
+		else if (rarity == 'rare') embed.setColor('#0070dd');
+		else if (rarity == 'epic') embed.setColor('#a335ee');
+		else if (rarity == 'legendary') embed.setColor('#ff8000');
+		else embed.setColor('#eeeeee');
+	},
+});
+
 module.exports = { util };

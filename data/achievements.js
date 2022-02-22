@@ -44,12 +44,12 @@ module.exports = {
 
 
 	// itemsAdded
-	'the first piece!': {
+	'the first piece': {
 		name: 'The First Piece',
 		emoji: '📦',
 		rarity: 'common',
 		description: 'Collect 1 items.',
-		unlockMessage: 'You have collected 10 items\n\nMake sure to polish them once in a while.\n\n',
+		unlockMessage: 'You have collected 1 items\n\nMake sure to polish them once in a while.\n\n',
 		reward: 'Box',
 	},
 	'oeh shiny!': {
@@ -208,16 +208,16 @@ module.exports = {
 		name: 'Count Dracula',
 		emoji: '🔢',
 		rarity: 'epic',
-		description: 'Count 500 time in the number game.',
-		unlockMessage: 'You have counted 500 in the number game\n\nCongrats you can now do what a baby can.\n\n',
+		description: 'Count 666 time in the number game.',
+		unlockMessage: 'You have counted 666 in the number game\n\nIf you count too much, the count may come for you.\n\n',
 		reward: 'Pentagram',
 	},
 	'pretending to be smart': {
 		name: 'Pretending to be Smart',
 		emoji: '🔢',
 		rarity: 'legendary',
-		description: 'Count 1000 time in the number game.',
-		unlockMessage: 'You have counted 1000 in the number game\n\nCongrats you can now do what a baby can.\n\n',
-		reward: 'Blue Checkmark',
+		description: 'Count 1500 time in the number game.',
+		unlockMessage: 'You have counted 1000 in the number game\n\nAre you trying to prove something here?\n\n',
+		reward: 'Smart',
 	},
 };

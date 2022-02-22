@@ -32,11 +32,7 @@ module.exports = {
 					.setImage(`attachment://${achievement.picture}`);
 			}
 
-			if (achievement.rarity == 'uncommon') embed.setColor('#1eff00');
-			else if (achievement.rarity == 'rare') embed.setColor('#0070dd');
-			else if (achievement.rarity == 'epic') embed.setColor('#a335ee');
-			else if (achievement.rarity == 'legendary') embed.setColor('#ff8000');
-			else embed.setColor('#eeeeee');
+			client.util.setEmbedRarity(embed, achievement.rarity);
 		}
 
 		else {

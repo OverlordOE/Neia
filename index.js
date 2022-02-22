@@ -3,10 +3,8 @@ const numberGame = require('./eventCommands/numbergame');
 const numberEvent = require('./eventCommands/numberevent');
 const cron = require('cron');
 const { Client, Intents, Collection } = require('discord.js');
-const { Users, userManager } = require('./util/userManager');
+const { Users, userManager, itemHandler, achievementHunter } = require('./util/userManager');
 const { guildOverseer, Guilds } = require('./util/guildOverseer');
-const { achievementHunter } = require('./util/achievementHunter');
-const { itemHandler } = require('./util//itemHandler');
 const { util } = require('./util/util');
 const fs = require('fs');
 
@@ -25,7 +23,7 @@ require('dotenv').config();
 client.login(process.env.TOKEN);
 
 
-// Initialize client
+//* Initialize client
 
 client.once('ready', async () => {
 	let memberTotal = 0;

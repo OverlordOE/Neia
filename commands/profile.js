@@ -132,10 +132,10 @@ module.exports = {
 
 		interaction.reply({ embeds: [mainEmbed], components: [row] });
 		const filter = i => i.user.id == interaction.user.id;
-		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
+		const collector = interaction.channel.createMessageComponentCollector({  filter, time: 60000 });
 
 		collector.on('collect', async i => {
-			if (i.user.id === interaction.user.id) {
+			if (i.isSelectMenu()) {
 				if (i.values[0] === 'main') {
 					row.components[0].setPlaceholder('Main Page');
 					await i.update({ embeds: [mainEmbed], components: [row] });
@@ -157,7 +157,6 @@ module.exports = {
 					await i.update({ embeds: [achievementEmbed], components: [row] });
 				}
 			}
-			else await i.followUp({ content: 'this menu isn\'t for you!', ephemeral: true });
 		});
 
 		collector.on('end', async () => await interaction.editReply({ embeds: [mainEmbed], components: [] }));
