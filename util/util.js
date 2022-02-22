@@ -4,10 +4,10 @@ const items = require('../data/items');
 const achievements = require('../data/achievements');
 
 Reflect.defineProperty(util, 'formatNumber', {
-/**
-* Formats the given number to a compressed version with si symbols
-* @param {number} number - The number that needs to be formatted.
-*/
+	/**
+	* Formats the given number to a compressed version with si symbols
+	* @param {number} number - The number that needs to be formatted.
+	*/
 	value: function formatNumber(number) {
 		const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
 		const tier = Math.log10(number) / 3 | 0;
@@ -18,7 +18,7 @@ Reflect.defineProperty(util, 'formatNumber', {
 		const scale = Math.pow(10, tier * 3);
 
 		const scaled = number / scale;
-		return `**${scaled.toFixed(2) + suffix}**`;
+		return `**${(Math.floor(scaled * 100) / 100) + suffix}**`;
 	},
 });
 
