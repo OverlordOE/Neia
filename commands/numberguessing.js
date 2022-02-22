@@ -11,7 +11,7 @@ module.exports = {
 				.setRequired(true))
 		.addBooleanOption(option =>
 				option
-					.setName('all in')
+					.setName('allin')
 					.setDescription('Wheter you\'re going broke today')
 					.setRequired(false)),
 		
@@ -29,7 +29,7 @@ module.exports = {
 		let gambleAmount = interaction.options.getInteger('amount');
 		
 		if (gambleAmount < 1) gambleAmount = 1;
-		if (interaction.options.getBoolean('all in')) gambleAmount = msgUser.balance;
+		if (interaction.options.getBoolean('allin')) gambleAmount = msgUser.balance;
 		if (gambleAmount > msgUser.balance) return interaction.reply({ content: `You don't have enough 💰.\n${client.util.formatNumber(gambleAmount - msgUser.balance)}💰 more needed.`, ephemeral: true });
 
 		client.userManager.changeBalance(msgUser, -gambleAmount, true);
