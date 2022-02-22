@@ -39,8 +39,8 @@ Reflect.defineProperty(userManager, 'getUser', {
 });
 
 
-Reflect.defineProperty(userManager, 'addBalance', {
-	value: function addBalance(user, amount, gambling = false) {
+Reflect.defineProperty(userManager, 'changeBalance', {
+	value: function changeBalance(user, amount, gambling = false) {
 		if (isNaN(amount)) throw Error(`${amount} is not a valid number.`);
 		user.balance += Number(amount);
 

@@ -8,8 +8,13 @@ module.exports = {
 			option
 				.setName('amount')
 				.setDescription('The amount you want to gamble.')
-				.setRequired(true)),
-
+				.setRequired(true))
+		.addBooleanOption(option =>
+			option
+				.setName('allin')
+				.setDescription('Wheter you\'re going broke today')
+				.setRequired(false)),
+	
 
 	async execute(interaction, msgUser, msgGuild, client) {
 		const payoutRate = 1.8;
@@ -23,9 +28,10 @@ module.exports = {
 
 		let gambleAmount = interaction.options.getInteger('amount');
 		if (gambleAmount < 1) gambleAmount = 1;
+		if (interaction.options.getBoolean('allin')) gambleAmount = msgUser.balance;
 		if (gambleAmount > msgUser.balance) return interaction.reply({ content: `You don't have enough 💰.\n${client.util.formatNumber(gambleAmount - msgUser.balance)}💰 more needed.`, ephemeral: true });
 
-		client.userManager.addBalance(msgUser, -gambleAmount, true);
+		client.userManager.changeBalance(msgUser, -gambleAmount, true);
 
 		const emojiArray = ['✊', '🧻', '✂️'];
 		const botAnswer = Math.floor(Math.random() * emojiArray.length);
@@ -91,7 +97,7 @@ module.exports = {
 			const userAnswer = button.customId;
 
 			if (botAnswer == userAnswer) {
-				const balance = client.userManager.addBalance(msgUser, gambleAmount, true);
+				const balance = client.userManager.changeBalance(msgUser, gambleAmount, true);
 				embed.setColor('#00fc43');
 				button.update({
 					embeds: [embed.setDescription(`__**You**__ have chosen ${emojiArray[userAnswer]}\n__**Neia**__ has chosen ${emojiArray[botAnswer]}.\n
@@ -106,7 +112,7 @@ module.exports = {
 				});
 			}
 			else if (userAnswer - botAnswer === 1 || userAnswer - botAnswer === -2) {
-				const balance = client.userManager.addBalance(msgUser, winAmount, true);
+				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
 				embed.setColor('#00fc43');
 				button.update({
 					embeds: [embed.setDescription(`__**You**__ have chosen ${emojiArray[userAnswer]}\n__**Neia**__ has chosen ${emojiArray[botAnswer]}.\n

@@ -45,7 +45,7 @@ module.exports = {
 					}
 
 					await client.itemHandler.removeItem(msgUser, item, amount);
-					const balance = client.userManager.addBalance(msgUser, refundAmount);
+					const balance = client.userManager.changeBalance(msgUser, refundAmount);
 
 					interaction.reply({
 						embeds: [embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${client.util.formatNumber(refundAmount)}💰 back.

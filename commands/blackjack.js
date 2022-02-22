@@ -9,15 +9,21 @@ module.exports = {
 			option
 				.setName('amount')
 				.setDescription('The amount you want to gamble.')
-				.setRequired(true)),
-
+				.setRequired(true))
+		.addBooleanOption(option =>
+			option
+				.setName('allin')
+				.setDescription('Wheter you\'re going broke today')
+				.setRequired(false)),
+			
 	async execute(interaction, msgUser, msgGuild, client) {
 		const payoutRate = 1.8;
 		let gambleAmount = interaction.options.getInteger('amount');
 
 		if (gambleAmount < 1) gambleAmount = 1;
+		if (interaction.options.getBoolean('allin')) gambleAmount = msgUser.balance;
 		if (gambleAmount > msgUser.balance) return interaction.reply({ content: `You don't have enough 💰.\n${client.util.formatNumber(gambleAmount - msgUser.balance)}💰 more needed.`, ephemeral: true });
-		client.userManager.addBalance(msgUser, -gambleAmount, true);
+		client.userManager.changeBalance(msgUser, -gambleAmount, true);
 
 
 		const row = new MessageActionRow()
@@ -102,25 +108,25 @@ module.exports = {
 				});
 			}
 			else if (neiaHandValue > 21) {
-				const balance = client.userManager.addBalance(msgUser, winAmount, true);
+				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
 				return await interaction.editReply({
 					embeds: [embed.setDescription(`__Neia busted!__. __**You Win!**__\n
 				You have won **${client.util.formatNumber(winAmount)}💰** and your balance is **${client.util.formatNumber(balance)}💰**`).setColor('#00fc43')], components: []
 				});
 			}
 			else if (cardsDrawn >= 5) {
-				const balance = client.userManager.addBalance(msgUser, winAmount, true);
+				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
 				return await interaction.editReply({
 					embeds: [embed.setDescription(`You have drawn **5 cards** without busting!\n__**You win**__\n
 				**You have won ${client.util.formatNumber(winAmount)}**💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43')], components: []
 				});
 			}
 			else if (neiaHandValue == playerHandValue) {
-				const balance = client.userManager.addBalance(msgUser, gambleAmount);
+				const balance = client.userManager.changeBalance(msgUser, gambleAmount);
 				return await interaction.editReply({ embeds: [embed.setDescription(`__**Its a draw!**__\n\nYour **balance** is ${client.util.formatNumber(balance)}💰`)], components: [] });
 			}
 			else if (playerHandValue > neiaHandValue) {
-				const balance = client.userManager.addBalance(msgUser, winAmount, true);
+				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
 				return await interaction.editReply({
 					embeds: [embed.setDescription(`__You win!__\n
 				You have won ${client.util.formatNumber(winAmount)}💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43')], components: []

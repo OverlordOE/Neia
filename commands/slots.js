@@ -8,8 +8,13 @@ module.exports = {
 			option
 				.setName('amount')
 				.setDescription('The amount you want to gamble.')
-				.setRequired(true)),
-
+				.setRequired(true))
+		.addBooleanOption(option =>
+			option
+				.setName('allin')
+				.setDescription('Wheter you\'re going broke today')
+				.setRequired(false)),
+	
 	async execute(interaction, msgUser, msgGuild, client) {
 		/*
 		?Profitability formula: y(1) = x*a*c / b^3
@@ -35,11 +40,12 @@ module.exports = {
 		let output = '';
 		let count = 0;
 		let rowsWon = 0;
-
+ 
 		let gambleAmount = interaction.options.getInteger('amount');
 		if (gambleAmount < 1) gambleAmount = 1;
+		if(interaction.options.getBoolean('allin')) gambleAmount = msgUser.balance;
 		if (gambleAmount > msgUser.balance) return interaction.reply({ content: `You don't have enough 💰.\n${client.util.formatNumber(gambleAmount - msgUser.balance)}💰 more needed.`, ephemeral: true });
-		client.userManager.addBalance(msgUser, -gambleAmount, true);
+		client.userManager.changeBalance(msgUser, -gambleAmount, true);
 
 
 		output += `
@@ -118,7 +124,7 @@ module.exports = {
 		function endGame() {
 			if (rowsWon >= 1) {
 				const winAmount = gambleAmount * payoutRate * rowsWon;
-				const balance = client.userManager.addBalance(msgUser, winAmount, true);
+				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
 				output += `\n\n__**You won!**__ **${rowsWon}** row(s)!\nYou gained ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`;
 				embed.setColor('#00fc43');
 			}

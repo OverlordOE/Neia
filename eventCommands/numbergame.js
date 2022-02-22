@@ -40,7 +40,7 @@ module.exports = async function execute(message, msgUser, guild, client) {
 			const reaction = client.userManager.getReaction(msgUser);
 			if (reaction.emoji && reaction.value) {
 				message.react(reaction.emoji);
-				client.userManager.addBalance(msgUser, Math.sqrt(reaction.value) / 3);
+				client.userManager.changeBalance(msgUser, Math.sqrt(reaction.value) / 3);
 			}
 		}
 		catch (error) {
@@ -62,7 +62,7 @@ module.exports = async function execute(message, msgUser, guild, client) {
 		numberGameInfo.currentNumber++;
 		numberGameInfo.totalCounted++;
 		numberGameInfo.lastUserId = message.author.id;
-		client.userManager.addBalance(msgUser, number + msgUser.countBoost);
+		client.userManager.changeBalance(msgUser, number + msgUser.countBoost);
 		client.userManager.addStats(msgUser, 'numbersCounted', 1);
 	}
 
@@ -170,7 +170,7 @@ module.exports = async function execute(message, msgUser, guild, client) {
 
 
 		if (daily === true) {
-			const balance = client.userManager.addBalance(msgUser, number * dailyMultiplier);
+			const balance = client.userManager.changeBalance(msgUser, number * dailyMultiplier);
 
 			const embed = new Discord.MessageEmbed()
 				.setDescription(`__**Daily Count**__ reward!\nYou gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
@@ -181,7 +181,7 @@ module.exports = async function execute(message, msgUser, guild, client) {
 		}
 
 		if (hourly === true) {
-			const balance = client.userManager.addBalance(msgUser, number * hourlyMultiplier);
+			const balance = client.userManager.changeBalance(msgUser, number * hourlyMultiplier);
 
 			const embed = new Discord.MessageEmbed()
 				.setDescription(`__**Hourly Count**__ reward!\nYou gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
