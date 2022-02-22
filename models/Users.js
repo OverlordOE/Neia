@@ -14,11 +14,8 @@ module.exports = (sequelize, DataTypes) => {
 
 		// NumberGame
 		reaction: {
-			type: DataTypes.JSON,
-			defaultValue: JSON.stringify({
-				value: 1,
-				emoji: '✅',
-			}),
+			type: DataTypes.STRING,
+			defaultValue: '✅',
 			allowNull: false,
 		},
 		powerCounting: {

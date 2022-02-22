@@ -37,11 +37,8 @@ module.exports = async function execute(message, msgUser, guild, client) {
 
 	function succesfullCount() {
 		try {
-			const reaction = client.userManager.getReaction(msgUser);
-			if (reaction.emoji && reaction.value) {
-				message.react(reaction.emoji);
-				client.userManager.changeBalance(msgUser, Math.sqrt(reaction.value) / 3);
-			}
+				message.react(msgUser.reaction);
+				client.userManager.changeBalance(msgUser, Math.sqrt(100) / 3); // ! NEEDS NEW VALUE
 		}
 		catch (error) {
 			client.logger.warn('Emoji failed');

@@ -14,7 +14,6 @@ module.exports = {
 		const user = await client.userManager.getUser(target.id);
 		const items = await client.itemHandler.getInventory(user);
 		const achievements = await client.achievementHunter.getAchievements(user);
-		const reaction = client.userManager.getReaction(user);
 		const protection = client.userManager.getProtection(user);
 		const powerCounting = client.userManager.getPowerCount(user);
 		const countBoost = client.userManager.getCountBoost(user);
@@ -27,7 +26,7 @@ module.exports = {
 			.setTitle(`${target.tag}'s Main Page`)
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
 			.addField('Balance:', `${client.util.formatNumber(user.balance)}💰`)
-			.addField('Number Game Reaction:', reaction.emoji, true)
+			.addField('Number Game Reaction:', user.reaction, true)
 			.addField('Next Daily Count Reward:', `**${dailyCount}**`, true)
 			.addField('Next Hourly Count Reward:', `**${hourlyCount}**`, true)
 			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL({ dynamic: true }))
@@ -36,8 +35,8 @@ module.exports = {
 		const numbergameEmbed = new MessageEmbed()
 			.setTitle(`${target.tag}'s Number Game Page`)
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
-			.addField('Number Game Reaction:', reaction.emoji, true)
-			.addField('Number Game Reaction Bonus', `${client.util.formatNumber(Math.sqrt(reaction.value) / 3)}💰`, true)
+			.addField('Number Game Reaction:', user.reaction, true)
+			// .addField('Number Game Reaction Bonus', `${client.util.formatNumber(Math.sqrt(reaction.value) / 3)}💰`, true)
 			.addField('Protection Available:', `**${protection}**`, true)
 			.addField('Power Count Available:', `**${powerCounting}**`, true)
 			.addField('Count Boost Available:', `**${countBoost}**`, true)

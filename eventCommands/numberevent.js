@@ -45,18 +45,17 @@ module.exports = async function execute(client) {
 					numberGameInfo.currentNumber += numberIncrease;
 					claimed = true;
 
-					const reaction = client.userManager.getReaction(user);
-					if (reaction.emoji && reaction.value) {
-						for (let i = oldNumber; i < oldNumber + numberIncrease; i++) {
-							if (checkpoints.includes(i)) {
-								const nextCheckpointIndex = checkpoints.indexOf(i) + 1;
-								numberGameInfo.lastCheckpoint = i;
-								numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
-								numberGameChannel.send(`Checkpoint __**${i}**__ reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
-							}
-							payout += i + Math.sqrt(reaction.value) / 3;
+
+					for (let i = oldNumber; i < oldNumber + numberIncrease; i++) {
+						if (checkpoints.includes(i)) {
+							const nextCheckpointIndex = checkpoints.indexOf(i) + 1;
+							numberGameInfo.lastCheckpoint = i;
+							numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
+							numberGameChannel.send(`Checkpoint __**${i}**__ reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
 						}
+						payout += i + Math.ceil(Math.sqrt(100) / 3); // ! NEEDS NEW VALUE
 					}
+
 					description += `\n\n**__THIS EVENT HAS BEEN CLAIMED BY:__ ${button.user}!**`;
 					sentMessage.edit({ embeds: [embed.setDescription(description).setColor('#00fc43')], components: [] });
 

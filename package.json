@@ -13,9 +13,9 @@
   "author": "OverlordOE",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Daylandelange/syndicatebot/issues"
+    "url": "https://github.com/OverlordOE/Neia/issues"
   },
-  "homepage": "https://github.com/Daylandelange/syndicatebot#readme",
+  "homepage": "https://github.com/OverlordOE/Neia",
   "dependencies": {
     "@discordjs/builders": "^0.6.0",
     "@discordjs/rest": "*",

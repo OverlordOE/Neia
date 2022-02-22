@@ -193,11 +193,6 @@ Reflect.defineProperty(userManager, 'setHourlyCount', {
 });
 
 
-Reflect.defineProperty(userManager, 'getReaction', {
-	value: function getReaction(user) {
-		return JSON.parse(user.reaction);
-	},
-});
 Reflect.defineProperty(userManager, 'saveReaction', {
 	value: function saveReaction(user, reactionInfo) {
 		user.reaction = JSON.stringify(reactionInfo);

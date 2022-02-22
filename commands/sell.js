@@ -34,14 +34,7 @@ module.exports = {
 					const refundAmount = sellPercentage * item.value * amount;
 
 					if (item.ctg == 'reaction') {
-						const reaction = client.userManager.getReaction(msgUser);
-						if (item.emoji == reaction.emoji) {
-							msgUser.reaction = JSON.stringify({
-								emoji: '✅',
-								value: 1,
-							});
-							msgUser.save();
-						}
+						// ? needs replacement 
 					}
 
 					await client.itemHandler.removeItem(msgUser, item, amount);
