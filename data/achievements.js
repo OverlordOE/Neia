@@ -1,5 +1,5 @@
 module.exports = {
-	
+
 	// timesGambled
 	'welcome to the casino': {
 		name: 'Welcome to the Casino',

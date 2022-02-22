@@ -14,7 +14,7 @@ module.exports = {
 				.setName('allin')
 				.setDescription('Wheter you\'re going broke today')
 				.setRequired(false)),
-	
+
 
 	async execute(interaction, msgUser, msgGuild, client) {
 		const payoutRate = 1.8;

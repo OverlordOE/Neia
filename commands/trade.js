@@ -108,7 +108,7 @@ module.exports = {
 					});
 				}
 				if (item.ctg == 'reaction') {
-					// ? needs replacement 
+					return interaction.reply({ embeds: [embed.setDescription('You can\'t trade Reaction Emojis.').setColor('#fc0303')], ephemeral: true });
 				}
 
 

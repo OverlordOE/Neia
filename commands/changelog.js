@@ -10,7 +10,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle('Neia V3.4: Power Counting')
 			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL({ dynamic: true }))
-			
+
 			.addField('**Reset**', `
 			Because i had to make some drastic changes in the database stat structure and the inflated economy i have decided to reset the database.
 This means that everything will be reset to 0, including the number game and your money.
@@ -24,11 +24,11 @@ You will get a DM from Neia when they activate. You can see the cooldowns in you
 			.addField('**Count Boost**', `
 			This is a new power-up that gives you extra money per count that you make for a minute. It has a **3 hour** cooldown.
 			`)
-			
+
 			.addField('**Number Game Event**', `
 			- Spawn time increased from **1 hour -> 3 hours**.
 - Count amount increased to compensate from **8-12 -> 10-15**.
-`)			
+`)
 
 			.addField('**Fruit Slots**', `
 			- You can now get rewards for the diagonal rows.

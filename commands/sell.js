@@ -33,8 +33,9 @@ module.exports = {
 				if (await client.itemHandler.hasItem(msgUser, item, amount)) {
 					const refundAmount = sellPercentage * item.value * amount;
 
-					if (item.ctg == 'reaction') {
-						// ? needs replacement 
+					if (item.ctg == 'reaction' && item.emoji == msgUser.reaction) {
+						msgUser.reaction = '✅';
+						msgUser.save();
 					}
 
 					await client.itemHandler.removeItem(msgUser, item, amount);

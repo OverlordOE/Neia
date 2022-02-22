@@ -131,7 +131,7 @@ module.exports = {
 
 		interaction.reply({ embeds: [mainEmbed], components: [row] });
 		const filter = i => i.user.id == interaction.user.id;
-		const collector = interaction.channel.createMessageComponentCollector({  filter, time: 60000 });
+		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
 
 		collector.on('collect', async i => {
 			if (i.isSelectMenu()) {

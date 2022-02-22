@@ -193,14 +193,6 @@ Reflect.defineProperty(userManager, 'setHourlyCount', {
 });
 
 
-Reflect.defineProperty(userManager, 'saveReaction', {
-	value: function saveReaction(user, reactionInfo) {
-		user.reaction = JSON.stringify(reactionInfo);
-		return user.save();
-	},
-});
-
-
 Reflect.defineProperty(userManager, 'getColour', {
 	value: function getColour() {
 		return '#fcfcfc';

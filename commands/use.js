@@ -31,8 +31,17 @@ module.exports = {
 
 		if (item) {
 			if (await client.itemHandler.hasItem(msgUser, item, amount)) {
+				if (item.ctg == 'reaction') {
+					msgUser.reaction = item.emoji;
+					msgUser.save();
 
-				if (item.use) {
+					return interaction.reply({
+						embeds: [embed.setDescription(`Number Game reaction **emoji** is now: ${item.emoji}
+					It will add ${client.util.formatNumber(Math.sqrt(item.value) / 3)}💰 for each number counted.`)]
+					});
+				}
+
+				else if (item.use) {
 					const result = await item.use(client, amount, embed, item, msgUser, msgGuild, interaction);
 
 					if (result.succes) {
@@ -43,18 +52,6 @@ module.exports = {
 					else return interaction.reply({ embeds: [embed.setDescription('An error has occurred, please report this to OverlordOE#0717')], ephemeral: true });
 				}
 
-				else if (item.ctg == 'reaction') {
-					msgUser.reaction = JSON.stringify({
-						emoji: item.emoji,
-						value: item.value,
-					});
-					msgUser.save();
-					return interaction.reply({
-						embeds: [embed.setDescription(`Number Game reaction **emoji** is now: ${item.emoji}
-											It will add ${client.util.formatNumber(Math.sqrt(item.value) / 3)}💰 for each number counted.`)]
-					});
-				}
-				// else if (item.ctg == 'chest') return interaction.reply({ embeds: [embed.setDescription('Please use the `open` command to use a chest'));
 				else return interaction.reply({ embeds: [embed.setDescription(`There is no use for __${item.name}__ yet, the item was not used.`)], ephemeral: true });
 			}
 			else return interaction.reply({ embeds: [embed.setDescription(`You don't have enough __${item.emoji}${item.name}(s)__!`)], ephemeral: true });

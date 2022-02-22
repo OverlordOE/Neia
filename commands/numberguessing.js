@@ -10,11 +10,11 @@ module.exports = {
 				.setDescription('The amount you want to gamble.')
 				.setRequired(true))
 		.addBooleanOption(option =>
-				option
-					.setName('allin')
-					.setDescription('Wheter you\'re going broke today')
-					.setRequired(false)),
-		
+			option
+				.setName('allin')
+				.setDescription('Wheter you\'re going broke today')
+				.setRequired(false)),
+
 
 
 	async execute(interaction, msgUser, msgGuild, client) {
@@ -27,7 +27,7 @@ module.exports = {
 		const payoutRate = 5;
 
 		let gambleAmount = interaction.options.getInteger('amount');
-		
+
 		if (gambleAmount < 1) gambleAmount = 1;
 		if (interaction.options.getBoolean('allin')) gambleAmount = msgUser.balance;
 		if (gambleAmount > msgUser.balance) return interaction.reply({ content: `You don't have enough 💰.\n${client.util.formatNumber(gambleAmount - msgUser.balance)}💰 more needed.`, ephemeral: true });
