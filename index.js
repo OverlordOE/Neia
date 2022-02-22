@@ -128,7 +128,7 @@ client.on('interactionCreate', async interaction => {
 // Random number game event every 3 hours0 0/3 * * *
 const activityArray = ['people count', 'you.', 'time fly by', 'Overlord', 'Ainz',
 	'the holy kingdom getting destroyed', 'out for you', 'the movie Vliegosaurus', 'Garbiel waste all his money',
-	'Jotan count in 10 servers'];
+	'Jotan count in 10 servers', 'Jotan ruin the longest of streaks'];
 const botEvents = new cron.CronJob('0 0/2 * * *', () => {
 	const activityNr = Math.floor(Math.random() * activityArray.length);
 	client.user.setActivity(activityArray[activityNr], { type: 'WATCHING' });
