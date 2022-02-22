@@ -61,7 +61,7 @@ module.exports = async function execute(client) {
 					sentMessage.edit({ embeds: [embed.setDescription(description).setColor('#00fc43')], components: [] });
 
 					numberGameInfo.lastUserId = null;
-					client.userManager.addBalance(user, payout);
+					client.userManager.changeBalance(user, payout);
 					client.guildOverseer.saveNumberGameInfo(await client.guildOverseer.getGuild(sentMessage.guildId), numberGameInfo);
 					numberGameChannel.send(`${oldNumber + numberIncrease}`).then(m => m.react('✅'));
 					collector.stop();

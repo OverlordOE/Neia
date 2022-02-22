@@ -81,8 +81,8 @@ module.exports = {
 				});
 			}
 
-			balance = client.userManager.addBalance(msgUser, -amount);
-			client.userManager.addBalance(targetUser, amount);
+			balance = client.userManager.changeBalance(msgUser, -amount);
+			client.userManager.changeBalance(targetUser, amount);
 			return interaction.reply({
 				embeds: [embed.setDescription(
 					`Trade with *${target}* succesfull!\n\nTransferred ${client.util.formatNumber(amount)}💰 to *${target}*.

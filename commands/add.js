@@ -58,7 +58,7 @@ module.exports = {
 			return interaction.reply(`Added ${amount} __${item.name}__ to ${target}`);
 		}
 		else if (interaction.options.getSubcommand() === 'money') {
-			client.userManager.addBalance(targetUser, amount);
+			client.userManager.changeBalance(targetUser, amount);
 			const balance = client.util.formatNumber(targetUser.balance);
 
 			if (amount <= 0) return interaction.reply(`Successfully removed ${client.util.formatNumber(amount * -1)}💰 from *${target}*. Their current balance is ${balance}💰`);

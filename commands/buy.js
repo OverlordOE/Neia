@@ -57,7 +57,7 @@ module.exports = {
 				});
 			}
 			client.itemHandler.addItem(msgUser, item, buyAmount);
-			balance = client.userManager.addBalance(msgUser, -cost);
+			balance = client.userManager.changeBalance(msgUser, -cost);
 
 			interaction.reply({
 				embeds: [embed.setDescription(`You've bought: __${client.util.formatNumber(buyAmount)}__ ${item.emoji}__${item.name}(s)__.
