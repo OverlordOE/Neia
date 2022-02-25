@@ -10,39 +10,41 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle('Neia V3.4: Power Counting')
 			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL({ dynamic: true }))
+			.setDescription(`
+			# **Neia V3.6: Collectables and Reaction overhaul**
+## **Reset**
+Because i had to make some drastic changes in the database i need to reset the database. 
+This means that everything will be reset to 0, i will change the number game number to what the last one was in the server.
 
-			.addField('**Reset**', `
-			Because i had to make some drastic changes in the database stat structure and the inflated economy i have decided to reset the database.
-This means that everything will be reset to 0, including the number game and your money.
-			`)
+## **Collectables**
+Reactions will now no longer be items but instead a new type of thing "A collectable". If you unlock/buy a collectable it will permanently unlock for you, this means you cannot sell or trade them. You can find them on a new tab in your `profile`. You can also call the `Collectables` command to see a list of all the collectables
 
-			.addField('** Daily and Hourly Counts **', `
-			Daily and Hourly counts activate when you count in the number game. You will get a greater count reward when they activate.
-You will get a DM from Neia when they activate. You can see the cooldowns in your \`Stats\`.
-			`)
+## **Reactions/Count bonus**
+Number Game Reactions will no longer give you bonus to counting and will be purely cosmetic from now on. In place for that there is a new type of Collectable called "Count Multiplier". You will start at a multiplier of 1x and each multiplier that you unlock adds +1 to that number. The multiplier multiplies the money you would normally get from counting.
 
-			.addField('**Count Boost**', `
-			This is a new power-up that gives you extra money per count that you make for a minute. It has a **3 hour** cooldown.
-			`)
+## **All ins**
+All ins are back for gambling commands! If you want to go all in you will need to insert a random number in the amount slot and then press tab to get to the all in option, select true there and thats it.
 
-			.addField('**Number Game Event**', `
-			- Spawn time increased from **1 hour -> 3 hours**.
-- Count amount increased to compensate from **8-12 -> 10-15**.
-`)
+## **UI Rework**
+I have changed the UI of the \`profile\` command, im planning to change all the commands to follow this theme so Neia will be easier and nicer to read.
 
-			.addField('**Fruit Slots**', `
-			- You can now get rewards for the diagonal rows.
-- Decreased extra row payout for :seven: from **3 -> 2**.
-- fruit slots payout decreased from **4.5 - > 4.0**.
-			`)
+### **Bug Fixes and Minor Changes**
+* Number Game Event now reacts with your reaction instead of the default checkmark.
+* Number Game Event now spawns every 2 hours.
+* \`Use\` command should now change colour correctly to green on a success and red on a failure.
+* \`Items\` and \`Shop\` commands have merged into 1 \`Shop\` command because all available items are now in the shop.
 
-			.addField('**Bug Fixes and Minor Changes**', `
-			- \`Number Guessing\` payout increased from **4.5 -> 5.0**
-- Added more checkpoints to the number game.
-- Fixed some typos.
-- Removed a lot of unused reactions so they won't clutter the shop as much. 
-- \`Trade\` should now change colour correctly to green on a success.
-`);
+#  **What's Next?**
+I have alot of plans of features to add, mostly small additions or improvements like:
+- More leaderboard stats
+- More stats in general
+- UI changes
+- More Achievements and Reactions
+- Additional ways to increase count multiplier
+- Gambling improvements
+- More Number Game Events
+- And more!
+			`);
 
 		return interaction.reply({ embeds: [embed] });
 	},
