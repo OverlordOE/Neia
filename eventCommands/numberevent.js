@@ -26,8 +26,8 @@ module.exports = async function execute(client) {
 			const numberGameChannel = await client.channels.fetch(numberGameInfo.channelId);
 			const numberIncrease = Math.floor(Math.random() * 5) + 5;
 			const timeoutLength = 30;
-			let description = `Be the **first** to click the emoji and the bot will count **${numberIncrease} times** for you.
-			You will gain __**normal count**__ and __**custom reaction**__ rewards for **every number** counted.
+			let description = `Be the **first** to click the button and Neia will count **${numberIncrease} times** for you.
+			You will gain __**count rewards**__ for **every number** counted.
 			
 			This event will expire in **${timeoutLength} minutes.**`;
 			const sentMessage = await numberGameChannel.send({ embeds: [embed.setDescription(description)], components: [row] });

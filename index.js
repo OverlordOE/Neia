@@ -3,7 +3,7 @@ const numberGame = require('./eventCommands/numbergame');
 const numberEvent = require('./eventCommands/numberevent');
 const cron = require('cron');
 const { Client, Intents, Collection } = require('discord.js');
-const { Users, userManager, itemHandler, achievementHunter } = require('./util/userManager');
+const { Users, userManager, itemHandler, achievementHunter, collectionOverseer } = require('./util/userManager');
 const { guildOverseer, Guilds } = require('./util/guildOverseer');
 const { util } = require('./util/util');
 const fs = require('fs');
@@ -39,11 +39,12 @@ client.once('ready', async () => {
 		storedUsers.forEach(b => userManager.set(b.user_id, b));
 		const storedGuilds = await Guilds.findAll();
 		storedGuilds.forEach(b => guildOverseer.set(b.guild_id, b));
-
-		client.userManager = userManager;
+		
 		client.guildOverseer = guildOverseer;
+		client.userManager = userManager;
 		client.itemHandler = itemHandler;
 		client.achievementHunter = achievementHunter;
+		client.collectionOverseer = collectionOverseer;
 		client.util = util;
 	}
 	catch (e) {

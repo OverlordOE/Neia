@@ -18,9 +18,14 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: '✅',
 			allowNull: false,
 		},
+		countMultiplier: {
+			type: DataTypes.INTEGER,
+			defaultValue: 1,
+			allowNull: false,
+		},
 		powerCounting: {
 			type: DataTypes.BOOLEAN,
-			defaultValue: false,
+			defaultValue: 0,
 			allowNull: false,
 		},
 		lastPowerCounting: {
@@ -64,6 +69,7 @@ module.exports = (sequelize, DataTypes) => {
 				timesGambled: 0,
 				gamblingMoneyLost: 0,
 				gamblingMoneyGained: 0,
+				countingMoneyGained: 0,
 			}),
 			allowNull: false,
 		},

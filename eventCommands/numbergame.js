@@ -59,8 +59,9 @@ module.exports = async function execute(message, msgUser, guild, client) {
 		numberGameInfo.currentNumber++;
 		numberGameInfo.totalCounted++;
 		numberGameInfo.lastUserId = message.author.id;
-		client.userManager.changeBalance(msgUser, number + msgUser.countBoost);
+		if (number > 2) client.userManager.changeBalance(msgUser, number * msgUser.countMultiplier);
 		client.userManager.addStats(msgUser, 'numbersCounted', 1);
+		client.userManager.addStats(msgUser, 'countingMoneyGained', number * msgUser.countMultiplier);
 	}
 
 	function wrongCount() {

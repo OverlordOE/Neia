@@ -1,4 +1,5 @@
 /* eslint-disable no-multiple-empty-lines */
+const moment = require('moment');
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
@@ -7,15 +8,18 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 	storage: 'database.sqlite',
 });
 
-const moment = require('moment');
 const { Collection, MessageEmbed } = require('discord.js');
 const { util } = require('./util');
+
+const Users = require('../models/Users')(sequelize, Sequelize);
 const UserItems = require('../models/UserItems')(sequelize, Sequelize);
 const UserAchievements = require('../models/UserAchievements')(sequelize, Sequelize);
-const achievementHunter = new Collection();
-const itemHandler = new Collection();
+const UserCollectables = require('../models/UserCollectables')(sequelize, Sequelize);
+
 const userManager = new Collection();
-const Users = require('../models/Users')(sequelize, Sequelize);
+const itemHandler = new Collection();
+const achievementHunter = new Collection();
+const collectionOverseer = new Collection();
 
 
 
@@ -100,7 +104,7 @@ Reflect.defineProperty(userManager, 'getProtection', {
 		const now = moment();
 		const dCheck = moment(user.lastProtection).add(1, 'd');
 		if (moment(dCheck).isBefore(now)) return true;
-		else return dCheck.format('MMM Do HH:mm');
+		else return now.to(dCheck);
 	},
 });
 Reflect.defineProperty(userManager, 'setProtection', {
@@ -134,7 +138,7 @@ Reflect.defineProperty(userManager, 'getPowerCount', {
 		const now = moment();
 		const dCheck = moment(user.lastPowerCounting).add(3, 'h');
 		if (moment(dCheck).isBefore(now)) return true;
-		else return dCheck.format('MMM Do HH:mm');
+		else return now.to(dCheck);
 	},
 });
 Reflect.defineProperty(userManager, 'setPowerCount', {
@@ -150,7 +154,7 @@ Reflect.defineProperty(userManager, 'getCountBoost', {
 		const now = moment();
 		const dCheck = moment(user.lastCountBoost).add(3, 'h');
 		if (moment(dCheck).isBefore(now)) return true;
-		else return dCheck.format('MMM Do HH:mm');
+		else return now.to(dCheck);
 	},
 });
 Reflect.defineProperty(userManager, 'setCountBoost', {
@@ -166,7 +170,7 @@ Reflect.defineProperty(userManager, 'getDailyCount', {
 		const now = moment();
 		const dCheck = moment(user.lastDailyCount).add(1, 'd');
 		if (moment(dCheck).isBefore(now)) return true;
-		else return dCheck.format('MMM Do HH:mm');
+		else return now.to(dCheck);
 	},
 });
 Reflect.defineProperty(userManager, 'setDailyCount', {
@@ -182,7 +186,7 @@ Reflect.defineProperty(userManager, 'getHourlyCount', {
 		const now = moment();
 		const dCheck = moment(user.lastHourlyCount).add(1, 'h');
 		if (moment(dCheck).isBefore(now)) return true;
-		else return dCheck.format('MMM Do HH:mm');
+		else return now.to(dCheck);
 	},
 });
 Reflect.defineProperty(userManager, 'setHourlyCount', {
@@ -266,6 +270,48 @@ Reflect.defineProperty(itemHandler, 'getInventory', {
 
 
 
+//* collectionOverseer
+Reflect.defineProperty(collectionOverseer, 'unlockCollectable', {
+	value: async function unlockCollectable(user, collectable) {
+		if (await collectionOverseer.hasCollectable(user, collectable)) return false;
+
+		if (collectable.ctg == 'multiplier') user.countMultiplier++;
+		user.save();
+
+		UserCollectables.create({
+			user_id: user.user_id,
+			name: collectable.name,
+		});
+
+		const collection = await collectionOverseer.getCollection(user);
+		achievementHunter.hunt(user, 'collectableAdded', collection);
+		return collection;
+	},
+});
+
+
+Reflect.defineProperty(collectionOverseer, 'hasCollectable', {
+	value: async function hasCollectable(user, collectable) {
+		const userCollectable = await UserCollectables.findOne({
+			where: { user_id: user.user_id, name: collectable.name },
+		});
+
+		if (userCollectable) return true;
+		return false;
+	},
+});
+
+Reflect.defineProperty(collectionOverseer, 'getCollection', {
+	value: async function getCollection(user) {
+		return UserCollectables.findAll({
+			where: { user_id: user.user_id },
+		});
+	},
+});
+
+
+
+
 //* ACHIEVEMENTHUNTER
 Reflect.defineProperty(achievementHunter, 'hunt', {
 	value: async function hunt(user, event, stats = null) {
@@ -279,7 +325,7 @@ Reflect.defineProperty(achievementHunter, 'hunt', {
 				else if (stats['timesGambled'] >= 5) unlock(user, 'Welcome to the Casino');
 				break;
 
-			case 'itemAdded':
+			case 'collectableAdded':
 				// eslint-disable-next-line no-case-declarations
 				if (stats.length >= 60) unlock(user, 'Hoarder');
 				else if (stats.length >= 40) unlock(user, 'Trophy Hunter');
@@ -292,7 +338,7 @@ Reflect.defineProperty(achievementHunter, 'hunt', {
 				if (stats >= 1000000) unlock(user, 'A Small Loan of a Million Dollars');
 				else if (stats >= 300000) unlock(user, 'You Can Buy a House With This');
 				else if (stats >= 120000) unlock(user, 'Its Raining Money');
-				else if (stats >= 50000) unlock(user, 'Big Stacks');
+				else if (stats >= 50000) unlock(user, 'Jackpot!');
 				else if (stats >= 10000) unlock(user, 'Pure Luck');
 				else if (stats >= 1000) unlock(user, 'Big Stacks');
 				break;
@@ -310,7 +356,15 @@ Reflect.defineProperty(achievementHunter, 'hunt', {
 				else if (stats['numbersCounted'] >= 500) unlock(user, 'Count Dracula');
 				else if (stats['numbersCounted'] >= 200) unlock(user, '200 Problems');
 				else if (stats['numbersCounted'] >= 50) unlock(user, 'Numberphile');
-				else if (stats['numbersCounted'] >= 1) unlock(user, 'Babys First Numbers');
+				else if (stats['numbersCounted'] >= 5) unlock(user, 'Babys First Numbers');
+				break;
+			
+			case 'countingMoneyGained':
+				if (stats['countingMoneyGained'] >= 1000000) unlock(user, 'Count Master');
+				else if (stats['countingMoneyGained'] >= 100000) unlock(user, 'Count Work Makes Dream Work');
+				else if (stats['countingMoneyGained'] >= 10000) unlock(user, '10000 Moneys');
+				else if (stats['countingMoneyGained'] >= 1000) unlock(user, 'Welcome to Count City');
+				else if (stats['countingMoneyGained'] >= 100) unlock(user, 'You Get Money From This?');
 				break;
 
 		}
@@ -319,17 +373,15 @@ Reflect.defineProperty(achievementHunter, 'hunt', {
 
 async function unlock(user, achievementName) {
 	const achievement = util.getAchievement(achievementName);
-	const hasAchievement = await achievementHunter.hasAchievement(user, achievement);
-	if (hasAchievement) return;
 	await addAchievement(user, achievement);
 
-	const reward = util.getItem(achievement.reward);
-	itemHandler.addItem(user, reward);
+	const reward = util.getCollectable(achievement.reward);
+	collectionOverseer.unlockCollectable(user, reward);
 
 	const embed = new MessageEmbed()
 		.setTitle('Achievement Unlocked!')
 		.setDescription(`You have unlocked **${achievement.emoji}${achievementName}**\n__${achievement.unlockMessage}__\n
-		Your reward for this is the reaction emoji: _**${reward.emoji}${achievement.reward}!**_`);
+		You have unlocked: _**${reward.emoji}${achievement.reward}!**_`);
 	util.setEmbedRarity(embed, achievement.rarity);
 
 	user.author.send({ embeds: [embed] });
@@ -337,6 +389,8 @@ async function unlock(user, achievementName) {
 
 
 async function addAchievement(user, achievement) {
+	if (await achievementHunter.hasAchievement(user, achievement)) return;
+
 	return await UserAchievements.create({
 		user_id: user.user_id,
 		name: achievement.name,
@@ -344,12 +398,12 @@ async function addAchievement(user, achievement) {
 }
 
 
-async function removeAchievement(user, achievement) {
-	const oldAchievement = await achievementHunter.hasAchievement(achievement);
+// async function removeAchievement(user, achievement) {
+// 	const oldAchievement = await achievementHunter.hasAchievement(achievement);
 
-	if (oldAchievement) return oldAchievement.destroy();
-	else throw Error(`User doesn't have achievement: ${achievement.name}`);
-}
+// 	if (oldAchievement) return oldAchievement.destroy();
+// 	else throw Error(`User doesn't have achievement: ${achievement.name}`);
+// }
 
 
 Reflect.defineProperty(achievementHunter, 'hasAchievement', {
@@ -371,4 +425,4 @@ Reflect.defineProperty(achievementHunter, 'getAchievements', {
 	},
 });
 
-module.exports = { Users, userManager, itemHandler, achievementHunter };
+module.exports = { Users, userManager, itemHandler, achievementHunter, collectionOverseer };
