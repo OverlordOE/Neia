@@ -100,15 +100,15 @@ module.exports = {
 				const value = command.getInteger('value');
 
 				if (command.getSubcommand() === 'reset') {
-					client.guildCommands.delete(msgGuild.guild_id);
+					client.guildOverseer.delete(msgGuild.guild_id);
 					msgGuild.destroy();
 					return interaction.reply('Guild reset succesfull');
 				}
 				else if (command.getSubcommand() === 'numbergame') {
-					const numberGame = client.guildCommands.getNumberGame(msgGuild);
+					const numberGame = client.guildOverseer.getNumberGame(msgGuild);
 					numberGame[property] = value;
 					numberGame.lastUserId = null;
-					client.guildCommands.saveNumberGameInfo(msgGuild, numberGame);
+					client.guildOverseer.saveNumberGameInfo(msgGuild, numberGame);
 					return interaction.reply('Numbergame edit succesfull');
 				}
 				else if (command.getSubcommand() === 'data') {
@@ -119,11 +119,11 @@ module.exports = {
 			}
 			else if (command.getSubcommandGroup() === 'user') {
 				const target = interaction.options.getUser('target');
-				const targetUser = await client.userCommands.getUser(target.id);
+				const targetUser = await client.userManager.getUser(target.id);
 
 				if (command.getSubcommand() === 'reset') {
 					targetUser.destroy();
-					client.userCommands.delete(target.id);
+					client.userManager.delete(target.id);
 					return interaction.reply('User reset succesfull');
 				}
 				else if (command.getSubcommand() === 'data') {

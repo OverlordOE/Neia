@@ -1,72 +1,53 @@
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
 const items = require('../data/items');
+const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('shop')
-		.setDescription('Shows all the items you can buy.'),
+		.setDescription('see the shop or details about a specific item.')
+		.addStringOption(option =>
+			option
+				.setName('item')
+				.setDescription('The item you want to see.')),
+
 
 	execute(interaction, msgUser, msgGuild, client) {
+		const embed = new MessageEmbed();
+		const tempItem = interaction.options.getString('item');
 
-		let reactions = '__**Reactions:**__\n';
-		let powerups = '__**Powerups:**__\n';
-		let chests = '__**Chests:**__\n';
-		let equipment = '__**Equipment:**__\n';
+		if (tempItem) {
+			const item = client.util.getItem(tempItem);
+			if (!item) return interaction.reply({ embeds: [embed.setDescription(`__${tempItem}__ is not a valid item.`)], ephemeral: true });
 
-		Object.values(items).sort((a, b) => a.value - b.value).map((i) => {
-			if (i.buyable) {
-				if (i.ctg == 'reaction') reactions += `${i.emoji} ${i.name}: ${client.util.formatNumber(i.value)}💰\n`;
-				else if (i.ctg == 'powerup') powerups += `${i.emoji} ${i.name}: ${client.util.formatNumber(i.value)}💰\n`;
-				// else if (i.ctg == 'equipment') equipment += `${i.emoji}${i.name}: ${client.util.formatNumber(i.value)}💰\n`;
-			}
-		});
+			embed
+				.setTitle(`${item.emoji}${item.name}`)
+				.setDescription(item.description)
+				.addField('Value', `${client.util.formatNumber(item.value)}💰`, true)
+				.addField('Category', item.ctg.toString(), true)
+				.setFooter('Use the command without arguments to see the item list', client.user.displayAvatarURL({ dynamic: true }));
 
-		const embed = new MessageEmbed()
-			.setTitle('Neia Shop')
-			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-			.setDescription(`${reactions}`)
-			.setColor('#f3ab16')
-			.setFooter('Use the items command to see the full item list.', client.user.displayAvatarURL({ dynamic: true }));
+			client.util.setEmbedRarity(embed, item.rarity);
+		}
 
-		const row = new MessageActionRow()
-			.addComponents(
-				new MessageSelectMenu()
-					.setCustomId('select')
-					.setPlaceholder('Reactions')
-					.addOptions([
-						{
-							label: 'Reactions',
-							description: 'Number reactions for the number game.',
-							value: 'reactions',
-						},
-						{
-							label: 'Powerups',
-							description: 'Powerups for the number game',
-							value: 'powerups',
-						},
-					]),
-			);
+		else {
+			let reactions = '__**Reactions:**__\n';
+			let powerups = '__**Powerups:**__\n';
+			let multipliers = '__**Multipliers:**__\n';
 
+			Object.values(items).sort((a, b) => a.value - b.value)
+				.map((i) => {
+				if (i.ctg == 'powerup') powerups += `${i.emoji} ${i.name}: ${client.util.formatNumber(i.value)}💰\n`;
+				else if (i.ctg == 'multiplier') multipliers += `${i.emoji} ${i.name}: ${client.util.formatNumber(i.value)}💰\n`; 
+				else if (i.ctg == 'reaction') reactions += `${i.emoji} ${i.name}: ${client.util.formatNumber(i.value)}💰\n`; 
+			});
 
-		interaction.reply({ embeds: [embed], components: [row] });
-		const filter = i => i.user.id == interaction.user.id;
-		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
+			embed
+				.setTitle('Neia Shop')
+				.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+				.setDescription(`${multipliers}\n${powerups}\n${reactions}\n`)
+				.setColor('#f3ab16');
+		}
 
-		collector.on('collect', async i => {
-			if (i.user.id === interaction.user.id) {
-				if (i.values[0] === 'reactions') {
-					row.components[0].setPlaceholder('Reactions');
-					await i.update({ embeds: [embed.setDescription(`${reactions}`)], components: [row] });
-				}
-				else if (i.values[0] === 'powerups') {
-					row.components[0].setPlaceholder('Powerups');
-					await i.update({ embeds: [embed.setDescription(`${powerups}`)], components: [row] });
-				}
-			}
-			else await i.followUp({ content: 'This menu isn\'t for you!', ephemeral: true });
-		});
-
-		collector.on('end', async () => await interaction.editReply({ embeds: [embed], components: [] }));
-
+		return interaction.reply({ embeds: [embed] });
 	},
 };

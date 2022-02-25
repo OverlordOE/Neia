@@ -49,16 +49,16 @@ module.exports = {
 
 		const amount = interaction.options.getInteger('amount');
 		const target = interaction.options.getUser('target');
-		const targetUser = await client.userCommands.getUser(target.id);
+		const targetUser = await client.userManager.getUser(target.id);
 
 
 		if (interaction.options.getSubcommand() === 'item') {
 			const item = client.util.getItem(interaction.options.getUser('item'));
-			client.userCommands.addItem(targetUser, item, amount);
+			client.itemHandler.addItem(targetUser, item, amount);
 			return interaction.reply(`Added ${amount} __${item.name}__ to ${target}`);
 		}
 		else if (interaction.options.getSubcommand() === 'money') {
-			client.userCommands.addBalance(targetUser, amount);
+			client.userManager.changeBalance(targetUser, amount);
 			const balance = client.util.formatNumber(targetUser.balance);
 
 			if (amount <= 0) return interaction.reply(`Successfully removed ${client.util.formatNumber(amount * -1)}💰 from *${target}*. Their current balance is ${balance}💰`);

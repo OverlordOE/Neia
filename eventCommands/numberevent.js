@@ -1,11 +1,11 @@
-const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000];
+const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000, 3300, 3600, 3900, 4200, 4600, 5000];
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
-module.exports = async function execute(client, logger) {
+module.exports = async function execute(client) {
 
 	client.guilds.cache.forEach(async g => {
-		const guild = await client.guildCommands.getGuild(g.id);
-		const numberGameInfo = client.guildCommands.getNumberGame(guild);
+		const guild = await client.guildOverseer.getGuild(g.id);
+		const numberGameInfo = client.guildOverseer.getNumberGame(guild);
 		let claimed = false;
 
 		if (numberGameInfo.channelId) {
@@ -24,10 +24,10 @@ module.exports = async function execute(client, logger) {
 				);
 
 			const numberGameChannel = await client.channels.fetch(numberGameInfo.channelId);
-			const numberIncrease = Math.floor(Math.random() * 10) + 6;
+			const numberIncrease = Math.floor(Math.random() * 5) + 5;
 			const timeoutLength = 30;
-			let description = `Be the **first** to click the emoji and the bot will count **${numberIncrease} times** for you.
-			You will gain __**normal count**__ and __**custom reaction**__ rewards for **every number** counted.
+			let description = `Be the **first** to click the button and Neia will count **${numberIncrease} times** for you.
+			You will gain __**count rewards**__ for **every number** counted.
 			
 			This event will expire in **${timeoutLength} minutes.**`;
 			const sentMessage = await numberGameChannel.send({ embeds: [embed.setDescription(description)], components: [row] });
@@ -39,31 +39,30 @@ module.exports = async function execute(client, logger) {
 				if (button.customId === 'claim') {
 
 					let payout = 0;
-					const user = await client.userCommands.getUser(button.user.id);
+					const user = await client.userManager.getUser(button.user.id);
 					const oldNumber = numberGameInfo.currentNumber;
 
 					numberGameInfo.currentNumber += numberIncrease;
 					claimed = true;
 
-					const reaction = client.userCommands.getReaction(user);
-					if (reaction.emoji && reaction.value) {
-						for (let i = oldNumber; i < oldNumber + numberIncrease; i++) {
-							if (checkpoints.includes(i)) {
-								const nextCheckpointIndex = checkpoints.indexOf(i) + 1;
-								numberGameInfo.lastCheckpoint = i;
-								numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
-								numberGameChannel.send(`Checkpoint __**${i}**__ reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
-							}
-							payout += i + Math.sqrt(reaction.value) / 3;
+
+					for (let i = oldNumber; i < oldNumber + numberIncrease; i++) {
+						if (checkpoints.includes(i)) {
+							const nextCheckpointIndex = checkpoints.indexOf(i) + 1;
+							numberGameInfo.lastCheckpoint = i;
+							numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
+							numberGameChannel.send(`Checkpoint __**${i}**__ reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
 						}
+						payout += i + Math.ceil(Math.sqrt(100) / 3); // ! NEEDS NEW VALUE
 					}
+
 					description += `\n\n**__THIS EVENT HAS BEEN CLAIMED BY:__ ${button.user}!**`;
 					sentMessage.edit({ embeds: [embed.setDescription(description).setColor('#00fc43')], components: [] });
 
 					numberGameInfo.lastUserId = null;
-					client.userCommands.addBalance(user, payout);
-					client.guildCommands.saveNumberGameInfo(await client.guildCommands.getGuild(sentMessage.guildId), numberGameInfo);
-					numberGameChannel.send(`${oldNumber + numberIncrease}`).then(m => m.react('✅'));
+					client.userManager.changeBalance(user, payout);
+					client.guildOverseer.saveNumberGameInfo(await client.guildOverseer.getGuild(sentMessage.guildId), numberGameInfo);
+					numberGameChannel.send(`${oldNumber + numberIncrease}`).then(m => m.react(user.reaction));
 					collector.stop();
 				}
 			});
@@ -77,5 +76,5 @@ module.exports = async function execute(client, logger) {
 			});
 		}
 	});
-	logger.info('Finished Number Game Events!');
+	client.logger.info('Finished Number Game Events!');
 };

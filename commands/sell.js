@@ -29,30 +29,27 @@ module.exports = {
 		const item = client.util.getItem(tempItem);
 
 		if (item) {
-			if (await client.userCommands.hasItem(msgUser, item, amount)) {
-				const refundAmount = sellPercentage * item.value * amount;
+			if (item.exchangeble) {
+				if (await client.itemHandler.hasItem(msgUser, item, amount)) {
+					const refundAmount = sellPercentage * item.value * amount;
 
-				if (item.ctg == 'reaction') {
-					const reaction = client.userCommands.getReaction(msgUser);
-					if (item.emoji == reaction.emoji) {
-						msgUser.reaction = JSON.stringify({
-							emoji: '✅',
-							value: 1,
-						});
+					if (item.ctg == 'reaction' && item.emoji == msgUser.reaction) {
+						msgUser.reaction = '✅';
 						msgUser.save();
 					}
-				}
 
-				await client.userCommands.removeItem(msgUser, item, amount);
-				const balance = client.userCommands.addBalance(msgUser, refundAmount);
+					await client.itemHandler.removeItem(msgUser, item, amount);
+					const balance = client.userManager.changeBalance(msgUser, refundAmount);
 
-				interaction.reply({
-					embeds: [embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${client.util.formatNumber(refundAmount)}💰 back.
+					interaction.reply({
+						embeds: [embed.setDescription(`You've refunded ${amount} ${item.emoji}__${item.name}(s)__ and received ${client.util.formatNumber(refundAmount)}💰 back.
 				Your balance is ${client.util.formatNumber(balance)}💰!`)
-						.setColor('#00fc43')]
-				});
+							.setColor('#00fc43')]
+					});
+				}
+				else return interaction.reply({ embeds: [embed.setDescription(`__**ITEM(S) NOT SOLD!**__\nYou don't have enough ${item.emoji}__${item.name}(s)__!`).setColor('#fc0303')], ephemeral: true });
 			}
-			else return interaction.reply({ embeds: [embed.setDescription(`__**ITEM(S) NOT SOLD!**__\nYou don't have enough ${item.emoji}__${item.name}(s)__!`).setColor('#fc0303')], ephemeral: true });
+			else return interaction.reply({ embeds: [embed.setDescription('You can\'t sell this item.').setColor('#fc0303')], ephemeral: true });
 		}
 		else return interaction.reply({ embeds: [embed.setDescription(`__**ITEM(S) NOT SOLD!**__\n__${tempItem}__ is not a valid item.`).setColor('#fc0303')], ephemeral: true });
 	},

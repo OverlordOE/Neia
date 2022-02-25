@@ -8,7 +8,7 @@ module.exports = {
 	async execute(interaction, msgUser, msgGuild, client) {
 		let guildTotal = 0;
 		let memberTotal = 0;
-		
+
 		client.guilds.cache.forEach(guild => {
 			guildTotal++;
 			if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount);

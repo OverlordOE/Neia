@@ -13,9 +13,9 @@
   "author": "OverlordOE",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Daylandelange/syndicatebot/issues"
+    "url": "https://github.com/OverlordOE/Neia/issues"
   },
-  "homepage": "https://github.com/Daylandelange/syndicatebot#readme",
+  "homepage": "https://github.com/OverlordOE/Neia",
   "dependencies": {
     "@discordjs/builders": "^0.6.0",
     "@discordjs/rest": "*",
@@ -23,15 +23,15 @@
     "cron": "^1.8.2",
     "discord-api-types": "^0.23.1",
     "discord-ytdl-core": "^5.0.4",
-    "discord.js": "^13.2.0",
+    "discord.js": "^13.3.1",
     "dotenv": "^10.0.0",
     "ffmpeg-static": "^4.4.0",
     "moment": "^2.29.1",
     "sequelize": "^6.6.5",
-    "sqlite3": "^5.0.2",
+    "sqlite3": "^4.2.0",
     "winston": "^3.3.3",
     "youtube-sr": "^4.1.8",
-    "ytdl-core": "^4.9.1"
+    "ytdl-core": "^4.10.1"
   },
   "devDependencies": {
     "eslint": "^7.32.0"

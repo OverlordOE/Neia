@@ -28,23 +28,19 @@ module.exports = {
 		const item = client.util.getItem(tempItem);
 
 		if (item) {
-
-			if (item.buyable) {
 				const protectionItem = client.util.getItem('streak protection');
-				if (item == protectionItem && !(await client.userCommands.newProtectionAllowed(msgUser))) {
+				if (item == protectionItem && !(await client.userManager.newProtectionAllowed(msgUser))) {
 					return interaction.reply({
 						embeds: [embed.setDescription('You can\'t buy Streak Protection.\nYou can only have 1 at a time and your cooldown should be worn off')
 							.setColor('#fc0303')], ephemeral: true
 					});
 				}
-				else buyItem(amount);
-			}
-			else if (item) return interaction.reply({ embeds: [embed.setDescription('You can\'t buy this item.').setColor('#fc0303')], ephemeral: true });
-
+				else await buyItem(amount);
 		}
 		else return interaction.reply({ embeds: [embed.setDescription(`__${tempItem}__ is not a valid item.`).setColor('#fc0303')], ephemeral: true });
 
-		function buyItem(buyAmount) {
+
+		async function buyItem(buyAmount) {
 			let balance = msgUser.balance;
 			const cost = buyAmount * item.value;
 			if (cost > balance) {
@@ -56,13 +52,37 @@ module.exports = {
 					`).setColor('#fc0303')]
 				});
 			}
-			client.userCommands.addItem(msgUser, item, buyAmount);
-			balance = client.userCommands.addBalance(msgUser, -cost);
 
-			interaction.reply({
-				embeds: [embed.setDescription(`You've bought: __${client.util.formatNumber(buyAmount)}__ ${item.emoji}__${item.name}(s)__.
-				\nCurrent balance is ${client.util.formatNumber(balance)}💰.`).setColor('#00fc43')]
-			});
+			if (item.type == 'collectable') {
+				const collectable = client.util.getCollectable(item.name);
+				const canUnlock = await client.collectionOverseer.unlockCollectable(msgUser, collectable);
+				if (canUnlock) {
+					balance = client.userManager.changeBalance(msgUser, -cost);
+					interaction.reply({
+						embeds: [embed.setDescription(`**You've unlocked: ${collectable.emoji}__${collectable.name}__**!
+						You can see it in your profile-collection tab.
+						\nCurrent balance is ${client.util.formatNumber(balance)}💰.`).setColor('#00fc43')]
+					});
+				}
+				else {
+					return interaction.reply({
+						embeds: [embed.setDescription(`
+						__**COLLECTABLE NOT BOUGHT!**__
+						You alread have ${item.emoji}${item.name}unlocked!
+					`).setColor('#fc0303')]
+					});
+				}
+			}
+			else {
+				client.itemHandler.addItem(msgUser, item, buyAmount);
+				balance = client.userManager.changeBalance(msgUser, -cost);
+				interaction.reply({
+					embeds: [embed.setDescription(`
+					You've bought: __${client.util.formatNumber(buyAmount)}__ ${item.emoji}__${item.name}(s)__.
+					You can see it in your profile-inventory tab.
+					\nCurrent balance is ${client.util.formatNumber(balance)}💰.`).setColor('#00fc43')]
+				});
+			}
 		}
 	},
 };

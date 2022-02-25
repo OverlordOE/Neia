@@ -1,49 +1,58 @@
-const { Client, Intents, Collection, Permissions } = require('discord.js');
+const { Permissions } = require('discord.js');
+const numberGame = require('./eventCommands/numbergame');
+const numberEvent = require('./eventCommands/numberevent');
+const cron = require('cron');
+const { Client, Intents, Collection } = require('discord.js');
+const { Users, userManager, itemHandler, achievementHunter, collectionOverseer } = require('./util/userManager');
+const { guildOverseer, Guilds } = require('./util/guildOverseer');
+const { util } = require('./util/util');
+const fs = require('fs');
+
 const client = new Client({
 	intents: new Intents(
 		[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.DIRECT_MESSAGES],
 	), partials: ['CHANNEL'],
 });
-const { Users, userCommands } = require('./util/userCommands');
-const { guildCommands, Guilds } = require('./util/guildCommands');
-const { util } = require('./util/util');
-const numberGame = require('./eventCommands/numbergame');
-const numberEvent = require('./eventCommands/numberevent');
-const logger = require('./util/logger');
-const cron = require('cron');
-const fs = require('fs');
-const active = new Map();
-client.emojiCharacters = require('./data/emojiCharacters');
-client.music = { active: active };
-client.logger = logger;
-require('dotenv').config();
 
-// Initialize client
+client.emojiCharacters = require('./data/emojiCharacters');
+client.logger = require('./util/logger');
+const active = new Map();
+client.music = { active: active };
+
+require('dotenv').config();
 client.login(process.env.TOKEN);
+
+
+//* Initialize client
+
 client.once('ready', async () => {
 	let memberTotal = 0;
 	client.guilds.cache.forEach(g => { if (!isNaN(memberTotal) && g.id != 264445053596991498) memberTotal += Number(g.memberCount); });
-	client.user.setActivity('you.', { type: 'WATCHING' });
 
+	const activityArray = ['people count', 'you.', 'time fly by', 'Overlord', 'Ainz', 'the holy kingdom getting destroyed', 'out for you', 'the movie Vliegosaurus', 'Garbiel waste all his money', 'Jotan count in 10 servers'];
+	const activityNr = Math.floor(Math.random() * activityArray.length);
+	client.user.setActivity(activityArray[activityNr], { type: 'WATCHING' });
 
 	//* Load in database
 	try {
 		const storedUsers = await Users.findAll();
-		storedUsers.forEach(b => userCommands.set(b.user_id, b));
+		storedUsers.forEach(b => userManager.set(b.user_id, b));
 		const storedGuilds = await Guilds.findAll();
-		storedGuilds.forEach(b => guildCommands.set(b.guild_id, b));
-
-		client.userCommands = userCommands;
-		client.guildCommands = guildCommands;
+		storedGuilds.forEach(b => guildOverseer.set(b.guild_id, b));
+		
+		client.guildOverseer = guildOverseer;
+		client.userManager = userManager;
+		client.itemHandler = itemHandler;
+		client.achievementHunter = achievementHunter;
+		client.collectionOverseer = collectionOverseer;
 		client.util = util;
 	}
 	catch (e) {
-		logger.error(e.stack);
+		client.logger.error(e.stack);
 	}
 
-	logger.info(`Logged in as ${client.user.tag}!`);
+	client.logger.info(`Logged in as ${client.user.tag}!`);
 });
-
 
 // ? Bad error handling
 client.on('warn', e => console.log(e));
@@ -69,18 +78,19 @@ for (const file of commandFiles) {
 client.on('messageCreate', async message => {
 	if (message.author.bot) return;
 	else if (message.channel.type == 'DM') {
-		logger.info(`${message.author.username} send message to Neia: ${message.content}`);
+		client.logger.info(`${message.author.username} send message to Neia: ${message.content}`);
 		const response = Math.floor((Math.random() * 5));
 		if (!response) message.author.send('🙂');
 		return;
 	}
-	const guild = await guildCommands.getGuild(message.guildId);
+	const guild = await client.guildOverseer.getGuild(message.guildId);
 	const id = message.author.id;
-	const user = await userCommands.getUser(id);
+	const user = await client.userManager.getUser(id);
+	user.author = message.author;
 	if (message.type != 'DEFAULT' || message.attachments.first() || message.interaction || message.author.bot) return;
 
 	if (Number.isInteger(Number(message.content))) {
-		return numberGame(message, user, guild, client, logger);
+		return numberGame(message, user, guild, client);
 	}
 });
 
@@ -93,9 +103,10 @@ client.on('interactionCreate', async interaction => {
 	const command = client.commands.get(interaction.commandName);
 	if (!command) return;
 
-	const guild = await guildCommands.getGuild(interaction.guildId);
+	const guild = await client.guildOverseer.getGuild(interaction.guildId);
 	const id = interaction.user.id;
-	const user = await userCommands.getUser(id);
+	const user = await client.userManager.getUser(id);
+	user.author = interaction.user;
 
 	if (command.permissions) {
 		if (!interaction.member.permissions.has(Permissions.FLAGS[command.permissions])) {
@@ -103,24 +114,31 @@ client.on('interactionCreate', async interaction => {
 		}
 	}
 
-	logger.info(`${interaction.user.tag} called "${interaction.commandName}" in "${interaction.guild.name}#${interaction.channel.name}".`);
+	client.logger.info(`${interaction.user.tag} called "${interaction.commandName}" in "${interaction.guild.name}#${interaction.channel.name}".`);
 	try {
-		await command.execute(interaction, user, guild, client, logger);
+		await command.execute(interaction, user, guild, client);
 	}
- catch (error) {
+	catch (error) {
 		console.error(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
 
 // Random number game event every 3 hours0 0/3 * * *
-const numberGameEvents = new cron.CronJob('0 0/2 * * *', () => {
+const activityArray = ['people count', 'you.', 'time fly by', 'Overlord', 'Ainz',
+	'the holy kingdom getting destroyed', 'out for you', 'the movie Vliegosaurus', 'Garbiel waste all his money',
+	'Jotan count in 10 servers', 'Jotan ruin the longest of streaks'];
+const botEvents = new cron.CronJob('0 0/2 * * *', () => {
+	const activityNr = Math.floor(Math.random() * activityArray.length);
+	client.user.setActivity(activityArray[activityNr], { type: 'WATCHING' });
+
+
 	const time = Math.floor(Math.random() * 60) * 120000;
 	console.log(time);
 	setTimeout(
 		numberEvent,
 		time,
-		client, logger,
+		client,
 	);
 });
-numberGameEvents.start();
+botEvents.start();

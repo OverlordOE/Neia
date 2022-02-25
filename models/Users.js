@@ -14,16 +14,18 @@ module.exports = (sequelize, DataTypes) => {
 
 		// NumberGame
 		reaction: {
-			type: DataTypes.JSON,
-			defaultValue: JSON.stringify({
-				value: 1,
-				emoji: '✅',
-			}),
+			type: DataTypes.STRING,
+			defaultValue: '✅',
+			allowNull: false,
+		},
+		countMultiplier: {
+			type: DataTypes.INTEGER,
+			defaultValue: 1,
 			allowNull: false,
 		},
 		powerCounting: {
 			type: DataTypes.BOOLEAN,
-			defaultValue: false,
+			defaultValue: 0,
 			allowNull: false,
 		},
 		lastPowerCounting: {
@@ -71,9 +73,10 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: JSON.stringify({
 				numbersCounted: 0,
 				streaksRuined: 0,
-				gamblingDone: 0,
+				timesGambled: 0,
 				gamblingMoneyLost: 0,
 				gamblingMoneyGained: 0,
+				countingMoneyGained: 0,
 			}),
 			allowNull: false,
 		},

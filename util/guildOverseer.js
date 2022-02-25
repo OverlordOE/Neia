@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const Discord = require('discord.js');
-const guildCommands = new Discord.Collection();
+const guildOverseer = new Discord.Collection();
 require('dotenv').config();
 
 const sequelize = new Sequelize('database', 'username', 'password', {
@@ -13,33 +13,33 @@ const Guilds = require('../models/Guilds')(sequelize, Sequelize);
 
 
 // GUILDS
-Reflect.defineProperty(guildCommands, 'newGuild', {
+Reflect.defineProperty(guildOverseer, 'newGuild', {
 	value: async function newGuild(id) {
 		const guild = await Guilds.create({
 			guild_id: id,
 		});
-		guildCommands.set(id, guild);
+		guildOverseer.set(id, guild);
 		return guild;
 	},
 });
 
 
-Reflect.defineProperty(guildCommands, 'getGuild', {
+Reflect.defineProperty(guildOverseer, 'getGuild', {
 	value: async function getGuild(id) {
-		let guild = guildCommands.get(id);
-		if (!guild) guild = await guildCommands.newGuild(id);
+		let guild = guildOverseer.get(id);
+		if (!guild) guild = await guildOverseer.newGuild(id);
 		return guild;
 	},
 });
 
 
-Reflect.defineProperty(guildCommands, 'getNumberGame', {
+Reflect.defineProperty(guildOverseer, 'getNumberGame', {
 	value: function getNumberGameInfo(guild) {
 		if (!guild.numberGame) return null;
 		return JSON.parse(guild.numberGame);
 	},
 });
-Reflect.defineProperty(guildCommands, 'setNumberChannel', {
+Reflect.defineProperty(guildOverseer, 'setNumberChannel', {
 	value: function setNumberChannel(guild, newChannelId) {
 
 		const numberGameInfo = JSON.parse(guild.numberGame);
@@ -51,7 +51,7 @@ Reflect.defineProperty(guildCommands, 'setNumberChannel', {
 		return numberGameInfo;
 	},
 });
-Reflect.defineProperty(guildCommands, 'saveNumberGameInfo', {
+Reflect.defineProperty(guildOverseer, 'saveNumberGameInfo', {
 	value: function saveNumberGameInfo(guild, numberGameInfo) {
 		guild.numberGame = JSON.stringify(numberGameInfo);
 		guild.save();
@@ -59,4 +59,4 @@ Reflect.defineProperty(guildCommands, 'saveNumberGameInfo', {
 	},
 });
 
-module.exports = { Guilds, guildCommands };
+module.exports = { Guilds, guildOverseer };
