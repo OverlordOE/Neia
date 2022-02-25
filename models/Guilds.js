@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 				channelId: null,
 				currentNumber: 0,
 				lastCheckpoint: 0,
+				nextCheckpoint: 50,
 				totalCounted: 0,
 				streaksRuined: 0,
 				highestStreak: 0,

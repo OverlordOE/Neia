@@ -17,7 +17,7 @@ Because i had to make some drastic changes in the database i need to reset the d
 This means that everything will be reset to 0, i will change the number game number to what the last one was in the server.
 
 ## **Collectables**
-Reactions will now no longer be items but instead a new type of thing "A collectable". If you unlock/buy a collectable it will permanently unlock for you, this means you cannot sell or trade them. You can find them on a new tab in your `profile`. You can also call the `Collectables` command to see a list of all the collectables
+Reactions will now no longer be items but instead a new type of thing "A collectable". If you unlock/buy a collectable it will permanently unlock for you, this means you cannot sell or trade them. You can find them on a new tab in your \`profile\`. You can also call the \`Collectables\` command to see a list of all the collectables
 
 ## **Reactions/Count bonus**
 Number Game Reactions will no longer give you bonus to counting and will be purely cosmetic from now on. In place for that there is a new type of Collectable called "Count Multiplier". You will start at a multiplier of 1x and each multiplier that you unlock adds +1 to that number. The multiplier multiplies the money you would normally get from counting.
