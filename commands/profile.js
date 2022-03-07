@@ -131,7 +131,7 @@ module.exports = {
 			);
 
 
-		interaction.reply({
+		await interaction.reply({
 			embeds: [embed
 				.setTitle(`${target.tag}'s Main Page`)
 				.setDescription(mainDescription)],
