@@ -358,7 +358,7 @@ Reflect.defineProperty(achievementHunter, 'hunt', {
 				else if (stats['numbersCounted'] >= 50) unlock(user, 'Numberphile');
 				else if (stats['numbersCounted'] >= 5) unlock(user, 'Babys First Numbers');
 				break;
-			
+
 			case 'countingMoneyGained':
 				if (stats['countingMoneyGained'] >= 1000000) unlock(user, 'Count Master');
 				else if (stats['countingMoneyGained'] >= 100000) unlock(user, 'Count Work Makes Dream Work');
@@ -373,6 +373,7 @@ Reflect.defineProperty(achievementHunter, 'hunt', {
 
 async function unlock(user, achievementName) {
 	const achievement = util.getAchievement(achievementName);
+	if (await achievementHunter.hasAchievement(user, achievement)) return;
 	await addAchievement(user, achievement);
 
 	const reward = util.getCollectable(achievement.reward);
@@ -389,8 +390,6 @@ async function unlock(user, achievementName) {
 
 
 async function addAchievement(user, achievement) {
-	if (await achievementHunter.hasAchievement(user, achievement)) return;
-
 	return await UserAchievements.create({
 		user_id: user.user_id,
 		name: achievement.name,
