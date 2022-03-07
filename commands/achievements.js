@@ -18,7 +18,7 @@ module.exports = {
 		if (tempAchievement) {
 			const achievement = client.util.getAchievement(tempAchievement);
 			if (!achievement) return interaction.reply({ embeds: [embed.setDescription(`__${tempAchievement}__ is not a valid achievement.`)], ephemeral: true });
-			const reward = client.util.getItem(achievement.reward);
+			const reward = client.util.getCollectable(achievement.reward);
 
 			embed
 				.setTitle(`${achievement.emoji}${achievement.name}`)
@@ -26,11 +26,6 @@ module.exports = {
 				.addField('Unlock Message', achievement.unlockMessage, true)
 				.addField('Reward', `${reward.emoji}${reward.name}`, true)
 				.setFooter('Use the command without arguments to see the achievement list', client.user.displayAvatarURL({ dynamic: true }));
-
-			if (achievement.picture) {
-				embed.attachFiles(`assets/achievements/${achievement.picture}`)
-					.setImage(`attachment://${achievement.picture}`);
-			}
 
 			client.util.setEmbedRarity(embed, achievement.rarity);
 		}
