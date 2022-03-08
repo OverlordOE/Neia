@@ -3,11 +3,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('leaderboards')
-		.setDescription('Shows the leaderboard of a couple of stats.')
-		.addBooleanOption(option =>
-			option
-				.setName('serveronly')
-				.setDescription('Show only users from this server.')),
+		.setDescription('Shows the leaderboard of a couple of stats.'),
 
 	async execute(interaction, msgUser, msgGuild, client) {
 		const searchFilter = user => client.users.cache.has(user.user_id);
