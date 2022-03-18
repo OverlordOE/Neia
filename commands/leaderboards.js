@@ -106,7 +106,7 @@ module.exports = {
 			);
 
 
-		interaction.reply({ embeds: [embed], components: [menuRow, buttonRow] });
+		await interaction.reply({ embeds: [embed], components: [menuRow, buttonRow] });
 		const buttonFilter = i => i.user.id == interaction.user.id;
 		const collector = interaction.channel.createMessageComponentCollector({ buttonFilter, time: 60000 });
 

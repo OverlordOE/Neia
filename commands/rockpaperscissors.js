@@ -87,7 +87,7 @@ module.exports = {
 
 
 		const filter = i => i.user.id == interaction.user.id;
-		interaction.reply({
+		await interaction.reply({
 			embeds: [embed.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.
 			**Choose __Rock__, __Paper__ or __Scissors__.**`)], components: [guessRow]
 		});
