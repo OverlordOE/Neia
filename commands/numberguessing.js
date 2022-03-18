@@ -91,7 +91,7 @@ module.exports = {
 
 
 		const filter = i => i.user.id == interaction.user.id;
-		interaction.reply({
+		await interaction.reply({
 			embeds: [embed.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.
 			**Guess the __number__ between __1 and 5__.**`)], components: [guessRow]
 		});
