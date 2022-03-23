@@ -367,6 +367,10 @@ Reflect.defineProperty(achievementHunter, 'hunt', {
 				else if (stats['countingMoneyGained'] >= 100) unlock(user, 'You Get Money From This?');
 				break;
 
+			case 'achievementsAchieved':
+				if (stats.length >= 30) unlock(user, 'Battle Hardened Achievement Hunter');
+				else if (stats.length >= 15) unlock(user, 'Achievement Hunter Footsoldier');
+				else if (stats.length >= 5) unlock(user, 'Achievement Hunter Trainee');
 		}
 	},
 });
@@ -386,6 +390,9 @@ async function unlock(user, achievementName) {
 	util.setEmbedRarity(embed, achievement.rarity);
 
 	user.author.send({ embeds: [embed] });
+
+	const achievements = await achievementHunter.getAchievements(user);
+	achievementHunter.hunt(user, 'achievementsAchieved', achievements);
 }
 
 

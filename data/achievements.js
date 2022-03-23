@@ -263,4 +263,30 @@ module.exports = {
 		unlockMessage: 'You have earned 1M💰 from counting\n\nYou Have mastered the art of counting.\n\n',
 		reward: 'Moneybag',
 	},	
+
+	//achievementsAchieved
+	'battle hardened achievement hunter': {
+		name: 'Battle Hardened Achievement Hunter',
+		emoji: '⚔️',
+		rarity: 'Legendary',
+		description: 'Earn 30 unique achievements',
+		unlockMessage: 'You have achieved a total of 30 achievements\n\n<:pepefresh:798676860380774410>\n\n',
+		reward: 'Hands',
+	},
+	'achievement hunter footsoldier' : {
+		name: 'Achievement Hunter Footsoldier',
+		emoji: '⚔️',
+		rarity: 'Rare',
+		description: 'Earn 15 unique achievements',
+		unlockMessage: 'You have achieved a total of 15 achievements\n\nhttps://youtu.be/2tRIjRVcHcQ\n\n',
+		reward: 'Moyai',
+	},
+	'achievement hunter trainee' : {
+		name: 'Achievement Hunter Trainee',
+		emoji: '⚔️',
+		rarity: 'Common',
+		description: 'Earn 5 unique achievements',
+		unlockMessage: 'You have achieved a total of 5 achievements\n\nYou\'re just getting started\n\n',
+		reward: 'Gorilla',
+	}
 };

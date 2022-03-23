@@ -384,4 +384,25 @@ module.exports = {
 		ctg: 'reaction',
 		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
+	'hands': {
+		name: 'Hands',
+		emoji: '<:hands:956211490241773638>',
+		rarity: 'legendary',
+		ctg: 'reaction',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
+	'moyai': {
+		name: 'Moyai',
+		emoji: '🗿',
+		rarity: 'rare',
+		ctg: 'reaction',
+		description: 'https://youtu.be/2tRIjRVcHcQ',
+	},
+	'gorilla': {
+		name: 'Gorilla',
+		emoji: '🦍',
+		rarity: 'legendary',
+		ctg: 'reaction',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
 };
