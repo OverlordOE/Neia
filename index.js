@@ -87,7 +87,7 @@ client.on('messageCreate', async message => {
 	const id = message.author.id;
 	const user = await client.userManager.getUser(id);
 	user.author = message.author;
-	if (message.type != 'DEFAULT' || message.attachments.first() || message.interaction || message.author.bot) return;
+	if (message.type != 'DEFAULT' || message.attachments.first() || message.interaction || message.author.bot || message.stickers.first()) return;
 
 	if (Number.isInteger(Number(message.content))) {
 		return numberGame(message, user, guild, client);
