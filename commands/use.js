@@ -34,8 +34,9 @@ module.exports = {
 					msgUser.reaction = collectable.emoji;
 					msgUser.save();
 
+					client.util.setEmbedRarity(embed, collectable.rarity);
 					return interaction.reply({
-						embeds: [embed.setDescription(`Number Game reaction has been changed to: ${collectable.emoji}`).setColor('#00fc43')]
+						embeds: [embed.setDescription(`Number Game reaction has been changed to: ${collectable.emoji}`)]
 					});
 				}
 			}
