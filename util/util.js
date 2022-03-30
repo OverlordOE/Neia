@@ -51,7 +51,7 @@ Reflect.defineProperty(util, 'getCollectable', {
 Reflect.defineProperty(util, 'setEmbedRarity', {
 	value: function setEmbedRarity(embed, rarity) {
 		const r = rarity.toLowerCase();
-		console.log(r);
+		
 		if (r == 'uncommon') embed.setColor('#1eff00');
 		else if (r == 'rare') embed.setColor('#0070dd');
 		else if (r == 'epic') embed.setColor('#a335ee');
