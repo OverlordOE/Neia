@@ -216,7 +216,7 @@ module.exports = {
 		name: 'Pretending to be Smart',
 		emoji: '🔢',
 		rarity: 'legendary',
-		description: 'Count 1500 time in the number game.',
+		description: 'Count 1500 times in the number game.',
 		unlockMessage: 'You have counted 1000 times in the number game\n\nAre you trying to prove something here?\n\n',
 		reward: 'Smart',
 	},
@@ -264,7 +264,7 @@ module.exports = {
 		reward: 'Moneybag',
 	},	
 
-	//achievementsAchieved
+	// achievementsAchieved
 	'battle hardened achievement hunter': {
 		name: 'Battle Hardened Achievement Hunter',
 		emoji: '⚔️',

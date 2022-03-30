@@ -18,11 +18,18 @@ module.exports = {
 		if (tempCollectable) {
 			const collectable = client.util.getCollectable(tempCollectable);
 			if (!collectable) return interaction.reply({ embeds: [embed.setDescription(`__${tempCollectable}__ is not a valid collectable.`)], ephemeral: true });
+			let gainedFrom = '';
+			if (collectable.gainedFrom === 'Shop') gainedFrom = 'Shop';
+			else {
+				const achievement = client.util.getAchievement(collectable.gainedFrom);
+				gainedFrom = `${achievement.emoji}${achievement.name}`;
+			}
 
 			embed
 				.setTitle(`${collectable.emoji}${collectable.name}`)
 				.setDescription(collectable.description)
 				.addField('Category', collectable.ctg.toString(), true)
+				.addField('Gained From', gainedFrom, true)
 				.setFooter('Use the command without arguments to see the item list', client.user.displayAvatarURL({ dynamic: true }));
 
 			client.util.setEmbedRarity(embed, collectable.rarity);
