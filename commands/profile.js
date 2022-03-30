@@ -64,30 +64,45 @@ module.exports = {
 
 		let inventoryDescription = '__Inventory:__\n\n';
 		if (inventory.length) {
-			inventory.map(i => {
-				if (i.amount >= 1) {
-					const item = client.util.getItem(i.name);
-					inventoryDescription += `${item.emoji}${item.name}: ${client.util.formatNumber(i.amount)}\n`;
-				}
-			});
+			inventory.sort((a, b) => {
+				if (a.name < b.name) return -1;
+				if (a.name > b.name) return 1;
+				return 0;
+			})
+				.map(i => {
+					if (i.amount >= 1) {
+						const item = client.util.getItem(i.name);
+						inventoryDescription += `${item.emoji}${item.name}: ${client.util.formatNumber(i.amount)}\n`;
+					}
+				});
 		}
 		else inventoryDescription = `*${target.tag}* does not have any items.`;
 
 		let collectionDescription = '__Collectables:__\n\n';
 		if (collection.length) {
-			collection.map(c => {
-				const collectable = client.util.getCollectable(c.name);
-				collectionDescription += `${collectable.emoji}${collectable.name}\n`;
-			});
+			collection.sort((a, b) => {
+				if (a.name < b.name) return -1;
+				if (a.name > b.name) return 1;
+				return 0;
+			})
+				.map(c => {
+					const collectable = client.util.getCollectable(c.name);
+					collectionDescription += `${collectable.emoji}${collectable.name}\n`;
+				});
 		}
 		else collectionDescription = `*${target.tag}*does not have any collectables.`;
 
 		let achievementDescription = '__Achievements:__\n\n';
 		if (achievements.length) {
-			achievements.map(a => {
-				const achievement = client.util.getAchievement(a.name);
-				achievementDescription += `${achievement.emoji}**${achievement.name}**\n`;
-			});
+			achievements.sort((a, b) => {
+				if (a.name < b.name) return -1;
+				if (a.name > b.name) return 1;
+				return 0;
+			})
+				.map(a => {
+					const achievement = client.util.getAchievement(a.name);
+					achievementDescription += `${achievement.emoji}**${achievement.name}**\n`;
+				});
 		}
 		else achievementDescription = `*${target.tag}* has no achievements!`;
 
