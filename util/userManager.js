@@ -275,7 +275,7 @@ Reflect.defineProperty(collectionOverseer, 'unlockCollectable', {
 	value: async function unlockCollectable(user, collectable) {
 		if (await collectionOverseer.hasCollectable(user, collectable)) return false;
 
-		if (collectable.ctg == 'multiplier') user.countMultiplier++;
+		if (collectable.ctg == 'multiplier') user.countMultiplier += 0.5;
 		user.save();
 
 		UserCollectables.create({
