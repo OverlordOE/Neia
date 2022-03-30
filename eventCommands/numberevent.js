@@ -53,7 +53,7 @@ module.exports = async function execute(client) {
 							numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
 							numberGameChannel.send(`Checkpoint __**${i}**__ reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
 						}
-						payout += i + Math.ceil(Math.sqrt(100) / 3); // ! NEEDS NEW VALUE
+						payout += i * user.countMultiplier;
 					}
 
 					description += `\n\n**__THIS EVENT HAS BEEN CLAIMED BY:__ ${button.user}!**`;
