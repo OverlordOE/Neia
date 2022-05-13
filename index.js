@@ -7,6 +7,7 @@ const { Users, userManager, itemHandler, achievementHunter, collectionOverseer }
 const { guildOverseer, Guilds } = require('./util/guildOverseer');
 const { util } = require('./util/util');
 const fs = require('fs');
+const beeFiles = fs.readdirSync('./pics')
 
 const client = new Client({
 	intents: new Intents(
@@ -39,7 +40,7 @@ client.once('ready', async () => {
 		storedUsers.forEach(b => userManager.set(b.user_id, b));
 		const storedGuilds = await Guilds.findAll();
 		storedGuilds.forEach(b => guildOverseer.set(b.guild_id, b));
-		
+
 		client.guildOverseer = guildOverseer;
 		client.userManager = userManager;
 		client.itemHandler = itemHandler;
@@ -78,6 +79,11 @@ for (const file of commandFiles) {
 client.on('messageCreate', async message => {
 	if (message.author.bot) return;
 	else if (message.channel.type == 'DM') {
+		if (message.author.id == '753959113666592770' || message.author.id == '137920111754346496') {
+			const chosenFile = beeFiles[Math.floor(Math.random() * beeFiles.length)];
+			message.author.send({ files: [`./pics/${chosenFile}`] });
+		}
+
 		client.logger.info(`${message.author.username} send message to Neia: ${message.content}`);
 		const response = Math.floor((Math.random() * 5));
 		if (!response) message.author.send('🙂');
