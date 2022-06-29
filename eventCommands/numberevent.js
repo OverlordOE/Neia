@@ -1,4 +1,4 @@
-const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000, 3300, 3600, 3900, 4200, 4600, 5000];
+const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000, 3300, 3600, 3900, 4200, 4600, 5000, 5500, 6000, 6600, 7200, 7900, 8600, 9400, 10000];
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports = async function execute(client) {
@@ -7,6 +7,7 @@ module.exports = async function execute(client) {
 		const guild = await client.guildOverseer.getGuild(g.id);
 		const numberGameInfo = client.guildOverseer.getNumberGame(guild);
 		let claimed = false;
+		let numberGameChannel;
 
 		if (numberGameInfo.channelId) {
 			const embed = new MessageEmbed()
@@ -23,7 +24,13 @@ module.exports = async function execute(client) {
 						.setEmoji('💰'),
 				);
 
-			const numberGameChannel = await client.channels.fetch(numberGameInfo.channelId);
+			try { numberGameChannel = await client.channels.fetch(numberGameInfo.channelId); }
+			catch (e) {
+				client.guildOverseer.setNumberChannel(guild, null);
+				client.logger.warn(`${guild.name} NumberGameChannel DOES NOT EXIST, removing numbergamechannel`);
+				return;
+			}
+
 			const numberIncrease = Math.floor(Math.random() * 5) + 5;
 			const timeoutLength = 30;
 			let description = `Be the **first** to click the button and Neia will count **${numberIncrease} times** for you.
