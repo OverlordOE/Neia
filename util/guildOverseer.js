@@ -50,7 +50,10 @@ Reflect.defineProperty(guildOverseer, 'saveNumberGameInfo', {
 Reflect.defineProperty(guildOverseer, 'getNumberGameEvent', {
 	value: function getNumberGameEvent(guild) {
 		if (!guild.numberGame) return null;
-		return JSON.parse(guild.numberGame).currentEvent || null;
+		const numberGameInfo = JSON.parse(guild.numberGame);
+		
+		if (numberGameInfo.currentEvent) return numberGameInfo.currentEvent;
+		else return null;
 	},
 });
 Reflect.defineProperty(guildOverseer, 'setNumberGameEvent', {

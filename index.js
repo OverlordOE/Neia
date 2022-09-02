@@ -7,6 +7,7 @@ const { Users, userManager, itemHandler, achievementHunter, collectionOverseer }
 const { guildOverseer, Guilds } = require('./util/guildOverseer');
 const { util } = require('./util/util');
 const fs = require('fs');
+const { cli } = require('winston/lib/winston/config');
 const beeFiles = fs.readdirSync('./pics');
 
 const client = new Client({
@@ -143,7 +144,7 @@ botEvents.start();
 // Random number game event every 2 hours 0 0 / 2 * * *
 function numberEventStart() {
 	const time = Math.floor(Math.random() * 60) * 120000;
-	console.log(time);
+	client.logger.log(`Next NumberEvent in ${Math.floor(time / 60000)} minutes`);
 	setTimeout(
 		numberEvent,
 		time,
