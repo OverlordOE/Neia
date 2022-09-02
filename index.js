@@ -7,7 +7,7 @@ const { Users, userManager, itemHandler, achievementHunter, collectionOverseer }
 const { guildOverseer, Guilds } = require('./util/guildOverseer');
 const { util } = require('./util/util');
 const fs = require('fs');
-const beeFiles = fs.readdirSync('./pics')
+const beeFiles = fs.readdirSync('./pics');
 
 const client = new Client({
 	intents: new Intents(
@@ -76,6 +76,7 @@ for (const file of commandFiles) {
 }
 
 
+//* Respond to messages
 client.on('messageCreate', async message => {
 	if (message.author.bot) return;
 	else if (message.channel.type == 'DM') {
@@ -130,15 +131,17 @@ client.on('interactionCreate', async interaction => {
 	}
 });
 
-// Random number game event every 3 hours0 0/3 * * *
-const activityArray = ['people count', 'you.', 'time fly by', 'Overlord', 'Ainz',
-	'the holy kingdom getting destroyed', 'out for you', 'the movie Vliegosaurus', 'Garbiel waste all his money',
-	'Jotan count in 10 servers', 'Jotan ruin the longest of streaks'];
+
+//* Bot Events
 const botEvents = new cron.CronJob('0 0/2 * * *', () => {
-	const activityNr = Math.floor(Math.random() * activityArray.length);
-	client.user.setActivity(activityArray[activityNr], { type: 'WATCHING' });
+	setBotActivity();
+	numberEventStart();
+});
+botEvents.start();
 
 
+// Random number game event every 2 hours 0 0 / 2 * * *
+function numberEventStart() {
 	const time = Math.floor(Math.random() * 60) * 120000;
 	console.log(time);
 	setTimeout(
@@ -146,5 +149,14 @@ const botEvents = new cron.CronJob('0 0/2 * * *', () => {
 		time,
 		client,
 	);
-});
-botEvents.start();
+}
+
+
+function setBotActivity() {
+	const activityArray = ['people count', 'you.', 'time fly by', 'Overlord', 'Ainz',
+		'the holy kingdom getting destroyed', 'out for you', 'the movie Vliegosaurus', 'Garbiel waste all his money',
+		'Jotan count in 10 servers', 'Jotan ruin the longest of streaks', 'the bees fly by'];
+	
+	const activityNr = Math.floor(Math.random() * activityArray.length);
+	client.user.setActivity(activityArray[activityNr], { type: 'WATCHING' });
+}
