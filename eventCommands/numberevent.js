@@ -71,8 +71,16 @@ module.exports = async function execute(client) {
 						payout += i * user.countMultiplier;
 					}
 
-					description += `\n\n**__THIS EVENT HAS BEEN CLAIMED BY:__ ${button.user}!**`;
-					sentMessage.edit({ embeds: [embed.setDescription(description).setColor('#00fc43')], components: [] });
+					const buttonUser = button.user;
+					const avatarLink = buttonUser.displayAvatarURL({ dynamic: true });
+					description += `\n\n**__THIS EVENT HAS BEEN CLAIMED BY:__ ${buttonUser}!**`;
+					sentMessage.edit({
+						embeds: [embed
+							.setDescription(description)
+							.setColor('#00fc43')
+							.setImage(avatarLink)]
+						, components: []
+					});
 
 					numberGameInfo.lastUserId = null;
 					client.userManager.changeBalance(user, payout);

@@ -144,7 +144,7 @@ botEvents.start();
 // Random number game event every 2 hours 0 0 / 2 * * *
 function numberEventStart() {
 	const time = Math.floor(Math.random() * 60) * 120000;
-	client.logger.log(`Next NumberEvent in ${Math.floor(time / 60000)} minutes`);
+	client.logger.info(`Next NumberEvent in ${Math.floor(time / 60000)} minutes`);
 	setTimeout(
 		numberEvent,
 		time,
