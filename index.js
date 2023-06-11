@@ -7,8 +7,9 @@ const { Users, userManager, itemHandler, achievementHunter, collectionOverseer }
 const { guildOverseer, Guilds } = require('./util/guildOverseer');
 const { util } = require('./util/util');
 const fs = require('fs');
-const { cli } = require('winston/lib/winston/config');
 const beeFiles = fs.readdirSync('./pics');
+require('winston/lib/winston/config');
+
 
 const client = new Client({
 	intents: new Intents(
@@ -154,7 +155,7 @@ function numberEventStart() {
 function setBotActivity() {
 	const activityArray = ['people count', 'you.', 'time fly by', 'Overlord', 'Ainz',
 		'the holy kingdom getting destroyed', 'out for you', 'the movie Vliegosaurus', 'Garbiel waste all his money',
-		'Jotan count in 10 servers', 'Jotan ruin the longest of streaks', 'the bees fly by'];
+		'Lilly count in 10 servers', 'Lilly ruin the longest of streaks', 'the bees fly by'];
 	
 	const activityNr = Math.floor(Math.random() * activityArray.length);
 	client.user.setActivity(activityArray[activityNr], { type: 'WATCHING' });
