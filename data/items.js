@@ -49,6 +49,24 @@ module.exports = {
 	},
 
 	//* CUSTOM EMOJIS  🤔
+	'trans': {
+		name: 'Trans',
+		value: 1,
+		emoji: '🏳️‍⚧️',
+		rarity: 'legendary',
+		ctg: 'reaction',
+		type: 'collectable',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
+	'pride': {
+		name: 'Pride',
+		value: 1,
+		emoji: '🏳️‍🌈',
+		rarity: 'legendary',
+		ctg: 'reaction',
+		type: 'collectable',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
 	'green checkmark': {
 		name: 'Green Checkmark',
 		value: 1000,

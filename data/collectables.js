@@ -460,4 +460,21 @@ module.exports = {
 		gainedFrom: 'achievement hunter trainee',
 		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
+	'trans': {
+		name: 'Trans',
+		emoji: '🏳️‍⚧️',
+		rarity: 'legendary',
+		ctg: 'reaction',
+		gainedFrom: 'shop',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
+	'pride': {
+		name: 'Pride',
+		emoji: '🏳️‍🌈',
+		rarity: 'legendary',
+		ctg: 'reaction',
+		gainedFrom: 'shop',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
+	
 };
