@@ -2,6 +2,25 @@ const emoji = require("../data/emojiCharacters");
 
 module.exports = {
   applyEasterEggs(number, message) {
+    const string = `${number}`;
+    const length = string.length;
+
+    if (string.includes("69", length - 2)) message.react("🍆");
+    if (string.includes("420", length - 3)) message.react("🚬");
+   
+    if (string.includes("0000", string.length - 4)) {
+      message.react(emoji[string[length - 5]]);
+      message.react(emoji[0]);
+      message.react("🇰");
+    } 
+    else if (string.includes("000", string.length - 3)) {
+      message.react(emoji[string[length - 4]]);
+      message.react("🇰");
+    } 
+    else if (string.includes("00", length - 2)) {
+      message.react(emoji[string[length - 3]]);
+      message.react("💯");
+    }
 
     switch (number) {
       case 7:
