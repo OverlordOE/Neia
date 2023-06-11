@@ -9,7 +9,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 const { Collection, MessageEmbed } = require('discord.js');
-const { util } = require('./util');
+const util = require('./util');
 
 const Users = require('../models/Users')(sequelize, Sequelize);
 const UserItems = require('../models/UserItems')(sequelize, Sequelize);

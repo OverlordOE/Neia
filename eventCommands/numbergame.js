@@ -1,5 +1,5 @@
-const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000, 3300, 3600, 3900, 4200, 4600, 5000, 5500, 6000, 6600, 7200, 7900, 8600, 9400, 10000];
 const Discord = require('discord.js');
+const nf = require('../util/numberFunctions');
 
 module.exports = async function execute(message, msgUser, guild, client) {
 
@@ -40,12 +40,12 @@ module.exports = async function execute(message, msgUser, guild, client) {
 		if (number > 2) client.userManager.changeBalance(msgUser, number * msgUser.countMultiplier);
 
 		giveBonus();
-		easterEggs();
+		nf.applyEasterEggs(number, message);
 
-		if (checkpoints.includes(number)) {
-			const nextCheckpointIndex = checkpoints.indexOf(number) + 1;
+		const checkpoint = nf.checkCheckpoint(number);
+		if (checkpoint) {
 			numberGameInfo.lastCheckpoint = number;
-			numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
+			numberGameInfo.nextCheckpoint = checkpoint;
 			message.reply(`Checkpoint **${number}** reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
 		}
 
@@ -64,74 +64,13 @@ module.exports = async function execute(message, msgUser, guild, client) {
 
 		numberGameInfo.currentNumber = 0;
 		numberGameInfo.lastCheckpoint = 0;
-		numberGameInfo.nextCheckpoint = checkpoints[0];
+		numberGameInfo.nextCheckpoint = 50;
 		numberGameInfo.lastUserId = null;
 		numberGameInfo.streaksRuined++;
 		client.userManager.addStats(msgUser, 'streaksRuined', 1);
 	}
 
-	function easterEggs() {
-		switch (number) {
-			case 7:
-				message.react('🍀');
-				break;
-			case 13:
-				message.react('✡️');
-				break;
-			case 42:
-				message.react(client.emojiCharacters[0]);
-				break;
-			case 69:
-				message.react('🍆');
-				break;
-			case 100:
-				message.react('💯');
-				break;
-			case 111:
-				message.react(client.emojiCharacters[1]);
-				break;
-			case 112:
-				message.react('🚑');
-				break;
-			case 123:
-				message.react(client.emojiCharacters[4]);
-				break;
-			case 222:
-				message.react(client.emojiCharacters[2]);
-				break;
-			case 333:
-				message.react(client.emojiCharacters[3]);
-				break;
-			case 314:
-				message.react('🥧');
-				break;
-			case 404:
-				message.react('❔');
-				break;
-			case 444:
-				message.react(client.emojiCharacters[4]);
-				break;
-			case 555:
-				message.react(client.emojiCharacters[5]);
-				break;
-			case 666:
-				message.react('✡️');
-				break;
-			case 777:
-				message.react('🍀');
-				break;
-			case 888:
-				message.react(client.emojiCharacters[8]);
-				break;
-			case 999:
-				message.react(client.emojiCharacters[9]);
-				break;
-			case 1000:
-				message.react(client.emojiCharacters[1]);
-				message.react('🇰');
-				break;
-		}
-	}
+	
 
 	function checkpoint() {
 		message.react('🏁');
