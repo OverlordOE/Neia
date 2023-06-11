@@ -18,8 +18,6 @@ const client = new Client({
 
 client.emojiCharacters = require('./data/emojiCharacters');
 client.logger = require('./util/logger');
-const active = new Map();
-client.music = { active: active };
 
 require('dotenv').config();
 client.login(process.env.TOKEN);
