@@ -1,6 +1,8 @@
 const emoji = require("../data/emojiCharacters");
 
 module.exports = {
+
+
   applyEasterEggs(number, message) {
     const string = `${number}`;
     const length = string.length;
@@ -74,6 +76,7 @@ module.exports = {
     }
   },
 
+  
   checkCheckpoint(number) {
     const checkpoints = [
       50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000,

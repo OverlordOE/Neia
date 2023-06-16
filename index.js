@@ -1,7 +1,6 @@
 const { Permissions } = require("discord.js");
-const numberGame = require("./eventCommands/numbergame");
-const numberEvent = require("./eventCommands/numberevent");
-const cron = require("cron");
+const numberGame = require("./numberGame/numbergame");
+const events = require('./events/events');
 const { Client, Intents, Collection } = require("discord.js");
 const {
   Users,
@@ -38,24 +37,13 @@ client.login(process.env.TOKEN);
 client.once("ready", async () => {
   let memberTotal = 0;
   client.guilds.cache.forEach((g) => {
-    if (!isNaN(memberTotal) && g.id != 264445053596991498)
+    if (!isNaN(memberTotal) && g.id != 264445053596991498) {
       memberTotal += Number(g.memberCount);
+    }
   });
 
-  const activityArray = [
-    "people count",
-    "you.",
-    "time fly by",
-    "Overlord",
-    "Ainz",
-    "the holy kingdom getting destroyed",
-    "out for you",
-    "the movie Vliegosaurus",
-    "Garbiel waste all his money",
-    "Jotan count in 10 servers",
-  ];
-  const activityNr = Math.floor(Math.random() * activityArray.length);
-  client.user.setActivity(activityArray[activityNr], { type: "WATCHING" });
+  // Start Bi Hourly Events
+  events.execute(client);
 
   //* Load in database
   try {
@@ -63,16 +51,17 @@ client.once("ready", async () => {
     storedUsers.forEach((b) => userManager.set(b.user_id, b));
     const storedGuilds = await Guilds.findAll();
     storedGuilds.forEach((b) => guildOverseer.set(b.guild_id, b));
-
-    client.guildOverseer = guildOverseer;
-    client.userManager = userManager;
-    client.itemHandler = itemHandler;
-    client.achievementHunter = achievementHunter;
-    client.collectionOverseer = collectionOverseer;
-    client.util = util;
-  } catch (e) {
-    client.logger.error(e.stack);
   }
+  catch (e) {
+    client.logger.error(e);
+  }
+
+  client.guildOverseer = guildOverseer;
+  client.userManager = userManager;
+  client.itemHandler = itemHandler;
+  client.achievementHunter = achievementHunter;
+  client.collectionOverseer = collectionOverseer;
+  client.util = util;
 
   client.logger.info(`Logged in as ${client.user.tag}!`);
 });
@@ -167,12 +156,15 @@ client.on("interactionCreate", async (interaction) => {
     }
   }
 
+  // Execute Command
   client.logger.info(
     `${interaction.user.tag} called "${interaction.commandName}" in "${interaction.guild.name}#${interaction.channel.name}".`
   );
+
   try {
     await command.execute(interaction, user, guild, client);
-  } catch (error) {
+  }
+  catch (error) {
     console.error(error);
     await interaction.reply({
       content: "There was an error while executing this command!",
@@ -180,37 +172,3 @@ client.on("interactionCreate", async (interaction) => {
     });
   }
 });
-
-//* Bot Events
-const botEvents = new cron.CronJob("0 0/2 * * *", () => {
-  setBotActivity();
-  numberEventStart();
-});
-botEvents.start();
-
-// Random number game event every 2 hours 0 0 / 2 * * *
-function numberEventStart() {
-  const time = Math.floor(Math.random() * 60) * 120000;
-  client.logger.info(`Next NumberEvent in ${Math.floor(time / 60000)} minutes`);
-  setTimeout(numberEvent, time, client);
-}
-
-function setBotActivity() {
-  const activityArray = [
-    "people count",
-    "you.",
-    "time fly by",
-    "Overlord",
-    "Ainz",
-    "the holy kingdom getting destroyed",
-    "out for you",
-    "the movie Vliegosaurus",
-    "Garbiel waste all his money",
-    "Lilly count in 10 servers",
-    "Lilly ruin the longest of streaks",
-    "the bees fly by",
-  ];
-
-  const activityNr = Math.floor(Math.random() * activityArray.length);
-  client.user.setActivity(activityArray[activityNr], { type: "WATCHING" });
-}

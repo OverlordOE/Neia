@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const numberEvent = require('../eventCommands/numberevent');
+const numberEvent = require('../numberGame/numberevent');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('startevent')
