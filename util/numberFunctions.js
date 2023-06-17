@@ -3,80 +3,90 @@ const emoji = require("../data/emojiCharacters");
 module.exports = {
 
 
-  applyEasterEggs(number, message) {
+  getEasterEggs(number) {
     const string = `${number}`;
     const length = string.length;
+    const returnArray = [];
 
-    if (string.includes("69", length - 2)) message.react("🍆");
-    if (string.includes("420", length - 3)) message.react("🚬");
-   
+    if (string.includes("69", length - 2)) returnArray.push("🍆");
+    if (string.includes("420", length - 3)) returnArray.push("🚬");
+
     if (string.includes("0000", string.length - 4)) {
-      message.react(emoji[string[length - 5]]);
-      message.react(emoji[0]);
-      message.react("🇰");
-    } 
+      returnArray.push(emoji[string[length - 5]]);
+      returnArray.push(emoji[0]);
+      returnArray.push("🇰");
+    }
     else if (string.includes("000", string.length - 3)) {
-      message.react(emoji[string[length - 4]]);
-      message.react("🇰");
-    } 
+      returnArray.push(emoji[string[length - 4]]);
+      returnArray.push("🇰");
+    }
     else if (string.includes("00", length - 2)) {
-      message.react(emoji[string[length - 3]]);
-      message.react("💯");
+      returnArray.push(emoji[string[length - 3]]);
+      returnArray.push("💯");
     }
 
     switch (number) {
       case 7:
-        message.react("🍀");
+        returnArray.push("🍀");
         break;
       case 13:
-        message.react("✡️");
+        returnArray.push("✡️");
         break;
       case 42:
-        message.react(emoji[0]);
+        returnArray.push(emoji[0]);
         break;
       case 111:
-        message.react(emoji[1]);
+        returnArray.push(emoji[1]);
         break;
       case 112:
-        message.react("🚑");
+        returnArray.push("🚑");
         break;
       case 123:
-        message.react(emoji[4]);
+        returnArray.push(emoji[4]);
         break;
       case 222:
-        message.react(emoji[2]);
+        returnArray.push(emoji[2]);
         break;
       case 333:
-        message.react(emoji[3]);
+        returnArray.push(emoji[3]);
         break;
       case 314:
-        message.react("🥧");
+        returnArray.push("🥧");
         break;
       case 404:
-        message.react("❔");
+        returnArray.push("❔");
         break;
       case 444:
-        message.react(emoji[4]);
+        returnArray.push(emoji[4]);
         break;
       case 555:
-        message.react(emoji[5]);
+        returnArray.push(emoji[5]);
         break;
       case 666:
-        message.react("✡️");
+        returnArray.push("✡️");
         break;
       case 777:
-        message.react("🍀");
+        returnArray.push("🍀");
         break;
       case 888:
-        message.react(emoji[8]);
+        returnArray.push(emoji[8]);
         break;
       case 999:
-        message.react(emoji[9]);
+        returnArray.push(emoji[9]);
         break;
+    }
+
+    return returnArray;
+  },
+
+
+  applyEasterEggs(easterEggs, message) {
+    for (let i = 0; i < easterEggs.length; i++) {
+      message.react(easterEggs[i]);
     }
   },
 
-  
+
   checkCheckpoint(number) {
     const checkpoints = [
       50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000,
@@ -89,4 +99,5 @@ module.exports = {
 
     return checkpoints[nextCheckpointIndex];
   },
+  
 };

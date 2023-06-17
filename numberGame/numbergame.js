@@ -36,19 +36,24 @@ module.exports = async function execute(message, msgUser, guild, client) {
 	}
 
 	function succesfullCount() {
-		message.react(msgUser.reaction);
+		// Money
 		if (number > 2) client.userManager.changeBalance(msgUser, number * msgUser.countMultiplier);
-
 		giveBonus();
-		nf.applyEasterEggs(number, message);
 
-		const checkpoint = nf.checkCheckpoint(number);
-		if (checkpoint) {
+		// Reactions
+		message.react(msgUser.reaction);
+		const easterEgg = nf.getEasterEggs(number);
+		if (easterEgg.length) nf.applyEasterEggs(easterEgg, message);
+
+		// Checkpoints
+		const check = nf.checkCheckpoint(number);
+		if (check) {
 			numberGameInfo.lastCheckpoint = number;
-			numberGameInfo.nextCheckpoint = checkpoint;
+			numberGameInfo.nextCheckpoint = check;
 			message.reply(`Checkpoint **${number}** reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
 		}
 
+		// Stats
 		if (number > numberGameInfo.highestStreak) numberGameInfo.highestStreak = number;
 		numberGameInfo.currentNumber++;
 		numberGameInfo.totalCounted++;
@@ -71,7 +76,6 @@ module.exports = async function execute(message, msgUser, guild, client) {
 	}
 
 	
-
 	function checkpoint() {
 		message.react('🏁');
 		message.channel.send(`${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!

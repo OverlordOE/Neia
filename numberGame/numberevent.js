@@ -62,7 +62,7 @@ async function sendEvent(client, g) {
   catch (error) {
     client.logger.warn(error);
   }
-  
+
   if (numberGameInfo.currentEvent) numberGameInfo.currentEvent.delete();
   client.guildOverseer.setNumberGameEvent(guild, sentMessage);
   client.guildOverseer.saveNumberGameInfo(guild, numberGameInfo);
@@ -83,7 +83,11 @@ async function sendEvent(client, g) {
 
       // Check all counted numbers for easter eggs and checkpoints
       for (let i = oldNumber; i < oldNumber + numberIncrease; i++) {
-        nf.applyEasterEggs(i, m);
+        const easterEgg = nf.getEasterEggs(i);
+        if (easterEgg.length) {
+          const msg = await numberGameChannel.send(`${i}`);
+          nf.applyEasterEggs(easterEgg, msg);
+        }
 
         const checkpoint = nf.checkCheckpoint(i);
         if (checkpoint) {
@@ -112,7 +116,8 @@ async function sendEvent(client, g) {
       // Send Final Number
       const m = await numberGameChannel.send(`${oldNumber + numberIncrease}`);
       m.react(user.reaction);
-
+      const easterEgg = nf.getEasterEggs(oldNumber + numberIncrease);
+      if (easterEgg.length) nf.applyEasterEggs(easterEgg, m);
 
       numberGameInfo.lastUserId = null;
       client.userManager.changeBalance(user, payout);

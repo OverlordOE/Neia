@@ -1,6 +1,6 @@
 const { Permissions } = require("discord.js");
-const numberGame = require("./numberGame/numbergame");
-const events = require('./events/events');
+const numberGame = require("./numberGame/numbergame.js");
+const events = require('./events/events.js');
 const { Client, Intents, Collection } = require("discord.js");
 const {
   Users,
@@ -117,8 +117,7 @@ client.on("messageCreate", async (message) => {
     message.interaction ||
     message.author.bot ||
     message.stickers.first()
-  )
-    return;
+  ) return;
 
   if (Number.isInteger(Number(message.content))) {
     return numberGame(message, user, guild, client);
@@ -132,8 +131,7 @@ client.on("interactionCreate", async (interaction) => {
     interaction.isMessageComponent() ||
     interaction.isButton() ||
     interaction.channel.type == "DM"
-  )
-    return;
+  ) return;
 
   const command = client.commands.get(interaction.commandName);
   if (!command) return;

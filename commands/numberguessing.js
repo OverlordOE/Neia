@@ -16,7 +16,6 @@ module.exports = {
 				.setRequired(false)),
 
 
-
 	async execute(interaction, msgUser, msgGuild, client) {
 		const embed = new MessageEmbed()
 			.setColor('#f3ab16')

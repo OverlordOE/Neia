@@ -38,7 +38,8 @@ const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
       console.log(
         "Successfully reloaded application (/) commands for global guilds."
       );
-    } catch (error) {
+    } 
+    catch (error) {
       console.error(error);
     }
   }
@@ -55,7 +56,8 @@ const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
       console.log(
         "Successfully reloaded application (/) commands for test guild."
       );
-    } catch (error) {
+    } 
+    catch (error) {
       console.error(error);
     }
   }
