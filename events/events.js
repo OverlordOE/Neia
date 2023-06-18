@@ -1,30 +1,31 @@
 const numberEvent = require("../numberGame/numberevent.js");
 const cron = require("cron");
-
+let client;
 module.exports = {
-	async execute(client) {
+	async execute(c) {
+		client = c;
 		botEvents.start();
-		numberEventStart(client);
-		setBotActivity(client);
+		numberEventStart();
+		setBotActivity();
 	}
 };
 
 
 const botEvents = new cron.CronJob("0 0/2 * * *", () => {
-	setBotActivity();
 	numberEventStart();
+	setBotActivity();
 });
 
 
 // Random number game event every 2 hours 0 0 / 2 * * *
-function numberEventStart(client) {
+function numberEventStart() {
 	const time = Math.floor(Math.random() * 60) * 120000;
 	client.logger.info(`Next NumberEvent in ${Math.floor(time / 60000)} minutes`);
 	setTimeout(numberEvent, time, client);
 }
 
 
-function setBotActivity(client) {
+function setBotActivity() {
 	const activityArray = [
 		"people count",
 		"you.",
