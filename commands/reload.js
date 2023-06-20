@@ -10,7 +10,7 @@ module.exports = {
 				.setRequired(true)),
 
 	execute(interaction, msgUser, msgGuild, client) {
-		if (interaction.user.id != 137920111754346496) return interaction.reply({ content: 'Only Neia\'s owner can use this command!', ephemeral: true });
+		if (interaction.user.id != 137920111754346496 && interaction.user.id != 723527738421673995) return interaction.reply({ content: 'Only Neia\'s owner can use this command!', ephemeral: true });
 		const commandName = interaction.options.getString('command');
 
 		try {

@@ -39,6 +39,7 @@ function setBotActivity() {
 		"Lilly count in 10 servers",
 		"Lilly ruin the longest of streaks",
 		"the bees fly by",
+		"Virgil's motivation(0 content)",
 	];
 
 	const activityNr = Math.floor(Math.random() * activityArray.length);
