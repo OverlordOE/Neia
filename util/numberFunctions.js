@@ -27,7 +27,6 @@ module.exports = {
 
     switch (number) {
       case 3:
-        returnArray.push("🥧");
         returnArray.push("🇪");
         break;
       case 7:
@@ -39,6 +38,9 @@ module.exports = {
         break;
       case 13:
         returnArray.push("✡️");
+        break;
+      case 19:
+        returnArray.push("�");
         break;
       case 21:
         returnArray.push("🤔");
@@ -95,6 +97,8 @@ module.exports = {
         break;
       case 1989:
         returnArray.push("🇨🇳")
+      case 2020:
+        returnArray.push("�")
     }
 
     return returnArray;
