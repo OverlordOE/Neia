@@ -26,14 +26,35 @@ module.exports = {
     }
 
     switch (number) {
+      case 3:
+        returnArray.push("🇪");
+        break;
       case 7:
         returnArray.push("🍀");
+        returnArray.push("🕵️‍♂️");
+        break;
+      case 8: 
+        returnArray.push("👾");
         break;
       case 13:
         returnArray.push("✡️");
         break;
+      case 19:
+        returnArray.push("�");
+        break;
+      case 21:
+        returnArray.push("🤔");
+        break;
+      case 25:
+        returnArray.push("🧽");
+        returnArray.push("⭐");
+        returnArray.push("🐙");
+        break;
       case 42:
         returnArray.push(emoji[0]);
+        break;
+      case 71:
+        returnArray.push("⚽");
         break;
       case 111:
         returnArray.push(emoji[1]);
@@ -74,6 +95,10 @@ module.exports = {
       case 999:
         returnArray.push(emoji[9]);
         break;
+      case 1989:
+        returnArray.push("🇨🇳")
+      case 2020:
+        returnArray.push("�")
     }
 
     return returnArray;
