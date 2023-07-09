@@ -25,8 +25,7 @@ module.exports = {
 				.addFields([
 					{ name: 'Unlock Message', value: achievement.unlockMessage, inline: true },
 					{ name: 'Reward', value: `${reward.emoji}${reward.name}`, inline: true }
-				])
-				.setFooter('Use the command without arguments to see the achievement list', client.user.displayAvatarURL({ dynamic: true }));
+				]);
 
 			client.util.setEmbedRarity(embed, achievement.rarity);
 		}

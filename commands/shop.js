@@ -24,8 +24,7 @@ module.exports = {
 				.addFields([
 					{ name: 'Value', value: `${client.util.formatNumber(item.value)}💰`, inline: true },
 					{ name: 'Category', value: item.ctg.toString(), inline: true }
-				])
-				.setFooter('Use the command without arguments to see the item list', client.user.displayAvatarURL({ dynamic: true }));
+				]);
 
 			client.util.setEmbedRarity(embed, item.rarity);
 		}

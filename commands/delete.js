@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,9 +8,9 @@ module.exports = {
 			option
 				.setName('amount')
 				.setDescription('The amount of messages you want to delete.')
-				.setRequired(true)),
+				.setRequired(true))
+				.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
 
-	permissions: 'MANAGE_MESSAGES',
 
 	execute(interaction, msgUser, msgGuild, client) {
 

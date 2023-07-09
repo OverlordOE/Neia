@@ -1,11 +1,10 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('setnumbergame')
-		.setDescription('Set a channel for the Numbergame. REQUIRES MANAGE_CHANNELS PERMISSION!'),
-
-	permissions: 'MANAGE_CHANNELS',
+		.setDescription('Set a channel for the Numbergame. REQUIRES MANAGE_CHANNELS PERMISSION!')
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
 
 	async execute(interaction, msgUser, msgGuild, client) {
 

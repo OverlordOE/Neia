@@ -13,7 +13,6 @@ module.exports = {
 
 		const embed = new EmbedBuilder()
 			.setTitle('Numbergame stats')
-			.setFooter('To change the channel for the number game use the `sc` command.', client.user.displayAvatarURL({ dynamic: true }))
 			.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
 			.addFields([{ name: 'Current Number', value: numberGameInfo.currentNumber.toString(), inline: false }])
 			.setColor('#f3ab16');

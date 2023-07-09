@@ -50,7 +50,6 @@ module.exports = {
 			.setTitle('Neia leaderboard')
 			.setDescription(editDescription(listArray[listIndex], page))
 			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-			.setFooter('Use the emojis to scroll through the list or switch the list.', client.user.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16');
 
 

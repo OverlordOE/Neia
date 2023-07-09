@@ -1,6 +1,6 @@
 const numberGame = require("./numberGame/numbergame.js");
 const events = require('./events/events.js');
-const { Client, GatewayIntentBits, Partials, Collection, Permissions } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, Collection } = require("discord.js");
 const {
   Users,
   userManager,
@@ -20,7 +20,6 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMembers,
     GatewayIntentBits.DirectMessages,
   ],
   partials: [Partials.Channel],
@@ -141,18 +140,6 @@ client.on("interactionCreate", async (interaction) => {
   const user = await client.userManager.getUser(id);
   user.author = interaction.user;
 
-  if (command.permissions) {
-    if (
-      !interaction.member.permissions.has(
-        Permissions.FLAGS[command.permissions]
-      )
-    ) {
-      return interaction.reply({
-        content: `You need the \`${command.permissions}\` permission to use this command!`,
-        ephemeral: true,
-      });
-    }
-  }
 
   // Execute Command
   client.logger.info(

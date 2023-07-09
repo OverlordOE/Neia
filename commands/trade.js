@@ -46,7 +46,6 @@ module.exports = {
 
 		const embed = new EmbedBuilder()
 			.setTitle('Neia Trading Center')
-			.setFooter('You can only trade to people on the same server.', client.user.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16');
 
 		const target = interaction.options.getUser('target');

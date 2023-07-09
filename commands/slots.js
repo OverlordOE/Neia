@@ -27,8 +27,7 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setColor('#f3ab16')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTitle('Neia\'s Gambling Imporium')
-			.setFooter('Have you tried Blackjack?', client.user.displayAvatarURL({ dynamic: true }));
+			.setTitle('Neia\'s Gambling Imporium');
 
 
 		const payoutRate = 1.6;

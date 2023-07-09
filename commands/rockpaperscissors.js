@@ -21,8 +21,7 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setColor('#f3ab16')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTitle('Rock, Paper, Scissors')
-			.setFooter('Use the emojis to play the game.', client.user.displayAvatarURL({ dynamic: true }));
+			.setTitle('Rock, Paper, Scissors');
 
 
 		let gambleAmount = interaction.options.getInteger('amount');

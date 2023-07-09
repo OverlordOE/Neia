@@ -9,7 +9,6 @@ module.exports = {
 
 		const embed = new EmbedBuilder()
 			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-			.setFooter('You can use the menu below to switch Categories.')
 			.setColor('#f3ab16');
 
 		const intro = `
@@ -126,7 +125,7 @@ module.exports = {
 		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
 
 		collector.on('collect', async i => {
-			if (i.isSelectMenu()) {
+			if (i.isStringSelectMenu()) {
 				if (i.values[0] === 'main') {
 					row.components[0].setPlaceholder('Main Page');
 					await i.update({

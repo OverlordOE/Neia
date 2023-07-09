@@ -30,8 +30,7 @@ module.exports = {
 				.addFields([
 					{ name: 'Category', value: collectable.ctg.toString(), inline: true },
 					{ name: 'Gained From', value: gainedFrom, inline: true }
-				])
-				.setFooter('Use the command without arguments to see the item list', client.user.displayAvatarURL({ dynamic: true }));
+				]);
 
 			client.util.setEmbedRarity(embed, collectable.rarity);
 		}

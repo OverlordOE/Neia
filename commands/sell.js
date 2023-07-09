@@ -19,8 +19,7 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setTitle('Neia Refunds')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-			.setColor('#f3ab16')
-			.setFooter('.', client.user.displayAvatarURL({ dynamic: true }));
+			.setColor('#f3ab16');
 
 		let amount = interaction.options.getInteger('amount');
 		if (amount < 1 || !amount) amount = 1;

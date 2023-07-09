@@ -60,7 +60,6 @@ module.exports = {
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
 			.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.`)
 			.setTitle('Blackjack')
-			.setFooter('Use the buttons to play the game.', client.user.displayAvatarURL({ dynamic: true }))
 			.spliceFields(0, 5, [
 				{ name: 'Players Hand', value: playerHand.toString(), inline: true },
 				{ name: 'Players Value', value: playerHandValue.toString(), inline: true },

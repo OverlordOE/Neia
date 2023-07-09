@@ -8,7 +8,6 @@ module.exports = {
 	execute(interaction, msgUser, msgGuild, client) {
 		const embed = new EmbedBuilder()
 			.setTitle('Neia V3.6: Collectables and Reaction overhaul')
-			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL({ dynamic: true }))
 			.setDescription(`
 			# **Neia V3.6: Collectables and Reaction overhaul**
 ## **Reset**

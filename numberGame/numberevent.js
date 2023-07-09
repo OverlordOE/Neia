@@ -1,5 +1,5 @@
 const nf = require("../util/numberFunctions");
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 module.exports = async function execute(client) {
 
@@ -22,10 +22,6 @@ async function sendEvent(client, g) {
 
   const embed = new EmbedBuilder()
     .setTitle("__**NUMBER BOOST EVENT**__")
-    .setFooter(
-      "These events happen randomly every 2 hours.",
-      client.user.displayAvatarURL({ dynamic: true })
-    )
     .setColor("#efc420");
 
   const row = new ActionRowBuilder().addComponents(

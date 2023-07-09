@@ -19,8 +19,7 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setColor('#f3ab16')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTitle('Number Guessing')
-			.setFooter('Use the emojis to play the game.', client.user.displayAvatarURL({ dynamic: true }));
+			.setTitle('Number Guessing');
 
 		const payoutRate = 5;
 

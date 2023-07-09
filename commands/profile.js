@@ -24,7 +24,6 @@ module.exports = {
 
 		const embed = new EmbedBuilder()
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
-			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16');
 
 		const mainDescription = `
@@ -155,7 +154,7 @@ module.exports = {
 		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
 
 		collector.on('collect', async i => {
-			if (i.isSelectMenu()) {
+			if (i.isStringSelectMenu()) {
 				if (i.values[0] === 'main') {
 					row.components[0].setPlaceholder('Main Page');
 					await i.update({
