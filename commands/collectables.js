@@ -1,6 +1,5 @@
 const collectables = require('../data/collectables');
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder , SlashCommandBuilder} = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('collectables')
@@ -12,7 +11,7 @@ module.exports = {
 
 
 	execute(interaction, msgUser, msgGuild, client) {
-		const embed = new MessageEmbed();
+		const embed = new EmbedBuilder();
 		const tempCollectable = interaction.options.getString('collectable');
 
 		if (tempCollectable) {
@@ -28,8 +27,10 @@ module.exports = {
 			embed
 				.setTitle(`${collectable.emoji}${collectable.name}`)
 				.setDescription(collectable.description)
-				.addField('Category', collectable.ctg.toString(), true)
-				.addField('Gained From', gainedFrom, true)
+				.addFields([
+					{ name: 'Category', value: collectable.ctg.toString(), inline: true },
+					{ name: 'Gained From', value: gainedFrom, inline: true }
+				])
 				.setFooter('Use the command without arguments to see the item list', client.user.displayAvatarURL({ dynamic: true }));
 
 			client.util.setEmbedRarity(embed, collectable.rarity);

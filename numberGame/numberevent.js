@@ -1,5 +1,5 @@
 const nf = require("../util/numberFunctions");
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require("discord.js");
 
 module.exports = async function execute(client) {
 
@@ -20,7 +20,7 @@ async function sendEvent(client, g) {
 
   if (!numberGameInfo.channelId) return;
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle("__**NUMBER BOOST EVENT**__")
     .setFooter(
       "These events happen randomly every 2 hours.",
@@ -28,11 +28,11 @@ async function sendEvent(client, g) {
     )
     .setColor("#efc420");
 
-  const row = new MessageActionRow().addComponents(
-    new MessageButton()
+  const row = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
       .setCustomId("claim")
       .setLabel("Claim!")
-      .setStyle("SUCCESS")
+      .setStyle(ButtonStyle.Success)
       .setEmoji("💰")
   );
 

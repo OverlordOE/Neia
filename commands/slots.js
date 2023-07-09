@@ -1,5 +1,4 @@
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('slots')
@@ -17,7 +16,7 @@ module.exports = {
 
 	async execute(interaction, msgUser, msgGuild, client) {
 		/*
-		?Profitability formula: y(1) = x*a*c / b^3
+		fixme: Profitability formula: y(1) = x*a*c / b^3
 		y = avarage profit per spin in decimal percentage
 		x = payout multiplier
 		a = amount of proftitable rows per row
@@ -25,7 +24,7 @@ module.exports = {
 		c = amount of rows
 		*/
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor('#f3ab16')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
 			.setTitle('Neia\'s Gambling Imporium')
@@ -55,11 +54,12 @@ module.exports = {
 
 		output += `
 		You have bet ${client.util.formatNumber(gambleAmount)}💰.
-		Get **${slotX}** of the __**same symbol**__ in a row to **win**.
 
-		Base Payout is **${payoutRate}X** your bet for every row.
-		Getting a 🍒 or 🍌 row will give **2 rows**.
-		Getting a <:luckyseven:838417718944333884> row will give **4 rows**.\n\n`;
+		**${payoutRate}X** Payout per row.
+		🍋 and 🍉 add **1 row**
+		🍒 and 🍌 add **2 rows**
+		<:luckyseven:838417718944333884> adda **4 rows**
+		\n`;
 
 		for (let i = 0; i < slotY; i++) {
 			slots[i] = [];
@@ -131,13 +131,12 @@ module.exports = {
 		function endGame() {
 			if (rowsWon >= 1) {
 				const winAmount = gambleAmount * payoutRate * rowsWon;
-				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
-				output += `\n\n**__You have won ${rowsWon} row(s)__ and got a payout of __${payoutRate * rowsWon}X your bet!__**\nYou gained ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`;
+				output += `\n\n**__You have ${rowsWon} row(s)__ and got a payout of __${payoutRate * rowsWon}X your bet!__**\nYou won ${client.util.formatNumber(winAmount)}💰`;
 				embed.setColor('#00fc43');
 			}
 			else {
 				embed.setColor('#fc0303');
-				output += `\n\n__**You lost!**__ ${client.util.formatNumber(gambleAmount)}💰\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
+				output += `\n\n__**You lost!**__ ${client.util.formatNumber(gambleAmount)}💰`;
 			}
 			interaction.editReply({ embeds: [embed.setDescription(output)] });
 		}

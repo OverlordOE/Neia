@@ -1,5 +1,4 @@
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder , SlashCommandBuilder} = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('numbergamestats')
@@ -12,24 +11,26 @@ module.exports = {
 
 		const channel = await client.channels.fetch(numberGameInfo.channelId);
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Numbergame stats')
 			.setFooter('To change the channel for the number game use the `sc` command.', client.user.displayAvatarURL({ dynamic: true }))
 			.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
-			.addField('Current Number', numberGameInfo.currentNumber.toString())
+			.addFields([{ name: 'Current Number', value: numberGameInfo.currentNumber.toString(), inline: false }])
 			.setColor('#f3ab16');
 
 		if (numberGameInfo.lastUserId) {
 			const lastCounter = await interaction.guild.members.fetch(numberGameInfo.lastUserId);
-			embed.addField('Last Counter', lastCounter.toString(), true);
+			embed.addFields([{ name: 'Last Counter', value: lastCounter.toString(), inline: true }]);
 		}
 
-		embed.addField('Channel', channel.toString(), true)
-			.addField('Total Numbers Counted', numberGameInfo.totalCounted.toString(), true)
-			.addField('Last Checkpoint', numberGameInfo.lastCheckpoint.toString(), true)
-			.addField('Next Checkpoint', numberGameInfo.nextCheckpoint.toString(), true)
-			.addField('Highest Streak', numberGameInfo.highestStreak.toString(), true)
-			.addField('Streaks Ruined', numberGameInfo.streaksRuined.toString(), true)
+		embed.addFields([
+			{ name: 'Channel', value: channel.toString(), inline: true },
+			{ name: 'Total Numbers Counted', value: numberGameInfo.totalCounted.toString(), inline: true },
+			{ name: 'Last Checkpoint', value: numberGameInfo.lastCheckpoint.toString(), inline: true },
+			{ name: 'Next Checkpoint', value: numberGameInfo.nextCheckpoint.toString(), inline: true },
+			{ name: 'Highest Streak', value: numberGameInfo.highestStreak.toString(), inline: true },
+			{ name: 'Streaks Ruined', value: numberGameInfo.streaksRuined.toString(), inline: true }
+		])
 			;
 
 		return interaction.reply({ embeds: [embed] });

@@ -1,5 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('profile')
@@ -23,7 +22,7 @@ module.exports = {
 		const stats = client.userManager.getStats(user);
 
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
 			.setFooter('You can use the buttons to switch pages.', client.user.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16');
@@ -106,9 +105,9 @@ module.exports = {
 		}
 		else achievementDescription = `*${target.tag}* has no achievements!`;
 
-		const row = new MessageActionRow()
+		const row = new ActionRowBuilder()
 			.addComponents(
-				new MessageSelectMenu()
+				new StringSelectMenuBuilder()
 					.setCustomId('select')
 					.setPlaceholder('Main Page')
 					.addOptions([

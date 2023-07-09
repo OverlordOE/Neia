@@ -1,5 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 const wait = require('util').promisify(setTimeout);
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -26,19 +25,19 @@ module.exports = {
 		client.userManager.changeBalance(msgUser, -gambleAmount, true);
 
 
-		const row = new MessageActionRow()
+		const row = new ActionRowBuilder()
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('hit')
 					.setLabel('Hit')
-					.setStyle('SUCCESS')
+					.setStyle(ButtonStyle.Success)
 					.setEmoji('🃏'),
 			)
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('stand')
 					.setLabel('Stand')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 					.setEmoji('🖐️'),
 			);
 
@@ -56,7 +55,7 @@ module.exports = {
 			getCard('client');
 		}
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor('#f3ab16')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
 			.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.`)

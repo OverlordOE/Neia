@@ -1,5 +1,4 @@
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('trade')
@@ -45,7 +44,7 @@ module.exports = {
 
 	async execute(interaction, msgUser, msgGuild, client) {
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Neia Trading Center')
 			.setFooter('You can only trade to people on the same server.', client.user.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16');

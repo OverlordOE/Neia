@@ -1,5 +1,4 @@
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('dice')
@@ -36,11 +35,13 @@ module.exports = {
 			total += roll;
 		}
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor('#f3ab16')
 			.setDescription(`You rolled a **D${sides} ${amount}** times!\nThese are the results: \n${result}`)
-			.addField('Total:', `**${total}**`, true)
-			.addField('Average:', `**${Math.fround(total / amount)}**`, true);
+			.addFields([
+				{ name: 'Total:', value: `**${total}**`, inline: true },
+				{ name: 'Average:', value: `**${Math.fround(total / amount)}**`, inline: true }
+			]);
 
 		interaction.reply({ embeds: [embed] });
 	},

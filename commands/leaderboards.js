@@ -1,5 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, SlashCommandBuilder, ButtonStyle } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('leaderboards')
@@ -47,7 +46,7 @@ module.exports = {
 		let page = 0;
 
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Neia leaderboard')
 			.setDescription(editDescription(listArray[listIndex], page))
 			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
@@ -55,9 +54,9 @@ module.exports = {
 			.setColor('#f3ab16');
 
 
-		const menuRow = new MessageActionRow()
+		const menuRow = new ActionRowBuilder()
 			.addComponents(
-				new MessageSelectMenu()
+				new StringSelectMenuBuilder()
 					.setCustomId('list')
 					.setPlaceholder('Balance List')
 					.addOptions([
@@ -89,19 +88,19 @@ module.exports = {
 					]),
 			);
 
-		const buttonRow = new MessageActionRow()
+		const buttonRow = new ActionRowBuilder()
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('previous')
 					.setLabel('Previous Page')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 					.setEmoji('◀️'),
 			)
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('next')
 					.setLabel('Next Page')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 					.setEmoji('▶️'),
 			);
 

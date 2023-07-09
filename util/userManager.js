@@ -8,7 +8,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 	storage: 'database.sqlite',
 });
 
-const { Collection, MessageEmbed } = require('discord.js');
+const { Collection, EmbedBuilder } = require('discord.js');
 const util = require('./util');
 
 const Users = require('../models/Users')(sequelize, Sequelize);
@@ -383,7 +383,7 @@ async function unlock(user, achievementName) {
 	const reward = util.getCollectable(achievement.reward);
 	collectionOverseer.unlockCollectable(user, reward);
 
-	const embed = new MessageEmbed()
+	const embed = new EmbedBuilder()
 		.setTitle('Achievement Unlocked!')
 		.setDescription(`You have unlocked **${achievement.emoji}${achievementName}**\n__${achievement.unlockMessage}__\n
 		You have unlocked: _**${reward.emoji}${achievement.reward}!**_`);

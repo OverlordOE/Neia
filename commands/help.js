@@ -1,5 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('help')
@@ -8,7 +7,7 @@ module.exports = {
 	async execute(interaction, msgUser, msgGuild, client) {
 
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
 			.setFooter('You can use the menu below to switch Categories.')
 			.setColor('#f3ab16');
@@ -77,9 +76,9 @@ module.exports = {
 		You can get more of them by unlocking achievements or buying them from the shop. To change your reaction use the \`use\` command in the following way \`use "name of reaction"\`.`;
 		
 
-		const row = new MessageActionRow()
+		const row = new ActionRowBuilder()
 			.addComponents(
-				new MessageSelectMenu()
+				new StringSelectMenuBuilder()
 					.setCustomId('select')
 					.setPlaceholder('Main Page')
 					.addOptions([

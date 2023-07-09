@@ -107,7 +107,7 @@ module.exports = async function execute(message, msgUser, guild, client) {
 		if (daily === true) {
 			const balance = client.userManager.changeBalance(msgUser, number * dailyMultiplier);
 
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setDescription(`__**Daily Count**__ reward!\nYou gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
 				.setColor('#f3ab16');
 			message.author.send({ embeds: [embed] });
@@ -118,7 +118,7 @@ module.exports = async function execute(message, msgUser, guild, client) {
 		if (hourly === true) {
 			const balance = client.userManager.changeBalance(msgUser, number * hourlyMultiplier);
 
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.EmbedBuilder()
 				.setDescription(`__**Hourly Count**__ reward!\nYou gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
 				.setColor('#f3ab16');
 			message.author.send({ embeds: [embed] });

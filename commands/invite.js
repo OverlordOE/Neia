@@ -1,5 +1,4 @@
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder , SlashCommandBuilder} = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('invite')
@@ -7,7 +6,7 @@ module.exports = {
 
 	execute(interaction, msgUser, msgGuild, client) {
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Neia Invites')
 			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
 			.setDescription(`

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const numberEvent = require('../numberGame/numberevent');
 module.exports = {
 	data: new SlashCommandBuilder()

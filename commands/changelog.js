@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('changelog')
@@ -7,7 +6,7 @@ module.exports = {
 
 
 	execute(interaction, msgUser, msgGuild, client) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Neia V3.6: Collectables and Reaction overhaul')
 			.setFooter('To see earlier updates join the support server.', client.user.displayAvatarURL({ dynamic: true }))
 			.setDescription(`

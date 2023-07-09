@@ -1,5 +1,4 @@
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder , SlashCommandBuilder} = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('buy')
@@ -16,7 +15,7 @@ module.exports = {
 
 
 	async execute(interaction, msgUser, msgGuild, client) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Neia Shop')
 			.setColor('#f3ab16')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }));

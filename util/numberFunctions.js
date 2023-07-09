@@ -80,6 +80,9 @@ module.exports = {
       case 444:
         returnArray.push(emoji[4]);
         break;
+      case 538:
+        returnArray.push('�');
+        break;
       case 555:
         returnArray.push(emoji[5]);
         break;
@@ -124,5 +127,5 @@ module.exports = {
 
     return checkpoints[nextCheckpointIndex];
   },
-  
+
 };

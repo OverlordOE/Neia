@@ -1,7 +1,6 @@
-const { Permissions } = require("discord.js");
 const numberGame = require("./numberGame/numbergame.js");
 const events = require('./events/events.js');
-const { Client, Intents, Collection } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, Collection, Permissions } = require("discord.js");
 const {
   Users,
   userManager,
@@ -16,14 +15,15 @@ const beeFiles = fs.readdirSync("./pics");
 require("winston/lib/winston/config");
 
 const client = new Client({
-  intents: new Intents([
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-    Intents.FLAGS.GUILD_VOICE_STATES,
-    Intents.FLAGS.DIRECT_MESSAGES,
-  ]),
-  partials: ["CHANNEL"],
+  intents: [
+    GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.DirectMessages,
+  ],
+  partials: [Partials.Channel],
 });
 
 client.emojiCharacters = require("./data/emojiCharacters");
