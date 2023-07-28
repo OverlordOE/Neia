@@ -1,4 +1,4 @@
-const { EmbedBuilder , SlashCommandBuilder} = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('numbergamestats')
@@ -10,27 +10,26 @@ module.exports = {
 		if (!numberGameInfo.channelId) return interaction.reply('You don\'t have a numbergame setup yet!\nUse the command `setchannel` to designate a channel for the numbergame');
 
 		const channel = await client.channels.fetch(numberGameInfo.channelId);
-
-		const embed = new EmbedBuilder()
-			.setTitle('Numbergame stats')
-			.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
-			.addFields([{ name: 'Current Number', value: numberGameInfo.currentNumber.toString(), inline: false }])
-			.setColor('#f3ab16');
+		let lastUser = 'Noone';
 
 		if (numberGameInfo.lastUserId) {
 			const lastCounter = await interaction.guild.members.fetch(numberGameInfo.lastUserId);
-			embed.addFields([{ name: 'Last Counter', value: lastCounter.toString(), inline: true }]);
+			lastUser = lastCounter.toString();
 		}
+		const embed = new EmbedBuilder()
+			.setTitle('Numbergame stats')
+			.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
+			.setColor('#f3ab16');
 
-		embed.addFields([
-			{ name: 'Channel', value: channel.toString(), inline: true },
-			{ name: 'Total Numbers Counted', value: numberGameInfo.totalCounted.toString(), inline: true },
-			{ name: 'Last Checkpoint', value: numberGameInfo.lastCheckpoint.toString(), inline: true },
-			{ name: 'Next Checkpoint', value: numberGameInfo.nextCheckpoint.toString(), inline: true },
-			{ name: 'Highest Streak', value: numberGameInfo.highestStreak.toString(), inline: true },
-			{ name: 'Streaks Ruined', value: numberGameInfo.streaksRuined.toString(), inline: true }
-		])
-			;
+		embed.setDescription(`**Current Number:** ${numberGameInfo.currentNumber}\n
+			**Last Counter:** ${lastUser}\n
+			**Channel:** ${channel.toString()}\n
+			**Total Numbers Counted:** ${numberGameInfo.totalCounted}\n
+			**Last Checkpoint:** ${numberGameInfo.lastCheckpoint}\n
+			**Next Checkpoint:** ${numberGameInfo.nextCheckpoint}\n
+			**Highest Streak:** ${numberGameInfo.highestStreak}\n
+			**Streaks Ruined:** ${numberGameInfo.streaksRuined}\n`
+			);
 
 		return interaction.reply({ embeds: [embed] });
 	},

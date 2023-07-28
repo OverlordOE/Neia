@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const nf = require('../util/numberFunctions');
 
 module.exports = async function execute(message, msgUser, guild, client) {
@@ -75,7 +74,7 @@ module.exports = async function execute(message, msgUser, guild, client) {
 		client.userManager.addStats(msgUser, 'streaksRuined', 1);
 	}
 
-	
+
 	function checkpoint() {
 		message.react('🏁');
 		message.channel.send(`${message.author} has ruined the streak at **${numberGameInfo.currentNumber}**!
@@ -105,12 +104,12 @@ module.exports = async function execute(message, msgUser, guild, client) {
 
 
 		if (daily === true) {
-			message.reply({ content: `__**Daily Count reward:**__ ${client.util.formatNumber(number * dailyMultiplier)}💰!`, ephemeral: true});
+			message.reply({ content: `__**Daily Count reward:**__ ${client.util.formatNumber(number * dailyMultiplier)}💰!`, ephemeral: true });
 			client.userManager.setDailyCount(msgUser);
 		}
 
 		if (hourly === true) {
-			message.author.send({ content: `__**Hourly Count reward:**__ ${client.util.formatNumber(number * hourlyMultiplier)}💰`, ephemeral: true});
+			message.author.send({ content: `__**Hourly Count reward:**__ ${client.util.formatNumber(number * hourlyMultiplier)}💰`, ephemeral: true });
 			client.userManager.setHourlyCount(msgUser);
 		}
 	}

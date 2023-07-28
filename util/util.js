@@ -43,4 +43,48 @@ module.exports = {
     else if (r == "legendary") embed.setColor("#ff8000");
     else embed.setColor("#eeeeee");
   },
+
+  mapToDescription(toMap) {
+    let common = ``;
+    let uncommon = ``;
+    let rare = ``;
+    let epic = ``;
+    let legendary = ``;
+
+    toMap.sort((a, b) => {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+
+    }).map(i => {
+
+      let item;
+      if (i.amount) item = this.getItem(i.name);
+      else item = this.getItem(i.name);
+
+      switch (item.rarity) {
+        case 'common':
+          common += `${item.emoji}${item.name}`;
+          break;
+        case 'uncommon':
+          uncommon += `${item.emoji}${item.name}`;
+          break;
+        case 'rare':
+          rare += `${item.emoji}${item.name}`;
+          break;
+        case 'epic':
+          epic += `${item.emoji}${item.name}`;
+          break;
+        case 'legendary':
+          legendary += `${item.emoji}${item.name}`;
+          break;
+      }				
+    });
+
+    return `**Common**\n${common}\n
+    **Uncommon**\n${uncommon}\n
+    **Rare**\n${rare}\n
+    **Epic**\n${epic}\n
+    **Legendary**\n${legendary}`;
+  }
 };

@@ -26,6 +26,7 @@ module.exports = {
 			.setThumbnail(target.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16');
 
+
 		const mainDescription = `
 		Balance: ${client.util.formatNumber(user.balance)}💰
 		Number Game Reaction: ${user.reaction}
@@ -60,41 +61,23 @@ module.exports = {
 		Lost with Gambling: ${client.util.formatNumber(stats.gamblingMoneyLost)}💰
 		`;
 
-		let inventoryDescription = '__Inventory:__\n\n';
-		if (inventory.length) {
-			inventory.sort((a, b) => {
-				if (a.name < b.name) return -1;
-				if (a.name > b.name) return 1;
-				return 0;
-			})
-				.map(i => {
-					if (i.amount >= 1) {
-						const item = client.util.getItem(i.name);
-						inventoryDescription += `${item.emoji}${item.name}: ${client.util.formatNumber(i.amount)}\n`;
-					}
-				});
-		}
-		else inventoryDescription = `*${target.tag}* does not have any items.`;
 
+		//	INVENTORY
+		let inventoryDescription;
+		if (!inventory.length) inventoryDescription = `*${target.username}* does not have any items.`;
+		else inventoryDescription = client.util.mapToDescription(inventory);
+
+		//	COLLECTION
 		let collectionDescription = '__Collectables:__\n\n';
-		if (collection.length) {
-			collection.sort((a, b) => {
-				if (a.name < b.name) return -1;
-				if (a.name > b.name) return 1;
-				return 0;
-			})
-				.map(c => {
-					const collectable = client.util.getCollectable(c.name);
-					collectionDescription += `${collectable.emoji}${collectable.name}\n`;
-				});
-		}
-		else collectionDescription = `*${target.tag}*does not have any collectables.`;
+		if (!collection.length) collectionDescription = `*${target.username}*does not have any collectables.`;
+		else collectionDescription = client.util.mapToDescription(collection);
 
+		//	ACHIEVEMENTS
 		let achievementDescription = '__Achievements:__\n\n';
 		if (achievements.length) {
 			achievements.sort((a, b) => {
-				if (a.name < b.name) return -1;
-				if (a.name > b.name) return 1;
+				if (a.emoji < b.emoji) return -1;
+				if (a.emoji > b.emoji) return 1;
 				return 0;
 			})
 				.map(a => {
@@ -102,7 +85,7 @@ module.exports = {
 					achievementDescription += `${achievement.emoji}**${achievement.name}**\n`;
 				});
 		}
-		else achievementDescription = `*${target.tag}* has no achievements!`;
+		else achievementDescription = `*${target.username}* has no achievements!`;
 
 		const row = new ActionRowBuilder()
 			.addComponents(
@@ -146,7 +129,7 @@ module.exports = {
 
 		await interaction.reply({
 			embeds: [embed
-				.setTitle(`${target.tag}'s Main Page`)
+				.setTitle(`${target.username}'s Main Page`)
 				.setDescription(mainDescription)],
 			components: [row]
 		});
@@ -159,7 +142,7 @@ module.exports = {
 					row.components[0].setPlaceholder('Main Page');
 					await i.update({
 						embeds: [embed
-							.setTitle(`${target.tag}'s Main Page`)
+							.setTitle(`${target.username}'s Main Page`)
 							.setDescription(mainDescription)
 						], components: [row]
 					});
@@ -168,7 +151,7 @@ module.exports = {
 					row.components[0].setPlaceholder('Number Game Page');
 					await i.update({
 						embeds: [embed
-							.setTitle(`${target.tag}'s Number Game Page`)
+							.setTitle(`${target.username}'s Number Game Page`)
 							.setDescription(numbergameDescription)
 						], components: [row]
 					});
@@ -177,7 +160,7 @@ module.exports = {
 					row.components[0].setPlaceholder('Statistics');
 					await i.update({
 						embeds: [embed
-							.setTitle(`${target.tag}'s Statistics`)
+							.setTitle(`${target.username}'s Statistics`)
 							.setDescription(statsDescription)
 						], components: [row]
 					});
@@ -186,7 +169,7 @@ module.exports = {
 					row.components[0].setPlaceholder('Collection');
 					await i.update({
 						embeds: [embed
-							.setTitle(`${target.tag}'s Collection`)
+							.setTitle(`${target.username}'s Collection`)
 							.setDescription(collectionDescription)
 						], components: [row]
 					});
@@ -195,7 +178,7 @@ module.exports = {
 					row.components[0].setPlaceholder('Inventory');
 					await i.update({
 						embeds: [embed
-							.setTitle(`${target.tag}'s Inventory`)
+							.setTitle(`${target.username}'s Inventory`)
 							.setDescription(inventoryDescription)
 						], components: [row]
 					});
@@ -204,7 +187,7 @@ module.exports = {
 					row.components[0].setPlaceholder('Achievements');
 					await i.update({
 						embeds: [embed
-							.setTitle(`${target.tag}'s Achievements`)
+							.setTitle(`${target.username}'s Achievements`)
 							.setDescription(achievementDescription)
 						], components: [row]
 					});
@@ -213,6 +196,6 @@ module.exports = {
 		});
 
 		collector.on('end', async () => await interaction.editReply({ embeds: [embed], components: [] }));
-
 	},
 };
+

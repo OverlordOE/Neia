@@ -28,19 +28,25 @@ module.exports = {
 				]);
 
 			client.util.setEmbedRarity(embed, achievement.rarity);
+			return interaction.reply({ embeds: [embed] });
 		}
 
-		else {
-			let description = '';
+		let description = '';
 
-			Object.values(achievements).map((i) => description += `${i.emoji}**${i.name}**\n`);
+		Object.values(achievements).sort((a, b) => {
+			if (a.emoji < b.emoji) return -1;
+			if (a.emoji > b.emoji) return 1;
+			return 0;
+		}).map(a => {
+			const achievement = client.util.getAchievement(a.name);
+			description += `${achievement.emoji}**${achievement.name}**\n`;
+		});
 
-			embed
-				.setTitle('Neia Achievement List')
-				.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-				.setDescription(description)
-				.setColor('#f3ab16');
-		}
+
+		embed.setTitle('Neia Achievement List')
+			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+			.setDescription(description)
+			.setColor('#f3ab16');
 
 		return interaction.reply({ embeds: [embed] });
 	},
