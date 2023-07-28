@@ -105,24 +105,12 @@ module.exports = async function execute(message, msgUser, guild, client) {
 
 
 		if (daily === true) {
-			const balance = client.userManager.changeBalance(msgUser, number * dailyMultiplier);
-
-			const embed = new Discord.EmbedBuilder()
-				.setDescription(`__**Daily Count**__ reward!\nYou gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
-				.setColor('#f3ab16');
-			message.author.send({ embeds: [embed] });
-
+			message.reply({ content: `__**Daily Count reward:**__ ${client.util.formatNumber(number * dailyMultiplier)}💰!`, ephemeral: true});
 			client.userManager.setDailyCount(msgUser);
 		}
 
 		if (hourly === true) {
-			const balance = client.userManager.changeBalance(msgUser, number * hourlyMultiplier);
-
-			const embed = new Discord.EmbedBuilder()
-				.setDescription(`__**Hourly Count**__ reward!\nYou gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
-				.setColor('#f3ab16');
-			message.author.send({ embeds: [embed] });
-
+			message.author.send({ content: `__**Hourly Count reward:**__ ${client.util.formatNumber(number * hourlyMultiplier)}💰`, ephemeral: true});
 			client.userManager.setHourlyCount(msgUser);
 		}
 	}
