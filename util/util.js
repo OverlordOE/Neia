@@ -64,27 +64,27 @@ module.exports = {
 
       switch (item.rarity) {
         case 'common':
-          common += `${item.emoji}${item.name}\n`;
+          common += `\n${item.emoji}${item.name}`;
           break;
         case 'uncommon':
-          uncommon += `${item.emoji}${item.name}\n`;
+          uncommon += `\n${item.emoji}${item.name}`;
           break;
         case 'rare':
-          rare += `${item.emoji}${item.name}\n`;
+          rare += `\n${item.emoji}${item.name}`;
           break;
         case 'epic':
-          epic += `${item.emoji}${item.name}\n`;
+          epic += `\n${item.emoji}${item.name}`;
           break;
         case 'legendary':
-          legendary += `${item.emoji}${item.name}\n`;
+          legendary += `\n${item.emoji}${item.name}`;
           break;
       }				
     });
 
-    return `**Common**\n${common}\n
-    **Uncommon**\n${uncommon}\n
-    **Rare**\n${rare}\n
-    **Epic**\n${epic}\n
+    return `**Common**\n${common}
+    **Uncommon**\n${uncommon}
+    **Rare**\n${rare}
+    **Epic**\n${epic}
     **Legendary**\n${legendary}`;
   }
 };
