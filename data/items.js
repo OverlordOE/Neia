@@ -310,7 +310,7 @@ module.exports = {
 			const numberGameChannel = await client.channels.fetch(numberGameChannelId);
 			numberGameChannel.send(`${interaction.user} **has activated Count Boost!**.\nThey get extra 💰 per count for __**1 minute**__.`);
 
-			msgUser.countBoost = 100;
+			msgUser.countBoost = 50;
 			msgUser.save();
 			client.userManager.setCountBoost(msgUser);
 
