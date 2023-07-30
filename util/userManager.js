@@ -275,7 +275,7 @@ Reflect.defineProperty(collectionOverseer, 'unlockCollectable', {
 	value: async function unlockCollectable(user, collectable) {
 		if (await collectionOverseer.hasCollectable(user, collectable)) return false;
 
-		if (collectable.ctg == 'multiplier') user.countMultiplier += 0.5;
+		if (collectable.ctg == 'multiplier') user.countMultiplier += 0.2;
 		user.save();
 
 		UserCollectables.create({
@@ -404,12 +404,12 @@ async function addAchievement(user, achievement) {
 }
 
 
-// async function removeAchievement(user, achievement) {
-// 	const oldAchievement = await achievementHunter.hasAchievement(achievement);
+async function removeAchievement(user, achievement) {
+	const oldAchievement = await achievementHunter.hasAchievement(achievement);
 
-// 	if (oldAchievement) return oldAchievement.destroy();
-// 	else throw Error(`User doesn't have achievement: ${achievement.name}`);
-// }
+	if (oldAchievement) return oldAchievement.destroy();
+	else throw Error(`User doesn't have achievement: ${achievement.name}`);
+}
 
 
 Reflect.defineProperty(achievementHunter, 'hasAchievement', {

@@ -7,7 +7,7 @@ module.exports = {
 		rarity: 'legendary',
 		ctg: 'multiplier',
 		gainedFrom: 'Shop',
-		description: 'Increases your count multiplier by 0.5.',
+		description: 'Increases your count multiplier by 0.2.',
 	},
 	'count multiplier 2': {
 		name: 'Count Multiplier 2',
@@ -15,7 +15,7 @@ module.exports = {
 		rarity: 'legendary',
 		ctg: 'multiplier',
 		gainedFrom: 'Shop',
-		description: 'Increases your count multiplier by 0.5.',
+		description: 'Increases your count multiplier by 0.2.',
 	},
 	'count multiplier 3': {
 		name: 'Count Multiplier 3',
@@ -23,7 +23,7 @@ module.exports = {
 		rarity: 'legendary',
 		ctg: 'multiplier',
 		gainedFrom: 'Shop',
-		description: 'Increases your count multiplier by 0.5.',
+		description: 'Increases your count multiplier by 0.2.',
 	},
 	'count multiplier 4': {
 		name: 'Count Multiplier 4',
@@ -31,7 +31,7 @@ module.exports = {
 		rarity: 'legendary',
 		ctg: 'multiplier',
 		gainedFrom: 'Shop',
-		description: 'Increases your count multiplier by 0.5.',
+		description: 'Increases your count multiplier by 0.2.',
 	},
 	'count multiplier 5': {
 		name: 'Count Multiplier 5',
@@ -39,7 +39,7 @@ module.exports = {
 		rarity: 'legendary',
 		ctg: 'multiplier',
 		gainedFrom: 'Shop',
-		description: 'Increases your count multiplier by 0.5.',
+		description: 'Increases your count multiplier by 0.2.',
 	},
 	'count multiplier 6': {
 		name: 'Count Multiplier 6',
@@ -47,7 +47,7 @@ module.exports = {
 		rarity: 'legendary',
 		ctg: 'multiplier',
 		gainedFrom: '10000 Moneys',
-		description: 'Increases your count multiplier by 0.5.',
+		description: 'Increases your count multiplier by 0.2.',
 	},
 	'count multiplier 7': {
 		name: 'Count Multiplier 7',
@@ -55,7 +55,7 @@ module.exports = {
 		rarity: 'legendary',
 		ctg: 'multiplier',
 		gainedFrom: '200 Problems',
-		description: 'Increases your count multiplier by 0.5.',
+		description: 'Increases your count multiplier by 0.2.',
 	},
 	'count multiplier 8': {
 		name: 'Count Multiplier 8',
@@ -63,7 +63,7 @@ module.exports = {
 		rarity: 'legendary',
 		ctg: 'multiplier',
 		gainedFrom: 'Half Person Half Millionaire',
-		description: 'Increases your count multiplier by 0.5.',
+		description: 'Increases your count multiplier by 0.2.',
 	},
 	'count multiplier 9': {
 		name: 'Count Multiplier 9',
@@ -71,7 +71,7 @@ module.exports = {
 		rarity: 'legendary',
 		ctg: 'multiplier',
 		gainedFrom: 'Jackpot!',
-		description: 'Increases your count multiplier by 0.5.',
+		description: 'Increases your count multiplier by 0.2.',
 	},
 	'count multiplier 10': {
 		name: 'Count Multiplier 10',
@@ -79,7 +79,7 @@ module.exports = {
 		rarity: 'legendary',
 		ctg: 'multiplier',
 		gainedFrom: 'The Collector',
-		description: 'Increases your count multiplier by 0.5.',
+		description: 'Increases your count multiplier by 0.2.',
 	},
 
 

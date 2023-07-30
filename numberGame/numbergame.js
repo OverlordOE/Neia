@@ -44,7 +44,7 @@ module.exports = async function execute(message, msgUser, guild, client) {
 		const easterEgg = nf.getEasterEggs(number);
 		if (easterEgg.length) nf.applyEasterEggs(easterEgg, message);
 
-		// Checkpoints
+		//  Checkpoints
 		const check = nf.checkCheckpoint(number);
 		if (check) {
 			numberGameInfo.lastCheckpoint = number;
@@ -97,18 +97,20 @@ module.exports = async function execute(message, msgUser, guild, client) {
 	}
 
 	function giveBonus() {
-		const dailyMultiplier = 5;
-		const hourlyMultiplier = 1;
+		const dailyMultiplier = 2.5;
+		const hourlyMultiplier = 0.5;
 		const daily = client.userManager.getDailyCount(msgUser);
 		const hourly = client.userManager.getHourlyCount(msgUser);
 
 
 		if (daily === true) {
+			client.userManager.changeBalance(msgUser, number * hourlyMultiplier);
 			message.reply({ content: `__**Daily Count reward:**__ ${client.util.formatNumber(number * dailyMultiplier)}💰!`, ephemeral: true });
 			client.userManager.setDailyCount(msgUser);
 		}
 
 		if (hourly === true) {
+			client.userManager.changeBalance(msgUser, number * hourlyMultiplier);
 			message.author.send({ content: `__**Hourly Count reward:**__ ${client.util.formatNumber(number * hourlyMultiplier)}💰`, ephemeral: true });
 			client.userManager.setHourlyCount(msgUser);
 		}
