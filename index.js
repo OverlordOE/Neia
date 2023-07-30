@@ -1,6 +1,6 @@
 const numberGame = require("./numberGame/numbergame.js");
 const events = require('./events/events.js');
-const { Client, GatewayIntentBits, Partials, Collection } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, Collection, Events } = require("discord.js");
 const {
   Users,
   userManager,
@@ -21,9 +21,7 @@ const client = new Client({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.DirectMessages,
-    GatewayIntentBits.GuildMembers
   ],
-  partials: [Partials.Channel],
 });
 
 client.emojiCharacters = require("./data/emojiCharacters");
@@ -88,7 +86,7 @@ for (const file of commandFiles) {
 }
 
 //* Respond to messages
-client.on("messageCreate", async (message) => {
+client.on(Events.MessageCreate, async (message) => {
   if (message.author.bot) return;
   else if (message.channel.type == "DM") {
     if (
@@ -112,7 +110,6 @@ client.on("messageCreate", async (message) => {
   user.author = message.author;
 
   if (
-    message.type != "DEFAULT" ||
     message.attachments.first() ||
     message.interaction ||
     message.author.bot ||
@@ -125,7 +122,7 @@ client.on("messageCreate", async (message) => {
 });
 
 //* Handle interactions
-client.on("interactionCreate", async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {
   if (
     !interaction.isCommand() ||
     interaction.isMessageComponent() ||
