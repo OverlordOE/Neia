@@ -60,23 +60,23 @@ module.exports = {
 
       let item;
       if (i.amount) item = this.getItem(i.name);
-      else item = this.getItem(i.name);
+      else item = this.getCollectable(i.name);
 
       switch (item.rarity) {
         case 'common':
-          common += `${item.emoji}${item.name}`;
+          common += `${item.emoji}${item.name}\n`;
           break;
         case 'uncommon':
-          uncommon += `${item.emoji}${item.name}`;
+          uncommon += `${item.emoji}${item.name}\n`;
           break;
         case 'rare':
-          rare += `${item.emoji}${item.name}`;
+          rare += `${item.emoji}${item.name}\n`;
           break;
         case 'epic':
-          epic += `${item.emoji}${item.name}`;
+          epic += `${item.emoji}${item.name}\n`;
           break;
         case 'legendary':
-          legendary += `${item.emoji}${item.name}`;
+          legendary += `${item.emoji}${item.name}\n`;
           break;
       }				
     });
