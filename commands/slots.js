@@ -130,6 +130,7 @@ module.exports = {
 		function endGame() {
 			if (rowsWon >= 1) {
 				const winAmount = gambleAmount * payoutRate * rowsWon;
+				client.userManager.changeBalance(msgUser, winAmount, true);
 				output += `\n\n**__You have ${rowsWon} row(s)__ and got a payout of __${payoutRate * rowsWon}X your bet!__**\nYou won ${client.util.formatNumber(winAmount)}💰`;
 				embed.setColor('#00fc43');
 			}

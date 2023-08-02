@@ -21,15 +21,17 @@ module.exports = {
 			.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
 			.setColor('#f3ab16');
 
-		embed.setDescription(`**Current Number:** ${numberGameInfo.currentNumber}\n
-			**Last Counter:** ${lastUser}\n
-			**Channel:** ${channel.toString()}\n
-			**Total Numbers Counted:** ${numberGameInfo.totalCounted}\n
-			**Last Checkpoint:** ${numberGameInfo.lastCheckpoint}\n
-			**Next Checkpoint:** ${numberGameInfo.nextCheckpoint}\n
-			**Highest Streak:** ${numberGameInfo.highestStreak}\n
-			**Streaks Ruined:** ${numberGameInfo.streaksRuined}\n`
-			);
+		embed.setDescription(`**Current Number:** ${numberGameInfo.currentNumber}
+			**Last Checkpoint:** ${numberGameInfo.lastCheckpoint}
+			**Next Checkpoint:** ${numberGameInfo.nextCheckpoint}	
+		
+			**Last Counter:** ${lastUser}
+			**Channel:** ${channel.toString()}
+			
+			**Total Numbers Counted:** ${numberGameInfo.totalCounted}
+			**Highest Streak:** ${numberGameInfo.highestStreak}
+			**Streaks Ruined:** ${numberGameInfo.streaksRuined}`
+		);
 
 		return interaction.reply({ embeds: [embed] });
 	},
