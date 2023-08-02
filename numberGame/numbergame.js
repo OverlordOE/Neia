@@ -104,14 +104,14 @@ module.exports = async function execute(message, msgUser, guild, client) {
 
 
 		if (daily === true) {
-			client.userManager.changeBalance(msgUser, number * hourlyMultiplier);
-			message.reply({ content: `__**Daily Count reward:**__ ${client.util.formatNumber(number * dailyMultiplier)}💰!`, ephemeral: true });
+			client.userManager.changeBalance(msgUser, number * dailyMultiplier);
+			message.react('💰');
 			client.userManager.setDailyCount(msgUser);
 		}
 
 		if (hourly === true) {
 			client.userManager.changeBalance(msgUser, number * hourlyMultiplier);
-			message.author.send({ content: `__**Hourly Count reward:**__ ${client.util.formatNumber(number * hourlyMultiplier)}💰`, ephemeral: true });
+			message.react('�');
 			client.userManager.setHourlyCount(msgUser);
 		}
 	}
