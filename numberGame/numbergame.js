@@ -111,7 +111,7 @@ module.exports = async function execute(message, msgUser, guild, client) {
 
 		if (hourly === true) {
 			client.userManager.changeBalance(msgUser, number * hourlyMultiplier);
-			message.react('�');
+			message.react('💵');
 			client.userManager.setHourlyCount(msgUser);
 		}
 	}
