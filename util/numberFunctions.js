@@ -99,9 +99,11 @@ module.exports = {
         returnArray.push(emoji[9]);
         break;
       case 1989:
-        returnArray.push("🇨🇳")
+        returnArray.push("🇨🇳");
+        break;
       case 2020:
-        returnArray.push("�")
+        returnArray.push("�");
+        break;
     }
 
     return returnArray;

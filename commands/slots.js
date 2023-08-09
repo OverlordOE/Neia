@@ -130,13 +130,16 @@ module.exports = {
 		function endGame() {
 			if (rowsWon >= 1) {
 				const winAmount = gambleAmount * payoutRate * rowsWon;
-				client.userManager.changeBalance(msgUser, winAmount, true);
-				output += `\n\n**__You have ${rowsWon} row(s)__ and got a payout of __${payoutRate * rowsWon}X your bet!__**\nYou won ${client.util.formatNumber(winAmount)}💰`;
+				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
+				output += `
+				\n**__You have ${rowsWon} row(s)__ and got a payout of __${payoutRate * rowsWon}X your bet!__**
+				You won ${client.util.formatNumber(winAmount)}💰
+				Your balance is ${client.util.formatNumber(balance)}💰`;
 				embed.setColor('#00fc43');
 			}
 			else {
 				embed.setColor('#fc0303');
-				output += `\n\n__**You lost!**__ ${client.util.formatNumber(gambleAmount)}💰`;
+				output += `\n\n__**You lost!**__ ${client.util.formatNumber(gambleAmount)}💰\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`;
 			}
 			interaction.editReply({ embeds: [embed.setDescription(output)] });
 		}
