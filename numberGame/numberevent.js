@@ -104,7 +104,7 @@ async function sendEvent(client, g) {
           embed
             .setDescription(description)
             .setColor("#00fc43")
-            .setImage(avatarLink),
+            .setThumbnail(avatarLink),
         ],
         components: [],
       });
