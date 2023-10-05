@@ -1,8 +1,7 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, ButtonBuilder, ActionRowBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('numberguessing')
+		.setName('1in5')
 		.setDescription('Guess which number Neia has in her mind.')
 		.addIntegerOption(option =>
 			option
@@ -16,13 +15,11 @@ module.exports = {
 				.setRequired(false)),
 
 
-
 	async execute(interaction, msgUser, msgGuild, client) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor('#f3ab16')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTitle('Number Guessing')
-			.setFooter('Use the emojis to play the game.', client.user.displayAvatarURL({ dynamic: true }));
+			.setTitle('Number Guessing');
 
 		const payoutRate = 5;
 
@@ -38,52 +35,52 @@ module.exports = {
 		const winAmount = payoutRate * gambleAmount;
 
 
-		const guessRow = new MessageActionRow()
+		const guessRow = new ActionRowBuilder()
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('1')
 					.setLabel('1')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 			)
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('2')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 					.setLabel('2')
 			)
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('3')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 					.setLabel('3')
 			)
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('4')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 					.setLabel('4')
 			)
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('5')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 					.setLabel('5')
 			);
-		const trueRow = new MessageActionRow();
+		const trueRow = new ActionRowBuilder();
 		for (let i = 1; i < 6; i++) {
 			if (i == answer) {
 				trueRow.addComponents(
-					new MessageButton()
+					new ButtonBuilder()
 						.setCustomId(`true${i}`)
-						.setStyle('SUCCESS')
+						.setStyle(ButtonStyle.Success)
 						.setLabel(`${i}`),
 				);
 			}
 			else {
 				trueRow.addComponents(
-					new MessageButton()
+					new ButtonBuilder()
 						.setCustomId(`true${i}`)
-						.setStyle('DANGER')
+						.setStyle(ButtonStyle.Danger)
 						.setLabel(`${i}`),
 				);
 			}
@@ -91,7 +88,7 @@ module.exports = {
 
 
 		const filter = i => i.user.id == interaction.user.id;
-		interaction.reply({
+		await interaction.reply({
 			embeds: [embed.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.
 			**Guess the __number__ between __1 and 5__.**`)], components: [guessRow]
 		});

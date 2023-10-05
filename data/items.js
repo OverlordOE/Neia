@@ -49,6 +49,24 @@ module.exports = {
 	},
 
 	//* CUSTOM EMOJIS  🤔
+	'trans': {
+		name: 'Trans',
+		value: 1,
+		emoji: '🏳️‍⚧️',
+		rarity: 'legendary',
+		ctg: 'reaction',
+		type: 'collectable',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
+	'pride': {
+		name: 'Pride',
+		value: 1,
+		emoji: '🏳️‍🌈',
+		rarity: 'legendary',
+		ctg: 'reaction',
+		type: 'collectable',
+		description: 'A custom emoji you can equip to change the number game emojis.',
+	},
 	'green checkmark': {
 		name: 'Green Checkmark',
 		value: 1000,
@@ -220,7 +238,7 @@ module.exports = {
 				};
 			}
 			const powerCountCooldown = client.userManager.getPowerCount(msgUser);
-			if (powerCountCooldown !== false) {
+			if (powerCountCooldown !== true) {
 				return {
 					succes: false,
 					message: `Your **Power Count** is on __Cooldown__.\nNext **Power Count**: ${powerCountCooldown}`,
@@ -237,8 +255,9 @@ module.exports = {
 			const numberGameChannel = await client.channels.fetch(numberGameChannelId);
 			numberGameChannel.send(`${interaction.user} **has activated Power Count!**.\nThey have __**1 minute**__ to count by themself.`);
 
+
+			msgUser.powerCounting = true;
 			msgUser.save();
-			msgUser.powerCounting = false;
 			client.userManager.setPowerCount(msgUser);
 
 			setTimeout(function () {
@@ -291,8 +310,8 @@ module.exports = {
 			const numberGameChannel = await client.channels.fetch(numberGameChannelId);
 			numberGameChannel.send(`${interaction.user} **has activated Count Boost!**.\nThey get extra 💰 per count for __**1 minute**__.`);
 
+			msgUser.countBoost = 50;
 			msgUser.save();
-			msgUser.countBoost = 100;
 			client.userManager.setCountBoost(msgUser);
 
 			setTimeout(function () {

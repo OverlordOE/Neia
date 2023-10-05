@@ -1,6 +1,5 @@
 const achievements = require('../data/achievements');
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('achievements')
@@ -12,40 +11,42 @@ module.exports = {
 
 
 	execute(interaction, msgUser, msgGuild, client) {
-		const embed = new MessageEmbed();
+		const embed = new EmbedBuilder();
 		const tempAchievement = interaction.options.getString('achievement');
 
 		if (tempAchievement) {
 			const achievement = client.util.getAchievement(tempAchievement);
 			if (!achievement) return interaction.reply({ embeds: [embed.setDescription(`__${tempAchievement}__ is not a valid achievement.`)], ephemeral: true });
-			const reward = client.util.getItem(achievement.reward);
+			const reward = client.util.getCollectable(achievement.reward);
 
 			embed
 				.setTitle(`${achievement.emoji}${achievement.name}`)
 				.setDescription(achievement.description)
-				.addField('Unlock Message', achievement.unlockMessage, true)
-				.addField('Reward', `${reward.emoji}${reward.name}`, true)
-				.setFooter('Use the command without arguments to see the achievement list', client.user.displayAvatarURL({ dynamic: true }));
-
-			if (achievement.picture) {
-				embed.attachFiles(`assets/achievements/${achievement.picture}`)
-					.setImage(`attachment://${achievement.picture}`);
-			}
+				.addFields([
+					{ name: 'Unlock Message', value: achievement.unlockMessage, inline: true },
+					{ name: 'Reward', value: `${reward.emoji}${reward.name}`, inline: true }
+				]);
 
 			client.util.setEmbedRarity(embed, achievement.rarity);
+			return interaction.reply({ embeds: [embed] });
 		}
 
-		else {
-			let description = '';
+		let description = '';
 
-			Object.values(achievements).map((i) => description += `${i.emoji}**${i.name}**\n`);
+		Object.values(achievements).sort((a, b) => {
+			if (a.emoji < b.emoji) return -1;
+			if (a.emoji > b.emoji) return 1;
+			return 0;
+		}).map(a => {
+			const achievement = client.util.getAchievement(a.name);
+			description += `${achievement.emoji}**${achievement.name}**\n`;
+		});
 
-			embed
-				.setTitle('Neia Achievement List')
-				.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-				.setDescription(description)
-				.setColor('#f3ab16');
-		}
+
+		embed.setTitle('Neia Achievement List')
+			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+			.setDescription(description)
+			.setColor('#f3ab16');
 
 		return interaction.reply({ embeds: [embed] });
 	},

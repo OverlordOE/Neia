@@ -1,5 +1,4 @@
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('slots')
@@ -17,7 +16,7 @@ module.exports = {
 
 	async execute(interaction, msgUser, msgGuild, client) {
 		/*
-		?Profitability formula: y(1) = x*a*c / b^3
+		fixme: Profitability formula: y(1) = x*a*c / b^3
 		y = avarage profit per spin in decimal percentage
 		x = payout multiplier
 		a = amount of proftitable rows per row
@@ -25,15 +24,19 @@ module.exports = {
 		c = amount of rows
 		*/
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor('#f3ab16')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTitle('Neia\'s Gambling Imporium')
-			.setFooter('Use the emojis to play the game.', client.user.displayAvatarURL({ dynamic: true }));
+			.setTitle('Neia\'s Gambling Imporium');
 
 
 		const payoutRate = 1.6;
-		const icons = ['🍋', '🍋', '🍋', '🍉', '🍉', '🍉', '🍒', '🍒', '🍌', '🍌', '<:luckyseven:838417718944333884>'];
+		const icons = [
+			'🍋', '🍋', '🍋', '🍋', '🍋',
+			'🍉', '🍉', '🍉', '🍉', '🍉',
+			'🍒', '🍒', '🍒',
+			'🍌', '🍌', '🍌',
+			'<:luckyseven:838417718944333884>', '<:luckyseven:838417718944333884>'];
 		const slots = [];
 		const slotX = 3;
 		const slotY = 3;
@@ -50,9 +53,12 @@ module.exports = {
 
 		output += `
 		You have bet ${client.util.formatNumber(gambleAmount)}💰.
-		Get **${slotX}** of the __**same symbol**__ in a row to **win**.
-		Getting a 🍒 or 🍌 row will give **2X payout**.
-		Getting a <:luckyseven:838417718944333884> row will give **4X payout**.\n\n`;
+
+		**${payoutRate}X** Payout per row.
+		🍋 and 🍉 add **1 row**
+		🍒 and 🍌 add **2 rows**
+		<:luckyseven:838417718944333884> adda **4 rows**
+		\n`;
 
 		for (let i = 0; i < slotY; i++) {
 			slots[i] = [];
@@ -125,7 +131,10 @@ module.exports = {
 			if (rowsWon >= 1) {
 				const winAmount = gambleAmount * payoutRate * rowsWon;
 				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
-				output += `\n\n__**You won!**__ **${rowsWon}** row(s)!\nYou gained ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`;
+				output += `
+				\n**__You have ${rowsWon} row(s)__ and got a payout of __${payoutRate * rowsWon}X your bet!__**
+				You won ${client.util.formatNumber(winAmount)}💰
+				Your balance is ${client.util.formatNumber(balance)}💰`;
 				embed.setColor('#00fc43');
 			}
 			else {
@@ -148,7 +157,7 @@ module.exports = {
 			}
 			else {
 				checkVerticalWins();
-				output += '\n🇽';
+				output += '\n\n🇽';
 				checkDiagonalWins();
 				endGame();
 			}

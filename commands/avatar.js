@@ -1,5 +1,4 @@
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder, hyperlink } = require('@discordjs/builders');
+const { EmbedBuilder, hyperlink, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('avatar')
@@ -13,7 +12,7 @@ module.exports = {
 		const target = interaction.options.getUser('target') || interaction.user;
 		const avatarLink = target.displayAvatarURL({ dynamic: true });
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle(`${target.tag}'s Avatar`)
 			.setDescription(hyperlink('Download Link', avatarLink))
 			.setImage(avatarLink)

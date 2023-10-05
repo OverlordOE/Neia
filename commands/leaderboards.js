@@ -1,51 +1,61 @@
-const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, SlashCommandBuilder, ButtonStyle } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('leaderboards')
-		.setDescription('Shows the leaderboard of a couple of stats.')
-		.addIntegerOption(option =>
-			option
-				.setName('page')
-				.setDescription('The page you want to see.')),
+		.setDescription('Shows the leaderboard of a couple of stats.'),
 
-	execute(interaction, msgUser, msgGuild, client) {
+	async execute(interaction, msgUser, msgGuild, client) {
+		const searchFilter = user => client.users.cache.has(user.user_id);
 
 		const ruinedList = client.userManager.sort((a, b) => client.userManager.getStats(b).streaksRuined - client.userManager.getStats(a).streaksRuined)
-			.filter(user => client.users.cache.has(user.user_id))
+			.filter(searchFilter)
 			.first(50)
 			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(client.userManager.getStats(user).streaksRuined)}`);
 
 
 		const countList = client.userManager.sort((a, b) => client.userManager.getStats(b).numbersCounted - client.userManager.getStats(a).numbersCounted)
-			.filter(user => client.users.cache.has(user.user_id))
+			.filter(searchFilter)
 			.first(50)
 			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(client.userManager.getStats(user).numbersCounted)}`);
 
+		const countGainList = client.userManager.sort((a, b) => client.userManager.getStats(b).countingMoneyGained - client.userManager.getStats(a).countingMoneyGained)
+			.filter(searchFilter)
+			.first(50)
+			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(client.userManager.getStats(user).countingMoneyGained)}💰`);
+
+		const gamblingGainList = client.userManager.sort((a, b) => client.userManager.getStats(b).gamblingMoneyGained - client.userManager.getStats(a).gamblingMoneyGained)
+			.filter(searchFilter)
+			.first(50)
+			.map((user, position) => `\n__**${position + 1}**.__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(client.userManager.getStats(user).gamblingMoneyGained)}💰`);
+
 
 		const balanceList = client.userManager.sort((a, b) => b.balance - a.balance)
-			.filter(user => client.users.cache.has(user.user_id))
+			.filter(searchFilter)
 			.first(50)
 			.map((user, position) => `\n__**${position + 1}.**__ *${client.users.cache.get(user.user_id).tag}*: ${client.util.formatNumber(user.balance)}💰`);
 
 
-		const listArray = [{ list: balanceList, title: 'Current Balance' }, { list: countList, title: 'Total Numbers Counted' }, { list: ruinedList, title: 'Streaks Ruined' }];
+		const listArray = [
+			{ list: balanceList, title: 'Current Balance' },
+			{ list: countList, title: 'Total Numbers Counted' },
+			{ list: ruinedList, title: 'Streaks Ruined' },
+			{ list: gamblingGainList, title: 'Money Gained Gambling' },
+			{ list: countGainList, title: 'Money Gained Counting' },
+		];
 		let listIndex = 0;
-		let page = interaction.options.getInteger('page') || 0;
-		if (page < 0 && page > 4) page = 0;
+		let page = 0;
 
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Neia leaderboard')
 			.setDescription(editDescription(listArray[listIndex], page))
 			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-			.setFooter('Use the emojis to scroll through the list or switch the list.', client.user.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16');
 
 
-		const menuRow = new MessageActionRow()
+		const menuRow = new ActionRowBuilder()
 			.addComponents(
-				new MessageSelectMenu()
+				new StringSelectMenuBuilder()
 					.setCustomId('list')
 					.setPlaceholder('Balance List')
 					.addOptions([
@@ -64,29 +74,39 @@ module.exports = {
 							description: 'Streaks Ruined Leaderboard.',
 							value: 'ruined',
 						},
+						{
+							label: 'Money Gained Gambling List',
+							description: 'Money Gained Gambling Leaderboard.',
+							value: 'ggambling',
+						},
+						{
+							label: 'Money Gained Counting List',
+							description: 'Money Gained Counting Leaderboard.',
+							value: 'gcounting',
+						},
 					]),
 			);
 
-		const buttonRow = new MessageActionRow()
+		const buttonRow = new ActionRowBuilder()
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('previous')
 					.setLabel('Previous Page')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 					.setEmoji('◀️'),
 			)
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('next')
 					.setLabel('Next Page')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 					.setEmoji('▶️'),
 			);
 
 
-		interaction.reply({ embeds: [embed], components: [menuRow, buttonRow] });
-		const filter = i => i.user.id == interaction.user.id;
-		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
+		await interaction.reply({ embeds: [embed], components: [menuRow, buttonRow] });
+		const buttonFilter = i => i.user.id == interaction.user.id;
+		const collector = interaction.channel.createMessageComponentCollector({ buttonFilter, time: 60000 });
 
 		collector.on('collect', async i => {
 			if (i.user.id === interaction.user.id) {
@@ -119,6 +139,18 @@ module.exports = {
 					else if (i.values[0] === 'ruined') {
 						listIndex = 2;
 						menuRow.components[0].setPlaceholder('Streaks Ruined List');
+						embed.setDescription(editDescription(listArray[listIndex], page));
+						await i.update({ embeds: [embed], components: [menuRow, buttonRow] });
+					}
+					else if (i.values[0] === 'ggambling') {
+						listIndex = 3;
+						menuRow.components[0].setPlaceholder('Streaks Ruined List');
+						embed.setDescription(editDescription(listArray[listIndex], page));
+						await i.update({ embeds: [embed], components: [menuRow, buttonRow] });
+					}
+					else if (i.values[0] === 'gcounting') {
+						listIndex = 4;
+						menuRow.components[0].setPlaceholder('Money Gained Counting List');
 						embed.setDescription(editDescription(listArray[listIndex], page));
 						await i.update({ embeds: [embed], components: [menuRow, buttonRow] });
 					}

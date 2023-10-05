@@ -1,5 +1,4 @@
-const checkpoints = [50, 100, 225, 350, 500, 650, 800, 1000, 1200, 1400, 1650, 1850, 2000, 2250, 2500, 2750, 3000, 3300, 3600, 3900, 4200, 4600, 5000];
-const Discord = require('discord.js');
+const nf = require('../util/numberFunctions');
 
 module.exports = async function execute(message, msgUser, guild, client) {
 
@@ -36,30 +35,29 @@ module.exports = async function execute(message, msgUser, guild, client) {
 	}
 
 	function succesfullCount() {
-		try {
-			message.react(msgUser.reaction);
-			client.userManager.changeBalance(msgUser, Math.sqrt(100) / 3); // ! NEEDS NEW VALUE
-		}
-		catch (error) {
-			client.logger.warn('Emoji failed');
-			message.react('✅');
-		}
-
+		// Money
+		if (number > 2) client.userManager.changeBalance(msgUser, number * msgUser.countMultiplier);
 		giveBonus();
-		easterEggs();
 
-		if (checkpoints.includes(number)) {
-			const nextCheckpointIndex = checkpoints.indexOf(number) + 1;
+		// Reactions
+		message.react(msgUser.reaction);
+		const easterEgg = nf.getEasterEggs(number);
+		if (easterEgg.length) nf.applyEasterEggs(easterEgg, message);
+
+		//  Checkpoints
+		const check = nf.checkCheckpoint(number);
+		if (check) {
 			numberGameInfo.lastCheckpoint = number;
-			numberGameInfo.nextCheckpoint = checkpoints[nextCheckpointIndex];
+			numberGameInfo.nextCheckpoint = check;
 			message.reply(`Checkpoint **${number}** reached!\nIf you make a mistake you will be reversed to this checkpoint.`);
 		}
 
+		// Stats
 		if (number > numberGameInfo.highestStreak) numberGameInfo.highestStreak = number;
 		numberGameInfo.currentNumber++;
 		numberGameInfo.totalCounted++;
 		numberGameInfo.lastUserId = message.author.id;
-		if (number > 2) client.userManager.changeBalance(msgUser, number * msgUser.countMultiplier);
+
 		client.userManager.addStats(msgUser, 'numbersCounted', 1);
 		client.userManager.addStats(msgUser, 'countingMoneyGained', number * msgUser.countMultiplier);
 	}
@@ -70,74 +68,12 @@ module.exports = async function execute(message, msgUser, guild, client) {
 
 		numberGameInfo.currentNumber = 0;
 		numberGameInfo.lastCheckpoint = 0;
-		numberGameInfo.nextCheckpoint = checkpoints[0];
+		numberGameInfo.nextCheckpoint = 50;
 		numberGameInfo.lastUserId = null;
 		numberGameInfo.streaksRuined++;
 		client.userManager.addStats(msgUser, 'streaksRuined', 1);
 	}
 
-	function easterEggs() {
-		switch (number) {
-			case 7:
-				message.react('🍀');
-				break;
-			case 13:
-				message.react('✡️');
-				break;
-			case 42:
-				message.react(client.emojiCharacters[0]);
-				break;
-			case 69:
-				message.react('🍆');
-				break;
-			case 100:
-				message.react('💯');
-				break;
-			case 111:
-				message.react(client.emojiCharacters[1]);
-				break;
-			case 112:
-				message.react('🚑');
-				break;
-			case 123:
-				message.react(client.emojiCharacters[4]);
-				break;
-			case 222:
-				message.react(client.emojiCharacters[2]);
-				break;
-			case 333:
-				message.react(client.emojiCharacters[3]);
-				break;
-			case 314:
-				message.react('🥧');
-				break;
-			case 404:
-				message.react('❔');
-				break;
-			case 444:
-				message.react(client.emojiCharacters[4]);
-				break;
-			case 555:
-				message.react(client.emojiCharacters[5]);
-				break;
-			case 666:
-				message.react('✡️');
-				break;
-			case 777:
-				message.react('🍀');
-				break;
-			case 888:
-				message.react(client.emojiCharacters[8]);
-				break;
-			case 999:
-				message.react(client.emojiCharacters[9]);
-				break;
-			case 1000:
-				message.react(client.emojiCharacters[1]);
-				message.react('🇰');
-				break;
-		}
-	}
 
 	function checkpoint() {
 		message.react('🏁');
@@ -161,31 +97,21 @@ module.exports = async function execute(message, msgUser, guild, client) {
 	}
 
 	function giveBonus() {
-		const dailyMultiplier = 5;
-		const hourlyMultiplier = 1;
+		const dailyMultiplier = 2.5;
+		const hourlyMultiplier = 0.5;
 		const daily = client.userManager.getDailyCount(msgUser);
 		const hourly = client.userManager.getHourlyCount(msgUser);
 
 
 		if (daily === true) {
-			const balance = client.userManager.changeBalance(msgUser, number * dailyMultiplier);
-
-			const embed = new Discord.MessageEmbed()
-				.setDescription(`__**Daily Count**__ reward!\nYou gained ${client.util.formatNumber(number * dailyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
-				.setColor('#f3ab16');
-			message.author.send({ embeds: [embed] });
-
+			client.userManager.changeBalance(msgUser, number * dailyMultiplier);
+			message.react('💰');
 			client.userManager.setDailyCount(msgUser);
 		}
 
 		if (hourly === true) {
-			const balance = client.userManager.changeBalance(msgUser, number * hourlyMultiplier);
-
-			const embed = new Discord.MessageEmbed()
-				.setDescription(`__**Hourly Count**__ reward!\nYou gained ${client.util.formatNumber(number * hourlyMultiplier)}💰 and your balance is ${client.util.formatNumber(balance)}💰.`)
-				.setColor('#f3ab16');
-			message.author.send({ embeds: [embed] });
-
+			client.userManager.changeBalance(msgUser, number * hourlyMultiplier);
+			message.react('💵');
 			client.userManager.setHourlyCount(msgUser);
 		}
 	}

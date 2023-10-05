@@ -1,5 +1,4 @@
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('numbergamestats')
@@ -11,26 +10,28 @@ module.exports = {
 		if (!numberGameInfo.channelId) return interaction.reply('You don\'t have a numbergame setup yet!\nUse the command `setchannel` to designate a channel for the numbergame');
 
 		const channel = await client.channels.fetch(numberGameInfo.channelId);
-
-		const embed = new MessageEmbed()
-			.setTitle('Numbergame stats')
-			.setFooter('To change the channel for the number game use the `sc` command.', client.user.displayAvatarURL({ dynamic: true }))
-			.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
-			.addField('Current Number', numberGameInfo.currentNumber.toString())
-			.setColor('#f3ab16');
+		let lastUser = 'Noone';
 
 		if (numberGameInfo.lastUserId) {
 			const lastCounter = await interaction.guild.members.fetch(numberGameInfo.lastUserId);
-			embed.addField('Last Counter', lastCounter.toString(), true);
+			lastUser = lastCounter.toString();
 		}
+		const embed = new EmbedBuilder()
+			.setTitle('Numbergame stats')
+			.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
+			.setColor('#f3ab16');
 
-		embed.addField('Channel', channel.toString(), true)
-			.addField('Total Numbers Counted', numberGameInfo.totalCounted.toString(), true)
-			.addField('Last Checkpoint', numberGameInfo.lastCheckpoint.toString(), true)
-			.addField('Next Checkpoint', numberGameInfo.nextCheckpoint.toString(), true)
-			.addField('Highest Streak', numberGameInfo.highestStreak.toString(), true)
-			.addField('Streaks Ruined', numberGameInfo.streaksRuined.toString(), true)
-			;
+		embed.setDescription(`**Current Number:** ${numberGameInfo.currentNumber}
+			**Last Checkpoint:** ${numberGameInfo.lastCheckpoint}
+			**Next Checkpoint:** ${numberGameInfo.nextCheckpoint}	
+		
+			**Last Counter:** ${lastUser}
+			**Channel:** ${channel.toString()}
+			
+			**Total Numbers Counted:** ${numberGameInfo.totalCounted}
+			**Highest Streak:** ${numberGameInfo.highestStreak}
+			**Streaks Ruined:** ${numberGameInfo.streaksRuined}`
+		);
 
 		return interaction.reply({ embeds: [embed] });
 	},

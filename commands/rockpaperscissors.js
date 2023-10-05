@@ -1,5 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, SlashCommandBuilder, ButtonStyle } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('rockpaperscissors')
@@ -19,11 +18,10 @@ module.exports = {
 	async execute(interaction, msgUser, msgGuild, client) {
 		const payoutRate = 1.8;
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor('#f3ab16')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTitle('Rock, Paper, Scissors')
-			.setFooter('Use the emojis to play the game.', client.user.displayAvatarURL({ dynamic: true }));
+			.setTitle('Rock, Paper, Scissors');
 
 
 		let gambleAmount = interaction.options.getInteger('amount');
@@ -37,49 +35,49 @@ module.exports = {
 		const botAnswer = Math.floor(Math.random() * emojiArray.length);
 		const winAmount = payoutRate * gambleAmount;
 
-		const guessRow = new MessageActionRow()
+		const guessRow = new ActionRowBuilder()
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('0')
 					.setEmoji('✊')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 			)
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('1')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 					.setEmoji('🧻')
 			)
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('2')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 					.setEmoji('✂️')
 			);
 
-		const trueRow = new MessageActionRow();
+		const trueRow = new ActionRowBuilder();
 		for (let i = 0; i < emojiArray.length; i++) {
 			if (i == botAnswer) {
 				trueRow.addComponents(
-					new MessageButton()
+					new ButtonBuilder()
 						.setCustomId(`true${i}`)
-						.setStyle('PRIMARY')
+						.setStyle(ButtonStyle.Primary)
 						.setEmoji(`${emojiArray[i]}`),
 				);
 			}
 			else if (botAnswer - i === 1 || botAnswer - i === -2) {
 				trueRow.addComponents(
-					new MessageButton()
+					new ButtonBuilder()
 						.setCustomId(`true${i}`)
-						.setStyle('DANGER')
+						.setStyle(ButtonStyle.Danger)
 						.setEmoji(`${emojiArray[i]}`),
 				);
 			}
 			else if (i - botAnswer === 1 || i - botAnswer === -2) {
 				trueRow.addComponents(
-					new MessageButton()
+					new ButtonBuilder()
 						.setCustomId(`true${i}`)
-						.setStyle('SUCCESS')
+						.setStyle(ButtonStyle.Success)
 						.setEmoji(`${emojiArray[i]}`),
 				);
 			}
@@ -87,7 +85,7 @@ module.exports = {
 
 
 		const filter = i => i.user.id == interaction.user.id;
-		interaction.reply({
+		await interaction.reply({
 			embeds: [embed.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.
 			**Choose __Rock__, __Paper__ or __Scissors__.**`)], components: [guessRow]
 		});

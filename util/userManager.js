@@ -8,8 +8,8 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 	storage: 'database.sqlite',
 });
 
-const { Collection, MessageEmbed } = require('discord.js');
-const { util } = require('./util');
+const { Collection, EmbedBuilder } = require('discord.js');
+const util = require('./util');
 
 const Users = require('../models/Users')(sequelize, Sequelize);
 const UserItems = require('../models/UserItems')(sequelize, Sequelize);
@@ -275,7 +275,7 @@ Reflect.defineProperty(collectionOverseer, 'unlockCollectable', {
 	value: async function unlockCollectable(user, collectable) {
 		if (await collectionOverseer.hasCollectable(user, collectable)) return false;
 
-		if (collectable.ctg == 'multiplier') user.countMultiplier++;
+		if (collectable.ctg == 'multiplier') user.countMultiplier += 0.2;
 		user.save();
 
 		UserCollectables.create({
@@ -358,7 +358,7 @@ Reflect.defineProperty(achievementHunter, 'hunt', {
 				else if (stats['numbersCounted'] >= 50) unlock(user, 'Numberphile');
 				else if (stats['numbersCounted'] >= 5) unlock(user, 'Babys First Numbers');
 				break;
-			
+
 			case 'countingMoneyGained':
 				if (stats['countingMoneyGained'] >= 1000000) unlock(user, 'Count Master');
 				else if (stats['countingMoneyGained'] >= 100000) unlock(user, 'Count Work Makes Dream Work');
@@ -367,30 +367,37 @@ Reflect.defineProperty(achievementHunter, 'hunt', {
 				else if (stats['countingMoneyGained'] >= 100) unlock(user, 'You Get Money From This?');
 				break;
 
+			case 'achievementsAchieved':
+				if (stats.length >= 30) unlock(user, 'Battle Hardened Achievement Hunter');
+				else if (stats.length >= 15) unlock(user, 'Achievement Hunter Footsoldier');
+				else if (stats.length >= 5) unlock(user, 'Achievement Hunter Trainee');
 		}
 	},
 });
 
 async function unlock(user, achievementName) {
 	const achievement = util.getAchievement(achievementName);
+	if (await achievementHunter.hasAchievement(user, achievement)) return;
 	await addAchievement(user, achievement);
 
 	const reward = util.getCollectable(achievement.reward);
 	collectionOverseer.unlockCollectable(user, reward);
 
-	const embed = new MessageEmbed()
+	const embed = new EmbedBuilder()
 		.setTitle('Achievement Unlocked!')
-		.setDescription(`You have unlocked **${achievement.emoji}${achievementName}**\n__${achievement.unlockMessage}__\n
-		You have unlocked: _**${reward.emoji}${achievement.reward}!**_`);
+		.setDescription(`You have achieved **${achievement.emoji}${achievementName}**\n\n*${achievement.unlockMessage}*\n
+		You have unlocked: _**${reward.emoji}${achievement.reward}!**_
+		Use the \`use\` command to equip it!`);
 	util.setEmbedRarity(embed, achievement.rarity);
 
 	user.author.send({ embeds: [embed] });
+
+	const achievements = await achievementHunter.getAchievements(user);
+	achievementHunter.hunt(user, 'achievementsAchieved', achievements);
 }
 
 
 async function addAchievement(user, achievement) {
-	if (await achievementHunter.hasAchievement(user, achievement)) return;
-
 	return await UserAchievements.create({
 		user_id: user.user_id,
 		name: achievement.name,
@@ -398,12 +405,12 @@ async function addAchievement(user, achievement) {
 }
 
 
-// async function removeAchievement(user, achievement) {
-// 	const oldAchievement = await achievementHunter.hasAchievement(achievement);
+async function removeAchievement(user, achievement) {
+	const oldAchievement = await achievementHunter.hasAchievement(achievement);
 
-// 	if (oldAchievement) return oldAchievement.destroy();
-// 	else throw Error(`User doesn't have achievement: ${achievement.name}`);
-// }
+	if (oldAchievement) return oldAchievement.destroy();
+	else throw Error(`User doesn't have achievement: ${achievement.name}`);
+}
 
 
 Reflect.defineProperty(achievementHunter, 'hasAchievement', {

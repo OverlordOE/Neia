@@ -1,5 +1,4 @@
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('botstats')
@@ -14,7 +13,7 @@ module.exports = {
 			if (!isNaN(memberTotal) && guild.id != 264445053596991498) memberTotal += Number(guild.memberCount);
 		});
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setDescription(`Neia is in **${guildTotal}** servers with a total of **${memberTotal}** users.`)
 			.setColor('#f3ab16');
 

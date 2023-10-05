@@ -1,5 +1,4 @@
-const { MessageEmbed } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const sellPercentage = 0.8;
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -17,11 +16,10 @@ module.exports = {
 
 
 	async execute(interaction, msgUser, msgGuild, client) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Neia Refunds')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-			.setColor('#f3ab16')
-			.setFooter('.', client.user.displayAvatarURL({ dynamic: true }));
+			.setColor('#f3ab16');
 
 		let amount = interaction.options.getInteger('amount');
 		if (amount < 1 || !amount) amount = 1;

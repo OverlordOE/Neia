@@ -1,5 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 const wait = require('util').promisify(setTimeout);
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -26,19 +25,19 @@ module.exports = {
 		client.userManager.changeBalance(msgUser, -gambleAmount, true);
 
 
-		const row = new MessageActionRow()
+		const row = new ActionRowBuilder()
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('hit')
 					.setLabel('Hit')
-					.setStyle('SUCCESS')
+					.setStyle(ButtonStyle.Success)
 					.setEmoji('🃏'),
 			)
 			.addComponents(
-				new MessageButton()
+				new ButtonBuilder()
 					.setCustomId('stand')
 					.setLabel('Stand')
-					.setStyle('PRIMARY')
+					.setStyle(ButtonStyle.Primary)
 					.setEmoji('🖐️'),
 			);
 
@@ -49,6 +48,7 @@ module.exports = {
 		let playerHandValue = 0;
 		let neiaHandValue = 0;
 		let cardsDrawn = 0;
+
 		let playerHand = '';
 		let neiaHand = '';
 		for (let i = 0; i < 2; i++) {
@@ -56,19 +56,18 @@ module.exports = {
 			getCard('client');
 		}
 
-		const embed = new MessageEmbed()
+		let description = `
+		You have **bet** ${client.util.formatNumber(gambleAmount)}💰.\n
+		${interaction.user.username}'s Hand: ${playerHand}
+		${interaction.user.username}'s Hand Value: **${playerHandValue}**\n
+		Neia's Hand: ${neiaHand}
+		Neia's Hand Value: **${neiaHandValue}**`;
+
+		const embed = new EmbedBuilder()
 			.setColor('#f3ab16')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-			.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.`)
-			.setTitle('Blackjack')
-			.setFooter('Use the buttons to play the game.', client.user.displayAvatarURL({ dynamic: true }))
-			.spliceFields(0, 5, [
-				{ name: 'Players Hand', value: playerHand.toString(), inline: true },
-				{ name: 'Players Value', value: playerHandValue.toString(), inline: true },
-				{ name: '\u200B', value: '\u200B' },
-				{ name: 'Neia\'s Hand', value: neiaHand.toString(), inline: true },
-				{ name: 'Neia\'s Value', value: neiaHandValue.toString(), inline: true },
-			]);
+			.setDescription(description)
+			.setTitle('Blackjack');
 
 
 		const filter = i => i.user.id == interaction.user.id;
@@ -102,53 +101,60 @@ module.exports = {
 		collector.on('end', async () => {
 			if (playerHandValue > 21) {
 				return await interaction.editReply({
-					embeds: [embed.setDescription(`__**You busted!**__\n
-			__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰
-			Your **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303')], components: []
+					embeds: [embed.setDescription(description += `\n
+					__**You busted!**__\n
+					__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰
+					Your balance is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303')], components: []
 				});
 			}
 			else if (neiaHandValue > 21) {
 				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
 				return await interaction.editReply({
-					embeds: [embed.setDescription(`__Neia busted!__. __**You Win!**__\n
-				You have won **${client.util.formatNumber(winAmount)}💰** and your balance is **${client.util.formatNumber(balance)}💰**`).setColor('#00fc43')], components: []
+					embeds: [embed.setDescription(description += `
+					\n**Neia busted!. __You Win!__**\n
+					You have won ${client.util.formatNumber(winAmount)}💰 and your balance is **${client.util.formatNumber(balance)}💰**`).setColor('#00fc43')], components: []
 				});
 			}
 			else if (cardsDrawn >= 5) {
 				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
 				return await interaction.editReply({
-					embeds: [embed.setDescription(`You have drawn **5 cards** without busting!\n__**You win**__\n
-				**You have won ${client.util.formatNumber(winAmount)}**💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43')], components: []
+					embeds: [embed.setDescription(description += `
+					\nYou have drawn **5 cards** without busting!\n__**You win**__\n
+					**You have won ${client.util.formatNumber(winAmount)}**💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43')], components: []
 				});
 			}
 			else if (neiaHandValue == playerHandValue) {
 				const balance = client.userManager.changeBalance(msgUser, gambleAmount);
-				return await interaction.editReply({ embeds: [embed.setDescription(`__**Its a draw!**__\n\nYour **balance** is ${client.util.formatNumber(balance)}💰`)], components: [] });
+				return await interaction.editReply({ embeds: [embed.setDescription(description += `
+				\n__**Its a draw!**__\n\nYour balance is ${client.util.formatNumber(balance)}💰`)], components: [] });
 			}
 			else if (playerHandValue > neiaHandValue) {
 				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
 				return await interaction.editReply({
-					embeds: [embed.setDescription(`__You win!__\n
-				You have won ${client.util.formatNumber(winAmount)}💰 and your **balance** is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43')], components: []
+					embeds: [embed.setDescription(description += `
+						\n__You win!__\n
+						You have won ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43')], components: []
 				});
 			}
 			else if (neiaHandValue > playerHandValue) {
 				return await interaction.editReply({
-					embeds: [embed.setDescription(`__**Neia wins!**__\n
-			__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰\nYour **balance** is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303')], components: []
+					embeds: [embed.setDescription(description += `
+					\n__**Neia wins!**__\n
+					__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303')], components: []
 				});
 			}
 		});
 
 
 		async function setEmbed(button) {
-			embed.spliceFields(0, 5, [
-				{ name: 'Players Hand', value: playerHand.toString(), inline: true },
-				{ name: 'Players Value', value: playerHandValue.toString(), inline: true },
-				{ name: '\u200B', value: '\u200B' },
-				{ name: 'Neia\'s Hand', value: neiaHand.toString(), inline: true },
-				{ name: 'Neia\'s Value', value: neiaHandValue.toString(), inline: true },
-			]);
+			description = `
+			You have **bet** ${client.util.formatNumber(gambleAmount)}💰.\n
+			${interaction.user.username}'s Hand: ${playerHand}
+			${interaction.user.username}'s Hand Value: **${playerHandValue}**\n
+			Neia's Hand: ${neiaHand}
+			Neia's Hand Value: **${neiaHandValue}**`;
+
+			embed.setDescription(description);
 			await button.update({ embeds: [embed], components: [row] });
 		}
 

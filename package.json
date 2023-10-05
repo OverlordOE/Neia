@@ -17,23 +17,17 @@
   },
   "homepage": "https://github.com/OverlordOE/Neia",
   "dependencies": {
-    "@discordjs/builders": "^0.6.0",
-    "@discordjs/rest": "*",
     "@discordjs/voice": "^0.6.0",
     "cron": "^1.8.2",
-    "discord-api-types": "^0.23.1",
-    "discord-ytdl-core": "^5.0.4",
-    "discord.js": "^13.3.1",
+    "discord.js": "^14.11.0",
     "dotenv": "^10.0.0",
-    "ffmpeg-static": "^4.4.0",
     "moment": "^2.29.1",
     "sequelize": "^6.6.5",
-    "sqlite3": "^4.2.0",
-    "winston": "^3.3.3",
-    "youtube-sr": "^4.1.8",
-    "ytdl-core": "^4.10.1"
+    "winston": "^3.3.3"
   },
   "devDependencies": {
-    "eslint": "^7.32.0"
-  }
+    "eslint": "^7.32.0",
+    "sqlite3": "^5.1.6"
+  },
+  "nodeVersion": "18.16.0"
 }
