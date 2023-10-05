@@ -6,7 +6,7 @@ module.exports = {
 		emoji: '🎲',
 		rarity: 'common',
 		description: 'Gamble 5 times.',
-		unlockMessage: 'You have gambled 5 times now\n\nWelcome to the casino, take a seat..\n\n',
+		unlockMessage: 'You have gambled 5 times now\nWelcome to the casino, take a seat..\n',
 		reward: 'Party',
 	},
 	'the start of an addiction': {
@@ -14,7 +14,7 @@ module.exports = {
 		emoji: '🎲',
 		rarity: 'common',
 		description: 'Gamble 50 times.',
-		unlockMessage: 'You have gambled 50 times now\n\nThis might be a sign of addiction.\n\n',
+		unlockMessage: 'You have gambled 50 times now\nThis might be a sign of addiction.\n',
 		reward: 'Slots',
 	},
 	'is this healthy?': {
@@ -22,7 +22,7 @@ module.exports = {
 		emoji: '🎲',
 		rarity: 'uncommon',
 		description: 'Gamble 200 times.',
-		unlockMessage: 'You have gambled 200 times now\n\nAre you sure its healthy gambling so much?\n\n',
+		unlockMessage: 'You have gambled 200 times now\nAre you sure its healthy gambling so much?\n',
 		reward: 'Red Heart',
 	},
 	'casino regular': {
@@ -30,7 +30,7 @@ module.exports = {
 		emoji: '🎲',
 		rarity: 'rare',
 		description: 'Gamble 500 times.',
-		unlockMessage: 'You have gambled 500 times now\n\nAll the casino employees know who you are now.\n\n',
+		unlockMessage: 'You have gambled 500 times now\nAll the casino employees know who you are now.\n',
 		reward: 'Monkey',
 	},
 	'gambling is my job': {
@@ -38,7 +38,7 @@ module.exports = {
 		emoji: '🎲',
 		rarity: 'epic',
 		description: 'Gamble 1000 times.',
-		unlockMessage: 'You have gambled 1000 times now\n\nBy this point you have quit your job to do full time gambling.\n\n',
+		unlockMessage: 'You have gambled 1000 times now\nBy this point you have quit your job to do full time gambling.\n',
 		reward: 'pepe biz',
 	},
 
@@ -49,7 +49,7 @@ module.exports = {
 		emoji: '📦',
 		rarity: 'common',
 		description: 'Collect 1 items.',
-		unlockMessage: 'You have collected 1 items\n\nMake sure to polish them once in a while.\n\n',
+		unlockMessage: 'You have collected 1 items\nMake sure to polish them once in a while.\n',
 		reward: 'Box',
 	},
 	'oeh shiny!': {
@@ -57,7 +57,7 @@ module.exports = {
 		emoji: '📦',
 		rarity: 'common',
 		description: 'Collect 10 items.',
-		unlockMessage: 'You have collected 10 items\n\nMake sure to polish them once in a while.\n\n',
+		unlockMessage: 'You have collected 10 items\nMake sure to polish them once in a while.\n',
 		reward: 'Raccoon',
 	},
 	'the collector': {
@@ -65,7 +65,7 @@ module.exports = {
 		emoji: '📦',
 		rarity: 'uncommon',
 		description: 'Collect 25 items.',
-		unlockMessage: 'You have collected 25 items\n\nYou have started taking this seriously.\n\n',
+		unlockMessage: 'You have collected 25 items\nYou have started taking this seriously.\n',
 		reward: 'Count Multiplier 10',
 	},
 	'trophy hunter': {
@@ -73,7 +73,7 @@ module.exports = {
 		emoji: '📦',
 		rarity: 'rare',
 		description: 'Collect 40 items.',
-		unlockMessage: 'You have collected 40 items\n\nYou can make quite the trophy collection now.\n\n',
+		unlockMessage: 'You have collected 40 items\nYou can make quite the trophy collection now.\n',
 		reward: 'trophy',
 	},
 	'hoarder': {
@@ -81,7 +81,7 @@ module.exports = {
 		emoji: '📦',
 		rarity: 'epic',
 		description: 'Collect 60 items.',
-		unlockMessage: 'You have collected 60 items\n\nYour collection is starting to take over your house.\n\n',
+		unlockMessage: 'You have collected 60 items\nYour collection is starting to take over your house.\n',
 		reward: 'Pepe EZ',
 	},
 
@@ -92,7 +92,7 @@ module.exports = {
 		emoji: '💎',
 		rarity: 'common',
 		description: 'Win 1K💰 from a single gamble.',
-		unlockMessage: 'You have won 1K💰 from a single gamble\n\nFlex those big stacks.\n\n',
+		unlockMessage: 'You have won 1K💰 from a single gamble\nFlex those big stacks.\n',
 		reward: 'Ok hand',
 	},
 	'pure luck': {
@@ -100,7 +100,7 @@ module.exports = {
 		emoji: '💎',
 		rarity: 'common',
 		description: 'Win 10K💰 from a single gamble.',
-		unlockMessage: 'You have won 10K💰 from a single gamble\n\nYou just got lucky.\n\n',
+		unlockMessage: 'You have won 10K💰 from a single gamble\nYou just got lucky.\n',
 		reward: 'Clover',
 	},
 	'jackpot!': {
@@ -108,7 +108,7 @@ module.exports = {
 		emoji: '💎',
 		rarity: 'uncommon',
 		description: 'Win 50K💰 from a single gamble.',
-		unlockMessage: 'You have won 50K💰 from a single gamble\n\nFlex those big stacks.\n\n',
+		unlockMessage: 'You have won 50K💰 from a single gamble\nFlex those big stacks.\n',
 		reward: 'Count Multiplier 9',
 	},
 	'its raining money': {
@@ -116,7 +116,7 @@ module.exports = {
 		emoji: '💎',
 		rarity: 'rare',
 		description: 'Win 120K💰 from a single gamble.',
-		unlockMessage: 'You have won 120K💰 from a single gamble\n\nFrom the popular hit rapper dababy.\n\n',
+		unlockMessage: 'You have won 120K💰 from a single gamble\nFrom the popular hit rapper dababy.\n',
 		reward: 'Pepe That',
 	},
 	'you can buy a house with this': {
@@ -124,7 +124,7 @@ module.exports = {
 		emoji: '💎',
 		rarity: 'epic',
 		description: 'Win 300K💰 from a single gamble.',
-		unlockMessage: 'You have won 300K💰 from a single gamble\n\nYou can buy a house with this... for now.\n\n',
+		unlockMessage: 'You have won 300K💰 from a single gamble\nYou can buy a house with this... for now.\n',
 		reward: 'House',
 	},
 	'a small loan of a million dollars': {
@@ -132,7 +132,7 @@ module.exports = {
 		emoji: '💎',
 		rarity: 'legendary',
 		description: 'Win 1M💰 from a single gamble.',
-		unlockMessage: 'You have won 1M💰 from a single gamble\n\nA certain orange man got the exact same thing.\n\n',
+		unlockMessage: 'You have won 1M💰 from a single gamble\nA certain orange man got the exact same thing.\n',
 		reward: 'Diamond',
 	},
 
@@ -143,7 +143,7 @@ module.exports = {
 		emoji: '💵',
 		rarity: 'common',
 		description: 'Earn 10K💰 with gambling.',
-		unlockMessage: 'You have earned 10K💰 with gambling\n\nYou can survive a couple of years with this.\n\n',
+		unlockMessage: 'You have earned 10K💰 with gambling\nYou can survive a couple of years with this.\n',
 		reward: 'Coin',
 	},
 	'a small fortune': {
@@ -151,7 +151,7 @@ module.exports = {
 		emoji: '💵',
 		rarity: 'uncommon',
 		description: 'Earn 100K💰 with gambling.',
-		unlockMessage: 'You have earned 100K💰 with gambling\n\nYou can survive a couple of years with this.\n\n',
+		unlockMessage: 'You have earned 100K💰 with gambling\nYou can survive a couple of years with this.\n',
 		reward: 'Dollar',
 	},
 	'half person half millionaire': {
@@ -159,7 +159,7 @@ module.exports = {
 		emoji: '💵',
 		rarity: 'rare',
 		description: 'Earn 500K💰 with gambling.',
-		unlockMessage: 'You have earned 500K💰 with gambling\n\nThe more money you have, the less human you are.\n\n',
+		unlockMessage: 'You have earned 500K💰 with gambling\nThe more money you have, the less human you are.\n',
 		reward: 'Count Multiplier 8',
 	},
 	'millionaire!': {
@@ -167,7 +167,7 @@ module.exports = {
 		emoji: '💵',
 		rarity: 'epic',
 		description: 'Earn 1M💰 with gambling.',
-		unlockMessage: 'You have earned 1M💰 with gambling\n\nYou are now no longer human.\n\n',
+		unlockMessage: 'You have earned 1M💰 with gambling\nYou are now no longer human.\n',
 		reward: 'Creditcard',
 	},
 	'still no jeff bezos': {
@@ -175,7 +175,7 @@ module.exports = {
 		emoji: '💵',
 		rarity: 'legendary',
 		description: 'Earn 5M💰 with gambling.',
-		unlockMessage: 'You have earned 5M💰 with gambling\n\nJeff Bezos is still 40000 times richer than you are right now.\n\n',
+		unlockMessage: 'You have earned 5M💰 with gambling\nJeff Bezos is still 40000 times richer than you are right now.\n',
 		reward: 'pepe money',
 	},
 
@@ -185,7 +185,7 @@ module.exports = {
 		emoji: '🔢',
 		rarity: 'common',
 		description: 'Count 5 times in the number game.',
-		unlockMessage: 'You have counted 5 times in the number game\n\nCongrats you can now do what a baby can.\n\n',
+		unlockMessage: 'You have counted 5 times in the number game\nCongrats you can now do what a baby can.\n',
 		reward: 'Blue Checkmark',
 	},
 	'numberphile': {
@@ -193,7 +193,7 @@ module.exports = {
 		emoji: '🔢',
 		rarity: 'uncommon',
 		description: 'Count 50 times in the number game.',
-		unlockMessage: 'You have counted 50 times in the number game\n\nYou must really like numbers if you have counted this much.\n\n',
+		unlockMessage: 'You have counted 50 times in the number game\nYou must really like numbers if you have counted this much.\n',
 		reward: '<:plus1:721750172710993922>',
 	},
 	'200 problems': {
@@ -201,7 +201,7 @@ module.exports = {
 		emoji: '🔢',
 		rarity: 'rare',
 		description: 'Count 200 times in the number game.',
-		unlockMessage: 'You have counted 200 times in the number game\n\nI have 200 problems but counting ain\'t one.\n\n',
+		unlockMessage: 'You have counted 200 times in the number game\nI have 200 problems but counting ain\'t one.\n',
 		reward: 'Count Multiplier 7',
 	},
 	'count dracula': {
@@ -209,7 +209,7 @@ module.exports = {
 		emoji: '🔢',
 		rarity: 'epic',
 		description: 'Count 666 times in the number game.',
-		unlockMessage: 'You have counted 666 times in the number game\n\nIf you count too much, the count may come for you.\n\n',
+		unlockMessage: 'You have counted 666 times in the number game\nIf you count too much, the count may come for you.\n',
 		reward: 'Pentagram',
 	},
 	'pretending to be smart': {
@@ -217,7 +217,7 @@ module.exports = {
 		emoji: '🔢',
 		rarity: 'legendary',
 		description: 'Count 1500 times in the number game.',
-		unlockMessage: 'You have counted 1000 times in the number game\n\nAre you trying to prove something here?\n\n',
+		unlockMessage: 'You have counted 1000 times in the number game\nAre you trying to prove something here?\n',
 		reward: 'Smart',
 	},
 
@@ -228,7 +228,7 @@ module.exports = {
 		emoji: '💰',
 		rarity: 'common',
 		description: 'Earn 100💰 with counting.',
-		unlockMessage: 'You have earned 100💰 from counting\n\nYeah you earn money with counting.\nWhy? IDK.\n\n',
+		unlockMessage: 'You have earned 100💰 from counting\nYeah you earn money with counting.\nWhy? IDK.\n',
 		reward: 'Target',
 	},
 	'welcome to count city': {
@@ -236,7 +236,7 @@ module.exports = {
 		emoji: '💰',
 		rarity: 'uncommon',
 		description: 'Earn 1k💰 with counting.',
-		unlockMessage: 'You have earned 1k💰 from counting\n\nWelcome to count city, the number 1 place to count.\n\n',
+		unlockMessage: 'You have earned 1k💰 from counting\nWelcome to count city, the number 1 place to count.\n',
 		reward: 'frog',
 	},
 	'10000 moneys': {
@@ -244,7 +244,7 @@ module.exports = {
 		emoji: '💰',
 		rarity: 'rare',
 		description: 'Earn 10k💰 with counting.',
-		unlockMessage: 'You have earned 10k💰 from counting\n\nTEN THOUSAND MONEEEYYYSS!!!\n\n',
+		unlockMessage: 'You have earned 10k💰 from counting\nTEN THOUSAND MONEEEYYYSS!!!\n',
 		reward: 'Count Multiplier 6',
 	},
 	'count work makes dream work': {
@@ -252,7 +252,7 @@ module.exports = {
 		emoji: '💰',
 		rarity: 'epic',
 		description: 'Earn 100k💰 with counting.',
-		unlockMessage: 'You have earned 100k💰 from counting\n\nCounting together gets you money quicker.\n\n',
+		unlockMessage: 'You have earned 100k💰 from counting\nCounting together gets you money quicker.\n',
 		reward: 'Star',
 	},
 	'count master': {
@@ -260,7 +260,7 @@ module.exports = {
 		emoji: '💰',
 		rarity: 'legendary',
 		description: 'Earn 1M💰 with counting.',
-		unlockMessage: 'You have earned 1M💰 from counting\n\nYou Have mastered the art of counting.\n\n',
+		unlockMessage: 'You have earned 1M💰 from counting\nYou Have mastered the art of counting.\n',
 		reward: 'Moneybag',
 	},	
 
@@ -270,7 +270,7 @@ module.exports = {
 		emoji: '⚔️',
 		rarity: 'Legendary',
 		description: 'Earn 30 unique achievements',
-		unlockMessage: 'You have achieved a total of 30 achievements\n\n<:pepefresh:798676860380774410>\n\n',
+		unlockMessage: 'You have achieved a total of 30 achievements\n<:pepefresh:798676860380774410>\n',
 		reward: 'Hands',
 	},
 	'achievement hunter footsoldier' : {
@@ -278,7 +278,7 @@ module.exports = {
 		emoji: '⚔️',
 		rarity: 'Rare',
 		description: 'Earn 15 unique achievements',
-		unlockMessage: 'You have achieved a total of 15 achievements\n\nhttps://youtu.be/2tRIjRVcHcQ\n\n',
+		unlockMessage: 'You have achieved a total of 15 achievements\nhttps://youtu.be/2tRIjRVcHcQ\n',
 		reward: 'Moyai',
 	},
 	'achievement hunter trainee' : {
@@ -286,7 +286,7 @@ module.exports = {
 		emoji: '⚔️',
 		rarity: 'Common',
 		description: 'Earn 5 unique achievements',
-		unlockMessage: 'You have achieved a total of 5 achievements\n\nYou\'re just getting started\n\n',
+		unlockMessage: 'You have achieved a total of 5 achievements\nYou\'re just getting started\n',
 		reward: 'Gorilla',
 	}
 };

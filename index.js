@@ -1,6 +1,6 @@
 const numberGame = require("./numberGame/numbergame.js");
 const events = require('./events/events.js');
-const { Client, GatewayIntentBits, Partials, Collection, Events } = require("discord.js");
+const { Client, GatewayIntentBits, Collection, Events } = require("discord.js");
 const {
   Users,
   userManager,
@@ -31,7 +31,6 @@ require("dotenv").config();
 
 if (process.argv.includes("-t") || process.argv.includes("-test")) client.login(process.env.TESTTOKEN);
 else client.login(process.env.TOKEN);
-
 
 
 //* Initialize client

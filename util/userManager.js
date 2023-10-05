@@ -385,8 +385,9 @@ async function unlock(user, achievementName) {
 
 	const embed = new EmbedBuilder()
 		.setTitle('Achievement Unlocked!')
-		.setDescription(`You have unlocked **${achievement.emoji}${achievementName}**\n__${achievement.unlockMessage}__\n
-		You have unlocked: _**${reward.emoji}${achievement.reward}!**_`);
+		.setDescription(`You have achieved **${achievement.emoji}${achievementName}**\n\n*${achievement.unlockMessage}*\n
+		You have unlocked: _**${reward.emoji}${achievement.reward}!**_
+		Use the \`use\` command to equip it!`);
 	util.setEmbedRarity(embed, achievement.rarity);
 
 	user.author.send({ embeds: [embed] });
