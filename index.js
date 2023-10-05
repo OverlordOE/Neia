@@ -28,7 +28,11 @@ client.emojiCharacters = require("./data/emojiCharacters");
 client.logger = require("./util/logger");
 
 require("dotenv").config();
-client.login(process.env.TOKEN);
+
+if (process.argv.includes("-t") || process.argv.includes("-test")) client.login(process.env.TESTTOKEN);
+else client.login(process.env.TOKEN);
+
+
 
 //* Initialize client
 

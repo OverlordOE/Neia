@@ -58,15 +58,13 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setColor('#f3ab16')
 			.setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-			.setDescription(`You have **bet** ${client.util.formatNumber(gambleAmount)}💰.`)
-			.setTitle('Blackjack')
-			.spliceFields(0, 5, [
-				{ name: 'Players Hand', value: playerHand.toString(), inline: true },
-				{ name: 'Players Value', value: playerHandValue.toString(), inline: true },
-				{ name: '\u200B', value: '\u200B' },
-				{ name: 'Neia\'s Hand', value: neiaHand.toString(), inline: true },
-				{ name: 'Neia\'s Value', value: neiaHandValue.toString(), inline: true },
-			]);
+			.setDescription(`
+			You have **bet** ${client.util.formatNumber(gambleAmount)}💰.\n
+			${interaction.user.username}'s Hand: ${playerHand}
+			${interaction.user.username}'s Hand Value: ${playerHand}\n
+			Neia's Hand: ${neiaHand}
+			Neia's Hand Value: ${neiaHandValue}`)
+			.setTitle('Blackjack');
 
 
 		const filter = i => i.user.id == interaction.user.id;
@@ -140,13 +138,14 @@ module.exports = {
 
 
 		async function setEmbed(button) {
-			embed.spliceFields(0, 5, [
-				{ name: 'Players Hand', value: playerHand.toString(), inline: true },
-				{ name: 'Players Value', value: playerHandValue.toString(), inline: true },
-				{ name: '\u200B', value: '\u200B' },
-				{ name: 'Neia\'s Hand', value: neiaHand.toString(), inline: true },
-				{ name: 'Neia\'s Value', value: neiaHandValue.toString(), inline: true },
-			]);
+			embed.setDescription(`
+			You have **bet** ${client.util.formatNumber(gambleAmount)}💰.\n
+			${interaction.user.username}'s Hand: ${playerHand}
+			${interaction.user.username}'s Hand Value: ${playerHand}\n
+			Neia's Hand: ${neiaHand}
+			Neia's Hand Value: ${neiaHandValue}
+			`);
+
 			await button.update({ embeds: [embed], components: [row] });
 		}
 
