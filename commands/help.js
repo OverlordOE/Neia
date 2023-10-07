@@ -1,3 +1,4 @@
+
 const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -6,7 +7,11 @@ module.exports = {
 
 	async execute(interaction, msgUser, msgGuild, client) {
 
+		interaction.reply('Feature is under contruction');
+		return;
 
+
+		/* eslint-disable no-unreachable */
 		const embed = new EmbedBuilder()
 			.setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
 			.setColor('#f3ab16');
@@ -113,77 +118,5 @@ module.exports = {
 						},
 					]),
 			);
-
-
-		interaction.reply({
-			embeds: [embed
-				.setTitle(`${target.tag}'s Main Page`)
-				.setDescription(mainDescription)],
-			components: [row]
-		});
-		const filter = i => i.user.id == interaction.user.id;
-		const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60000 });
-
-		collector.on('collect', async i => {
-			if (i.isStringSelectMenu()) {
-				if (i.values[0] === 'main') {
-					row.components[0].setPlaceholder('Main Page');
-					await i.update({
-						embeds: [embed
-							.setTitle(`${target.tag}'s Main Page`)
-							.setDescription(mainDescription)
-						], components: [row]
-					});
-				}
-				else if (i.values[0] === 'numbergame') {
-					row.components[0].setPlaceholder('Number Game Page');
-					await i.update({
-						embeds: [embed
-							.setTitle(`${target.tag}'s Number Game Page`)
-							.setDescription(numbergameDescription)
-						], components: [row]
-					});
-				}
-				else if (i.values[0] === 'stats') {
-					row.components[0].setPlaceholder('Statistics');
-					await i.update({
-						embeds: [embed
-							.setTitle(`${target.tag}'s Statistics`)
-							.setDescription(statsDescription)
-						], components: [row]
-					});
-				}
-				else if (i.values[0] === 'collection') {
-					row.components[0].setPlaceholder('Collection');
-					await i.update({
-						embeds: [embed
-							.setTitle(`${target.tag}'s Collection`)
-							.setDescription(collectionDescription)
-						], components: [row]
-					});
-				}
-				else if (i.values[0] === 'inventory') {
-					row.components[0].setPlaceholder('Inventory');
-					await i.update({
-						embeds: [embed
-							.setTitle(`${target.tag}'s Inventory`)
-							.setDescription(inventoryDescription)
-						], components: [row]
-					});
-				}
-				else if (i.values[0] === 'achievements') {
-					row.components[0].setPlaceholder('Achievements');
-					await i.update({
-						embeds: [embed
-							.setTitle(`${target.tag}'s Achievements`)
-							.setDescription(achievementDescription)
-						], components: [row]
-					});
-				}
-			}
-		});
-
-		collector.on('end', async () => await interaction.editReply({ embeds: [embed], components: [] }));
-
 	},
 };
