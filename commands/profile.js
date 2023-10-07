@@ -1,5 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, SlashCommandBuilder } = require('discord.js');
-import { stripIndents } from 'common-tags';
+const { stripIndents } = require('common-tags');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('profile')

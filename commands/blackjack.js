@@ -1,6 +1,6 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 const wait = require('util').promisify(setTimeout);
-import { stripIndents } from 'common-tags';
+const { stripIndents } = require('common-tags');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('blackjack')
