@@ -1,5 +1,6 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 const wait = require('util').promisify(setTimeout);
+import { stripIndents } from 'common-tags';
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('blackjack')
@@ -56,7 +57,7 @@ module.exports = {
 			getCard('client');
 		}
 
-		let description = `
+		let description = stripIndents`
 		You have **bet** ${client.util.formatNumber(gambleAmount)}💰.\n
 		${interaction.user.username}'s Hand: ${playerHand}
 		${interaction.user.username}'s Hand Value: **${playerHandValue}**\n
@@ -110,35 +111,37 @@ module.exports = {
 			else if (neiaHandValue > 21) {
 				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
 				return await interaction.editReply({
-					embeds: [embed.setDescription(description += `
+					embeds: [embed.setDescription(description += stripIndents`
 					\n**Neia busted!. __You Win!__**\n
-					You have won ${client.util.formatNumber(winAmount)}💰 and your balance is **${client.util.formatNumber(balance)}💰**`).setColor('#00fc43')], components: []
+					You have won ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43')], components: []
 				});
 			}
 			else if (cardsDrawn >= 5) {
 				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
 				return await interaction.editReply({
-					embeds: [embed.setDescription(description += `
+					embeds: [embed.setDescription(description += stripIndents`
 					\nYou have drawn **5 cards** without busting!\n__**You win**__\n
-					**You have won ${client.util.formatNumber(winAmount)}**💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43')], components: []
+					You have won ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43')], components: []
 				});
 			}
 			else if (neiaHandValue == playerHandValue) {
 				const balance = client.userManager.changeBalance(msgUser, gambleAmount);
-				return await interaction.editReply({ embeds: [embed.setDescription(description += `
-				\n__**Its a draw!**__\n\nYour balance is ${client.util.formatNumber(balance)}💰`)], components: [] });
+				return await interaction.editReply({
+					embeds: [embed.setDescription(description += stripIndents`
+				\n__**Its a draw!**__\n\nYour balance is ${client.util.formatNumber(balance)}💰`)], components: []
+				});
 			}
 			else if (playerHandValue > neiaHandValue) {
 				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
 				return await interaction.editReply({
-					embeds: [embed.setDescription(description += `
+					embeds: [embed.setDescription(description += stripIndents`
 						\n__You win!__\n
 						You have won ${client.util.formatNumber(winAmount)}💰 and your balance is ${client.util.formatNumber(balance)}💰`).setColor('#00fc43')], components: []
 				});
 			}
 			else if (neiaHandValue > playerHandValue) {
 				return await interaction.editReply({
-					embeds: [embed.setDescription(description += `
+					embeds: [embed.setDescription(description += stripIndents`
 					\n__**Neia wins!**__\n
 					__**You lost**__ ${client.util.formatNumber(gambleAmount)}💰\nYour balance is ${client.util.formatNumber(msgUser.balance)}💰`).setColor('#fc0303')], components: []
 				});
@@ -147,7 +150,7 @@ module.exports = {
 
 
 		async function setEmbed(button) {
-			description = `
+			description = stripIndents`
 			You have **bet** ${client.util.formatNumber(gambleAmount)}💰.\n
 			${interaction.user.username}'s Hand: ${playerHand}
 			${interaction.user.username}'s Hand Value: **${playerHandValue}**\n
@@ -155,7 +158,8 @@ module.exports = {
 			Neia's Hand Value: **${neiaHandValue}**`;
 
 			embed.setDescription(description);
-			await button.update({ embeds: [embed], components: [row] });
+			button.deferUpdate();
+			await interaction.editReply({ embeds: [embed], components: [row] });
 		}
 
 		function getCard(player) {

@@ -1,4 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { stripIndents } = require('common-tags');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('numbergamestats')
@@ -21,7 +22,8 @@ module.exports = {
 			.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
 			.setColor('#f3ab16');
 
-		embed.setDescription(`**Current Number:** ${numberGameInfo.currentNumber}
+		embed.setDescription(stripIndents`
+			**Current Number:** ${numberGameInfo.currentNumber}
 			**Last Checkpoint:** ${numberGameInfo.lastCheckpoint}
 			**Next Checkpoint:** ${numberGameInfo.nextCheckpoint}	
 		

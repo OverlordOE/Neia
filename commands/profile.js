@@ -1,4 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, SlashCommandBuilder } = require('discord.js');
+import { stripIndents } from 'common-tags';
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('profile')
@@ -27,7 +28,7 @@ module.exports = {
 			.setColor('#f3ab16');
 
 
-		const mainDescription = `
+		const mainDescription = stripIndents`
 		Balance: ${client.util.formatNumber(user.balance)}💰
 		Number Game Reaction: ${user.reaction}
 		Count Multiplier: **${user.countMultiplier}X**
@@ -35,7 +36,7 @@ module.exports = {
 		Next Hourly Count Reward: **${hourlyCount}**
 		`;
 
-		const numbergameDescription = `
+		const numbergameDescription = stripIndents`
 		Number Game Reaction: ${user.reaction}
 		Count Multiplier: **${user.countMultiplier}X**
 		
@@ -52,7 +53,7 @@ module.exports = {
 		`;
 
 
-		const statsDescription = `
+		const statsDescription = stripIndents`
 		Numbers Counted: **${stats.numbersCounted}**
 		Streaks Ruined: **${stats.streaksRuined}**
 		

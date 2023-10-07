@@ -1,4 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+import { stripIndents } from 'common-tags';
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('slots')
@@ -51,7 +52,7 @@ module.exports = {
 		client.userManager.changeBalance(msgUser, -gambleAmount, true);
 
 
-		output += `
+		output += stripIndents`
 		You have bet ${client.util.formatNumber(gambleAmount)}💰.
 
 		**${payoutRate}X** Payout per row.
@@ -131,7 +132,7 @@ module.exports = {
 			if (rowsWon >= 1) {
 				const winAmount = gambleAmount * payoutRate * rowsWon;
 				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
-				output += `
+				output += stripIndents`
 				\n**__You have ${rowsWon} row(s)__ and got a payout of __${payoutRate * rowsWon}X your bet!__**
 				You won ${client.util.formatNumber(winAmount)}💰
 				Your balance is ${client.util.formatNumber(balance)}💰`;
