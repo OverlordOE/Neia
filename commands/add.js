@@ -6,7 +6,7 @@ module.exports = {
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('item')
-				.setDescription('Add an item to a user')
+				.setDescription('BOT OWNER DEBUG COMMAND')
 				.addUserOption(option =>
 					option
 						.setName('target')
@@ -29,7 +29,7 @@ module.exports = {
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('money')
-				.setDescription('Add money to a user')
+				.setDescription('BOT OWNER DEBUG COMMAND')
 				.addUserOption(option =>
 					option
 						.setName('target')

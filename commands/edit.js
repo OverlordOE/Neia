@@ -12,7 +12,7 @@ module.exports = {
 				.addSubcommand(subcommand =>
 					subcommand
 						.setName('data')
-						.setDescription('Change the data of the guild')
+						.setDescription('BOT OWNER DEBUG COMMAND')
 						.addStringOption(option =>
 							option
 								.setName('property')
@@ -28,7 +28,7 @@ module.exports = {
 				.addSubcommand(subcommand =>
 					subcommand
 						.setName('numbergame')
-						.setDescription('Change the numbergame in the guild')
+						.setDescription('BOT OWNER DEBUG COMMAND')
 						.addStringOption(option =>
 							option
 								.setName('property')
@@ -44,7 +44,7 @@ module.exports = {
 				.addSubcommand(subcommand =>
 					subcommand
 						.setName('reset')
-						.setDescription('Resets the guild')),
+						.setDescription('BOT OWNER DEBUG COMMAND')),
 		)
 
 
@@ -52,11 +52,11 @@ module.exports = {
 		.addSubcommandGroup((group) =>
 			group
 				.setName('user')
-				.setDescription('Edit the mentioned user')
+				.setDescription('BOT OWNER DEBUG COMMAND')
 				.addSubcommand(subcommand =>
 					subcommand
 						.setName('data')
-						.setDescription('Change the data of the user')
+						.setDescription('BOT OWNER DEBUG COMMAND')
 						.addUserOption(option =>
 							option
 								.setName('target')
@@ -78,7 +78,7 @@ module.exports = {
 				.addSubcommand(subcommand =>
 					subcommand
 						.setName('reset')
-						.setDescription('Resets the user')
+						.setDescription('BOT OWNER DEBUG COMMAND')
 						.addUserOption(option =>
 							option
 								.setName('target')
