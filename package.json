@@ -18,6 +18,7 @@
   "homepage": "https://github.com/OverlordOE/Neia",
   "dependencies": {
     "@discordjs/voice": "^0.6.0",
+    "common-tags": "^1.8.2",
     "cron": "^1.8.2",
     "discord.js": "^14.11.0",
     "dotenv": "^10.0.0",
