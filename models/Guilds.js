@@ -18,6 +18,18 @@ module.exports = (sequelize, DataTypes) => {
 			}),
 			allowNull: true,
 		},
+		numberGuessing: {
+			type: DataTypes.JSON,
+			defaultValue: JSON.stringify({
+				lastUserId: null,
+				channelId: null,
+				targetNumber: 0,
+				totalGuessed: 0,
+				currentGuessed: 0,
+				fastestGuess: 0,
+			}),
+			allowNull: true,
+		},
 	},
 		{
 			timestamps: false,

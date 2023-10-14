@@ -11,10 +11,16 @@ const commandFiles = fs
 const local = process.argv.includes("--local") || process.argv.includes("-l");
 const del = process.argv.includes("--delete") || process.argv.includes("-d");
 const global = process.argv.includes("--global") || process.argv.includes("-g");
+const test = process.argv.includes("--test") || process.argv.includes("-t");
 
 // Place your client and guild ids here
-const clientId = process.env.CLIENT_ID;
 const guildId = process.env.GUILD_ID;
+let clientId;
+
+
+if (test) clientId = process.env.TESTCLIENT_ID;
+else clientId = process.env.CLIENT_ID;
+
 
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
@@ -38,7 +44,7 @@ const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
       console.log(
         "Successfully reloaded application (/) commands for global guilds."
       );
-    } 
+    }
     catch (error) {
       console.error(error);
     }
@@ -56,15 +62,15 @@ const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
       console.log(
         "Successfully reloaded application (/) commands for test guild."
       );
-    } 
+    }
     catch (error) {
       console.error(error);
     }
   }
   else if (del) {
     rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] })
-	.then(() => console.log('Successfully deleted all guild commands.'))
-	.catch(console.error);
+      .then(() => console.log('Successfully deleted all guild commands.'))
+      .catch(console.error);
   }
 
 })();
