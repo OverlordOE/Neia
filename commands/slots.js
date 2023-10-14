@@ -1,5 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { stripIndents } = require('common-tags');
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('slots')
@@ -52,14 +52,14 @@ module.exports = {
 		client.userManager.changeBalance(msgUser, -gambleAmount, true);
 
 
-		output += stripIndents`
+		output += `
 		You have bet ${client.util.formatNumber(gambleAmount)}💰.
 
 		**${payoutRate}X** Payout per row.
 		🍋 and 🍉 add **1 row**
 		🍒 and 🍌 add **2 rows**
 		<:luckyseven:838417718944333884> adda **4 rows**
-		\n`;
+		\n`.replace(/\t+/g, '');
 
 		for (let i = 0; i < slotY; i++) {
 			slots[i] = [];
@@ -132,10 +132,10 @@ module.exports = {
 			if (rowsWon >= 1) {
 				const winAmount = gambleAmount * payoutRate * rowsWon;
 				const balance = client.userManager.changeBalance(msgUser, winAmount, true);
-				output += stripIndents`
+				output += `
 				\n**__You have ${rowsWon} row(s)__ and got a payout of __${payoutRate * rowsWon}X your bet!__**
 				You won ${client.util.formatNumber(winAmount)}💰
-				Your balance is ${client.util.formatNumber(balance)}💰`;
+				Your balance is ${client.util.formatNumber(balance)}💰`.replace(/\t+/g, '');
 				embed.setColor('#00fc43');
 			}
 			else {

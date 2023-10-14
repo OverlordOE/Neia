@@ -1,5 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { stripIndents } = require('common-tags');
+
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -46,11 +46,12 @@ module.exports = {
 			const cost = buyAmount * item.value;
 			if (cost > balance) {
 				return interaction.reply({
-					embeds: [embed.setDescription(stripIndents`
+					embeds: [embed.setDescription(`
 					__**ITEM(S) NOT BOUGHT!**__
 					You currently have ${client.util.formatNumber(balance)}💰 but __${client.util.formatNumber(buyAmount)}__ ${item.emoji}${item.name}(s) costs ${client.util.formatNumber(cost)}💰!
 					You need ${client.util.formatNumber(cost - balance)}💰 more.
-					`).setColor('#fc0303')]
+					`.replace(/\t+/g, '')
+					).setColor('#fc0303')]
 				});
 			}
 
@@ -67,10 +68,11 @@ module.exports = {
 				}
 				else {
 					return interaction.reply({
-						embeds: [embed.setDescription(stripIndents`
+						embeds: [embed.setDescription(`
 						__**COLLECTABLE NOT BOUGHT!**__
-						You alread have ${item.emoji}${item.name}unlocked!
-					`).setColor('#fc0303')]
+						You alread have ${item.emoji}${item.name}unlocked!`
+							.replace(/\t+/g, '')
+						).setColor('#fc0303')]
 					});
 				}
 			}
@@ -78,10 +80,12 @@ module.exports = {
 				client.itemHandler.addItem(msgUser, item, buyAmount);
 				balance = client.userManager.changeBalance(msgUser, -cost);
 				interaction.reply({
-					embeds: [embed.setDescription(stripIndents`
+					embeds: [embed.setDescription(`
 					You've bought: __${client.util.formatNumber(buyAmount)}__ ${item.emoji}__${item.name}(s)__.
 					You can see it in your profile-inventory tab.
-					\nCurrent balance is ${client.util.formatNumber(balance)}💰.`).setColor('#00fc43')]
+					\nCurrent balance is ${client.util.formatNumber(balance)}💰.`
+						.replace(/\t+/g, '')
+					).setColor('#00fc43')]
 				});
 			}
 		}

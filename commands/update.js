@@ -1,5 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { stripIndents } = require('common-tags');
+
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -12,7 +12,7 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setColor('#f3ab16')
 			.setTitle('Neia V3.8: API Upgrade and Bug Fixes')
-			.setDescription(stripIndents`
+			.setDescription(`
 This update does not add many new features but instead is an upgrade to Neia's backbone so i can make better features later
 
 ### **Economy**
@@ -41,7 +41,7 @@ If anyone has **Suggestions** or **Feedback** I would love to hear them. Post al
 [Click here to join the support server](https://discord.gg/hFGxVDT)
 [Click here to submit a bug or request  feature](https://discord.com/channels/390502342908444683/1040668787025911858)
 For more info contact: OverlordOE#0717
- `);
+ `.replace(/\t+/g, ''));
 
 		try {
 			client.guilds.cache.forEach(async (g) => {

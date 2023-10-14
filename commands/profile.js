@@ -1,5 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, SlashCommandBuilder } = require('discord.js');
-const { stripIndents } = require('common-tags');
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('profile')
@@ -28,15 +28,15 @@ module.exports = {
 			.setColor('#f3ab16');
 
 
-		const mainDescription = stripIndents`
+		const mainDescription = `
 		Balance: ${client.util.formatNumber(user.balance)}💰
 		Number Game Reaction: ${user.reaction}
 		Count Multiplier: **${user.countMultiplier}X**
 		Next Daily Count Reward: **${dailyCount}**
 		Next Hourly Count Reward: **${hourlyCount}**
-		`;
+		`.replace(/\t+/g, '');
 
-		const numbergameDescription = stripIndents`
+		const numbergameDescription = `
 		Number Game Reaction: ${user.reaction}
 		Count Multiplier: **${user.countMultiplier}X**
 		
@@ -50,17 +50,17 @@ module.exports = {
 		💰 Gained with Counting : ${client.util.formatNumber(stats.countingMoneyGained)}💰
 		Numbers Counted: **${stats.numbersCounted}**
 		Streaks Ruined: **${stats.streaksRuined}**
-		`;
+		`.replace(/\t+/g, '');
 
 
-		const statsDescription = stripIndents`
+		const statsDescription = `
 		Numbers Counted: **${stats.numbersCounted}**
 		Streaks Ruined: **${stats.streaksRuined}**
 		
 		Times Gambled: **${stats.timesGambled}**
 		Won with Gambling: ${client.util.formatNumber(stats.gamblingMoneyGained)}💰
 		Lost with Gambling: ${client.util.formatNumber(stats.gamblingMoneyLost)}💰
-		`;
+		`.replace(/\t+/g, '');
 
 
 		//	INVENTORY

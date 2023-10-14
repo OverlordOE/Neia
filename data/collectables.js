@@ -476,5 +476,5 @@ module.exports = {
 		gainedFrom: 'shop',
 		description: 'A custom emoji you can equip to change the number game emojis.',
 	},
-	
+
 };

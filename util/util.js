@@ -78,7 +78,7 @@ module.exports = {
         case 'legendary':
           legendary += `\n${item.emoji}${item.name}`;
           break;
-      }				
+      }
     });
 
     return `**Common**\n${common}
