@@ -1,13 +1,15 @@
 const nf = require("../util/numberFunctions");
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
+let eventSucces = 0;
+
 module.exports = async function execute(client) {
 
   client.guilds.cache.forEach(async (g) => {
     sendEvent(client, g);
   });
 
-  client.logger.info("Finished Number Game Events!");
+  client.logger.info(`Send ${eventSucces} Number Game Events!`);
 };
 
 
@@ -54,6 +56,7 @@ async function sendEvent(client, g) {
       embeds: [embed.setDescription(description)],
       components: [row],
     });
+    eventSucces++;
   }
   catch (error) {
     client.logger.warn(error);
@@ -119,6 +122,9 @@ async function sendEvent(client, g) {
       client.userManager.changeBalance(user, payout);
       client.guildOverseer.setNumberGameEvent(guild, null);
       client.guildOverseer.saveNumberGameInfo(guild, numberGameInfo);
+
+      client.logger.info(`Event Count ${oldNumber} --> ${oldNumber + numberIncrease} in "${numberGameChannel.guild.name}#${numberGameChannel.name}"`);
+
       collector.stop();
     }
   });

@@ -16,18 +16,23 @@ const test = process.argv.includes("--test") || process.argv.includes("-t");
 // Place your client and guild ids here
 const guildId = process.env.GUILD_ID;
 let clientId;
+let token;
 
-
-if (test) clientId = process.env.TESTCLIENT_ID;
-else clientId = process.env.CLIENT_ID;
-
+if (test) {
+  clientId = process.env.TESTCLIENT_ID;
+  token = process.env.TESTTOKEN;
+}
+else {
+  clientId = process.env.CLIENT_ID;
+  token = process.env.TOKEN;
+}
 
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
   commands.push(command.data.toJSON());
 }
 
-const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
+const rest = new REST({ version: "9" }).setToken(token);
 
 (async () => {
   if (global) {
