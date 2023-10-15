@@ -1,6 +1,7 @@
-const numberGame = require("./numberGame/numbergame.js");
-const events = require('./events/events.js');
-const { Client, GatewayIntentBits, Collection, Events } = require("discord.js");
+const timeEvents = require('./events/timeEvents.js');
+const messageEvents = require('./events/messageEvents.js');
+const interactionEvents = require('./events/interactionEvents.js');
+const { Client, GatewayIntentBits, Collection, Events, Partials } = require("discord.js");
 const {
   Users,
   userManager,
@@ -11,7 +12,6 @@ const {
 const { guildOverseer, Guilds } = require("./util/guildOverseer");
 const util = require("./util/util");
 const fs = require("fs");
-const beeFiles = fs.readdirSync("./pics");
 require("winston/lib/winston/config");
 
 const client = new Client({
@@ -22,6 +22,7 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.DirectMessages,
   ],
+  partials: [Partials.Channel]
 });
 
 client.emojiCharacters = require("./data/emojiCharacters");
@@ -43,8 +44,8 @@ client.once("ready", async () => {
     }
   });
 
-  // Start Bi Hourly Events
-  events.execute(client);
+  //* Start time based Events
+  timeEvents.execute(client);
 
   //* Load in database
   try {
@@ -90,71 +91,10 @@ for (const file of commandFiles) {
 
 //* Respond to messages
 client.on(Events.MessageCreate, async (message) => {
-  if (message.author.bot) return;
-  else if (message.channel.type == "DM") {
-    if (
-      message.author.id == "753959113666592770" ||
-      message.author.id == "137920111754346496"
-    ) {
-      const chosenFile = beeFiles[Math.floor(Math.random() * beeFiles.length)];
-      message.author.send({ files: [`./pics/${chosenFile}`] });
-    }
-
-    client.logger.info(
-      `${message.author.username} send message to Neia: ${message.content}`
-    );
-    const response = Math.floor(Math.random() * 5);
-    if (!response) message.author.send("🙂");
-    return;
-  }
-
-  const guild = await client.guildOverseer.getGuild(message.guildId);
-  const user = await client.userManager.getUser(message.author.id);
-  user.author = message.author;
-
-  if (
-    message.attachments.first() ||
-    message.interaction ||
-    message.author.bot ||
-    message.stickers.first()
-  ) return;
-
-  if (Number.isInteger(Number(message.content))) {
-    return numberGame(message, user, guild, client);
-  }
+  messageEvents.message(message, client);
 });
 
 //* Handle interactions
 client.on(Events.InteractionCreate, async (interaction) => {
-  if (
-    !interaction.isCommand() ||
-    interaction.isMessageComponent() ||
-    interaction.isButton() ||
-    interaction.channel.type == "DM"
-  ) return;
-
-  const command = client.commands.get(interaction.commandName);
-  if (!command) return;
-
-  const guild = await client.guildOverseer.getGuild(interaction.guildId);
-  const id = interaction.user.id;
-  const user = await client.userManager.getUser(id);
-  user.author = interaction.user;
-
-
-  // Execute Command
-  client.logger.info(
-    `${interaction.user.tag} called "${interaction.commandName}" in "${interaction.guild.name}#${interaction.channel.name}".`
-  );
-
-  try {
-    await command.execute(interaction, user, guild, client);
-  }
-  catch (error) {
-    console.error(error);
-    await interaction.reply({
-      content: "There was an error while executing this command!",
-      ephemeral: true,
-    });
-  }
+  interactionEvents.interaction(interaction, client);
 });
