@@ -8,7 +8,7 @@ module.exports = {
 
         async execute(interaction, msgUser, msgGuild, client) {
 
-            client.guildOverseer.setNumberChannel(msgGuild, interaction.channel.id);
+            client.guildOverseer.setNumberGameChannel(msgGuild, interaction.channel.id);
             
             return interaction.reply(`This channel has been set for the guessing game.
             **Rules:**

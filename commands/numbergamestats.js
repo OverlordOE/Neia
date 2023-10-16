@@ -8,7 +8,7 @@ module.exports = {
 
 	async execute(interaction, msgUser, msgGuild, client) {
 		const numberGameInfo = client.guildOverseer.getNumberGame(msgGuild);
-		if (!numberGameInfo.channelId) return interaction.reply('You don\'t have a numbergame setup yet!\nUse the command `setchannel` to designate a channel for the numbergame');
+		if (!numberGameInfo.channelId) return interaction.reply('You don\'t have a numbergame setup yet!\nUse the command `setNumberGame` to designate a channel for the numbergame');
 
 		const channel = await client.channels.fetch(numberGameInfo.channelId);
 		let lastUser = 'Noone';

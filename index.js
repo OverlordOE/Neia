@@ -1,19 +1,15 @@
-const timeEvents = require('./events/timeEvents.js');
-const messageEvents = require('./events/messageEvents.js');
-const interactionEvents = require('./events/interactionEvents.js');
 const { Client, GatewayIntentBits, Collection, Events, Partials } = require("discord.js");
-const {
-  Users,
-  userManager,
-  itemHandler,
-  achievementHunter,
-  collectionOverseer,
-} = require("./util/userManager");
+const { Users, userManager, itemHandler, achievementHunter, collectionOverseer, } = require("./util/userManager");
 const { guildOverseer, Guilds } = require("./util/guildOverseer");
+const interactionEvents = require('./events/interactionEvents.js');
+const messageEvents = require('./events/messageEvents.js');
+const timeEvents = require('./events/timeEvents.js');
 const util = require("./util/util");
 const fs = require("fs");
 require("winston/lib/winston/config");
 
+
+//* setup bot client
 const client = new Client({
   intents: [
     GatewayIntentBits.GuildMessageReactions,
@@ -28,14 +24,13 @@ const client = new Client({
 client.emojiCharacters = require("./data/emojiCharacters");
 client.logger = require("./util/logger");
 
+//* Get enviroment token
 require("dotenv").config();
-
 if (process.argv.includes("-t") || process.argv.includes("-test")) client.login(process.env.TESTTOKEN);
 else client.login(process.env.TOKEN);
 
 
 //* Initialize client
-
 client.once("ready", async () => {
   let memberTotal = 0;
   client.guilds.cache.forEach((g) => {
@@ -67,6 +62,7 @@ client.once("ready", async () => {
 
   client.logger.info(`Logged in as ${client.user.tag}!`);
 });
+
 
 // ? Bad error handling
 client.on("warn", (e) => console.log(e));

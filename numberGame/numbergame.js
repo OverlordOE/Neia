@@ -24,7 +24,7 @@ module.exports = async function execute(message, msgUser, guild, client) {
 		await mistake();
 	}
 
-	return client.guildOverseer.saveNumberGameInfo(guild, numberGameInfo);
+	return client.guildOverseer.saveNumberGame(guild, numberGameInfo);
 
 
 	// Functions

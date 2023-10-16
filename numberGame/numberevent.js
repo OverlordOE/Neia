@@ -38,7 +38,7 @@ async function sendEvent(client, g) {
     numberGameChannel = await client.channels.fetch(numberGameInfo.channelId);
   }
   catch (e) {
-    client.guildOverseer.setNumberChannel(guild, null);
+    client.guildOverseer.setNumberGameChannel(guild, null);
     client.logger.warn(
       `${guild.name} NumberGameChannel DOES NOT EXIST, removing numbergamechannel`
     );
@@ -64,7 +64,7 @@ async function sendEvent(client, g) {
 
   if (numberGameInfo.currentEvent) numberGameInfo.currentEvent.delete();
   client.guildOverseer.setNumberGameEvent(guild, sentMessage);
-  client.guildOverseer.saveNumberGameInfo(guild, numberGameInfo);
+  client.guildOverseer.saveNumberGame(guild, numberGameInfo);
 
   const collector = numberGameChannel.createMessageComponentCollector({
     time: timeoutLength * 60000,
@@ -121,7 +121,7 @@ async function sendEvent(client, g) {
       numberGameInfo.lastUserId = null;
       client.userManager.changeBalance(user, payout);
       client.guildOverseer.setNumberGameEvent(guild, null);
-      client.guildOverseer.saveNumberGameInfo(guild, numberGameInfo);
+      client.guildOverseer.saveNumberGame(guild, numberGameInfo);
 
       client.logger.info(`Event Count ${oldNumber} --> ${oldNumber + numberIncrease} in "${numberGameChannel.guild.name}#${numberGameChannel.name}"`);
 

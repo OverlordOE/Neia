@@ -65,7 +65,7 @@ For more info contact: OverlordOE#0717
 				numberGameChannel = await client.channels.fetch(numberGameInfo.channelId);
 			}
 			catch (e) {
-				client.guildOverseer.setNumberChannel(guild, null);
+				client.guildOverseer.setNumberGameChannel(guild, null);
 				client.logger.warn(
 					`${guild.name} NumberGameChannel DOES NOT EXIST, removing numbergamechannel`
 				);

@@ -1,4 +1,4 @@
-module.exports = async function execute(message, guild, client) {
+module.exports = async function execute(message, msgUser, guild, client) {
 
     const numberGuessingInfo = client.guildOverseer.getNumberGuessing(guild);
 
@@ -37,4 +37,4 @@ module.exports = async function execute(message, guild, client) {
         }
         numberGuessingInfo.prize = 0.8 * numberGuessingInfo.prize;
     }
-}
+};

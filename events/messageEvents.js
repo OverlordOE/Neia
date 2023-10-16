@@ -1,13 +1,15 @@
 const numberGame = require("../numberGame/numbergame");
+const numberGuessing = require("../numberGame/numberguessing");
 const fs = require("fs");
 const beeFiles = fs.readdirSync("./pics");
 const { ChannelType } = require("discord.js");
+const numberguessing = require("../numberGame/numberguessing");
 
 
 module.exports = {
 	async message(message, client) {
 		if (message.author.bot) return;
-		else if (message.channel.type == ChannelType.DM) {
+		if (message.channel.type == ChannelType.DM) {
 			if (
 				message.author.id == "753959113666592770" ||
 				message.author.id == "137920111754346496"
@@ -36,7 +38,8 @@ module.exports = {
 		) return;
 
 		if (Number.isInteger(Number(message.content))) {
-			return numberGame(message, user, guild, client);
+			numberGame(message, user, guild, client);
+			numberguessing(message, user, guild, client);
 		}
 	}
 };

@@ -39,8 +39,8 @@ Reflect.defineProperty(guildOverseer, 'getNumberGame', {
 		return JSON.parse(guild.numberGame);
 	},
 });
-Reflect.defineProperty(guildOverseer, 'saveNumberGameInfo', {
-	value: function saveNumberGameInfo(guild, numberGameInfo) {
+Reflect.defineProperty(guildOverseer, 'saveNumberGame', {
+	value: function saveNumberGame(guild, numberGameInfo) {
 		guild.numberGame = JSON.stringify(numberGameInfo);
 		guild.save();
 		return numberGameInfo;
@@ -51,7 +51,7 @@ Reflect.defineProperty(guildOverseer, 'getNumberGameEvent', {
 	value: function getNumberGameEvent(guild) {
 		if (!guild.numberGame) return null;
 		const numberGameInfo = JSON.parse(guild.numberGame);
-		
+
 		if (numberGameInfo.currentEvent) return numberGameInfo.currentEvent;
 		else return null;
 	},
@@ -68,8 +68,10 @@ Reflect.defineProperty(guildOverseer, 'setNumberGameEvent', {
 	},
 });
 
-Reflect.defineProperty(guildOverseer, 'setNumberChannel', {
-	value: function setNumberChannel(guild, newChannelId) {
+Reflect.defineProperty(guildOverseer, 'setNumberGameChannel', {
+	value: function setNumberGameChannel(guild, newChannelId) {
+		const numberGuessingInfo = JSON.parse(guild.numberGuessing);
+		if (newChannelId == numberGuessingInfo.channelId) return null;
 
 		const numberGameInfo = JSON.parse(guild.numberGame);
 		numberGameInfo.channelId = newChannelId;
@@ -78,6 +80,82 @@ Reflect.defineProperty(guildOverseer, 'setNumberChannel', {
 		guild.save();
 
 		return numberGameInfo;
+	},
+});
+
+Reflect.defineProperty(guildOverseer, 'removeNumberGameChannel', {
+	value: function removeNumberGameChannel(guild) {
+
+		const numberGameInfo = JSON.parse(guild.numberGame);
+		numberGameInfo.channelId = null;
+
+		guild.numberGame = JSON.stringify(numberGameInfo);
+		guild.save();
+
+		return numberGameInfo;
+	},
+});
+
+Reflect.defineProperty(guildOverseer, 'getNumberGuessing', {
+	value: function getNumberGuessing(guild) {
+		if (!guild.numberGuessing) return null;
+		return JSON.parse(guild.numberGuessing);
+	},
+});
+Reflect.defineProperty(guildOverseer, 'saveNumberGuessing', {
+	value: function saveNumberGuessing(guild, numberGuessingInfo) {
+		guild.numberGuessing = JSON.stringify(numberGuessingInfo);
+		guild.save();
+		return numberGuessingInfo;
+	},
+});
+
+Reflect.defineProperty(guildOverseer, 'getNumberGuessingEvent', {
+	value: function getNumberGuessingEvent(guild) {
+		if (!guild.numberGuessing) return null;
+		const numberGuessingInfo = JSON.parse(guild.numberGuessing);
+
+		if (numberGuessingInfo.currentEvent) return numberGuessingInfo.currentEvent;
+		else return null;
+	},
+});
+Reflect.defineProperty(guildOverseer, 'setnumberGuessingEvent', {
+	value: function setnumberGuessingEvent(guild, newEvent) {
+		const numberGuessingInfo = JSON.parse(guild.numberGuessing);
+		numberGuessingInfo.currentEvent = newEvent;
+
+		guild.numberGuessing = JSON.stringify(numberGuessingInfo);
+		guild.save();
+
+		return numberGuessingInfo;
+	},
+});
+
+Reflect.defineProperty(guildOverseer, 'setNumberGuessingChannel', {
+	value: function setNumberGuessingChannel(guild, newChannelId) {
+		const numberGameInfo = JSON.parse(guild.numberGame);
+		if (numberGameInfo.channelId == newChannelId) return null;
+
+		const numberGuessingInfo = JSON.parse(guild.numberGuessing);
+		numberGuessingInfo.channelId = newChannelId;
+
+		guild.numberGuessing = JSON.stringify(numberGuessingInfo);
+		guild.save();
+
+		return numberGuessingInfo;
+	},
+});
+
+Reflect.defineProperty(guildOverseer, 'removeNumberGuessingChannel', {
+	value: function removeNumberGuessingChannel(guild) {
+
+		const numberGuessingInfo = JSON.parse(guild.numberGuessing);
+		numberGuessingInfo.channelId = null;
+
+		guild.numberGame = JSON.stringify(numberGuessingInfo);
+		guild.save();
+
+		return numberGuessingInfo;
 	},
 });
 

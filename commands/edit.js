@@ -108,7 +108,7 @@ module.exports = {
 					const numberGame = client.guildOverseer.getNumberGame(msgGuild);
 					numberGame[property] = value;
 					numberGame.lastUserId = null;
-					client.guildOverseer.saveNumberGameInfo(msgGuild, numberGame);
+					client.guildOverseer.saveNumberGame(msgGuild, numberGame);
 					return interaction.reply('Numbergame edit succesfull');
 				}
 				else if (command.getSubcommand() === 'data') {

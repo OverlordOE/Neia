@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: JSON.stringify({
 				lastUserId: null,
 				channelId: null,
+				currentEvent: null,
 				currentNumber: 0,
 				lastCheckpoint: 0,
 				nextCheckpoint: 50,
@@ -23,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: JSON.stringify({
 				lastUserId: null,
 				channelId: null,
+				prizePool: 0,
 				targetNumber: 0,
 				totalGuessed: 0,
 				currentGuessed: 0,
