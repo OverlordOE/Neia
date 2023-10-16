@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
 				totalGuessed: 0,
 				currentGuessed: 0,
 				fastestGuess: 0,
+				roundsCompleted: 0,
 			}),
 			allowNull: true,
 		},

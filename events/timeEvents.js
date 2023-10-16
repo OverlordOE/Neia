@@ -20,7 +20,7 @@ const botEvents = new cron.CronJob("0 0/2 * * *", () => {
 // Random number game event every 2 hours 0 0 / 2 * * *
 function numberGameEventStart() {
 	const time = Math.floor(Math.random() * 60) * 120000;
-	client.logger.info(`Next guessingGameEvent in ${Math.floor(time / 60000)} minutes`);
+	client.logger.info(`Next NumberGame Event in ${Math.floor(time / 60000)} minutes`);
 	setTimeout(numberGameEvent, time, client);
 }
 

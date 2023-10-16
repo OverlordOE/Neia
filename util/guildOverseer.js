@@ -34,8 +34,20 @@ Reflect.defineProperty(guildOverseer, 'getGuild', {
 
 
 Reflect.defineProperty(guildOverseer, 'getNumberGame', {
-	value: function getNumberGameInfo(guild) {
-		if (!guild.numberGame) return null;
+	value: function getNumberGame(guild) {
+		if (!guild.numberGame) {
+			return guildOverseer.saveNumberGame(guild, {
+				lastUserId: null,
+				channelId: null,
+				currentEvent: null,
+				currentNumber: 0,
+				lastCheckpoint: 0,
+				nextCheckpoint: 50,
+				totalCounted: 0,
+				streaksRuined: 0,
+				highestStreak: 0,
+			});
+		}
 		return JSON.parse(guild.numberGame);
 	},
 });
@@ -70,7 +82,7 @@ Reflect.defineProperty(guildOverseer, 'setNumberGameEvent', {
 
 Reflect.defineProperty(guildOverseer, 'setNumberGameChannel', {
 	value: function setNumberGameChannel(guild, newChannelId) {
-		const guessingGameInfo = JSON.parse(guild.guessingGame);
+		const guessingGameInfo = guildOverseer.getGuessingGame(guild);
 		if (newChannelId == guessingGameInfo.channelId) return null;
 
 		const numberGameInfo = JSON.parse(guild.numberGame);
@@ -96,9 +108,21 @@ Reflect.defineProperty(guildOverseer, 'removeNumberGameChannel', {
 	},
 });
 
+
 Reflect.defineProperty(guildOverseer, 'getGuessingGame', {
 	value: function getGuessingGame(guild) {
-		if (!guild.guessingGame) return null;
+		if (!guild.guessingGame) {
+			return guildOverseer.saveGuessingGame(guild, {
+				lastUserId: null,
+				channelId: null,
+				prizePool: 0,
+				targetNumber: 0,
+				totalGuessed: 0,
+				currentGuessed: 0,
+				fastestGuess: 0,
+				roundsCompleted: 0,
+			});
+		}
 		return JSON.parse(guild.guessingGame);
 	},
 });
@@ -133,11 +157,13 @@ Reflect.defineProperty(guildOverseer, 'setguessingGameEvent', {
 
 Reflect.defineProperty(guildOverseer, 'setGuessingGameChannel', {
 	value: function setGuessingGameChannel(guild, newChannelId) {
-		const numberGameInfo = JSON.parse(guild.numberGame);
+		const numberGameInfo = guildOverseer.getNumberGame(guild);
 		if (numberGameInfo.channelId == newChannelId) return null;
 
-		const guessingGameInfo = JSON.parse(guild.guessingGame);
+		const guessingGameInfo = guildOverseer.getGuessingGame(guild);
 		guessingGameInfo.channelId = newChannelId;
+		guessingGameInfo.targetNumber = Math.ceil(Math.random() * 1000);
+		console.log(guessingGameInfo.targetNumber);
 
 		guild.guessingGame = JSON.stringify(guessingGameInfo);
 		guild.save();
@@ -152,7 +178,7 @@ Reflect.defineProperty(guildOverseer, 'removeGuessingGameChannel', {
 		const guessingGameInfo = JSON.parse(guild.guessingGame);
 		guessingGameInfo.channelId = null;
 
-		guild.numberGame = JSON.stringify(guessingGameInfo);
+		guild.guessingGame = JSON.stringify(guessingGameInfo);
 		guild.save();
 
 		return guessingGameInfo;

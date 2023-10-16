@@ -15,11 +15,11 @@ module.exports = {
 		}
 
 		if (client.guildOverseer.setNumberGameChannel(msgGuild, interaction.channel.id) == null) {
-			interaction.reply('There is already Guessing Game active in this channel. Remove the Guessing Game or make a new channel for the Numbergame');
+			return interaction.reply('There is already Guessing Game active in this channel. Remove the Guessing Game or make a new channel for the Numbergame');
 		}
 		return interaction.reply(`This channel has been set for the Numbergame
 		**Rules:**
-l		__- The same person can't count twice in a row.__
+		__- The same person can't count twice in a row.__
 		__- Every number needs to be 1 higher then the last.__
 		__- If you make a mistake after reaching a checkpoint you will be reverted to the checkpoint, after that the checkpoint is removed.__
 		__- Once every 2 hours an event randomly happens, the first person to claim this will make Neia count between 5 and 9 times for them.__
@@ -29,6 +29,6 @@ l		__- The same person can't count twice in a row.__
 		__- You get 💰 for every number you count.__
 		__- The first time you count every hour gives a small bonus and once a day a big bonus.__
 		__- You can get more 💰 by buying count multipliers.__
-		`).replace(/\t+/g, '');
+		`.replace(/\t+/g, ''));
 	},
 };

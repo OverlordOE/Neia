@@ -8,16 +8,19 @@ module.exports = {
 
 	async execute(interaction, msgUser, msgGuild, client) {
 
-		const numberGameInfo = client.guildOverseer.getNumberGame(msgGuild);
-		if (numberGameInfo.channelId) {
-			client.guildOverseer.removeNumberGameChannel(msgGuild);
-			return interaction.reply('Removed Numbergame from this server. All your progress is still saved');
+		const guessingGameInfo = client.guildOverseer.getGuessingGame(msgGuild);
+		
+		const channelId = guessingGameInfo.channelId || null;
+		if (channelId) {
+			client.guildOverseer.removeGuessingGameChannel(msgGuild);
+			return interaction.reply('Removed Guessing Game from this server. All your progress is still saved');
 		}
 
-		if (client.guildOverseer.setNumberGameChannel(msgGuild, interaction.channel.id) == null) {
-			interaction.reply('There is already a Number Game active in this channel. Remove the Number Game or make a new channel for the Guessing Game');
+		const succes = client.guildOverseer.setGuessingGameChannel(msgGuild, interaction.channel.id);
+		if (succes == null) {
+			return interaction.reply('There is already a Number Game active in this channel. Remove the Number Game or make a new channel for the Guessing Game');
 		}
-		return interaction.reply(`set
-		`).replace(/\t+/g, '');
+
+		return interaction.reply(`It has been done`.replace(/\t+/g, ''));
 	},
 };
