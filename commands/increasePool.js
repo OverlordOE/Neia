@@ -24,7 +24,7 @@ module.exports = {
         // if (poolAmount > msgUser.balance) return interaction.reply({ content: `You don't have enough 💰.\n${client.util.formatNumber(poolAmount - msgUser.balance)}💰 more needed.`, ephemeral: true });
 
         // client.userManager.changeBalance(msgUser, -poolAmount, true);
-        // numberGuessingInfo.prize += 2 * poolAmount;
-        // message.reply(`The new prize pool is **${numberGuessingInfo.prize}**💰!`)
+        // guessingGameInfo.prize += 2 * poolAmount;
+        // message.reply(`The new prize pool is **${guessingGameInfo.prize}**💰!`)
     }
 };

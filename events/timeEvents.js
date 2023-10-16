@@ -1,27 +1,27 @@
-const numberEvent = require("../numberGame/numberevent.js");
+const numberGameEvent = require("../numberGame/numberGameEvent.js");
 const cron = require("cron");
 let client;
 module.exports = {
 	async execute(c) {
 		client = c;
 		botEvents.start();
-		numberEventStart();
+		numberGameEventStart();
 		setBotActivity();
 	}
 };
 
 
 const botEvents = new cron.CronJob("0 0/2 * * *", () => {
-	numberEventStart();
+	numberGameEventStart();
 	setBotActivity();
 });
 
 
 // Random number game event every 2 hours 0 0 / 2 * * *
-function numberEventStart() {
+function numberGameEventStart() {
 	const time = Math.floor(Math.random() * 60) * 120000;
-	client.logger.info(`Next NumberEvent in ${Math.floor(time / 60000)} minutes`);
-	setTimeout(numberEvent, time, client);
+	client.logger.info(`Next guessingGameEvent in ${Math.floor(time / 60000)} minutes`);
+	setTimeout(numberGameEvent, time, client);
 }
 
 

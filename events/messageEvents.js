@@ -1,9 +1,8 @@
-const numberGame = require("../numberGame/numbergame");
-const numberGuessing = require("../numberGame/numberguessing");
+const numberGame = require("../numberGame/numberGame");
+const guessingGame = require("../guessingGame/guessingGame");
 const fs = require("fs");
 const beeFiles = fs.readdirSync("./pics");
 const { ChannelType } = require("discord.js");
-const numberguessing = require("../numberGame/numberguessing");
 
 
 module.exports = {
@@ -39,7 +38,7 @@ module.exports = {
 
 		if (Number.isInteger(Number(message.content))) {
 			numberGame(message, user, guild, client);
-			numberguessing(message, user, guild, client);
+			guessingGame(message, user, guild, client);
 		}
 	}
 };

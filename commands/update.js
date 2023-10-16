@@ -26,7 +26,7 @@ Neia's economy has changed, it still needs fine tuning but the rewards for count
 Neia no longer spams your DMs with all the Hourly and Daily counts and now instead reacts to the number whenever they happen
 
 ### **__Bug Fixes and Minor Changes__**
-* \`Numberguessing\` got renamed to \`1in5\`
+* \`Guessinggame\` got renamed to \`1in5\`
 * \`Blackjack\` works again
 * \`Slots\` now shows your final balance at the end
 * Changed Avatar location on Number Event

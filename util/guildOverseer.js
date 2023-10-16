@@ -70,8 +70,8 @@ Reflect.defineProperty(guildOverseer, 'setNumberGameEvent', {
 
 Reflect.defineProperty(guildOverseer, 'setNumberGameChannel', {
 	value: function setNumberGameChannel(guild, newChannelId) {
-		const numberGuessingInfo = JSON.parse(guild.numberGuessing);
-		if (newChannelId == numberGuessingInfo.channelId) return null;
+		const guessingGameInfo = JSON.parse(guild.guessingGame);
+		if (newChannelId == guessingGameInfo.channelId) return null;
 
 		const numberGameInfo = JSON.parse(guild.numberGame);
 		numberGameInfo.channelId = newChannelId;
@@ -96,66 +96,66 @@ Reflect.defineProperty(guildOverseer, 'removeNumberGameChannel', {
 	},
 });
 
-Reflect.defineProperty(guildOverseer, 'getNumberGuessing', {
-	value: function getNumberGuessing(guild) {
-		if (!guild.numberGuessing) return null;
-		return JSON.parse(guild.numberGuessing);
+Reflect.defineProperty(guildOverseer, 'getGuessingGame', {
+	value: function getGuessingGame(guild) {
+		if (!guild.guessingGame) return null;
+		return JSON.parse(guild.guessingGame);
 	},
 });
-Reflect.defineProperty(guildOverseer, 'saveNumberGuessing', {
-	value: function saveNumberGuessing(guild, numberGuessingInfo) {
-		guild.numberGuessing = JSON.stringify(numberGuessingInfo);
+Reflect.defineProperty(guildOverseer, 'saveGuessingGame', {
+	value: function saveGuessingGame(guild, guessingGameInfo) {
+		guild.guessingGame = JSON.stringify(guessingGameInfo);
 		guild.save();
-		return numberGuessingInfo;
+		return guessingGameInfo;
 	},
 });
 
-Reflect.defineProperty(guildOverseer, 'getNumberGuessingEvent', {
-	value: function getNumberGuessingEvent(guild) {
-		if (!guild.numberGuessing) return null;
-		const numberGuessingInfo = JSON.parse(guild.numberGuessing);
+Reflect.defineProperty(guildOverseer, 'getGuessingGameEvent', {
+	value: function getGuessingGameEvent(guild) {
+		if (!guild.guessingGame) return null;
+		const guessingGameInfo = JSON.parse(guild.guessingGame);
 
-		if (numberGuessingInfo.currentEvent) return numberGuessingInfo.currentEvent;
+		if (guessingGameInfo.currentEvent) return guessingGameInfo.currentEvent;
 		else return null;
 	},
 });
-Reflect.defineProperty(guildOverseer, 'setnumberGuessingEvent', {
-	value: function setnumberGuessingEvent(guild, newEvent) {
-		const numberGuessingInfo = JSON.parse(guild.numberGuessing);
-		numberGuessingInfo.currentEvent = newEvent;
+Reflect.defineProperty(guildOverseer, 'setguessingGameEvent', {
+	value: function setguessingGameEvent(guild, newEvent) {
+		const guessingGameInfo = JSON.parse(guild.guessingGame);
+		guessingGameInfo.currentEvent = newEvent;
 
-		guild.numberGuessing = JSON.stringify(numberGuessingInfo);
+		guild.guessingGame = JSON.stringify(guessingGameInfo);
 		guild.save();
 
-		return numberGuessingInfo;
+		return guessingGameInfo;
 	},
 });
 
-Reflect.defineProperty(guildOverseer, 'setNumberGuessingChannel', {
-	value: function setNumberGuessingChannel(guild, newChannelId) {
+Reflect.defineProperty(guildOverseer, 'setGuessingGameChannel', {
+	value: function setGuessingGameChannel(guild, newChannelId) {
 		const numberGameInfo = JSON.parse(guild.numberGame);
 		if (numberGameInfo.channelId == newChannelId) return null;
 
-		const numberGuessingInfo = JSON.parse(guild.numberGuessing);
-		numberGuessingInfo.channelId = newChannelId;
+		const guessingGameInfo = JSON.parse(guild.guessingGame);
+		guessingGameInfo.channelId = newChannelId;
 
-		guild.numberGuessing = JSON.stringify(numberGuessingInfo);
+		guild.guessingGame = JSON.stringify(guessingGameInfo);
 		guild.save();
 
-		return numberGuessingInfo;
+		return guessingGameInfo;
 	},
 });
 
-Reflect.defineProperty(guildOverseer, 'removeNumberGuessingChannel', {
-	value: function removeNumberGuessingChannel(guild) {
+Reflect.defineProperty(guildOverseer, 'removeGuessingGameChannel', {
+	value: function removeGuessingGameChannel(guild) {
 
-		const numberGuessingInfo = JSON.parse(guild.numberGuessing);
-		numberGuessingInfo.channelId = null;
+		const guessingGameInfo = JSON.parse(guild.guessingGame);
+		guessingGameInfo.channelId = null;
 
-		guild.numberGame = JSON.stringify(numberGuessingInfo);
+		guild.numberGame = JSON.stringify(guessingGameInfo);
 		guild.save();
 
-		return numberGuessingInfo;
+		return guessingGameInfo;
 	},
 });
 
