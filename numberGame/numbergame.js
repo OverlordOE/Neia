@@ -97,8 +97,8 @@ module.exports = async function execute(message, msgUser, guild, client) {
 	}
 
 	function giveBonus() {
-		const dailyMultiplier = 2.5;
-		const hourlyMultiplier = 0.5;
+		const dailyMultiplier = 4;
+		const hourlyMultiplier = 1.5;
 		const daily = client.userManager.getDailyCount(msgUser);
 		const hourly = client.userManager.getHourlyCount(msgUser);
 
