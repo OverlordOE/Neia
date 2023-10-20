@@ -68,6 +68,7 @@ module.exports = (sequelize, DataTypes) => {
 				streaksRuined: 0,
 				numbersGuessed: 0,
 				fastestGuess: 0,
+				guessesCompleted: 0,
 				timesGambled: 0,
 				gamblingMoneyLost: 0,
 				gamblingMoneyGained: 0,
