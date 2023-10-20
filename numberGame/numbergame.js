@@ -105,12 +105,14 @@ module.exports = async function execute(message, msgUser, guild, client) {
 
 		if (daily === true) {
 			client.userManager.changeBalance(msgUser, number * dailyMultiplier);
+			client.userManager.addStats(msgUser, 'countingMoneyGained', number * dailyMultiplier);
 			message.react('💰');
 			client.userManager.setDailyCount(msgUser);
 		}
 
 		if (hourly === true) {
 			client.userManager.changeBalance(msgUser, number * hourlyMultiplier);
+			client.userManager.addStats(msgUser, 'countingMoneyGained', number * hourlyMultiplier);
 			message.react('💵');
 			client.userManager.setHourlyCount(msgUser);
 		}
