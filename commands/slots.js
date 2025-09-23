@@ -58,7 +58,7 @@ module.exports = {
 		**${payoutRate}X** Payout per row.
 		🍋 and 🍉 add **1 row**
 		🍒 and 🍌 add **2 rows**
-		<:luckyseven:838417718944333884> adda **4 rows**
+		<:luckyseven:838417718944333884> adds **4 rows**
 		\n`.replace(/\t+/g, '');
 
 		for (let i = 0; i < slotY; i++) {
