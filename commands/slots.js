@@ -1,5 +1,4 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('slots')
@@ -55,11 +54,11 @@ module.exports = {
 		output += `
 		You have bet ${client.util.formatNumber(gambleAmount)}💰.
 
-		**${payoutRate}X** Payout per row.
-		🍋 and 🍉 add **1 row**
-		🍒 and 🍌 add **2 rows**
-		<:luckyseven:838417718944333884> adds **4 rows**
-		\n`.replace(/\t+/g, '');
+**${payoutRate}X** Payout per row.
+🍋 and 🍉 add **1 row**
+🍒 and 🍌 add **2 rows**
+<:luckyseven:838417718944333884> adds **4 rows**
+\n`;
 
 		for (let i = 0; i < slotY; i++) {
 			slots[i] = [];
@@ -135,7 +134,7 @@ module.exports = {
 				output += `
 				\n**__You have ${rowsWon} row(s)__ and got a payout of __${payoutRate * rowsWon}X your bet!__**
 				You won ${client.util.formatNumber(winAmount)}💰
-				Your balance is ${client.util.formatNumber(balance)}💰`.replace(/\t+/g, '');
+				Your balance is ${client.util.formatNumber(balance)}💰`;
 				embed.setColor('#00fc43');
 			}
 			else {
